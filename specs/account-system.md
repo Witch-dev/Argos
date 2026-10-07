@@ -1,6 +1,6 @@
 # Feature Spec — Account System
 
-**Status:** 🚧 Phases 1–2 done (2026-10-07), except the parts moved to Roadmap Stage 4 (cookie, in-memory token, 15-minute token). Part of Phase 1 was already built by `specs/app-hardening.md`; see §0. Phases 3–6 not started.
+**Status:** 🚧 Phases 1–3 done (2026-10-07), except the parts moved to Roadmap Stage 4 (cookie, in-memory token, 15-minute token). Part of Phase 1 was already built by `specs/app-hardening.md`; see §0. Phases 4–6 not started.
 
 Builds on the existing auth: ASP.NET Core Identity with `ApplicationUser` (`Argos.Infrastructure/Identity/ApplicationUser.cs`), JWTs issued by `TokenService`, refresh tokens from `RefreshTokenService`, and `AuthController` (`/api/auth/register`, `/login`, `/refresh`, `/logout`, `/me`). On the frontend: `AuthContext`, `api/authToken.ts` (login token and refresh token in `localStorage`) and `api/client.ts` (adds the `Authorization` header; on a 401 it refreshes once and retries). The research behind this spec, including the Goodreads/Letterboxd comparison, is in `ACCOUNTS-AND-HOSTING.md`. Read that first.
 
@@ -129,7 +129,7 @@ Sign up and login work, but nothing around them does. (Written 2026-10-02. Items
 (`EmailConfirmed`, `LockoutEnd`, `AccessFailedCount`, `TwoFactorEnabled`, the authenticator key, recovery codes and external logins already exist in Identity's tables.)
 
 New tables:
-- **`RefreshTokens`**: *already exists* (app-hardening) with `Id`, `UserId`, `TokenHash` (unique), `CreatedAt`, `ExpiresAt`, `RevokedAt?`, `ReplacedByTokenId?`. **Phase 3 adds** `SessionId` (shared by every token in one chain of rotations; a rotated token copies it), `LastUsedAt` and `UserAgent`, plus an index on `(UserId, SessionId)`. Existing rows each get their own new `SessionId`.
+- **`RefreshTokens`**: *already exists* (app-hardening) with `Id`, `UserId`, `TokenHash` (unique), `CreatedAt`, `ExpiresAt`, `RevokedAt?`, `ReplacedByTokenId?`. **Phase 3 adds** `SessionId` (shared by every token in one chain of rotations; a rotated token copies it), `SessionStartedAt` and `UserAgent`, plus an index on `(UserId, SessionId)`. Existing rows each get their own new `SessionId`. *(Built 2026-10-07 without `LastUsedAt`: every renewal makes a new token, so the live token's `CreatedAt` already says when the session was last active.)*
 - **`UsernameHistory`**: `Id`, `UserId`, `OldUsername`, `OldNormalizedUsername` (indexed), `ChangedAt`. A name is held while `ChangedAt` is under 30 days old.
 - **`ImportJobs`**: `Id`, `UserId`, `Source` (`Goodreads`), `Status` (`Queued` / `Running` / `Completed` / `Failed` / `Undone`), `TotalRows`, `ProcessedRows`, `CreatedAt`, `FinishedAt?`.
 - **`ImportRows`**: `Id`, `ImportJobId`, `RowNumber`, `Title`, `Author`, `Isbn13?`, `Isbn10?`, raw mapped fields (status, rating, review, dates, pages, shelves), `Result` (`Pending` / `Imported` / `AlreadyOnShelf` / `NotFound` / `Error`), `Message?`, `CreatedLogId?`.
@@ -209,7 +209,8 @@ PUT  /api/users/me/username       { username, password }
 POST /api/users/me/email          { newEmail, password }       → sends link; sets PendingEmail
 POST /api/auth/confirm-email-change { userId, newEmail, token }
 PUT  /api/users/me/password       { currentPassword?, newPassword }  (current is optional only when hasPassword = false)
-GET  /api/auth/sessions           → [{ sessionId, userAgent, createdAt, lastUsedAt, isCurrent }]
+GET  /api/auth/sessions           → [{ sessionId, browser, operatingSystem, startedAt, lastActiveAt, isCurrent }]
+DELETE /api/users/me/email/pending  → cancels a waiting email change (added while building)
 DELETE /api/auth/sessions/{id}    ;  POST /api/auth/sessions/revoke-others
 ```
 
@@ -385,19 +386,28 @@ Items marked *(app-hardening)* were built there; items marked *(Stage 4)* wait f
 ### Phase 3 — Settings page
 
 #### Backend
-- [ ] `UsernameChangedAt`, `PendingEmail` + `UsernameHistory` (migration)
-- [ ] `RefreshTokens` gains `SessionId`, `LastUsedAt`, `UserAgent` (same migration); rotation copies `SessionId` and updates `LastUsedAt` (§3.1)
-- [ ] `PUT /me/profile`, `PUT /me/username` (yearly rule, 30-day hold), change-email + confirm, `PUT /me/password`
-- [ ] Profile lookup by held old username
-- [ ] Sessions list / revoke one / revoke others
-- [ ] Tests: username yearly rule, held name can't be registered and redirects, email change only applies after the link, password change ends other sessions
+- [x] `UsernameChangedAt`, `PendingEmail` + `UsernameHistory` (migration `AddAccountSettings`)
+- [x] `RefreshTokens` gains `SessionId`, `SessionStartedAt`, `UserAgent` (same migration); rotation copies them (§3.1). *The login token carries the session as a `sid` claim, which is how "this browser" and "keep this session" are known.*
+- [x] `PUT /me/profile`, `PUT /me/username` (yearly rule, 30-day hold), change-email + confirm, `PUT /me/password`. *Profile needs a confirmed email (others read display names and bios). Display names drop line breaks and invisible characters. Wrong passwords in settings are limited per session (5, then 15 minutes), not counted toward the account lockout, so a stolen session can't lock the owner out of login. A confirm link only works for the change still waiting; cancelling or asking for another address ends it. The change-email message greets by username, since it goes to an unproven address.*
+- [x] Profile lookup by held old username (`GET /api/users/{username}` only; other username routes such as compare still 404 for an old name: `bugs/held-username-only-on-profile.md`)
+- [x] Sessions list / revoke one / revoke others
+- [x] Tests: username yearly rule, held name can't be registered and redirects, email change only applies after the link, password change ends other sessions (`AccountSettingsTests`), plus rotation keeping the session and a logout landing mid-rotation (`RefreshTokenServiceTests`)
 #### Frontend
-- [ ] `/settings` with Profile / Account / Security / Privacy & data tabs; sidebar link
-- [ ] Profile edit (display name, bio, avatar picker moved here or linked)
-- [ ] Change username (shows the next allowed date), email (pending state), password
-- [ ] Sessions list; move the review-privacy select here from the profile page
-- [ ] Old-username URL replacement on the profile page
-- [ ] Tests for each form
+- [x] `/settings` with Profile / Account / Security / Privacy & data tabs (`?tab=` in the address); sidebar link
+- [x] Profile edit (display name, bio, avatar picker; the profile page keeps its own avatar button too)
+- [x] Change username (shows the next allowed date), email (pending state with cancel), password
+- [x] Sessions list; review-privacy and discoverable settings moved here from the profile page, which now links to Settings
+- [x] Old-username URL replacement on the profile page
+- [x] Tests for each form (`SettingsPage.test.tsx`)
+#### Review pass (2026-10-07)
+- [x] Code review + security review. Fixed:
+  - **A logout could miss a session that was renewing at that moment.** Rotation now saves the new token *before* retiring the old one, so a revoke always catches one of them, and a rotation that loses the race deletes its new token.
+  - **Wrong passwords in settings** are now counted per session (see above), not toward the account-wide lockout.
+  - **The change-email message** greets by username, not the free-text display name, so it can't carry spam to a stranger's inbox.
+  - **Smaller fixes:** invisible formatting characters are stripped from names and bios; profile requests have a length cap; the pending email is cleared in the same save as the change; `/me` uses the shared clock.
+  - **Left open:**
+    - A sign-up racing a rename by milliseconds could take the name being given up (`bugs/username-hold-race.md`).
+    - `Email:ReplyToAddress` must be set before going live (Roadmap Stage 4), because the "email changed" notice asks readers to reply.
 
 ### Phase 4 — 2FA and Continue with Google
 

@@ -10,6 +10,10 @@ A running, dated log of every real change and fix made to Argos with Claude Code
 
 ---
 
+### 2026-10-07 — Accounts Phase 3: the settings page
+
+Readers now have a Settings page (sidebar) with four tabs. Profile sets a display name, bio and picture. Account changes the email (only after a link to the new address is opened; the old address is told), the username (once a year; the old name is held for 30 days and keeps opening the profile) and the password (logs out the other browsers). Security lists the logged-in browsers with "Log out" and "Log out everywhere else". Privacy & data holds the review-privacy and discoverable settings, moved from the profile page. Login tokens now carry their session, and a review fix made renewals safe against a logout landing mid-renewal. Details and the two small bugs left open: `specs/account-system.md` Phase 3.
+
 ### 2026-10-07 — New `/test-plan` skill for manual testing checklists
 
 Before launch, every area of the app needs a hands-on check in the browser, not just automated tests. `.claude/skills/test-plan/SKILL.md` writes one checklist per reader journey (accounts, shelves, reviews, lists, clubs and so on) in `Argos/testing/<area>.md`. It builds them from the specs, the code as it is today and the open bugs. Each step is one action with one visible expected result, with Phone and Desktop result columns. Steps are numbered so bugs can point to them, and steps that need a person are tagged so the rest can later be run with Playwright. Checks that apply to every page (themes, languages, phone width, keyboard) live once in `_shared.md`. The `testing/README.md` index is left until most launch features are built. It's now a task in `ROADMAP.md` Stage 10, together with the full manual test pass.
