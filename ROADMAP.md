@@ -88,7 +88,7 @@ Small things that are cheaper now than later.
 
 ## Stage 2 — Bring your books in
 
-**Spec exists:** `specs/account-system.md` Phase 6 (Goodreads import). Extend it before building:
+**Spec:** `specs/book-import.md` (written 2026-10-07; replaces `specs/account-system.md` Phase 6). It covers all four items:
 
 - [ ] **Add StoryGraph** to the import (its CSV export has different columns).
 - [ ] **Keep notes, dates and rereads**: what readers complain other apps lose.

@@ -1,6 +1,6 @@
 # Feature Spec — Account System
 
-**Status:** 🚧 Phases 1–3 done (2026-10-07), except the parts moved to Roadmap Stage 4 (cookie, in-memory token, 15-minute token). Part of Phase 1 was already built by `specs/app-hardening.md`; see §0. Phases 4–6 not started.
+**Status:** 🚧 Phases 1–3 done (2026-10-07), except the parts moved to Roadmap Stage 4 (cookie, in-memory token, 15-minute token). Part of Phase 1 was already built by `specs/app-hardening.md`; see §0. Phases 4–5 not started. **Phase 6 (Goodreads import) moved to `specs/book-import.md`** (2026-10-07), which adds StoryGraph and supersedes §2 "Goodreads import", §3.11 and the Phase 6 tasks here.
 
 Builds on the existing auth: ASP.NET Core Identity with `ApplicationUser` (`Argos.Infrastructure/Identity/ApplicationUser.cs`), JWTs issued by `TokenService`, refresh tokens from `RefreshTokenService`, and `AuthController` (`/api/auth/register`, `/login`, `/refresh`, `/logout`, `/me`). On the frontend: `AuthContext`, `api/authToken.ts` (login token and refresh token in `localStorage`) and `api/client.ts` (adds the `Authorization` header; on a 401 it refreshes once and retries). The research behind this spec, including the Goodreads/Letterboxd comparison, is in `ACCOUNTS-AND-HOSTING.md`. Read that first.
 
@@ -293,6 +293,8 @@ POST /api/auth/cancel-deletion   (allowed while deactivated)
 
 ### 3.11 Phase 6: Goodreads import
 
+> **Superseded by `specs/book-import.md` (2026-10-07).** Kept for history; follow that spec.
+
 ```
 POST /api/imports/goodreads   (multipart file, ≤10 MB, confirmed email) → { jobId }
 GET  /api/imports/{id}        → job progress + counts
@@ -316,7 +318,7 @@ GET  /api/imports             → your past imports
 - ~~**Have I Been Pwned breach check.**~~ *Moved into Phase 1 (2026-10-07).*
 - **SMS or email 2FA**, and sign-in with Apple, Facebook, Amazon or others. *(Passkeys moved into Phase 4, 2026-10-07.)*
 - **Profile privacy** (public / signed-in only / followers only). Stays in `FUTURE-IDEAS.md` with account-wide privacy.
-- **Imports from StoryGraph or Letterboxd**, and re-importing an Argos export.
+- ~~**Imports from StoryGraph**~~ *(added in `specs/book-import.md`, 2026-10-07)*. Letterboxd-style re-importing of an Argos export stays out.
 - **CAPTCHA** on sign up. Rate limits and email confirmation come first; revisit if spam appears.
 - **Admin tools** (banning, viewing users, manual unlock).
 - **Keeping deleted content** for export (Letterboxd keeps it 30 days; Argos deletes for real).
@@ -441,6 +443,8 @@ Items marked *(app-hardening)* were built there; items marked *(Stage 4)* wait f
 - [ ] Tests for the delete flow and cancel
 
 ### Phase 6 — Goodreads import
+
+**Moved to `specs/book-import.md`** (2026-10-07). The tasks below are not used.
 
 #### Backend
 - [ ] `ImportJobs`, `ImportRows`, `ImportCreatedLists` (migration)
