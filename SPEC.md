@@ -60,34 +60,26 @@ Key relationships: one User has many Logs, Lists, and Writings; one Book has man
 ### Phase 1.5 — Book Clubs (large addition, built alongside Phase 1)
 - Book Clubs: a group of readers moving through the same book together — public/private with a directory or invite-link + request-to-join, suggest-then-vote book selection with an admin/mod confirm step, time-boxed checkpoints with a full threaded, upvoteable/downvoteable comment discussion per checkpoint (the app's first comment system), member progress reused from the existing `Log` data — ✅ shipped 2026-09-28, `specs/book-clubs.md`
 
-### Next up — Launch readiness (from `PRODUCT-ANALYSIS.md`, 2026-10-06)
-The biggest weaknesses found by the 2026-10-06 product analysis, compared with what readers say they want from a book app. These come before any Phase 2 work. Each one still needs its own spec in `specs/` before it's built (the account system already has one). **The build order, and everything else needed to launch (CI, hosting, backups, legal pages, a phone pass), is in `ROADMAP.md`. That file decides the order, not this list.**
-1. **Account system**: email confirmation, forgot password, change email, delete account. Already specced in `specs/account-system.md`, not started. Then pick hosting and deploy (§10).
-2. **Data export**: everything a reader has (logs, reviews, lists, writings) as CSV + JSON, with the CSV in Goodreads' column layout so it can be imported elsewhere. Required before a public launch (§8 Legal / Data).
-3. **Goodreads + StoryGraph import**: shelves, ratings, dates, reviews and rereads from a CSV export. Match by ISBN, then title + author, with a screen for reviewing books it couldn't match. Notes and dates must survive, because other apps lose them. Lists import is captured in `FUTURE-IDEAS.md`.
-4. **Reporting & moderation**: report a review, writing, comment or user; an admin queue; hide content. Plus rules against review-bombing: no ratings before a book's publish date, no rating until the email is confirmed, flag sudden waves of low ratings.
-5. **Notifications**: an in-app bell first, an email digest later. Quiet by default, with a setting per type. Unblocks the club organizing tools and story replies in `FUTURE-IDEAS.md`, and can build on `ActivityEvents`.
-6. **Yearly reading goal + stats page**: books and pages per month, top authors, genres, moods, pace, average rating, DNF rate. Free, never paywalled. Replaces Phase 2's "Year in Review / reading-challenge style stats".
-7. **Private account + follow requests**: today shelves, progress and progress notes are public even to logged-out visitors. Design notes are in `FUTURE-IDEAS.md` ("Account-level privacy settings").
-8. **Formats, editions & series**: print / ebook / audiobook per log, audiobook progress in hours:minutes, choosing an edition (cover, page count), and "Book 3 of 7" series tracking. Covers Phase 2's "Edition/ISBN precision".
+### Next up — Launch readiness
+The 2026-10-06 product analysis (`PRODUCT-ANALYSIS.md`) found eight gaps to close before any Phase 2 work: accounts, data export, Goodreads + StoryGraph import, reporting & moderation, notifications, yearly goal + stats, private accounts, and formats/editions/series. **`ROADMAP.md` holds the details and decides the order.** Each still needs its own spec in `specs/` before it's built. Shipped so far: account system Phases 1–3 (`specs/account-system.md`).
 
 ### Phase 2 — Growth (post-MVP)
 - Book news feed — general, unpersonalized, aggregated from book-industry RSS feeds (`specs/book-news-feed.md`) — ✅ shipped 2026-09-27
 - Email confirmation and forgot-password flows (confirmed future requirement — see §5 for why this shapes the Phase 1 auth implementation)
 - Likes/comments on reviews — **superseded**: `specs/writings-and-annotations.md` builds a fuller comment/highlight/vote system covering Writings and Reviews together, not just a plain like/comment on reviews.
 - Writings & Annotations: long-form original pieces or quoted book passages, with Instagram-style whole-post comments (nested) plus Genius-style highlight-anchored comments, both upvote/downvoteable — ✅ shipped 2026-09-30, `specs/writings-and-annotations.md`
-- Year in Review / reading-challenge style stats: stats moved to **Next up** #6; the shareable year-in-review image is in `FUTURE-IDEAS.md`
+- Year in Review / reading-challenge style stats: stats moved to **Next up** (`ROADMAP.md`); the shareable year-in-review image is in `FUTURE-IDEAS.md`
 - Genre & tag browsing, "popular this week"
 - Basic recommendations (from genres/ratings of followed users)
-- ~~Goodreads CSV import~~: moved to **Next up** #3
-- ~~Notifications~~: moved to **Next up** #5
+- ~~Goodreads CSV import~~: moved to **Next up** (`ROADMAP.md`)
+- ~~Notifications~~: moved to **Next up** (`ROADMAP.md`)
 - Diary calendar view
-- ~~Edition/ISBN precision~~: moved to **Next up** #8
+- ~~Edition/ISBN precision~~: moved to **Next up** (`ROADMAP.md`)
 
 ### Phase 3 — Scale / Mobile
 - Mobile app (React Native, reusing the same API)
 - Public API / API keys for integrations
-- ~~Moderation & reporting tools~~: moved to **Next up** #4
+- ~~Moderation & reporting tools~~: moved to **Next up** (`ROADMAP.md`)
 - ML-driven recommendations
 - Push notifications
 
@@ -137,7 +129,7 @@ Specific versions we're building against, so there's no ambiguity during setup. 
 | Frontend testing | React Testing Library | **16.x** | |
 | Containerization | Docker / Docker Compose | current stable | local Postgres + optional full-stack compose |
 
-Version policy going forward: pin exact versions in `.csproj`/`package.json` (no floating majors in production dependencies), bump deliberately rather than on every release, and note any version bump that changes behavior in the relevant phase of §9 rather than silently upgrading mid-feature.
+Version policy going forward: pin exact versions in `.csproj`/`package.json` (no floating majors in production dependencies), bump deliberately rather than on every release, and note any version bump that changes behavior in the relevant spec and the changelog rather than silently upgrading mid-feature.
 
 **API tooling note**: Swagger UI (via Swashbuckle) is the always-on, auto-generated reference for "what does the API look like right now." Bruno collections are checked into the repo under `bruno/` (one `.bru` request file per endpoint, organized by resource) and are the hand-maintained, git-diffable counterpart — useful for exploratory testing during development and as a runnable record of real request/response examples, including authenticated flows Swagger UI doesn't exercise well on its own. Neither replaces the automated xUnit test suite (§8); both are developer-facing tools that sit alongside it.
 
@@ -186,51 +178,27 @@ Activity feed is **query-derived** in Phase 1 (pull recent Logs/Lists from follo
 - Users can mark lists/profile as private; support account data export/delete (GDPR-lite) before any public launch.
 
 **Resourcing**
-- Assume solo-or-small-team development — the step-by-step plan below is scoped for that, not a large team.
+- Assume solo-or-small-team development — the build plan in §9 and `ROADMAP.md` are scoped for that, not a large team.
 
 **Testing**
 - Backend: xUnit for services/business logic, integration tests against a test Postgres instance for API endpoints.
-- Frontend: Vitest + React Testing Library for components; no E2E framework required until Phase 2 stabilizes core flows.
+- Frontend: Vitest + React Testing Library for components. There's no E2E suite in the repo: browser checks run on demand with Playwright from a scratch folder (the `browser-check` skill), and manual checklists live in `testing/` (the `test-plan` skill).
 
-## 9. Step-by-Step Plan
+## 9. Original Build Plan (done)
 
-**Phase 0 — Setup**
-- Solution scaffolding: `Argos.Api`, `Argos.Domain`, `Argos.Infrastructure` projects; React app via Vite
-- Docker Compose for local Postgres
-- Basic CI (build + test on push)
+The MVP was built in this order. `backend-tasks/` and `frontend-tasks/` refer to these phase numbers. What comes next is decided by `ROADMAP.md`.
 
-**Phase 1 — Book data foundation**
-- EF Core models + migrations: `Users`, `Books`
-- `OpenLibraryClient` + caching layer; search & detail endpoints
-- Frontend: search page, book detail page
-
-**Phase 2 — Auth**
-- ASP.NET Identity, register/login, JWT issuance
-- Frontend auth flows, protected routes, token storage
-
-**Phase 3 — Logging & ratings**
-- `Logs` entity + CRUD endpoints (shelve, rate, review, dates)
-- Profile page: shelves, log history, basic stats
-
-**Phase 4 — Social**
-- `Follows` + follow/unfollow endpoints
-- Activity feed (query-derived)
-- User search/profile browsing
-
-**Phase 5 — Lists**
-- `Lists`/`ListItems` CRUD
-- Public list pages
-
-**Phase 6 — MVP polish & launch**
-- Responsive UI pass
-- Deploy (backend + Postgres + frontend hosting — provider TBD)
-- Closed beta with a small user group; gather feedback before Phase 2 scoping
-
-**Phase 7+ (post-MVP)** — Goodreads import, comments/likes, recommendations, mobile app, per the Phase 2/3 feature lists above.
+- **Phase 0 — Setup:** the three-project solution, the Vite app, Docker Compose Postgres, CI
+- **Phase 1 — Book data:** `Users`, `Books`, `OpenLibraryClient` + cache, search and book pages
+- **Phase 2 — Auth:** Identity + JWT, frontend auth flows and protected routes
+- **Phase 3 — Logging & ratings:** `Logs` CRUD, profile shelves, history and stats
+- **Phase 4 — Social:** follows, the query-derived feed, user search
+- **Phase 5 — Lists:** `Lists`/`ListItems`, public list pages
+- **Phase 6 — MVP polish:** responsive pass. Deploying and the closed beta moved to `ROADMAP.md` (Stage 4 onward)
 
 ## 10. Open Decisions
 
 - Hosting provider (Azure fits the .NET stack naturally; Render/Railway/Fly.io are cheaper options for an MVP). Options and 2026 prices researched in `ACCOUNTS-AND-HOSTING.md` §2.3 (leaning: Cloudflare Pages + Render + Neon); not decided yet.
 - Whether public book/profile pages need SEO/SSR — if so, revisit the pure-SPA choice for those routes specifically (rest of the app stays SPA either way).
 - ~~Half-star ratings vs. whole-star only.~~ Resolved 2026-10-01: half stars, 0.5–5, for logs and club ratings (`specs/reviews-improvements.md`).
-- ~~Import priority after MVP.~~ Resolved 2026-10-06: Goodreads + StoryGraph CSV import is **Next up** #3 (§4).
+- ~~Import priority after MVP.~~ Resolved 2026-10-06: Goodreads + StoryGraph CSV import is `ROADMAP.md` Stage 2.

@@ -2,13 +2,17 @@
 
 A running, dated log of every real change and fix made to Argos with Claude Code — features, backend gaps found and fixed, bugs, and anything non-obvious enough to be worth finding again later. Newest first.
 
-**Why this file exists:** the detailed reasoning for any given decision lives in the relevant `backend-tasks/*.md`, `frontend-tasks/*.md`, or `specs/*.md` file (each has its own `## Progress`/`## Design` section). This file is the index across all of them — short enough to skim in one pass when you're trying to remember *whether* something was already tried, so you know which file to open for the *why*.
+**Why this file exists:** the detailed reasoning for any given decision lives in the relevant `specs/*.md` file (or, for the original build, `backend-tasks/*.md` / `frontend-tasks/*.md`). This file is the index across all of them — short enough to skim in one pass when you're trying to remember *whether* something was already tried, so you know which file to open for the *why*.
 
 **Format for a new entry:** `### YYYY-MM-DD — Title`, then 2-4 sentences: what changed, why, and a link to the file with full detail. Add entries as work happens, not in a batch after the fact — that's what keeps this useful.
 
 **Archiving:** this file keeps only the last ~3 days of entries in full. When it grows past ~30 KB, move older entries into `changelog/YYYY-MM.md` (newest first) and add a one-line title for each to the index at the bottom, so nothing old drops out of sight.
 
 ---
+
+### 2026-10-07 — Claude setup tidied: one facts file, fixed agents and skills, browser-check skill
+
+A review of the agents, skills and memory found stale facts and contradictions. For example, every agent still said Argos wasn't a git repo, and the orchestrator only reported review findings when the standing rule is to fix the clear-cut ones. A new `CLAUDE.md` holds the shared project facts once, and each agent now gets only what its role needs. The scaffolding skills gained the five-language and error-code steps, web-design now knows the 5 themes and real breakpoints, and the new `browser-check` skill holds the Playwright recipe (including confirming test readers' emails). To save tokens, `SPEC.md` §4 "Next up" and §9 were shortened to pointers to `ROADMAP.md`, and the Oct 4 changelog entries were archived.
 
 ### 2026-10-07 — Accounts Phase 3: the settings page
 
@@ -189,70 +193,6 @@ Phase 2 of `specs/feed-redesign.md`. The Feed now includes your own reviews and 
 
 Phase 1 of `specs/feed-redesign.md`. Posts duplicated Writings with fewer features (no likes, comments, editing or deleting), so they're gone: a Writing without a title is now a short note (≤1000 characters, no highlight-comments), and with a title it's a full piece. Migration `FoldPostsIntoWritings` turned the 5 existing posts into notes and dropped `Posts`. One "What are you reading or thinking?" composer replaces the two prompts; it starts as a note, with "+ Add title" and "This is a quote". Writings can be liked (`WritingLikes`), and feed and Writings cards show a ♥ button and a 💬 count. The Posts tab is gone and `/posts` redirects to `/writings`. Also fixed: deleting a writing left its comments behind; like buttons ignored refetched values (liking in the modal and then on the card double-counted); comment counts didn't refresh after commenting; `WritingCard` nested a `<div>` inside a `<p>`.
 
-### 2026-10-04 — Readings strip on every section, one shared frame
-
-The Readings strip only appeared on Feed, so switching to Writings, Reviews or Posts made the page jump. The four sections are now nested routes under a new `SectionsLayout` (strip + `SectionTabs` + `<Outlet />`), so the strip and tabs stay mounted and only the content below swaps: no reload of the strip, no jump. Checked live: the same strip element survives every tab switch, its position doesn't move, and the activity list isn't refetched. The pages themselves no longer render the strip or tabs.
-
-### 2026-10-04 — Section tabs double as the page title
-
-Feed, Writings, Reviews and Posts each had a big heading between the Readings strip and the tab bar. That heading is gone. The active tab is now the title instead: large serif, full-strength text, no underline; the other tabs stay small and muted. Each page keeps its `<h1>` hidden for screen readers. The change is scoped to `SectionTabs`, so the review sub-tabs and Browse lists tabs, which share the same base styles, look as before.
-
-### 2026-10-04 — Readings strip becomes stories, with likes and comments
-
-The home page's "Readings" strip opened a small card pinned to the top-left, so it looked like it belonged to the wrong book, and you could only look at it. The strip now works like Instagram stories:
-- One tile per person, with a count when they have several updates. New updates get an accent ring; ones you've seen fade.
-- A "You" tile shows your own updates with their like and comment totals.
-- Clicking a tile opens a centered viewer (full screen on phones). ‹ / › and the arrow keys step through stories and roll on to the next person. There's no auto-advance timer.
-- Each story has a ♥ like and a comment thread with replies, for the owner and their followers only.
-
-Backend: a `ReadingLikes` table (migration `AddReadingLikes`), `CommentTargetType.Reading`, `POST/DELETE /api/readings/{id}/like` and `GET /api/readings/{id}/comments`. `/api/feed/activity` now returns up to 5 stories per person, includes your own, and adds like and comment counts. Deleting a log now also deletes its review and story comments, which used to be left behind. `ActivityItemPopover` was removed.
-
-The code and security review found no access holes. Fixes from the review:
-- **Story time:** a story now dates from its last progress update (new `Log.ProgressUpdatedAt`, migration `AddLogProgressUpdatedAt`), so a page update on an old book counts as news.
-- **Activity query:** the per-person cap now runs in SQL instead of loading whole shelves into memory.
-- **Moderation:** story owners can delete any comment on their story, and someone unfollowed or blocked can no longer edit their old comment.
-- **Viewer:** it no longer shows stale likes or jumps to a different story when data refreshes, and Esc or a stray click no longer throws away a comment draft. The dialog now keeps keyboard focus inside it.
-
-See `specs/reading-stories.md`.
-
-### 2026-10-04 — Fix: ♡ Favourite button stayed locked after logging a book as Read
-
-The book page's Favourite button is only enabled once you have a Read log, but saving a log (`LogForm`) or deleting one (`LogReviewCard`) never refreshed the cached favourite status, so the button kept saying "Mark it as read…" until a full page reload. Both now invalidate the `['favourites']` queries.
-
-### 2026-10-04 — Clubs page: template cover for clubs without a book cover
-
-Clubs that are still choosing a book, or reading one Open Library has no cover for, showed an empty dashed box. They now get a template "book": the club's initial in serif on an accent-tinted tile with a spine strip. One of three tints is picked from the club name, so it stays the same between visits. It is built only from existing tokens (via `color-mix`), so it follows dark mode. See `specs/clubs-directory-refresh.md`.
-
-### 2026-10-04 — Clubs page: "Your clubs" cards, covers, realistic seed clubs
-
-The Clubs page was one flat list of text rows, with your own clubs mixed in. It now opens with "Your clubs" cards (cover, your progress bar, next checkpoint, members), followed by "Discover clubs" without your clubs, sorted by size, with the current book's cover on every row. Backend: `ClubDto` and `MyClubSummaryDto` gained `CurrentBookCoverUrl`, and `MyClubSummaryDto` gained `MemberCount`. Five realistic clubs were seeded in the dev database, and the old test clubs were left alone. The review found that the Clubs page could be up to a minute stale after creating a club or changing one on its page. Both now refresh it. See `specs/clubs-directory-refresh.md`.
-
-### 2026-10-04 — Find readers: label the filter bar as filtering people
-
-The Genre/Audience/Mood selects on Find readers looked like book filters, since nothing said they filter readers by what they read. The bar now starts with a "Readers who read" lead-in, which also labels the group for screen readers. No behaviour change. See `specs/find-readers-discovery.md` §3.7.
-
-### 2026-10-04 — Find readers Phases 2–3: fixes from code and security review
-
-Ran the `reviewer` and `security-review` agents on Phases 2–3; from now on they run at the end of every phase. Neither found a private-rating leak or a way for an invited reader to act as a member.
-
-Fixed:
-- **Crash:** a malformed Open Library subject (an overflowing reading grade, a null) could crash the API and keep crashing it on every restart. Classification now can't throw, and the refresh and backfill catch per book.
-- **Private moods:** the mood filter used moods from Private reviews; now Public only.
-- **Blocking** cancels pending club invites between the two readers.
-- **Invite link:** an invited reader opening a private club's link saw "Request sent" after actually joining. The endpoint now returns the status.
-- **Back after a buddy read** reopened the form and could create a duplicate club. It now returns to the book page.
-- **Smaller fixes:**
-  - "Finish by" today works west of UTC.
-  - Following refreshes taste matches.
-  - Books in both fiction and nonfiction count for both.
-  - Stale filter URLs are cleaned.
-  - "Rated exactly alike" is only claimed at 100%.
-  - "Literary criticism" and "political science" no longer count as genres.
-  - Book-page readers drop the match badge, per the spec.
-  - Simultaneous invites no longer give a 500.
-
-Backend 314 → 318 tests, frontend 360 → 362, all passing; every fix was rechecked live in Chromium. Left for later: invite rate limits (with the account-system spec's rate limits), and the per-request cost of browse at larger scale. Details in `specs/find-readers-discovery.md` under Verification.
-
 ---
 
 ## Older entries — index
@@ -261,6 +201,14 @@ One line per archived entry. Open the month's file for the full text.
 
 ### October 2026 → [changelog/2026-10.md](changelog/2026-10.md)
 
+- 10-04 — Readings strip on every section, one shared frame
+- 10-04 — Section tabs double as the page title
+- 10-04 — Readings strip becomes stories, with likes and comments
+- 10-04 — Fix: ♡ Favourite button stayed locked after logging a book as Read
+- 10-04 — Clubs page: template cover for clubs without a book cover
+- 10-04 — Clubs page: "Your clubs" cards, covers, realistic seed clubs
+- 10-04 — Find readers: label the filter bar as filtering people
+- 10-04 — Find readers Phases 2–3: fixes from code and security review
 - 10-03 — Find readers, Phase 3: book-page readers, buddy reads and club invites, genre/audience/mood filters (spec complete)
 - 10-03 — Find readers, Phase 2: taste match, readers like you, compare page
 - 10-03 — Blocking hides the blocker's profile from the blocked reader
