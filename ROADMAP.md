@@ -233,6 +233,7 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 - [ ] Every bug testers found is fixed or filed as P3.
 - [ ] No open P1 or P2 bugs.
 - [ ] `reviewer` + `security-review` pass over the whole app, not just the last change.
+- [ ] **Full manual test pass.** Create `Argos/testing/README.md`: one row per area plan with its step count, the commit it was written against, the date last tested and the result. Then run `/test-plan` for every area so each plan matches the code that will launch, and fill in `_shared.md`. Run Playwright through the steps not tagged 👤, then do the 👤 steps by hand on a real phone and desktop. Every ❌ becomes a bug file. Left until now on purpose, so features that are still changing don't need testing twice. *Size M.*
 - [ ] Move the API to Render's paid plan (~$7/month) so it never sleeps (`ACCOUNTS-AND-HOSTING.md` §2.3 C).
 - [ ] Turn off invite-only sign-up.
 - [ ] Landing page Phase 2 (`specs/landing-page.md`): live "What readers are into this week" rows, now that moderation (Stage 7) and private accounts (Stage 8) exist. *Built 2026-10-06 but switched off (`Landing:ShowcaseEnabled`).* To finish: add the private-account and moderation rules to `LandingRepository`, with tests, then switch it on. Check that the "Import from Goodreads" and "Export your data" copy (spec §7) went in when Stages 2 and 6 shipped.

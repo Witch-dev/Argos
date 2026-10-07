@@ -10,6 +10,10 @@ A running, dated log of every real change and fix made to Argos with Claude Code
 
 ---
 
+### 2026-10-07 — New `/test-plan` skill for manual testing checklists
+
+Before launch, every area of the app needs a hands-on check in the browser, not just automated tests. `.claude/skills/test-plan/SKILL.md` writes one checklist per reader journey (accounts, shelves, reviews, lists, clubs and so on) in `Argos/testing/<area>.md`. It builds them from the specs, the code as it is today and the open bugs. Each step is one action with one visible expected result, with Phone and Desktop result columns. Steps are numbered so bugs can point to them, and steps that need a person are tagged so the rest can later be run with Playwright. Checks that apply to every page (themes, languages, phone width, keyboard) live once in `_shared.md`. The `testing/README.md` index is left until most launch features are built. It's now a task in `ROADMAP.md` Stage 10, together with the full manual test pass.
+
 ### 2026-10-07 — Accounts Phase 2: emails, confirmation, forgot password, new-login alerts
 
 The API can now send email: Mailpit locally, any SMTP server (Resend) in production, through a background queue. Emails are written in the reader's language and signed "Toffee". New accounts get a confirmation link, and posting anything others can read (reviews, progress notes, comments, writings, clubs, public lists) waits for it. There's a banner and a shared dialog explaining it. Forgot/reset password works; a reset also confirms the email, lifts lockouts and logs out everywhere. A login from a browser the account hasn't seen emails the owner. The review pass moved link-signing keys into the database, put tokens after `#` in links, and added an hourly email cap. One bug was left open (`bugs/email-sending-has-no-overall-budget.md`). Details: `specs/account-system.md` Phase 2.
