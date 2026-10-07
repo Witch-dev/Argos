@@ -9,11 +9,10 @@ You implement backend features for Argos: an ASP.NET Core Web API (C#) with Post
 
 ## Project facts (read this instead of rediscovering them)
 
-- **Two folders.** Code lives in the git repo `C:/Users/jramo/Apollon`: backend in `src/` (`Argos.Api`, `Argos.Domain`, `Argos.Infrastructure`), tests in `test/Argos.Tests` (`Unit/`, `Integration/`), frontend in `web/`. Planning lives in `C:/Users/jramo/Argos` (not a git repo): `SPEC.md`, `ROADMAP.md`, `specs/*.md` (one per feature), `bugs/*.md`. Run `git diff` / `git status` inside Apollon.
+- **Two repos.** Code is in the git repo `C:/Users/jramo/Apollon`: backend in `src/` (`Argos.Api`, `Argos.Domain`, `Argos.Infrastructure`), tests in `test/Argos.Tests` (`Unit/`, `Integration/`), frontend in `web/`. Planning is in the separate git repo `C:/Users/jramo/Argos`: `SPEC.md`, `ROADMAP.md`, `specs/*.md` (one per feature), `bugs/*.md`. Run `git diff` / `git status` inside Apollon for code changes.
 - **Build in Release.** The user usually has the dev API running, which locks `bin/Debug`. Use `dotnet build -c Release` and `dotnet test test/Argos.Tests -c Release`. For EF migrations, run `dotnet build src/Argos.Api -c Release` first, then `dotnet ef migrations add|database update --project src/Argos.Infrastructure --startup-project src/Argos.Api --configuration Release --no-build`. Don't kill the running API. Say it needs a restart after backend changes.
 - **Frontend checks** (in `web/`): `npm test` (Vitest), `npm run build` (typecheck + build), `npm run lint`.
 - **Every on-screen text is translated** (i18next) into en, es, pt-BR, de and fr, in `web/src/locales/<lang>/<section>.json`. New or changed UI text goes into all five files. `locales.test.ts` fails if a key is missing. Backend error messages have codes in `src/Argos.Api/Errors/ErrorCodes.cs`, and the frontend translates them, so a new error message needs a code there too.
-- **Styling** uses the design tokens in `web/src/index.css`. Don't invent new colours or spacing. The `web-design` skill in `Argos/.claude/skills/` describes the conventions.
 
 ## Working with the user
 
@@ -40,10 +39,10 @@ All external book-data calls go through a dedicated `OpenLibraryClient` service 
 
 ## Conventions
 
-- EF Core migrations: generate with `dotnet ef migrations add <Name>`, review the generated migration before applying, apply with `dotnet ef database update`. Never hand-edit a migration that's already been applied elsewhere.
-- Auth: ASP.NET Core Identity issuing JWTs; protect endpoints with `[Authorize]` rather than ad hoc checks in handlers.
-- Background/periodic work (e.g. Open Library cache refresh) belongs in a hosted service or Hangfire job, not inline in a request path.
-- Write xUnit tests for new service/business logic as you go, or hand off to `tester` if the change is large enough to warrant a dedicated pass — don't skip coverage silently either way.
+- EF Core migrations: generate and apply with the Release commands in Project facts, and review the generated migration before applying it. Never hand-edit a migration that's already been applied elsewhere.
+- Auth: ASP.NET Core Identity issuing JWTs; protect endpoints with `[Authorize]` rather than ad hoc checks in handlers. Check ownership, visibility, blocks and the confirmed-email gate (`[RequireConfirmedEmail]`) where the spec asks for them, not just "is logged in".
+- Background/periodic work (e.g. Open Library cache refresh, the email queue) belongs in a hosted `BackgroundService`, like the existing ones in `src/Argos.Api/Services`, not inline in a request path.
+- Write xUnit tests for new service/business logic as you go. You can't start the `tester` agent yourself, so if the change needs a bigger dedicated test pass, say so in your summary. Don't skip coverage silently.
 - Build/verify in Release (see Project facts) and run the relevant tests before considering a change done.
 
 Don't add validation, error handling, or abstractions for cases the spec doesn't call for. A new endpoint doesn't need a new architectural layer; three similar handlers are fine without a shared base class until a fourth shows up.

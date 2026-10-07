@@ -9,11 +9,11 @@ You review changes to the Argos codebase. You do not edit code — you find prob
 
 ## Project facts (read this instead of rediscovering them)
 
-- **Two folders.** Code lives in the git repo `C:/Users/jramo/Apollon`: backend in `src/` (`Argos.Api`, `Argos.Domain`, `Argos.Infrastructure`), tests in `test/Argos.Tests` (`Unit/`, `Integration/`), frontend in `web/`. Planning lives in `C:/Users/jramo/Argos` (not a git repo): `SPEC.md`, `ROADMAP.md`, `specs/*.md` (one per feature), `bugs/*.md`. Run `git diff` / `git status` inside Apollon.
-- **Build in Release.** The user usually has the dev API running, which locks `bin/Debug`. Use `dotnet build -c Release` and `dotnet test test/Argos.Tests -c Release`. For EF migrations, run `dotnet build src/Argos.Api -c Release` first, then `dotnet ef migrations add|database update --project src/Argos.Infrastructure --startup-project src/Argos.Api --configuration Release --no-build`. Don't kill the running API. Say it needs a restart after backend changes.
+- **Two repos.** Code is in the git repo `C:/Users/jramo/Apollon`: backend in `src/` (`Argos.Api`, `Argos.Domain`, `Argos.Infrastructure`), tests in `test/Argos.Tests` (`Unit/`, `Integration/`), frontend in `web/`. Planning is in the separate git repo `C:/Users/jramo/Argos`: `SPEC.md`, `ROADMAP.md`, `specs/*.md` (one per feature), `bugs/*.md`. Run `git diff` / `git status` inside Apollon for code changes.
+- **Build and test in Release** (`dotnet build -c Release`, `dotnet test test/Argos.Tests -c Release`). The user's running dev API locks `bin/Debug`; don't kill it.
 - **Frontend checks** (in `web/`): `npm test` (Vitest), `npm run build` (typecheck + build), `npm run lint`.
 - **Every on-screen text is translated** (i18next) into en, es, pt-BR, de and fr, in `web/src/locales/<lang>/<section>.json`. New or changed UI text goes into all five files. `locales.test.ts` fails if a key is missing. Backend error messages have codes in `src/Argos.Api/Errors/ErrorCodes.cs`, and the frontend translates them, so a new error message needs a code there too.
-- **Styling** uses the design tokens in `web/src/index.css`. Don't invent new colours or spacing. The `web-design` skill in `Argos/.claude/skills/` describes the conventions.
+- **Styling** uses the design tokens in `web/src/index.css` (5 themes). Don't invent new colours or spacing. The `web-design` skill in `Argos/.claude/skills/` describes the conventions.
 
 ## What "correct" means for this project
 

@@ -55,6 +55,8 @@ Gaps in the sequence (5, 7) are intentional — round up or down to the nearest 
 
 A second breakpoint, **1100px**, exists only in `Layout.module.css` for the 3-column shell itself: below it `RightPanel`/`.rightRail` hides (`display: none`) and `.content` drops `margin-right`, since the center content plus two `15rem` rails needs real width to avoid feeling cramped — a genuine break the 640px step doesn't cover. Don't add further breakpoints for individual pages' own internal layouts; this one is specifically for the global rail.
 
+A third, **480px**, exists only in `LandingPage.module.css` to hide the top bar's join button on small phones (the hero's big join button is right below). It's local to that page, not a global step.
+
 ## Typography
 
 - Two font tokens: `--font-sans` (`Public Sans` + system-ui fallback stack) for UI chrome, `--font-serif` (`Literata` + Georgia fallback) for headings, book titles, and review/post body text. `body` sets `--font-sans`; `h1`–`h4` are switched to `--font-serif` by a base rule in `index.css`. Both load from Google Fonts (see `index.html`).

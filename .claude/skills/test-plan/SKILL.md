@@ -31,7 +31,7 @@ If the area isn't in the map, or a new spec doesn't fit, add a row here as part 
 ## Step 2 — Gather what the area should do
 
 Read, in this order, and only what the area needs:
-1. The area's `Argos/specs/*.md`: the behaviour, edge cases and anything marked as shipped vs not built yet.
+1. The area's `Argos/specs/*.md`: the Status line, then the Problem, Clarifying decisions, Design and Explicitly out of scope sections. Skip the Tasks checklist and progress notes (they're long and describe how it was built, not what a reader sees), unless you need one to settle a spec-vs-code question.
 2. The code that exists **today** in `C:/Users/jramo/Apollon`: the routes in `web/src/` (pages, buttons, dialogs) and the controller rules in `src/Argos.Api` (who may do what, limits, error codes). The plan tests the app as built, not as first imagined. If the spec and the code disagree, write the step from the spec, and list the disagreement under "Questions" at the bottom of the plan.
 3. `Argos/bugs/README.md`: open bugs in this area become steps marked `known bug: <file>`, so the tester knows the failure is expected.
 4. The existing `Argos/testing/<area>.md`, if there is one. Update it in place: keep results already recorded, remove steps for removed features, add new ones.
@@ -94,7 +94,7 @@ An area plan adds a row here only for something new that applies everywhere.
 
 ## Test readers
 
-Plans use fresh readers created through the API, not the seeded `alice_reads`: **reader A** (main tester), **reader B** (follows A), **reader C** (a stranger), **reader D** (blocked by A). Say in "Before you start" what each needs (books shelved, a club, a private list). How to seed them is in the user's browser-testing notes (register, follows, logs, lists and clubs through the API).
+Plans use fresh readers created through the API, not the seeded `alice_reads`: **reader A** (main tester), **reader B** (follows A), **reader C** (a stranger), **reader D** (blocked by A). Say in "Before you start" what each needs (books shelved, a club, a private list). How to seed them through the API (register, follows, logs, lists, clubs) is in the `browser-check` skill.
 
 ## Step 6 — Finish
 
