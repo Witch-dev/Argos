@@ -99,6 +99,6 @@ Plans use fresh readers created through the API, not the seeded `alice_reads`: *
 ## Step 6 — Finish
 
 - Tell the user the file path, how many steps it has, and what's in "Questions".
-- Add a CHANGELOG entry only when creating a new plan, not for small updates.
+- Add a CHANGELOG line (pointing at the plan file) only when creating a new plan, not for small updates.
 - If `Argos/testing/README.md` exists, update this area's row (step count, "written against" date). Don't create the README; the user will ask for it.
 - Failures found while **running** a plan become bug files in `Argos/bugs/` as usual, with a link to the step number.

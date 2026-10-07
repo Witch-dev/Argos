@@ -22,6 +22,6 @@ Argos is a Letterboxd-like app for books. This folder holds the planning, not th
 
 ## Records to keep
 
-- `CHANGELOG.md`: a 2–4 sentence entry for every real change, written when it's finished. Read only its top ~15 lines and insert after the first `---`.
+- `CHANGELOG.md`: one line per real change, written when it's finished: `- YYYY-MM-DD — What changed → where the detail is` (a spec, a bug file, or `Apollon <hash>` for a small fix, whose commit message then carries the detail). Read only its top ~15 lines and add the line at the top of the current month's section.
 - `bugs/`: one file per bug that isn't fixed on the spot, plus a row in `bugs/README.md` (priority P1–P3, size S/M/L).
 - `specs/<feature>.md`: one file per feature, with Backend / Frontend / Verification task headings. Re-read it against what was built before ticking tasks.
