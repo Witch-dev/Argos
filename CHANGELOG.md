@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-07 — Orchestrator agent retired, `security-review` agent renamed `argos-security`, Claude memory backed up to `claude-memory/` → `CLAUDE.md`
 - 2026-10-07 — Claude setup tidied: one facts file, fixed agents and skills, browser-check skill → `CLAUDE.md`
 - 2026-10-07 — Accounts Phase 3: the settings page → `specs/account-system.md`
 - 2026-10-07 — New `/test-plan` skill for manual testing checklists → `.claude/skills/test-plan/SKILL.md`
