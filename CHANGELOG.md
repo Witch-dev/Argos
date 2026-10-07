@@ -10,6 +10,10 @@ A running, dated log of every real change and fix made to Argos with Claude Code
 
 ---
 
+### 2026-10-07 — The Argos planning folder is now its own git repository
+
+This folder (specs, roadmap, changelog, bugs, learning tasks, agents and skills) had no version history or backup. It's now a git repo on branch `main`, meant to be pushed to a private GitHub repo at `Witch-dev/Argos`. It stays separate from the Apollon code repo on purpose: code history stays clean, doc edits don't trigger CI, and plans stay private if the code repo is ever made public. `.claude/settings.local.json` (per-machine permissions) is gitignored.
+
 ### 2026-10-07 — A slow language save could show the previous reader after switching accounts
 
 CI failed `AuthContext.test.tsx` after `ff7ce14`: logging out Alice and in as Bob still showed "authenticated as alice". The cause was a real bug, not a flaky test. When an account has no saved language, logging in saves the browser's language to it in the background (`saveLanguageToAccount`). If that save finished, or failed and rolled back, after someone else had logged in, it wrote the previous reader's account over the new one's. CI's slow machine made the failed request land late. Now the save only touches the cache while it still holds the same reader. 3 new tests in `saveLanguageToAccount.test.ts` fail on the old code and pass on the new. The login tests' readers also have a saved language now, so they no longer make a real network request. All 505 frontend tests pass. Pushed as commit `ef01f09`.
