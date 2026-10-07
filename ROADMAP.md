@@ -2,7 +2,7 @@
 
 Written 2026-10-06. This is the **order of work** from today to a public launch. It pulls together `SPEC.md` §4 "Next up", `PRODUCT-ANALYSIS.md`, `ACCOUNTS-AND-HOSTING.md`, `specs/account-system.md` and the open bugs in `bugs/README.md`.
 
-**How to use it:** work top to bottom. Tick a box when it's done and verified, and add the date. Each step that says **needs spec** gets a spec in `specs/` first (the usual way: clarifying questions → spec → build phase by phase → reviewer + security-review → changelog). When a whole stage is done, add a `CHANGELOG.md` entry.
+**How to use it:** work top to bottom. Tick a box when it's done and verified, and add the date. Each step that says **needs spec** gets a spec in `specs/` first (the usual way: clarifying questions → spec → build phase by phase → reviewer + argos-security → changelog). When a whole stage is done, add a `CHANGELOG.md` entry.
 
 **Sizes:** S = under a day · M = a few days · L = a week or more. These are rough and include tests and review.
 
@@ -80,7 +80,7 @@ Small things that are cheaper now than later.
 - [x] **Refuse passwords that have appeared in data breaches (new, small).** Have I Been Pwned's free check, which only sends the first 5 characters of a scrambled code of the password. Protects every reader against attackers trying passwords leaked from other sites. *Size S.* **Done 2026-10-07.**
 - [x] **Account Phase 2: email.** Sending email (Mailpit locally, Resend in production), confirm your email, forgot password, and a **"new login" email** when someone logs in from a new browser or device. *Size M.* **Done 2026-10-07.** Run `docker compose up -d mailpit` and read emails at localhost:8025.
 - [x] **Account Phase 3: settings page.** Display name and bio (nothing can set them today, though the feed shows them), change password, change email, change username, sessions list with "log out everywhere". *Size M.* **Done 2026-10-07.** Settings is in the sidebar.
-- [ ] **Invite-only sign-up switch (new, small).** A setting that makes registration need an invite code, so the beta stays closed. Turn it off at public launch. *Size S.*
+- [x] **Invite-only sign-up switch (new, small).** A setting that makes registration need an invite code, so the beta stays closed. Turn it off at public launch. *Size S.* **Done 2026-10-07** (grew to M: readers invite readers, 5 links each; `specs/invite-only-signup.md`). Turn on with `Registration__InviteOnly=true` in production, after your own account exists.
 
 **Done when:** a reader can sign up, confirm their email, reset a forgotten password, and edit their profile, all with real emails arriving through Mailpit.
 
@@ -233,7 +233,7 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 
 - [ ] Every bug testers found is fixed or filed as P3.
 - [ ] No open P1 or P2 bugs.
-- [ ] `reviewer` + `security-review` pass over the whole app, not just the last change.
+- [ ] `reviewer` + `argos-security` pass over the whole app, not just the last change.
 - [ ] **Full manual test pass.** Create `Argos/testing/README.md`: one row per area plan with its step count, the commit it was written against, the date last tested and the result. Then run `/test-plan` for every area so each plan matches the code that will launch, and fill in `_shared.md`. Run Playwright through the steps not tagged 👤, then do the 👤 steps by hand on a real phone and desktop. Every ❌ becomes a bug file. Left until now on purpose, so features that are still changing don't need testing twice. *Size M.*
 - [ ] Move the API to Render's paid plan (~$7/month) so it never sleeps (`ACCOUNTS-AND-HOSTING.md` §2.3 C).
 - [ ] Turn off invite-only sign-up.

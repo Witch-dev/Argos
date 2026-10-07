@@ -1,0 +1,15 @@
+- [Stepwise approval workflow](feedback_stepwise_approval_workflow.md) — RETIRED 2026-09-28: implement directly now, no per-step approval, backend or frontend
+- [Explain simply, no assumed knowledge](feedback_explain_simply_no_assumed_knowledge.md) — define terms plainly, don't assume background
+- [Argos backend learning path](project_argos_backend_learning_path.md) — history: original backend built as a 17-module curriculum; finished, keep explaining concepts plainly
+- [Argos frontend tasks](project_argos_frontend_tasks.md) — history: original frontend tasks 01-10 done 2026-09-27; new work goes in specs/, not new task files
+- [Maintain the changelog](feedback_maintain_changelog.md) — one line per real change in Argos/CHANGELOG.md, pointing to the spec/bug/commit with the detail
+- [Feature spec workflow](feedback_feature_spec_workflow.md) — one spec file per feature in Argos/specs/, Backend/Frontend sub-headings in its task list, not separate files
+- [Apollon repo split](project_apollon_repo_split.md) — code in Apollon repo, planning + .claude tooling in Argos repo; shared facts live in Argos/CLAUDE.md
+- [Future ideas backlog](project_argos_future_ideas_backlog.md) — Argos/FUTURE-IDEAS.md captures "add this as a future feature" ideas without a full spec convo
+- [Review after each phase](feedback_review_after_each_phase.md) — run reviewer at the end of every spec phase (argos-security only if auth/input/privacy/external API), then fix findings
+- [Launch roadmap](project_argos_launch_roadmap.md) — Argos/ROADMAP.md decides build order to beta + public launch; next task = first unticked box
+- [Bug files](feedback_bug_files.md) — every unfixed bug gets its own md in Argos/bugs/, indexed by priority P1-P3 and size S/M/L
+- [CI and pushing](project_apollon_ci_and_pushing.md) — Apollon CI is green; offer commit+push after each finished piece, user checks Actions tab
+- [Token efficiency](feedback_token_efficiency.md) — small work done directly, not via subagents; Sonnet agents except argos-security on Opus; no orchestrator
+- [Suggest model/effort](feedback_suggest_model_effort.md) — before each task, one line: keep Opus medium, or switch to high/Sonnet
+- [Handoff prompt for new session](feedback_handoff_prompt_new_session.md) — at the end of a finished task/phase/stage, give a 2–4 line prompt to continue in a fresh session

@@ -1,5 +1,5 @@
 ---
-name: security-review
+name: argos-security
 description: Reviews Argos changes for security issues — auth/JWT handling, input validation, SQL/EF injection risk, secrets handling, and Open Library client hygiene. Read-only; reports findings via ReportFindings. Use only when a change touches auth, user input reaching the server, privacy/visibility rules, or an external API call — skip it for UI-only or styling work.
 tools: Read, Grep, Glob, Bash, ReportFindings
 model: opus
