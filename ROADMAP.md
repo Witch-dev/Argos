@@ -78,7 +78,7 @@ Small things that are cheaper now than later.
 
 - [x] **Account Phase 1, the parts not already shipped:** 12-character passwords with the common-password list, log in with email *or* username, live "username taken" check, reserved names (`me`, `admin`, `settings`…). Moving the tokens into an httpOnly cookie needs the site and API on the same domain, so **do that part in Stage 4**, once hosting exists. *Size M.* **Done 2026-10-07.** The security review also changed lockout to count per network address (see CHANGELOG).
 - [x] **Refuse passwords that have appeared in data breaches (new, small).** Have I Been Pwned's free check, which only sends the first 5 characters of a scrambled code of the password. Protects every reader against attackers trying passwords leaked from other sites. *Size S.* **Done 2026-10-07.**
-- [ ] **Account Phase 2: email.** Sending email (Mailpit locally, Resend in production), confirm your email, forgot password, and a **"new login" email** when someone logs in from a new browser or device. *Size M.*
+- [x] **Account Phase 2: email.** Sending email (Mailpit locally, Resend in production), confirm your email, forgot password, and a **"new login" email** when someone logs in from a new browser or device. *Size M.* **Done 2026-10-07.** Run `docker compose up -d mailpit` and read emails at localhost:8025.
 - [ ] **Account Phase 3: settings page.** Display name and bio (nothing can set them today, though the feed shows them), change password, change email, change username, sessions list with "log out everywhere". *Size M.*
 - [ ] **Invite-only sign-up switch (new, small).** A setting that makes registration need an invite code, so the beta stays closed. Turn it off at public launch. *Size S.*
 

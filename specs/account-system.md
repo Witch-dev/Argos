@@ -1,6 +1,6 @@
 # Feature Spec — Account System
 
-**Status:** 🚧 Phase 1 done (2026-10-07), except the parts moved to Roadmap Stage 4 (cookie, in-memory token, 15-minute token). Part of Phase 1 was already built by `specs/app-hardening.md`; see §0. Phases 2–6 not started.
+**Status:** 🚧 Phases 1–2 done (2026-10-07), except the parts moved to Roadmap Stage 4 (cookie, in-memory token, 15-minute token). Part of Phase 1 was already built by `specs/app-hardening.md`; see §0. Phases 3–6 not started.
 
 Builds on the existing auth: ASP.NET Core Identity with `ApplicationUser` (`Argos.Infrastructure/Identity/ApplicationUser.cs`), JWTs issued by `TokenService`, refresh tokens from `RefreshTokenService`, and `AuthController` (`/api/auth/register`, `/login`, `/refresh`, `/logout`, `/me`). On the frontend: `AuthContext`, `api/authToken.ts` (login token and refresh token in `localStorage`) and `api/client.ts` (adds the `Authorization` header; on a 401 it refreshes once and retries). The research behind this spec, including the Goodreads/Letterboxd comparison, is in `ACCOUNTS-AND-HOSTING.md`. Read that first.
 
@@ -355,20 +355,32 @@ Items marked *(app-hardening)* were built there; items marked *(Stage 4)* wait f
 ### Phase 2 — Email, confirmation, forgot password
 
 #### Backend
-- [ ] `IEmailSender` / `SmtpEmailSender` (MailKit) / `EmailOptions`; `EmailQueue` + `EmailQueueService`; `AccountEmails`
-- [ ] `mailpit` in `docker-compose.yml`; dev SMTP settings; `App:FrontendBaseUrl`
-- [ ] Token lifespans (confirm 3 days, reset 1 hour as a separate provider)
-- [ ] Public `RefreshTokenService.RevokeAllForUserAsync` (revoke-all exists only inside rotation today, §0)
-- [ ] Confirm / resend / forgot / reset endpoints; reset also confirms the email; reset revokes all sessions
-- [ ] Register sends the confirmation email; migration marks existing users confirmed
-- [ ] `[RequireConfirmedEmail]` on the endpoints in §3.5 + the in-service checks for reviews with text and public lists
-- [ ] `CurrentUserResponse` new fields
-- [ ] *(Added 2026-10-07)* **"New login" email**: when someone logs in from a browser/device not seen before on that account, email the owner ("New login to Argos from Chrome on Windows. Wasn't you? Reset your password."). Needs a way to recognise a device (e.g. a long-lived random cookie or the User-Agent kept with the session in Phase 3); decide which when the phase starts.
-- [ ] Tests: each gated endpoint 403 → OK after confirming; forgot-password gives the same answer for unknown emails; reset link single use and expiry; emails land in a fake sender
+- [x] `IEmailSender` / `SmtpEmailSender` (MailKit) / `EmailOptions`; `EmailQueue` + `EmailQueueService`; `AccountEmails`. *Emails are written in the reader's `PreferredLanguage` (all 5 site languages, specs/languages.md) and say **Toffee**, the name readers see.*
+- [x] `mailpit` in `docker-compose.yml`; dev SMTP settings; `App:FrontendBaseUrl` (checked at startup)
+- [x] Token lifespans (confirm 3 days, reset 1 hour as a separate provider, `PasswordResetTokenProvider`)
+- [x] Public `RefreshTokenService.RevokeAllForUserAsync` (revoke-all exists only inside rotation today, §0)
+- [x] Confirm / resend / forgot / reset endpoints; reset also confirms the email; reset revokes all sessions. *Reset also lifts any lockout. Forgot-password, like resend, sends at most one email per account per minute (`EmailCooldown`), so nobody can flood an inbox from many addresses.*
+- [x] Register sends the confirmation email; migration marks existing users confirmed
+- [x] `[RequireConfirmedEmail]` on the endpoints in §3.5 + the checks for reviews with text and public lists. *There's no `/api/posts`: short notes are writings, so the writings gate covers them; checkpoint comment edits are `PUT /api/comments/{id}`. The review-text and public-list checks are in `LogsController` / `BookListsController` (via `IEmailConfirmationStatus`), not the services, which don't know about accounts. The filter runs before model validation, so an unconfirmed reader is told to confirm rather than about a form field.*
+- [x] `CurrentUserResponse` new fields: `emailConfirmed`, `twoFactorEnabled`, `hasPassword`. *`pendingEmail`, `usernameChangeAvailableAt` (Phase 3) and `hasGoogle` (Phase 4) wait for the data they report.*
+- [x] *(Added 2026-10-07)* **"New login" email**. *Decided at the start of the phase: each browser keeps a random id (`argos_device_id` in `localStorage`, kept across logouts) and sends it with login and sign-up; `KnownDevices` stores its SHA-256 hash with the User-Agent. A login with an id the account hasn't seen emails the owner, naming the browser and system from a fixed list ("Chrome on Windows"), with a button to the forgot-password page. Not sent when the account has no known browsers yet (every account from before this, on its first login) or its email isn't confirmed. A login with no id (a script) counts as new. A cookie was ruled out: the site and API aren't on one domain until Stage 4.*
+- [x] Tests: each gated endpoint 403 → OK after confirming; forgot-password gives the same answer for unknown emails; reset link single use and expiry; emails land in a fake sender (`AccountEmailTests`, `AccountEmailsTests`). *Other test classes treat every account as confirmed (`ApiFactory`); `StrictEmailApiFactory` turns that off.*
 #### Frontend
-- [ ] `/confirm-email`, `/forgot-password`, `/reset-password` pages; "Forgot password?" link
-- [ ] Unconfirmed banner with resend; shared `email_not_confirmed` dialog
-- [ ] Tests: banner, dialog on 403, reset form
+- [x] `/confirm-email`, `/forgot-password`, `/reset-password` pages; "Forgot password?" link. *The token is removed from the address bar once read (`useEmailLink`). A successful reset also ends the session in this browser.*
+- [x] Unconfirmed banner with resend; shared `email_not_confirmed` dialog
+- [x] Tests: banner, dialog on 403, reset form
+#### Review pass (2026-10-07)
+- [x] Code review + security review. Fixed:
+  - **Emailed links survived nothing:** the keys that sign links lived inside the container, so every redeploy broke all unused links. They're now stored in the database (`DataProtectionKeys` table).
+  - **Reset now lifts every login block**, including the per-address `LoginAttemptLimiter` ones, not only Identity's.
+  - **Remembering the browser or queueing an email can no longer fail a sign-up or login.** Errors are logged instead.
+  - **Progress notes are gated too.** They're free text anyone can read on profiles and in feeds, so an unconfirmed spam account could have used them. That's the rule in §2: "anything others can read".
+  - **A public list's details can be edited** by its owner after their email becomes unconfirmed. Only *switching* to Public needs a confirmed email.
+  - **At most 5 emails of each kind per account per hour**, on top of 1 a minute.
+  - **The token is after `#` in links** (`/reset-password#userId=…&token=…`). Browsers never send that part to a server, so it stays out of hosting logs.
+  - **Stricter production settings:** links must be HTTPS outside localhost; `Email:Host` is required outside Development; STARTTLS is required whenever an SMTP password is sent.
+  - **Send failures** log the error type, not the message, which usually repeats the address.
+  - Left open: an overall daily email budget (`bugs/email-sending-has-no-overall-budget.md`).
 
 ### Phase 3 — Settings page
 

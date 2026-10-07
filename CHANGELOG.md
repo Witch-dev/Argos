@@ -10,6 +10,10 @@ A running, dated log of every real change and fix made to Argos with Claude Code
 
 ---
 
+### 2026-10-07 — Accounts Phase 2: emails, confirmation, forgot password, new-login alerts
+
+The API can now send email: Mailpit locally, any SMTP server (Resend) in production, through a background queue. Emails are written in the reader's language and signed "Toffee". New accounts get a confirmation link, and posting anything others can read (reviews, progress notes, comments, writings, clubs, public lists) waits for it. There's a banner and a shared dialog explaining it. Forgot/reset password works; a reset also confirms the email, lifts lockouts and logs out everywhere. A login from a browser the account hasn't seen emails the owner. The review pass moved link-signing keys into the database, put tokens after `#` in links, and added an hourly email cap. One bug was left open (`bugs/email-sending-has-no-overall-budget.md`). Details: `specs/account-system.md` Phase 2.
+
 ### 2026-10-07 — The Argos planning folder is now its own git repository
 
 This folder (specs, roadmap, changelog, bugs, learning tasks, agents and skills) had no version history or backup. It's now a git repo on branch `main`, meant to be pushed to a private GitHub repo at `Witch-dev/Argos`. It stays separate from the Apollon code repo on purpose: code history stays clean, doc edits don't trigger CI, and plans stay private if the code repo is ever made public. `.claude/settings.local.json` (per-machine permissions) is gitignored.

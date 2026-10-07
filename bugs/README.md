@@ -28,6 +28,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | [Blocks don't apply in book club discussions](blocks-not-applied-in-club-discussions.md) | P3 | M | Backend, clubs |
 | [Writings' Popular list ranks every writing on every request](writings-popular-query-cost.md) | P3 | M | Backend, performance |
 | [Removing a title can race with a new highlight-comment](remove-title-highlight-race.md) | P3 | S | Backend, writings |
+| [Account emails have no overall daily budget](email-sending-has-no-overall-budget.md) | P3 | M | Backend, email, security |
 | [Deleting a writing isn't one transaction](writing-delete-not-atomic.md) | P3 | S | Backend, writings |
 | [A time zone .NET knows but Postgres doesn't would break the Feed](time-zone-name-mismatch-500.md) | P3 | S | Backend, Feed |
 | [The Readings strip relies only on follows being removed when someone blocks](readings-strip-no-block-safety-net.md) | P3 | S | Backend, privacy |
