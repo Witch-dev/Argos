@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-07 — Import Phase 1: Goodreads + StoryGraph import backend, private notes on logs → `specs/book-import.md`
 - 2026-10-07 — Orchestrator agent retired, `security-review` agent renamed `argos-security`, Claude memory backed up to `claude-memory/` → `CLAUDE.md`
 - 2026-10-07 — Invite-only sign-up: readers get 5 invite links each, sign-up needs one while the switch is on → `specs/invite-only-signup.md`
 - 2026-10-07 — Claude setup tidied: one facts file, fixed agents and skills, browser-check skill → `CLAUDE.md`
