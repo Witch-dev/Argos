@@ -1,6 +1,6 @@
 # Feature Spec — Account System
 
-**Status:** 🚧 Phases 1–3 done (2026-10-07), except the parts moved to Roadmap Stage 4 (cookie, in-memory token, 15-minute token). Part of Phase 1 was already built by `specs/app-hardening.md`; see §0. Phases 4–5 not started. **Phase 6 (Goodreads import) moved to `specs/book-import.md`** (2026-10-07), which adds StoryGraph and supersedes §2 "Goodreads import", §3.11 and the Phase 6 tasks here.
+**Status:** 🚧 Phases 1–3 done (2026-10-07), except the parts moved to Roadmap Stage 4 (cookie, in-memory token, 15-minute token). Part of Phase 1 was already built by `specs/app-hardening.md`; see §0. Phases 4–5 not started. **Phase 6 (Goodreads import) moved to `specs/book-import.md`** (2026-10-07; built and done 2026-10-08), which adds StoryGraph and supersedes §2 "Goodreads import", §3.11 and the Phase 6 tasks here.
 
 Builds on the existing auth: ASP.NET Core Identity with `ApplicationUser` (`Argos.Infrastructure/Identity/ApplicationUser.cs`), JWTs issued by `TokenService`, refresh tokens from `RefreshTokenService`, and `AuthController` (`/api/auth/register`, `/login`, `/refresh`, `/logout`, `/me`). On the frontend: `AuthContext`, `api/authToken.ts` (login token and refresh token in `localStorage`) and `api/client.ts` (adds the `Authorization` header; on a 401 it refreshes once and retries). The research behind this spec, including the Goodreads/Letterboxd comparison, is in `ACCOUNTS-AND-HOSTING.md`. Read that first.
 

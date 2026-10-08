@@ -1,6 +1,6 @@
 # Feature Spec — Import from Goodreads and StoryGraph
 
-**Status:** 🚧 Phase 1 (backend) built 2026-10-07, except checking the mappers against real export files. Phases 2–3 not started. Roadmap Stage 2.
+**Status:** ✅ Done 2026-10-08 (Phases 1–3). Checked against a real Goodreads and a real StoryGraph export. Open follow-ups are bug files `bugs/import-*.md`. Roadmap Stage 2.
 
 Replaces Phase 6 of `specs/account-system.md` (the Goodreads-only import), which was never built. That phase's decisions (§2 "Goodreads import", §3.11) are carried over here and extended, so this file is the only one to follow.
 
@@ -198,19 +198,26 @@ reviewer + argos-security on the Phase 1 backend. All fixed, with tests:
 
 ### Phase 2 — Frontend
 
-- [ ] Private note in the log form and on your own log on the book page
-- [ ] Import page: instructions, upload, progress (2 s polling), results counts
-- [ ] "To fix" and "Check these" groups with the search dialog
-- [ ] Past imports with undo
-- [ ] Translations in all five languages; tests for upload → progress → results → fix
+- [x] Private note in the log form and on your own log on the book page
+- [x] Import page: instructions, upload, progress (2 s polling), results counts
+- [x] "To fix" and "Check these" groups with the search dialog
+- [x] Past imports with undo
+- [x] Translations in all five languages; tests for upload → progress → results → fix
+
+#### Built notes (2026-10-07)
+- Page: `/settings/import`, linked from Settings → Privacy & data. Each past import has "Show results" so older imports can still be fixed. Counts are shown as label + number (no plural forms to translate). Strings are in `locales/*/imports.json`.
+- The book page lists your own private notes (`MyPrivateNotes`, from your shelf query) under a lock, so notes on logs without a review show too.
+- Browser check: upload → progress → results → Find it / Skip → undo at desktop and phone width; an imported Goodreads private note shows on the book page. **Found:** `Left Hand of Darkness` (file) vs `The Left Hand of Darkness` (Open Library) with no ISBN went to "To fix" instead of "Check these": the title normaliser may not drop a leading "The". Not yet looked into.
 
 ### Phase 3 — Verification & docs
 
-- [ ] Backend + frontend tests pass; build and lint clean; migrations applied to the dev database
-- [ ] A real Goodreads export and a real StoryGraph export both import in the browser (`browser-check`), at desktop and phone width; every unmatched book can be found or skipped
-- [ ] reviewer + argos-security (file upload, an external API, and the private note's privacy)
-- [ ] Bruno: an Imports folder
-- [ ] SPEC.md §10 (import done); `specs/account-system.md` Status line; ROADMAP Stage 2 ticks; CHANGELOG line
+- [x] Backend + frontend tests pass (575 backend, 552 frontend); build and lint clean; migrations applied to the dev database (none pending)
+- [x] A real Goodreads export and a real StoryGraph export both import in the browser (`browser-check`), at desktop and phone width; every unmatched book can be found or skipped. **Done 2026-10-08.** Goodreads: 38 rows, 37 imported, 9 to check, 1 to fix; find / confirm / remove / undo worked. StoryGraph: 38 rows, 37 imported, 4 to check, 1 to fix (same Ivan Ilych), 26 ratings kept, undo removed all. No horizontal overflow at 375px.
+  - Found: the file writes ratings as `5.0` and the mapper dropped them → fixed (uses the decimal parser, test added). The leading-"The" title fix is in too.
+  - Known limit: `The Death of Ivan Ilych` (Tolstoy) goes to "To fix" because Open Library lists the author as `Лев Толстой`, so the surname check fails. "Find it" works. Not fixed (non-Latin author names).
+- [x] reviewer + argos-security (file upload, an external API, and the private note's privacy). **Done 2026-10-08.** Reviewer: no blocking bugs; fixed the stale Feed/favourites cache after an import change, stale errors in Check these, and the hard-coded "7 days" text; added tests. Security: **fixed** an unbounded `Read Count` (CPU/memory DoS from a tiny file, plus a 500 on a huge rating), unbounded shelves per row, slow tag-stripping on huge reviews, and Find it skipping the book-fetch rate limit / checking the row only after the fetch. **Not fixed, logged as bugs:** `import-no-quota-over-time`, `import-worker-sleeps-inline-on-retries`, `import-upload-shares-login-rate-limit` (also check forwarded headers before launch), `import-isbn-and-work-key-trust`. Ownership, private-note privacy, SQL injection and Open Library hygiene came back clean.
+- [x] Bruno: an Imports folder (`bruno/Imports/`, 9 requests; not run against a live API yet)
+- [x] SPEC.md (the "Shipped so far" line; §10 already marked the import question resolved); `specs/account-system.md` Status line; ROADMAP Stage 2 ticks; CHANGELOG line
 
 ### Local setup needed
 

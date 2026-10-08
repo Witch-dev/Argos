@@ -86,14 +86,14 @@ Small things that are cheaper now than later.
 
 ---
 
-## Stage 2 — Bring your books in
+## Stage 2 — Bring your books in ✅ done 2026-10-08
 
 **Spec:** `specs/book-import.md` (written 2026-10-07; replaces `specs/account-system.md` Phase 6). It covers all four items:
 
-- [ ] **Add StoryGraph** to the import (its CSV export has different columns).
-- [ ] **Keep notes, dates and rereads**: what readers complain other apps lose.
-- [ ] **Goodreads lists → Argos lists** (the idea in `FUTURE-IDEAS.md`; the spec already maps custom shelves to private lists).
-- [ ] **A review screen** for books that couldn't be matched to Open Library, so nothing is silently dropped.
+- [x] **Add StoryGraph** to the import (its CSV export has different columns).
+- [x] **Keep notes, dates and rereads**: what readers complain other apps lose.
+- [x] **Goodreads lists → Argos lists** (the idea in `FUTURE-IDEAS.md`; the spec already maps custom shelves to private lists).
+- [x] **A review screen** for books that couldn't be matched to Open Library, so nothing is silently dropped.
 
 *Size M.*
 

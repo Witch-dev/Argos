@@ -32,6 +32,13 @@ Not prioritized, not designed, not committed to — just "don't forget this."
     - **Leaning:** start with Option 1, built so it can grow into Option 2. Per-edition page count and "which edition did I read" are what would justify the table.
     - **Questions for the spec:** should the pick change only the cover, or also the page count and language shown? Reviews and ratings should probably stay on the work (as on Letterboxd and Goodreads), so pooled ratings stay meaningful, with only the reader's own log pointing to an edition.
 
+- **Author pages: search authors, read their bio, browse their works**: raised 2026-10-07. Argos has nothing for authors today: `Book.Authors` is only a list of name strings, so a book page can't link to an author. Notes for the spec:
+  - **Open Library endpoints:** `GET /search/authors.json?q=` (key, name, top_work, work_count, dates); `GET /authors/{id}.json` (name, `bio` as a string or `{type, value}`, birth/death dates, wikipedia, photos, alternate_names); `GET /authors/{id}/works.json?limit=&offset=` (paginated, `size` is the total); photo at `https://covers.openlibrary.org/a/olid/{OL…A}-M.jpg`, so a placeholder is needed when there is none. `OpenLibraryClient` already calls `/authors/{id}.json` to get names for a work.
+  - **The gap:** link books to authors by keeping the Open Library author id, e.g. `BookAuthor(BookId, OpenLibraryAuthorId, Name)`. Existing books get backfilled the next time their work is refreshed, since the work response already carries the author keys.
+  - **Shape:** `OpenLibraryClient.SearchAuthorsAsync / GetAuthorAsync / GetAuthorWorksAsync`; `AuthorsController` with `GET /api/authors/search`, `/{id}`, `/{id}/works`, cached per the Open Library rules in SPEC; a Books/Authors toggle in Search; an author page (photo, years, bio, paged Works grid); author names on book pages become links. No new tables if authors are fetched live and cached.
+  - **Open decisions:** (1) Authors tab in the existing search, or mixed results? (2) fetch live and cache (leaning), or an `Author` table so Argos can later add follow author / favorite authors? (3) show every work Open Library lists (duplicates and odd entries included) or only works with covers? (4) bios are mostly English; leaning to show them as they are, untranslated.
+  - **Related:** the stats page's "top authors" (`ROADMAP.md`) would be able to link to these pages.
+
 ## From the product analysis (2026-10-06)
 
 Suggestions from `PRODUCT-ANALYSIS.md`, which compared Argos with what readers and writers ask for online (Goodreads, StoryGraph, Fable, Hardcover, Scribophile, AO3). The biggest weaknesses went to SPEC.md §4 "Next up". The analysis has the reasoning and sources for each idea below.
