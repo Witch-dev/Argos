@@ -8,6 +8,10 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-08 — Books / Community split finished: full browser pass in all five themes at desktop and phone width, phone menu panel now reaches the bottom of the screen, manual test plan for the privacy rules → `specs/books-community-split.md` Phase 4, `testing/books-and-privacy.md`
+- 2026-10-08 — Books home (popular, want-to-read, journal preview, year card), the journal (`/journal`, per-book privacy, "make all private", a Journal tab on profiles), stats summary, bulk privacy in Settings; Feed now shows a public book's row without stars when its review is hidden → `specs/books-community-split.md` Phase 3
+- 2026-10-08 — Per-book reading visibility on the backend: `Log.ReadingVisibility` (private / followers / public, existing books public), one rule in C# and SQL applied to shelves, the Readings strip, the Feed, book pages, ratings, discovery, landing, compare and favourites, plus a bulk "make all private" endpoint; reviewed and security-reviewed → `specs/books-community-split.md` Phase 2, `bugs/club-progress-ignores-reading-visibility.md`
+- 2026-10-08 — Books / Community split specced (two sections, journal as a view over logs, per-book private/followers/public), added to the roadmap as Stage 2b → `specs/books-community-split.md`
 - 2026-10-08 — Hosting decided: `wingedwords.app` at Porkbun with its DNS and email forwarding, site, API and database all on Render (Cloudflare Pages, Email Routing, R2 and Neon dropped), deploys only after CI passes → `ACCOUNTS-AND-HOSTING.md` §2.1, `ROADMAP.md` Stage 4
 - 2026-10-08 — Import fixes reviewed: jobs take turns round-robin, a turn ends after 3 unreachable books, ISBNs remembered only when title and author agree, undoable imports never deleted → `bugs/import-*.md`, Apollon fb2e4dc
 - 2026-10-08 — Imports limited over time: 3 started a day, 10 kept per reader, one file read at once → `bugs/import-no-quota-over-time.md`, Apollon e7e1651

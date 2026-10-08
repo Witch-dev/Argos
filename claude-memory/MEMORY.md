@@ -13,3 +13,4 @@
 - [Token efficiency](feedback_token_efficiency.md) — small work done directly, not via subagents; Sonnet agents except argos-security on Opus; no orchestrator
 - [Suggest model/effort](feedback_suggest_model_effort.md) — before each task, one line: keep Opus medium, or switch to high/Sonnet
 - [Handoff prompt for new session](feedback_handoff_prompt_new_session.md) — at the end of a finished task/phase/stage, give a 2–4 line prompt to continue in a fresh session
+- [Books/Community split](project_books_community_split.md) — decisions so far for the two top tabs (Books default, reviews in Community, journal, private books, no off switch); spec still to write

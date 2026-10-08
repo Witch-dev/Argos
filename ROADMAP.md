@@ -38,6 +38,7 @@ There are two launches, not one:
 | **0** | Clean-up and foundations | Cheap, and everything later builds on it | M |
 | **1** | Accounts: passwords, email, settings | Can't invite anyone until a forgotten password is recoverable | L |
 | **2** | Bring your books in: Goodreads/StoryGraph import | The #1 reason readers switch or don't | M |
+| **2b** | Books and Community: two sections, a journal, private books | Changes the navigation, so do it before the phone pass redoes it; also closes the "everyone's shelves are public" gap per book | L |
 | **3** | Works well on a phone | Most logging happens on phones; beta testers will use phones | M |
 | **4** | Go live: hosting, email, backups, legal | Puts stages 1–3 in front of people | M |
 | 🚩 | **Closed beta starts** | | |
@@ -98,6 +99,21 @@ Small things that are cheaper now than later.
 *Size M.*
 
 **Done when:** a real Goodreads export and a real StoryGraph export both import, and a reader can see and fix every book that didn't match.
+
+---
+
+## Stage 2b — Books and Community ✅ done 2026-10-08
+
+**Spec:** `specs/books-community-split.md` (written 2026-10-08). **Proposed position, move it if you disagree:** it changes the sidebar and top bar that Stage 3's phone pass would otherwise rework, and per-book privacy shrinks the "everyone's shelves are public" gap before strangers arrive. Private *accounts* stay in Stage 8.
+
+- [x] **Phase 1:** the Books / Community tabs, per-section sidebar, remembered section. Frontend only. *(Done 2026-10-08; browser-checked in Phase 4.)*
+- [x] **Phase 2:** per-book reading visibility (private / followers / public) across every place that reads other people's logs. Reviewer and argos-security after. *(Done 2026-10-08, backend only; club progress left open in `bugs/club-progress-ignores-reading-visibility.md`.)*
+- [x] **Phase 3:** Books home (popular books, want-to-read, journal preview), the journal page, privacy settings. *(Done 2026-10-08; reviewer and argos-security found no bugs.)*
+- [x] **Phase 4:** Community touches, full browser pass, docs. *(Done 2026-10-08. "Readers to follow" was already there, the journal label was skipped, Goodreads has no privacy signal; manual test plan `testing/books-and-privacy.md`. Section names still to review in `FUTURE-IDEAS.md`.)*
+
+*Size L.*
+
+**Done when:** a reader can stay entirely inside Books, mark any book private or followers-only and have it vanish from everything other people see, and switch it back.
 
 ---
 

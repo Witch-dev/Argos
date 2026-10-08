@@ -18,6 +18,7 @@ The user names an area. Plans follow **what a reader does**, not spec files, bec
 | `accounts.md` | Sign up, confirm email, log in/out, forgot password, settings, language | `account-system.md`, `languages.md`, `avatar-picker.md` |
 | `landing.md` | Logged-out visitor's first look | `landing-page.md` |
 | `books-and-search.md` | Find a book, open its page | `live-book-search.md` |
+| `books-and-privacy.md` | Books/Community sections, journal, private books and who sees them | `books-community-split.md` |
 | `shelves-and-progress.md` | Shelve, track progress, finish, reread, DNF, import | `reading-progress-tracking.md`, `reading-stories.md` |
 | `reviews.md` | Rate, review, privacy of reviews | `reviews-improvements.md` |
 | `lists.md` | Create, order, tag, share lists | `book-lists-improvements.md` |

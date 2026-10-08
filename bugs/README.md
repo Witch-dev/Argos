@@ -34,6 +34,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | [Deleting a writing isn't one transaction](writing-delete-not-atomic.md) | P3 | S | Backend, writings |
 | [A time zone .NET knows but Postgres doesn't would break the Feed](time-zone-name-mismatch-500.md) | P3 | S | Backend, Feed |
 | [The Readings strip relies only on follows being removed when someone blocks](readings-strip-no-block-safety-net.md) | P3 | S | Backend, privacy |
+| [Book clubs show a member's progress even when that book is private](club-progress-ignores-reading-visibility.md) | P3 | M | Backend, clubs, privacy |
 
 ## Fixed
 
