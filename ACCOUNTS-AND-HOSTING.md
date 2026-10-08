@@ -92,9 +92,10 @@ You need one so email can be sent from your own address (e.g. `noreply@argos.app
 | GoDaddy | Higher still | — | Avoid: high renewals and lots of upselling. |
 
 - **Pick Cloudflare** if the frontend will be on Cloudflare Pages (domain, DNS and site in one place); otherwise **Porkbun**.
+- **Decided 2026-10-08:** `wingedwords.app` at **Porkbun**, DNS kept at Porkbun. Keeping the domain at a different company from the hosting means one account problem can't take down everything, and it costs about $0.73/year more than Cloudflare. Everything else is hosted on **Render** (site, API and database) to keep it to two accounts. This replaces the Cloudflare Pages + Neon plan in §2.3: Pages only accepts the bare `wingedwords.app` address when Cloudflare runs the DNS, and one host is simpler than three.
 - **.com** is cheapest; **.app** fits a web app and only works over HTTPS (secure connections), which is fine. **Skip .io and .ai** ($40–80+ a year). Check renewal prices on unusual endings like `.club`.
 - Turn on **auto-renew**. Don't buy extras (paid email inboxes, website builders, "SSL certificates").
-- Use your own subdomains: the site at `argos.app`, the API at `api.argos.app`, not `*.pages.dev` / `*.onrender.com`. The refresh-token cookie (§1.4) works much more simply when the site and API share a domain.
+- Use your own subdomains: the site at `argos.app`, the API at `api.argos.app`, not `*.onrender.com`. The refresh-token cookie (§1.4) works much more simply when the site and API share a domain.
 
 ### 2.2 Email sending: free
 
@@ -116,19 +117,23 @@ You prove you own the domain by adding a few records in its DNS settings. Free s
 **A. Free: for testing with a few friends**
 | Part | Where | Cost |
 |---|---|---|
-| React site | Cloudflare Pages | Free |
+| React site | Render static site | Free |
 | API | Render free plan | Free, but it **goes to sleep after 15 minutes of no visitors**; waking takes roughly 30–60 seconds, and scheduled work like the news-feed refresh stops while it's asleep |
-| Database | Neon free plan | Free, 0.5 GB, never paused |
+| Database | Render Postgres free plan | Free, but **deleted after 30 days**: only for a first test, before real data |
 
 **B. Your own small server: about €4.49/month**
 A Hetzner CX22 VPS (2 CPUs, 4 GB memory, 40 GB storage) running the existing `docker-compose.yml` almost unchanged, plus Caddy for automatic HTTPS. Cheapest option that never sleeps, but you're the admin: security updates, backups, fixing it if it goes down.
 
 **C. Managed, paid: about $7/month**
-Same as A, but the API on Render's paid Starter plan so it never sleeps. The database stays free on Neon.
+Same as A, but the API on Render's paid Starter plan (~$7/month) so it never sleeps, and the database on Render Postgres's paid plan (~$6–7/month), which keeps the data and backs it up. About $13–14/month in all.
 
-**Avoid:** Railway and Fly.io no longer have free plans (pay-as-you-go). Render's free database is deleted after 30 days. Supabase's free database pauses after about a week with no activity.
+*Before 2026-10-08 the plan was Cloudflare Pages + Render + Neon (Neon's free database never expires). Switched to Render for everything to keep one host; see §2.1.*
 
-**Recommendation:** start with **A**, switch the API to **C** when real users join (a single settings change, not a migration). Pick **B** instead if you'd rather pay less and enjoy managing a server.
+**Avoid:** Railway and Fly.io no longer have free plans (pay-as-you-go). (Render's free database is deleted after 30 days, so the database needs Render's paid plan before real readers join.) Supabase's free database pauses after about a week with no activity.
+
+**Decided:** start with **A** for a first test, then move to **C** before real readers join (two settings changes on Render, not a migration). Pick **B** instead if you'd rather pay less and enjoy managing a server.
+
+**Deploying (decided 2026-10-08):** everything lives on Render, and nothing deploys until CI passes. Each Render service (site and API) is set to auto-deploy "After CI checks pass", so a push to `main` goes live only once the GitHub Actions tests are green.
 
 ### 2.4 Everything else
 
@@ -143,17 +148,17 @@ Same as A, but the API on Render's paid Starter plan so it never sleeps. The dat
 **Free extras worth adding**
 | What | Free option | Why |
 |---|---|---|
-| Database backups | Neon's short restore history, plus a nightly copy to Cloudflare R2 (10 GB free) | Don't lose everyone's reviews if the database breaks |
-| Receiving email (`hello@argos.app`) | Cloudflare Email Routing, forwarding to Gmail | Resend only *sends* email |
+| Database backups | Included in Render Postgres's paid plan | Don't lose everyone's reviews if the database breaks |
+| Receiving email (`hello@wingedwords.app`) | Porkbun's free email forwarding to Gmail (Cloudflare Email Routing needs Cloudflare DNS) | Resend only *sends* email |
 | Error tracking | Sentry free plan | Tells you when something crashes for a user |
 | Uptime alerts | UptimeRobot free plan | Emails you if the site goes down |
-| Automatic deploys | GitHub Actions (free minutes per month) | Runs tests and deploys whenever you push code |
+| Automatic deploys | GitHub Actions (free minutes per month) runs the tests; Render deploys only after they pass | A red build never reaches readers |
 
 **Only if you decide to later**
 | What | Cost |
 |---|---|
 | Users upload their own images | Cloudflare R2: free up to 10 GB, then a few cents per GB |
-| Bigger database (past 0.5 GB) | Neon paid plan; check pricing at that point |
+| Bigger database | A larger Render Postgres plan; check pricing at that point |
 | Phone apps in the App Store / Play Store | Apple $99/year, Google $25 one-time; not needed, the website works on phones |
 | Charging users (a "Pro" plan) | Stripe: no monthly fee, about 3% + $0.30 per payment |
 

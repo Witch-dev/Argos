@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-08 — Hosting decided: `wingedwords.app` at Porkbun with its DNS and email forwarding, site, API and database all on Render (Cloudflare Pages, Email Routing, R2 and Neon dropped), deploys only after CI passes → `ACCOUNTS-AND-HOSTING.md` §2.1, `ROADMAP.md` Stage 4
 - 2026-10-08 — Import fixes reviewed: jobs take turns round-robin, a turn ends after 3 unreachable books, ISBNs remembered only when title and author agree, undoable imports never deleted → `bugs/import-*.md`, Apollon fb2e4dc
 - 2026-10-08 — Imports limited over time: 3 started a day, 10 kept per reader, one file read at once → `bugs/import-no-quota-over-time.md`, Apollon e7e1651
 - 2026-10-08 — App renamed from Toffee to Winged Words, with the new winged-dachshund logo (emails, translations, page title) → Apollon cc04d35

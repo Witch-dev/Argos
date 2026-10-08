@@ -120,9 +120,9 @@ Small things that are cheaper now than later.
 **No feature spec needed.** The research and choices are in `ACCOUNTS-AND-HOSTING.md` Part 2. Write a short `DEPLOY.md` as you go (how to deploy, where secrets live, how to restore a backup).
 
 **Accounts and services**
-- [ ] Buy the domain (Cloudflare or Porkbun, auto-renew on). *~$11/year.*
-- [ ] Database on Neon (free plan) · API on Render · site on Cloudflare Pages.
-- [ ] Resend for sending email, with the domain verified · Cloudflare Email Routing so `hello@…` reaches your Gmail.
+- [ ] Buy `wingedwords.app` at **Porkbun** and keep its DNS there (auto-renew, two-factor login, registrar lock on). *$8.75 first year, $14.93/year after.*
+- [ ] Everything hosted on **Render**: the site as a static site (free) at `wingedwords.app` with `www.` forwarding to it, the API at `api.wingedwords.app`, and the database on Render Postgres. Porkbun's DNS points at Render with the records Render shows. Render's free database is deleted after 30 days, so it's fine for a first test but must be on the paid plan (~$6–7/month) before anyone's real data goes in.
+- [ ] Resend for sending email, with the domain verified in Porkbun's DNS · Porkbun's free email forwarding so `hello@wingedwords.app` reaches your Gmail.
 - [ ] **Email settings for production:** `Email__Host` (Resend's SMTP), `Email__Username`/`Email__Password`, `Email__FromAddress`, and **`Email__ReplyToAddress` set to the `hello@…` address**. The "your email was changed" notice tells readers to reply if it wasn't them, so replies must reach someone. *Size S.*
 - [ ] **Open Library User-Agent with a real contact** (moved from Stage 0). `Program.cs` sends `Argos/1.0 (https://github.com/Witch-dev/Apollon)`. Open Library asks for a way to reach you if something goes wrong. Once the domain and the `hello@…` address exist, change it to the real site address and that email. *Size S.*
 
@@ -134,10 +134,10 @@ Small things that are cheaper now than later.
 - [ ] Production secrets (JWT key, database password, Resend key) live in the host's secret settings, never in the repo.
 
 **Safety nets**
-- [ ] Nightly database backup to Cloudflare R2, and **one real test restore**. A backup that has never been restored doesn't count.
+- [ ] Database backups: Render Postgres's paid plan backs up automatically. Do **one real test restore** into a scratch database. A backup that has never been restored doesn't count.
 - [ ] Error tracking (Sentry, free plan) on the API and the site.
 - [ ] Uptime alert (UptimeRobot, free).
-- [ ] CI from Stage 0 also deploys when `main` is green.
+- [ ] **Deploy only after CI passes.** On each Render service (site and API), set auto-deploy to "After CI checks pass" instead of "On commit", so a push to `main` goes live only once the GitHub Actions tests are green; a red build never reaches readers. Note it in `DEPLOY.md`.
 
 **Landing page** (`specs/landing-page.md`, Phase 1)
 - [ ] Landing page for logged-out visitors at `/`: pitch, mascot, four feature cards built from live mini-components, a join button that follows the invite-only switch, and link-preview tags. Do this after the privacy policy exists, so the page's trust line can be checked against it. *Size M.*

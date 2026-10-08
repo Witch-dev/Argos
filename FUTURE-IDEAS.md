@@ -39,6 +39,12 @@ Not prioritized, not designed, not committed to — just "don't forget this."
   - **Open decisions:** (1) Authors tab in the existing search, or mixed results? (2) fetch live and cache (leaning), or an `Author` table so Argos can later add follow author / favorite authors? (3) show every work Open Library lists (duplicates and odd entries included) or only works with covers? (4) bios are mostly English; leaning to show them as they are, untranslated.
   - **Related:** the stats page's "top authors" (`ROADMAP.md`) would be able to link to these pages.
 
+- **Scaling past one API server**: raised 2026-10-08, when hosting was settled on Render (`ACCOUNTS-AND-HOSTING.md` §2.1). Only needed if one bigger Render server stops being enough; a larger server is the first step and goes a long way. Running two or more copies of the API at once needs these changes first, because today some state lives in the API's own memory:
+  - **Counters in memory:** `LoginAttemptLimiter`, `EmailCooldown` and the ASP.NET rate limits (`Program.cs`) count per server. With two copies each keeps its own count, so a limit of 5 becomes 5 per copy. Move them to Postgres (or a shared cache like Redis, if SPEC §8 allows it by then).
+  - **Background jobs:** `ImportProcessingService`, `EmailQueueService`, `NewsFeedRefreshService`, `OpenLibraryCacheRefreshService` and `RefreshTokenCleanupService` would run on every copy. They need a way to make sure only one copy does each piece of work (e.g. Postgres row locks or a lock per job), or must run in a separate single worker service.
+  - **In-memory caches:** `LandingShowcaseService` and anything else on `IMemoryCache` would differ per copy. Usually harmless, but check each one.
+  - *Rough size: about a week. Moving off Render later is mostly a DNS change at Porkbun, since the API is a Docker container and the database is plain Postgres.*
+
 ## From the product analysis (2026-10-06)
 
 Suggestions from `PRODUCT-ANALYSIS.md`, which compared Argos with what readers and writers ask for online (Goodreads, StoryGraph, Fable, Hardcover, Scribophile, AO3). The biggest weaknesses went to SPEC.md §4 "Next up". The analysis has the reasoning and sources for each idea below.

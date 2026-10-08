@@ -198,7 +198,7 @@ The MVP was built in this order. `backend-tasks/` and `frontend-tasks/` refer to
 
 ## 10. Open Decisions
 
-- Hosting provider (Azure fits the .NET stack naturally; Render/Railway/Fly.io are cheaper options for an MVP). Options and 2026 prices researched in `ACCOUNTS-AND-HOSTING.md` §2.3 (leaning: Cloudflare Pages + Render + Neon); not decided yet.
+- Hosting provider (Azure fits the .NET stack naturally; Render/Railway/Fly.io are cheaper options for an MVP). Options and 2026 prices researched in `ACCOUNTS-AND-HOSTING.md` §2.3. Decided 2026-10-08: domain `wingedwords.app` at Porkbun (DNS there too), everything else (site, API, database) on Render.
 - Whether public book/profile pages need SEO/SSR — if so, revisit the pure-SPA choice for those routes specifically (rest of the app stays SPA either way).
 - ~~Half-star ratings vs. whole-star only.~~ Resolved 2026-10-01: half stars, 0.5–5, for logs and club ratings (`specs/reviews-improvements.md`).
 - ~~Import priority after MVP.~~ Resolved 2026-10-06: Goodreads + StoryGraph CSV import is `ROADMAP.md` Stage 2.
