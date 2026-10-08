@@ -1,6 +1,6 @@
 # Argos: working notes for Claude
 
-Argos is a Letterboxd-like app for books. This folder holds the planning, not the code.
+Argos is a Letterboxd-like app for books. Its public name is **Winged Words** (renamed from Toffee on 2026-10-08); "Argos" is the code name in folders and namespaces. This folder holds the planning, not the code.
 
 ## Two repos
 

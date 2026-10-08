@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-08 — App renamed from Toffee to Winged Words, with the new winged-dachshund logo (emails, translations, page title) → Apollon cc04d35
 - 2026-10-08 — Import Phase 3 done (Roadmap Stage 2 complete): real Goodreads and StoryGraph exports checked in the browser; leading "The"/"A"/"An" ignored in title matching; Goodreads ratings written as `5.0` now kept; security fixes (unbounded Read Count, shelves per row, tag-stripping cost, Find it rate limit); Bruno Imports folder; four open follow-ups → `specs/book-import.md`, `bugs/import-*.md`
 - 2026-10-07 — Import Phase 2: private note in the log form and on the book page, /settings/import (upload, progress, To fix, Check these, past imports with undo), five languages → `specs/book-import.md`
 - 2026-10-07 — Marketing plan written, with share cards and link previews outlined → `MARKETING.md`
