@@ -24,10 +24,6 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Priority | Size | Area |
 |---|---|---|---|
-| [Imports have no limit over time, so one account can fill the database](import-no-quota-over-time.md) | P2 | M | Backend, imports, security |
-| [One slow import row stalls everyone's imports](import-worker-sleeps-inline-on-retries.md) | P2 | M | Backend, imports |
-| [Import upload shares the login rate-limit bucket, and proxy IPs may not be forwarded](import-upload-shares-login-rate-limit.md) | P2 | S | Backend, security, deploy |
-| [Import trusts Open Library work keys and cached ISBNs forever](import-isbn-and-work-key-trust.md) | P3 | S | Backend, imports, Open Library |
 | [Blocks only apply while signed in](blocks-only-apply-signed-in.md) | P3 | L | Backend, privacy |
 | [Blocks don't apply in book club discussions](blocks-not-applied-in-club-discussions.md) | P3 | M | Backend, clubs |
 | [Writings' Popular list ranks every writing on every request](writings-popular-query-cost.md) | P3 | M | Backend, performance |
@@ -43,6 +39,10 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [Imports have no limit over time](import-no-quota-over-time.md) | 2026-10-08 | Apollon e7e1651 |
+| [One slow import row stalls everyone's imports](import-worker-sleeps-inline-on-retries.md) | 2026-10-08 | Apollon f4a246e |
+| [Import trusts Open Library work keys and cached ISBNs forever](import-isbn-and-work-key-trust.md) | 2026-10-08 | Apollon bdf575f |
+| [Import upload shares the login rate-limit bucket](import-upload-shares-login-rate-limit.md) | 2026-10-08 | Apollon 7638dff |
 | [List tags can't contain accented letters](list-tags-reject-accents.md) | 2026-10-07 | `CHANGELOG.md`, "List tags accept any language's letters" |
 | [The activity part of the Feed reads every followed reader's whole history](activity-feed-query-reads-whole-history.md) | 2026-10-07 | `CHANGELOG.md`, "The Feed's activity rows no longer read whole histories" |
 | [Blocks don't apply between commenters](blocks-not-applied-between-commenters.md) | 2026-10-07 | `CHANGELOG.md`, "Blocks now reach comments" |

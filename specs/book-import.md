@@ -29,7 +29,8 @@ A reader with years of history on Goodreads or StoryGraph won't start again from
 - **StoryGraph's quick questions come across.** Argos's moods, pace, plot/character and content warnings were modelled on StoryGraph's, so they map almost one to one (§3.3). Unknown values are dropped quietly.
 - **StoryGraph tags become private lists**, like Goodreads shelves.
 - **Too-long text is shortened, not refused.** A review over 10,000 characters or a private note over 5,000 is cut, and the row says so ("Review shortened to 10,000 characters"). Refusing the whole book over it would be worse.
-- **One import at a time per reader.** Starting a second while one runs is refused (a partial unique index makes this hold even for two uploads at the same moment).
+- **One import at a time per reader.** Starting a second while one runs is refused (a partial unique index makes this hold even for two uploads at the same moment). Only one of a reader's files is read at once, and at most two across the whole server.
+- **Limits over time** (added 2026-10-08, `bugs/import-no-quota-over-time.md`): 5 uploads per reader per hour (rate limit), 3 imports started per 24 hours, and at most 10 imports kept per reader. Starting one more deletes the oldest finished one (never one from the last 24 hours); its books and logs stay.
 - **Import data is deleted 30 days after the import finishes.** The rows hold copies of reviews and private notes; keeping them forever isn't needed. The logs and lists created stay, of course. After 7 days undo is gone; after 30 the import disappears from the list.
 - **The uploaded file itself is never stored**, only the parsed rows.
 - *Decided while building (2026-10-07):* imported lists get **no description** (an English "Imported from Goodreads" would show untranslated to readers in other languages; the list title is the shelf name). **At most 100 lists** per import; further shelf names are ignored.
@@ -104,16 +105,18 @@ In order, stopping at the first hit:
 3. **Title + author search** (`SearchAsync`). It counts only if the titles are equal after normalising (lower case, accents and punctuation removed, subtitle after `:` and "(Series #1)" dropped) **and** an author's surname matches. A hit is `MatchedByTitle`: imported, but listed under "Check these".
 4. Otherwise `NotFound`.
 
+**An ISBN match is only trusted if the book agrees with the row** (added 2026-10-08, `bugs/import-isbn-and-work-key-trust.md`): the normalised titles are equal **or** an author's surname matches. Either is enough (a translation keeps its author; a name in another alphabet keeps its title). When both differ, Open Library's record may be wrong (it's a public wiki): the row's other ISBN and the title search are tried first, and only if they find nothing is the row imported to that book under "Check these". An ISBN is **remembered** on the book only when title **and** author both agree, since the file supplies both and one alone could be crafted. A row with no author agrees by title only. The work key from `/isbn/` must look like `OL<digits>W`, or the ISBN counts as not found.
+
 The search uses `IOpenLibraryClient.TrySearchAsync`, which returns null when Open Library is down, so an outage is retried like a failed ISBN lookup instead of turning books into `NotFound`.
 
 **Only the ISBN Open Library confirmed is remembered** on the book. The row's other ISBN is only what the file claims; remembering it would let one file send other readers' imports of that ISBN to the wrong book (security review 2026-10-07).
 
-If Open Library is unreachable, the row is retried twice (30 s, then 2 min). After that it's `Error` ("Couldn't reach Open Library") and appears with the not-found books, where "Find it" fixes it.
+If Open Library is unreachable, the row is retried twice (30 s, then 2 min). It is **set aside, not waited for**: the row gets a `RetryAt` time, the worker carries on with other books and other readers' imports, and the job finishes only once no book is left waiting (added 2026-10-08, `bugs/import-worker-sleeps-inline-on-retries.md`). After the last try it's `Error` ("Couldn't reach Open Library") and appears with the not-found books, where "Find it" fixes it.
 
 ### 3.5 Processing
 
 `ImportProcessingService : BackgroundService`:
-- **Jobs take turns**, 20 books at a time: next is the `Queued` or `Running` job with the fewest books done (oldest first among equals), so a small import isn't stuck behind someone's 10,000-book one. A `Queued` job becomes `Running` with its lists created in the same save.
+- **Jobs take turns**, 20 books at a time: next is the `Queued` or `Running` job served least recently (`LastTurnAt`, never-served first, then oldest), so a small import isn't stuck behind someone's 10,000-book one. A turn also ends after 3 books in a row Open Library couldn't answer for, so a file full of them can't hold the worker for long (changed 2026-10-08 after the security review; it used to be "fewest books done first", which a job whose books kept failing would always win). A `Queued` job becomes `Running` with its lists created in the same save.
 - **At most one Open Library request per second** from the worker (`OpenLibraryPacer`, shared by the whole API). `OpenLibraryPacingHandler` sits on the Open Library `HttpClient` and paces every request made under `OpenLibraryPacer.PaceThisFlow()` (the worker sets it once), including a book fetch's author look-ups; readers' own searches and "Find it" never wait. A 500-book library takes roughly 10–30 minutes; cached books are instant. Settings in `Imports` (`ImportOptions`).
 - **One worker per API instance.** Production runs one instance (Render); a second one would need a database lock before both could run workers. Tests turn the worker off (`Imports:WorkerEnabled=false`) except in `ImportApiFactory`, because every test host shares one database.
 - Each row is saved on its own (row result + its logs + its list items in one transaction), so a crash loses at most one row.
@@ -148,7 +151,7 @@ POST   /api/imports/{id}/undo               within 7 days, not while Running
 ```
 
 - All need login and only touch your own imports (someone else's → 404).
-- Upload: confirmed email (`[RequireConfirmedEmail]`), rate limit `auth` (existing policy), 409 if you already have a `Queued` or `Running` job. Each error gets a code in `ErrorCodes.cs`.
+- Upload: confirmed email (`[RequireConfirmedEmail]`), rate limit `imports` (per reader, 5 an hour; was `auth` until 2026-10-08), 409 if you already have a `Queued` or `Running` job or have started 3 today. Each error gets a code in `ErrorCodes.cs`.
 - **Resolve** on a `NotFound`/`Error` row creates the logs as the worker would. On a `MatchedByTitle` row ("Change"), it moves the logs and list items that row created to the new book, keeping any edits made since. If the chosen book is already on your shelves from elsewhere, it's refused with a clear error.
 - **Undo** deletes the logs in every row's `CreatedLogIds` that still exist and the lists in `ImportCreatedLists`, then sets the job `Undone`. Logs and lists you created yourself are never touched.
 

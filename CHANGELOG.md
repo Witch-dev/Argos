@@ -8,7 +8,12 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-08 — Import fixes reviewed: jobs take turns round-robin, a turn ends after 3 unreachable books, ISBNs remembered only when title and author agree, undoable imports never deleted → `bugs/import-*.md`, Apollon fb2e4dc
+- 2026-10-08 — Imports limited over time: 3 started a day, 10 kept per reader, one file read at once → `bugs/import-no-quota-over-time.md`, Apollon e7e1651
 - 2026-10-08 — App renamed from Toffee to Winged Words, with the new winged-dachshund logo (emails, translations, page title) → Apollon cc04d35
+- 2026-10-08 — Import worker sets a book aside to retry later instead of sleeping on it, so one slow book no longer stalls everyone → `bugs/import-worker-sleeps-inline-on-retries.md`, Apollon f4a246e
+- 2026-10-08 — Import trusts an ISBN match only if its title or author agrees, otherwise "Check these"; Open Library work keys checked → `bugs/import-isbn-and-work-key-trust.md`, Apollon bdf575f
+- 2026-10-08 — Import uploads get their own per-reader limit (5 an hour) instead of sharing the login one → `bugs/import-upload-shares-login-rate-limit.md`, Apollon 7638dff
 - 2026-10-08 — Import Phase 3 done (Roadmap Stage 2 complete): real Goodreads and StoryGraph exports checked in the browser; leading "The"/"A"/"An" ignored in title matching; Goodreads ratings written as `5.0` now kept; security fixes (unbounded Read Count, shelves per row, tag-stripping cost, Find it rate limit); Bruno Imports folder; four open follow-ups → `specs/book-import.md`, `bugs/import-*.md`
 - 2026-10-07 — Import Phase 2: private note in the log form and on the book page, /settings/import (upload, progress, To fix, Check these, past imports with undo), five languages → `specs/book-import.md`
 - 2026-10-07 — Marketing plan written, with share cards and link previews outlined → `MARKETING.md`
