@@ -142,14 +142,14 @@ Small things that are cheaper now than later.
 - [ ] Everything hosted on **Render**: the site as a static site (free) at `wingedwords.app` with `www.` forwarding to it, the API at `api.wingedwords.app`, and the database on Render Postgres. Porkbun's DNS points at Render with the records Render shows. Render's free database is deleted after 30 days, so it's fine for a first test but must be on the paid plan (~$6–7/month) before anyone's real data goes in.
 - [ ] Resend for sending email, with the domain verified in Porkbun's DNS · Porkbun's free email forwarding so `hello@wingedwords.app` reaches your Gmail.
 - [ ] **Email settings for production:** `Email__Host` (Resend's SMTP), `Email__Username`/`Email__Password`, `Email__FromAddress`, and **`Email__ReplyToAddress` set to the `hello@…` address**. The "your email was changed" notice tells readers to reply if it wasn't them, so replies must reach someone. *Size S.*
-- [ ] **Open Library User-Agent with a real contact** (moved from Stage 0). `Program.cs` sends `Argos/1.0 (https://github.com/Witch-dev/Apollon)`. Open Library asks for a way to reach you if something goes wrong. Once the domain and the `hello@…` address exist, change it to the real site address and that email. *Size S.*
+- [x] **Open Library User-Agent with a real contact** (moved from Stage 0). **Done 2026-10-11:** the User-Agent comes from the `App:Contact` setting, set to the site address and `hello@wingedwords.app` in `appsettings.Production.json`; re-check it once the domain and the address really exist. Original task: `Program.cs` sends `Argos/1.0 (https://github.com/Witch-dev/Apollon)`. Open Library asks for a way to reach you if something goes wrong. Once the domain and the `hello@…` address exist, change it to the real site address and that email. *Size S.*
 
 **Security setup** (`ACCOUNTS-AND-HOSTING.md` §2.6)
 - [ ] HTTPS everywhere, with HSTS.
 - [x] *(Deploy with or before the cookie change: every page load of a signed-in reader now calls `/refresh`, so without real IPs the 30/min refresh limit would be one bucket for the whole site.)* `ForwardedHeaders` with the real proxy listed, so rate limits see real visitor IPs instead of making everyone share one limit. The login lockout (`LoginAttemptLimiter`, 5 wrong passwords per account per address) depends on this too. **Done 2026-10-11**, ahead of hosting, alongside the cookie change. Built as `VisitorAddressMiddleware`, which reads Render's chain by its shape instead of `UseForwardedHeaders`' hop count (the security review showed a count can be spoofed). **After the first deploy, do the check in `DEPLOY.md` ("Visitor addresses behind the proxy").**
-- [ ] **Bot check on login and sign-up (Cloudflare Turnstile, free).** Shown after a few failed logins from one address, or always on sign-up. Stops bots trying leaked email/password pairs from thousands of addresses, which per-address limits can't. *Size S.*
+- [ ] **Bot check on login and sign-up** — **moved to Stage 10 (2026-10-11):** the beta is invite-only, and a Cloudflare account isn't needed until strangers can register. (Cloudflare Turnstile, free.) Shown after a few failed logins from one address, or always on sign-up. Stops bots trying leaked email/password pairs from thousands of addresses, which per-address limits can't. *Size S.*
 - [x] Move login tokens into an httpOnly cookie (the part left over from Stage 1), now that the site and API share a domain. In the same change, shorten the login token from 60 to 15 minutes (`specs/account-system.md` §0 and §3.2). **Done 2026-10-11**, ahead of hosting: localhost on any port is already one site. Check it again on the live domain (log in, reload, still logged in).
-- [ ] Production secrets (JWT key, database password, Resend key) live in the host's secret settings, never in the repo. Also set `Cors__AllowedOrigins__0=https://wingedwords.app`, and make the API refuse to start outside Development when it's missing (today it falls back to `http://localhost:5173`).
+- [ ] Production secrets (JWT key, database password, Resend key) live in the host's secret settings, never in the repo. Also set `Cors__AllowedOrigins__0=https://wingedwords.app`, and make the API refuse to start outside Development when it's missing. **The refusing part is done 2026-10-11** (`FrontendOrigins`); only setting the variable on Render is left.
 
 **Safety nets**
 - [ ] Database backups: Render Postgres's paid plan backs up automatically. Do **one real test restore** into a scratch database. A backup that has never been restored doesn't count.
@@ -161,20 +161,20 @@ Small things that are cheaper now than later.
 **Landing page** (`specs/landing-page.md`, Phase 1)
 - [ ] Landing page for logged-out visitors at `/`: pitch, mascot, four feature cards built from live mini-components, a join button that follows the invite-only switch, and link-preview tags. Do this after the privacy policy exists, so the page's trust line can be checked against it. *Size M.*
   - *Built and verified 2026-10-06.* Three things are left for this stage, once the site is live:
-    - add privacy and terms links to the footer;
+    - ~~add privacy and terms links to the footer~~ (done 2026-10-11);
     - check the trust line against the privacy policy;
     - make `og:image` an absolute URL and test a real link preview.
 
 **Legal basics** (plain-language templates are fine at this size; not legal advice)
-- [ ] Privacy policy: what's stored, why, how to export and delete it. **Facts to put in it (built in Stage 6, 2026-10-11):**
+- [x] Privacy policy at `/privacy`, in all five languages. **Written 2026-10-11** from the facts below. Before going live, re-read it for three things: backup retention (it says only that backups are overwritten; add the number once Render's plan is chosen), the error-tracking paragraph (true only once Sentry is wired) and that `hello@wingedwords.app` really receives mail. Original task: what's stored, why, how to export and delete it. **Facts to put in it (built in Stage 6, 2026-10-11):**
   - **Download:** Settings → Privacy & data → "Download my data" gives a zip of CSV files: profile, book log (Goodreads' columns), lists, writings, comments, club messages, follows and favourites. Up to 5 an hour per reader.
   - **Delete:** Settings → Privacy & data → "Delete my account", password required. The account is hidden at once and every session ends. For 30 days the reader can log in and cancel, and everything comes back. After 30 days it is erased for good, with the reader's own logs, reviews, lists, writings, likes, follows and sign-in records.
   - **Comments:** the reader chooses at deletion time to keep their comments and club messages, shown as "Deleted user" with no profile link, or to have them erased too. Comments other readers left on the erased reader's own writings, lists and reviews are erased with them.
   - **Clubs:** a club the reader created passes to another member, or is deleted if nobody else is in it.
   - **Username:** an erased username is held for 30 days before anyone can register it.
   - **Not erased at once:** nothing is kept after the 30 days except what is in backups until they roll over (say how long once Stage 4's backup plan is set) and what other readers copied.
-- [ ] Terms of use, with a minimum age of 13.
-- [ ] Open Library credit in the footer ("Book data from Open Library").
+- [x] Terms of use at `/terms`, minimum age 13, all five languages. **Done 2026-10-11.**
+- [x] Open Library credit in the footer ("Book data from Open Library"). **Done 2026-10-11:** `SiteFooter`, with the policy and terms links, under every page and at the bottom of the landing page.
 
 *Size M.*
 
@@ -261,6 +261,7 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 - [ ] `reviewer` + `argos-security` pass over the whole app, not just the last change.
 - [ ] **Full manual test pass.** Create `Argos/testing/README.md`: one row per area plan with its step count, the commit it was written against, the date last tested and the result. Then run `/test-plan` for every area so each plan matches the code that will launch, and fill in `_shared.md`. Run Playwright through the steps not tagged 👤, then do the 👤 steps by hand on a real phone and desktop. Every ❌ becomes a bug file. Left until now on purpose, so features that are still changing don't need testing twice. *Size M.*
 - [ ] Move the API to Render's paid plan (~$7/month) so it never sleeps (`ACCOUNTS-AND-HOSTING.md` §2.3 C).
+- [ ] **Bot check on login and sign-up (Cloudflare Turnstile, free)** — moved here from Stage 4. Needs a Cloudflare account, for the site and secret keys. Add the service to the privacy policy's "Who else handles your data" paragraph.
 - [ ] Turn off invite-only sign-up.
 - [ ] Landing page Phase 2 (`specs/landing-page.md`): live "What readers are into this week" rows, now that moderation (Stage 7) and private accounts (Stage 8) exist. *Built 2026-10-06 but switched off (`Landing:ShowcaseEnabled`).* To finish: add the private-account and moderation rules to `LandingRepository`, with tests, then switch it on. Check that the "Import from Goodreads" and "Export your data" copy (spec §7) went in when Stages 2 and 6 shipped.
 - [ ] Privacy policy and terms re-read against what actually shipped (notifications, export, delete, private accounts).
