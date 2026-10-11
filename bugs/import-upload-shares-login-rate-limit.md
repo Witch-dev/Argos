@@ -15,4 +15,4 @@ Check the forwarded-headers setup on the deploy host; give imports their own per
 - New `imports` rate-limit policy: 5 uploads per reader per hour (`RateLimits:ImportsPerHour`), keyed by user id, so readers on one network don't share it and it never touches the login bucket.
 - `UseAuthentication` now runs before `UseRateLimiter`, so the policy knows the reader.
 - A refused upload gets its own message (`imports.tooManyUploads`) instead of "wait a minute".
-- Forwarded headers: still to do on the deploy host, already listed under ROADMAP Stage 4 "Security setup".
+- Forwarded headers: still to do on the deploy host, already listed under ROADMAP Stage 4 "Security setup". **Done 2026-10-11** with a custom reader rather than `UseForwardedHeaders` (`VisitorAddressMiddleware`, see `DEPLOY.md`); checked again on the live site after the first deploy.
