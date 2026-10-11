@@ -1,6 +1,6 @@
 # Feature Spec — Private accounts and follow requests
 
-**Status:** 🔨 Backend (Phase 1) and frontend (Phase 2) built and reviewed 2026-10-11; verification (Phase 3) not started. Roadmap Stage 8. **Must ship before public launch.**
+**Status:** ✅ Built 2026-10-11 (backend, frontend, review, browser pass). A by-hand pass on a real phone and in es / pt-BR / de / fr is left in `testing/account-privacy.md`. Roadmap Stage 8. Roadmap Stage 8. **Must ship before public launch.**
 
 ## 1. Problem
 
@@ -114,9 +114,9 @@ Every place that reads another reader's content was checked in the code. Most go
 
 ### Verification
 
-- [ ] Browser pass with three readers (owner, approved follower, stranger) on every surface in §3.4; `testing/account-privacy.md` written with `/test-plan`.
-- [ ] Re-read this spec against what was built before ticking tasks (CLAUDE.md).
-- [ ] CHANGELOG line; tick Stage 8 in `ROADMAP.md`.
+- [x] Browser pass with four readers (owner, approved follower, stranger, a reader who asked) on the profile, writings, lists, search, settings and the request flow; `testing/account-privacy.md` written with `/test-plan` (58 steps, 23 run and passed; the rest, other languages and themes and the real phone are still to do by hand).
+- [x] Re-read this spec against what was built (CLAUDE.md): routes, silent decline and the audit table were updated to match.
+- [x] CHANGELOG line; Stage 8 ticked in `ROADMAP.md`.
 
 ## 5. Out of scope
 
