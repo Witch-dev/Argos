@@ -1,6 +1,6 @@
 # Feature Spec — Private accounts and follow requests
 
-**Status:** 🔨 Backend (Phase 1) built and reviewed 2026-10-11; frontend (Phase 2) and verification (Phase 3) not started. Roadmap Stage 8. **Must ship before public launch.**
+**Status:** 🔨 Backend (Phase 1) and frontend (Phase 2) built and reviewed 2026-10-11; verification (Phase 3) not started. Roadmap Stage 8. **Must ship before public launch.**
 
 ## 1. Problem
 
@@ -104,12 +104,13 @@ Every place that reads another reader's content was checked in the code. Most go
 
 ### Frontend
 
-- [ ] Settings → Privacy & data: a "Private account" switch (`PUT /api/users/me/preferences { isPrivate }`) with a short explanation of what strangers will and won't see. **Turning it off asks first, showing how many waiting requests will be approved** (security review: going public lets every waiting request in for good).
-- [ ] Settings → **Follow requests**: list with approve / decline, a count badge on the Settings entry, an empty state.
-- [ ] Profile for a stranger of a private account: the locked state with the Follow / **Requested** button (Requested cancels on click).
-- [ ] Follow buttons everywhere they appear (cards, discovery, lists of readers) show Follow / Requested / Following. `POST /api/follows` now answers 200 `{ state }` instead of 204, so the client call and its type change; `GET /api/follows/requested` lists who the reader has asked.
-- [ ] A "Remove follower" action on the followers list of your own profile.
-- [ ] Translations in all five languages for every new text, including `aria-label`s; phone width and all five themes.
+- [x] Settings → Privacy & data: a "Private account" switch (`PUT /api/users/me/preferences { isPrivate }`) with a short explanation of what strangers will and won't see. **Turning it off asks first, showing how many waiting requests will be approved** (security review: going public lets every waiting request in for good).
+- [x] Settings → **Follow requests**: list with approve / decline, a count badge on the Settings entry, an empty state.
+- [x] Profile for a stranger of a private account: the locked state with the Follow / **Requested** button (Requested cancels on click).
+- [x] Follow buttons everywhere they appear (cards, discovery, lists of readers) show Follow / Requested / Following. `POST /api/follows` now answers 200 `{ state }` instead of 204, so the client call and its type change; `GET /api/follows/requested` lists who the reader has asked.
+- [x] A "Remove follower" action on the followers list of your own profile.
+- [x] Translations in all five languages for every new text, including `aria-label`s. *(Phone width and all five themes are part of the Phase 3 browser pass.)*
+- [x] `reviewer` after the phase. Findings fixed: a stray favourites request on a locked profile (and the tab now resets between profiles), a stale request row after a failed approve, silent remove-follower errors, the Follow button flashing back after a click, the "Requested" label not containing its visible word, and a logged-out visitor on a locked profile now gets "Log in to follow".
 
 ### Verification
 

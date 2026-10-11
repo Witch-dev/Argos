@@ -232,10 +232,10 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 
 ## Stage 8 — Privacy: private accounts
 
-**Spec:** `specs/account-privacy.md` (written 2026-10-11, decisions asked the same day). **Phase 1 (backend) built and reviewed 2026-10-11; Phase 2 (frontend) and Phase 3 (verification) still to do.** The original notes are in `FUTURE-IDEAS.md`, "Account-level privacy settings".
+**Spec:** `specs/account-privacy.md` (written 2026-10-11, decisions asked the same day). **Phases 1 (backend) and 2 (frontend) built and reviewed 2026-10-11; Phase 3 (browser pass, test plan) still to do.** The original notes are in `FUTURE-IDEAS.md`, "Account-level privacy settings".
 
-- [ ] Public or private account. Private shows shelves, progress, reviews and writings only to approved followers. Everyone else sees name and avatar only. *(Backend done 2026-10-11; the Settings switch and the locked profile are Phase 2.)*
-- [ ] Follow requests: approve or decline. *(Backend done 2026-10-11; the Settings list and the Requested button are Phase 2.)*
+- [ ] Public or private account. Private shows shelves, progress, reviews and writings only to approved followers. Everyone else sees name and avatar only. *(Built 2026-10-11, backend and frontend; browser pass pending.)*
+- [ ] Follow requests: approve or decline. *(Built 2026-10-11, backend and frontend; browser pass pending.)*
 - [x] Apply it everywhere it's listed in the notes: shelves (`LogsController`), the Readings strip, reviews, writings, likes and comments. **Done 2026-10-11** (audit table in the spec, §3.4; the audit also fixed three gaps the notes didn't list).
 
 *Size L.* It's the last of the must-haves because it touches the most code, but it **must** ship before public launch. Strangers will be able to see everyone's shelves until it does.
