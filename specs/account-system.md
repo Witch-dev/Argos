@@ -436,15 +436,31 @@ Items marked *(app-hardening)* were built there; items marked *(Stage 4)* wait f
   - **EF warning 10622:** an entity that is the required end of a relationship with a filtered entity (`CommentVoteRecord` → `Comment`, likes → `Log`) needs a matching filter, or the warning is accepted on purpose. Decide per entity when adding them.
   - **`Users` is not filtered** (the owner must still log in to cancel, and erasure has to find them); profile, search and follower lists exclude `DeactivatedAt != null` explicitly.
   - Delete confirmation is password only until Phase 4 (2FA, Google) exists.
-- [ ] `GET /me/export` (zip of CSVs, rate-limited)
-- [ ] `DeactivatedAt`, `DeletionKeepsContributions`; seed `deleted` user; delete + cancel-deletion endpoints; deactivated login answer
-- [ ] `AccountErasureService` (keep/delete contributions, club Admin handover, Restrict FKs)
-- [ ] Tests: export contents, deactivated user hidden everywhere (profile, search, feed, reviews, lists, comments), cancel restores everything, erasure both ways, club handover, empty club deleted
+- [x] `GET /me/export` (zip of CSVs, rate-limited). **Done 2026-10-11:** `AccountExportController`/`Writer`/`Repository`. `logs.csv` starts with Goodreads' columns (plus Private Notes), UTF-8 with a byte-order mark. 5 per reader per hour and one at a time. `posts.csv` doesn't exist: posts were folded into `writings.csv`. Cells other people write (book titles, club and checkpoint names, a collaborator's list note) get a leading `'` if they start with `=`, `+`, `-` or `@`.
+- [x] `DeactivatedAt`, `DeletionKeepsContributions`; `deleted` user; delete + cancel-deletion endpoints; deactivated login answer. **Done 2026-10-11, with two changes from the spec:**
+  - The `deleted` user is created the first time an erasure needs it (`DeletedUser.cs`), not seeded by the migration.
+  - A login while deactivated gets a normal login token **plus a `deactivated` claim**, instead of a `{ deactivated, deletionDate }` answer. A global gate (`DeactivatedAccountFilter`) refuses it everywhere except endpoints marked `[AllowDeactivated]` (`/auth/me`, `/auth/cancel-deletion`). `/auth/me` carries `deactivatedAt` and `deletionDate`, and the site shows one screen. `cancel-deletion` needs that token and a live session.
+- [x] `AccountErasureService` (keep/delete contributions, club Admin handover, Restrict FKs). **Done 2026-10-11:** worker every `Accounts:ErasureIntervalMinutes`, first run one interval after start. Development uses a grace period of about 2 minutes and 1 minute; `ApiFactory` pins 30 days for tests.
+- [x] Tests: export contents, deactivated user hidden everywhere, cancel restores everything, erasure both ways, club handover, empty club deleted. **Done:** `AccountDeactivationFilterTests`, `AccountDeletionTests`, `AccountErasureTests`, `AccountExportTests` (backend suite 643 green).
 #### Frontend
-- [ ] "Download my data"; delete-account screen (choice, warnings, password + code)
-- [ ] "Scheduled for deletion" screen with cancel
-- [ ] "Deleted user" rendering for kept contributions
-- [ ] Tests for the delete flow and cancel
+- [x] "Download my data"; delete-account screen (choice, warnings, password). **Done 2026-10-11:** Settings → Privacy & data, `/settings/delete-account`. Password only; no 2FA code until Phase 4 exists.
+- [x] "Scheduled for deletion" screen with cancel (`ScheduledDeletionPage`, shown by `ProtectedRoute`)
+- [x] "Deleted user" rendering for kept contributions (`CommentTree`, `AnnotationCommentNode`; username `deleted`)
+- [x] Tests for the delete flow and cancel (web suite 631 green)
+
+#### Review pass (2026-10-11)
+`reviewer` and `argos-security` ran over the whole phase. Fixed:
+- Erasure failed forever when a reader replied to their own checkpoint comment and someone else replied to that reply (placeholders now cover every ancestor).
+- Cancelling between "list due accounts" and "erase" could still erase: the erasure re-reads inside its transaction and the final delete is conditional.
+- A club was deleted when its only other member was also waiting to be deleted: it now goes to that member.
+- `cancel-deletion` worked as a token refresh that skipped revocation, and an old token could undo a deletion without the password: it now needs the deactivated token of a live session.
+- A second delete request pushed the date back: it now answers with the first date.
+- Comments others left on an erased reader's writings, lists and logs stayed behind (no foreign key): erasure removes them. The erased username is held 30 days (recorded against the `deleted` user).
+- Replies to a hidden comment showed as top-level comments while the grace period ran: they now wait with their parent.
+- Export: one at a time per reader, and spreadsheet formula starts in other people's cells are neutralised.
+- Found in the browser: after "Cancel deletion" the scheduled screen stayed up (clearing the query cache orphaned the mounted `me` query).
+
+**Accepted on purpose:** a login token issued before the request keeps working for up to 15 minutes (it carries no `deactivated` claim), but everything it could show is hidden by the filters. Left as a bug file: pending club invites still show a deactivated inviter's name (`bugs/club-invite-shows-deactivated-inviter.md`).
 
 ### Phase 6 — Goodreads import
 

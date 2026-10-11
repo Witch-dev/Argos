@@ -28,6 +28,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | [Blocks don't apply in book club discussions](blocks-not-applied-in-club-discussions.md) | P3 | M | Backend, clubs |
 | [Writings' Popular list ranks every writing on every request](writings-popular-query-cost.md) | P3 | M | Backend, performance |
 | [Removing a title can race with a new highlight-comment](remove-title-highlight-race.md) | P3 | S | Backend, writings |
+| [Pending club invites still show a deactivated inviter's name](club-invite-shows-deactivated-inviter.md) | P3 | S | Backend, clubs |
 | [Account emails have no overall daily budget](email-sending-has-no-overall-budget.md) | P3 | M | Backend, email, security |
 | [A sign-up racing a rename can take the name being given up](username-hold-race.md) | P3 | S | Backend, accounts |
 | [An old username only redirects on the profile page](held-username-only-on-profile.md) | P3 | S | Backend + frontend, accounts |

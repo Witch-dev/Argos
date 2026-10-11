@@ -194,12 +194,12 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 
 ---
 
-## Stage 6 — Your data: export and delete
+## Stage 6 — Your data: export and delete ✅ done 2026-10-11
 
 **Spec exists:** `specs/account-system.md` Phase 5.
 
-- [ ] Export everything as a `.zip` of CSVs, with `logs.csv` in Goodreads' column layout.
-- [ ] Delete account: hidden at once, fully erased after 30 days, with a choice to keep comments as "Deleted user".
+- [x] Export everything as a `.zip` of CSVs, with `logs.csv` in Goodreads' column layout. **Done 2026-10-11.**
+- [x] Delete account: hidden at once, fully erased after 30 days, with a choice to keep comments as "Deleted user". **Done 2026-10-11**, reviewed by `reviewer` and `argos-security` and browser-checked. Still to do by hand: nothing blocks it, but add "Delete" and "Download" to the privacy policy in Stage 4.
 - [x] **Start with the risky check the spec names:** whether EF Core global query filters work with the Feed's `UNION ALL` query. If they don't, use the spec's fallback. **Done 2026-10-11: they work, filters it is** (`specs/account-system.md` Phase 5).
 
 *Size M.*
