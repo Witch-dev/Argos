@@ -166,7 +166,13 @@ Small things that are cheaper now than later.
     - make `og:image` an absolute URL and test a real link preview.
 
 **Legal basics** (plain-language templates are fine at this size; not legal advice)
-- [ ] Privacy policy: what's stored, why, how to export and delete it.
+- [ ] Privacy policy: what's stored, why, how to export and delete it. **Facts to put in it (built in Stage 6, 2026-10-11):**
+  - **Download:** Settings → Privacy & data → "Download my data" gives a zip of CSV files: profile, book log (Goodreads' columns), lists, writings, comments, club messages, follows and favourites. Up to 5 an hour per reader.
+  - **Delete:** Settings → Privacy & data → "Delete my account", password required. The account is hidden at once and every session ends. For 30 days the reader can log in and cancel, and everything comes back. After 30 days it is erased for good, with the reader's own logs, reviews, lists, writings, likes, follows and sign-in records.
+  - **Comments:** the reader chooses at deletion time to keep their comments and club messages, shown as "Deleted user" with no profile link, or to have them erased too. Comments other readers left on the erased reader's own writings, lists and reviews are erased with them.
+  - **Clubs:** a club the reader created passes to another member, or is deleted if nobody else is in it.
+  - **Username:** an erased username is held for 30 days before anyone can register it.
+  - **Not erased at once:** nothing is kept after the 30 days except what is in backups until they roll over (say how long once Stage 4's backup plan is set) and what other readers copied.
 - [ ] Terms of use, with a minimum age of 13.
 - [ ] Open Library credit in the footer ("Book data from Open Library").
 
