@@ -1,6 +1,6 @@
 # Feature Spec — Yearly goal and stats page
 
-**Status:** 📝 Spec written 2026-10-11 (decisions asked the same day). Roadmap Stage 9. Wanted before January 2027, when readers set their goals.
+**Status:** ✅ Built and reviewed 2026-10-11 (Apollon c74a0ab, ae75804, 9668a86, 054deae, plus the page-count overflow fix). Roadmap Stage 9. Wanted before January 2027, when readers set their goals.
 
 ## 1. Problem
 
@@ -91,22 +91,32 @@ Empty states are real: a year with nothing read returns zeros and empty lists, a
 ## 5. Tasks
 
 ### Phase 1 — Backend
-- [ ] Migration: `ReadingGoals` (+ deactivation filter)
-- [ ] `ReadingProgressCalculator` with unit tests (books, pages, unknown pages, past/future year, leap year, pace status boundaries)
-- [ ] Goal endpoints (`GET/PUT/DELETE /api/goals/{year}`), validation, error codes + translations
-- [ ] `GET /api/stats/overview` (+ repository projection) and the goal in `GET /api/stats/summary`
-- [ ] `GET /api/users/{username}/goal` with `ReadingVisibleTo`, block and deactivation handling
-- [ ] Integration tests: counting (rereads yes, DNF no, year edges), private books excluded from the public goal, another reader's goal/stats unreachable, 404/400 cases
+- [x] Migration: `ReadingGoals` (+ deactivation filter)
+- [x] `ReadingProgressCalculator` with unit tests (books, pages, unknown pages, past/future year, leap year, pace status boundaries)
+- [x] Goal endpoints (`GET/PUT/DELETE /api/goals/{year}`), validation, error codes + translations
+- [x] `GET /api/stats/overview` (+ repository projection) and the goal in `GET /api/stats/summary`
+- [x] `GET /api/users/{username}/goal` with `ReadingVisibleTo`, block and deactivation handling
+- [x] Integration tests: counting (rereads yes, DNF no, year edges), private books excluded from the public goal, another reader's goal/stats unreachable, 404/400 cases
 
 ### Phase 2 — Frontend
-- [ ] API client + types + query keys
-- [ ] Goal card (set / edit / remove) on the stats page and Books home
-- [ ] `StatsPage` with year picker and all sections; empty states
-- [ ] Profile goal line
-- [ ] Translations (five languages) and tests (Vitest)
+- [x] API client + types + query keys
+- [x] Goal card (set / edit / remove) on the stats page and Books home
+- [x] `StatsPage` with year picker and all sections; empty states
+- [x] Profile goal line
+- [x] Translations (five languages) and tests (Vitest)
 
 ### Phase 3 — Verification
-- [ ] Browser check: phone width and all five themes, empty account and a seeded one (`browser-check`)
-- [ ] Reviewer; argos-security (a new privacy-relevant endpoint on the profile)
-- [ ] Manual test plan `testing/stats-and-goals.md` (`test-plan` skill)
-- [ ] CHANGELOG line, ROADMAP Stage 9 ticked
+- [x] Browser check: phone width and all five themes, empty account and a seeded one (`browser-check`)
+- [x] Reviewer; argos-security (a new privacy-relevant endpoint on the profile)
+- [x] Manual test plan `testing/stats-and-goals.md` (`test-plan` skill)
+- [x] CHANGELOG line, ROADMAP Stage 9 ticked
+
+## 6. Build notes (2026-10-11)
+
+- Goals are in the data download (`goals.csv`) and go with the account (FK cascade, deactivation filter).
+- Only finished logs **with a finish date** count (a Read log with no date is not in any year, nor All time).
+- The home card takes its goal from `GET /api/stats/summary` (one request); the stats page uses `GET /api/goals/{year}`.
+- The year picker always offers this year and next year, so a goal can be set before anything is read.
+- Browser check (side ports): goal set through the UI, no sideways scroll at 375 px in all five themes, a viewer sees 2 of 24 when one of 3 finished books is private.
+- Review findings fixed: a double first save answered 500 (now becomes an update); DELETE works for any year so an aged-out goal can be removed; `/stats?year=` out of range falls back to this year; page sums are added in `long` and clamped. Not done: the frontend repeats the 10,000 / 1,000,000 target caps (only matters if they change).
+- Open for later: `Log.TotalPages` has no upper limit (the stats clamp it, the log form doesn't).
