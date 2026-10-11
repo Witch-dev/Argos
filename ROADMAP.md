@@ -244,7 +244,7 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 
 ## Stage 9 — Yearly goal and stats
 
-**Needs spec.**
+**Spec:** `specs/yearly-goal-and-stats.md` (written 2026-10-11, decisions asked the same day). Build it phase by phase: backend, frontend, verification.
 
 - [ ] Set a yearly goal ("read 30 books in 2027") and see progress on the home page and profile.
 - [ ] Stats page: books and pages per month, top authors, genres, moods, pace, average rating, DNF rate, longest and shortest book.
