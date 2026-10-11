@@ -188,13 +188,13 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 
 ---
 
-## Stage 5 — Notifications
+## Stage 5 — Notifications ✅ done 2026-10-11
 
-**Needs spec.** Starting points: `FUTURE-IDEAS.md` ("Notifications can start from `ActivityEvents`", "Notifications for reading stories", "Book club organizing tools").
+**Spec:** `specs/notifications.md`. Browser-checked with three readers; manual plan in `testing/notifications.md`.
 
-- [ ] An in-app bell: new follower, likes, replies, mentions, club invites, "checkpoint due in 2 days", collaborator invites on lists.
-- [ ] **Quiet by default**, with an on/off setting per type. Fable gets complaints for sending too many.
-- [ ] A weekly email digest, off by default. It can wait until after launch if time is short.
+- [x] An in-app bell: new follower, follow requests, likes (grouped per item), comments, replies, club invites, "checkpoint due in 2 days", collaborator invites on lists. *(@mentions left out: no mention feature exists.)*
+- [x] **Quiet by default**, with an on/off setting per type group; likes are off until the reader turns them on. Fable gets complaints for sending too many.
+- [ ] ~~A weekly email digest, off by default.~~ **Moved out of this stage (2026-10-11):** build it after launch, on top of the notifications table.
 
 *Size M.*
 

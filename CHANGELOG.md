@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-11 — Stage 5 Phase 1 (backend): notifications bell API — new follower, follow requests, grouped likes, comments, replies, club and list invites, checkpoint-due reminders, per-group switches (likes off by default); reviewer and security findings fixed → `specs/notifications.md`, `bugs/list-invites-ignore-blocks.md`
 - 2026-10-11 — Stage 8 done: private accounts verified in a real browser (four readers, desktop and phone width, two themes), manual test plan written → `testing/account-privacy.md`, `specs/account-privacy.md`
 - 2026-10-11 — Stage 8 Phase 2 (frontend): "Private account" switch (asks first, with the number of waiting requests), Follow requests list with approve / decline and a badge, locked profile for strangers, Follow / Requested / Following button everywhere, Remove follower; reviewer findings fixed → `specs/account-privacy.md` (Apollon ac4d9b1)
 - 2026-10-11 — Stage 8 Phase 1 (backend): private accounts and follow requests: one visibility ceiling in the shared SQL filters and their C# twins, applied to shelves, reviews, writings (which had no rule), lists, activity, discovery, profile and followers lists; follow / request / approve / decline / remove follower, silent decline with a one-day wait, blocks clear waiting requests; audit found and fixed three gaps; `reviewer` + `argos-security` findings fixed → `specs/account-privacy.md` (Apollon 6f282c1)
