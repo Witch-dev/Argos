@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-11 — Phone pass: 44 px tap targets, bottom-sheet dialogs, thumb-sized star picker, quick-log (+10 pages, Finished! then stars) in the "+" list and on the book page, installable web app (manifest, icons, no offline), focus ring, skip link, 404 page, `100dvh`, 65-character reading width → `specs/phone-pass.md`, `testing/phone.md`
+
 - 2026-10-08 — Books / Community split finished: full browser pass in all five themes at desktop and phone width, phone menu panel now reaches the bottom of the screen, manual test plan for the privacy rules → `specs/books-community-split.md` Phase 4, `testing/books-and-privacy.md`
 - 2026-10-08 — Books home (popular, want-to-read, journal preview, year card), the journal (`/journal`, per-book privacy, "make all private", a Journal tab on profiles), stats summary, bulk privacy in Settings; Feed now shows a public book's row without stars when its review is hidden → `specs/books-community-split.md` Phase 3
 - 2026-10-08 — Per-book reading visibility on the backend: `Log.ReadingVisibility` (private / followers / public, existing books public), one rule in C# and SQL applied to shelves, the Readings strip, the Feed, book pages, ratings, discovery, landing, compare and favourites, plus a bulk "make all private" endpoint; reviewed and security-reviewed → `specs/books-community-split.md` Phase 2, `bugs/club-progress-ignores-reading-visibility.md`

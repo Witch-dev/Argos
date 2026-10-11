@@ -119,11 +119,13 @@ Small things that are cheaper now than later.
 
 ## Stage 3 — Works well on a phone
 
-**Needs spec** (small; use the `web-design` skill). From `FUTURE-IDEAS.md` "Mobile-first pass".
+**Spec:** `specs/phone-pass.md` (written 2026-10-11). **Built 2026-10-11; waiting on the real-phone check** (`testing/phone.md`).
 
-- [ ] **The five screens people use most** work comfortably at phone width (≤ 640 px): log a book, update a page, write a review, the Feed, a club checkpoint.
-- [ ] **Quick-log**: "+10 pages" and "Finished!" with a quick rating, straight from the Readings strip and the book page. Pulled forward from `FUTURE-IDEAS.md` because it makes the phone experience fast.
-- [ ] **Installable web app (PWA)**: an app icon on the home screen, without an app store.
+- [x] **The five screens people use most** work comfortably at phone width (≤ 640 px): log a book, update a page, write a review, the Feed, a club checkpoint. *(Browser-checked at 390 px in Paper and Dark: no sideways scroll, controls at least 44 px.)*
+- [x] **Quick-log**: "+10 pages" and "Finished!" with a quick rating, from the "+" tile's book list and the book page (the Readings strip itself shows people's stories, so it has no quick-log).
+- [x] **Installable web app (PWA)**: manifest and icons, no offline mode.
+- [x] **Look-and-feel polish** from the `taste-skill` review: global focus ring, press feedback, `100dvh`, skip link, 404 page, tabular numerals, 65-character reading width.
+- [ ] **Real-phone check**: log a book, +10 pages, finish with a rating, add to the home screen.
 
 *Size M.*
 
