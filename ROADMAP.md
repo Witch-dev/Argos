@@ -232,7 +232,7 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 
 ## Stage 8 — Privacy: private accounts
 
-**Needs spec.** All design notes are in `FUTURE-IDEAS.md`, "Account-level privacy settings".
+**Spec:** `specs/account-privacy.md` (written 2026-10-11, decisions asked the same day; not built). The original notes are in `FUTURE-IDEAS.md`, "Account-level privacy settings".
 
 - [ ] Public or private account. Private shows shelves, progress, reviews and writings only to approved followers. Everyone else sees name and avatar only.
 - [ ] Follow requests: approve or decline.
