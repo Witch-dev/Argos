@@ -144,7 +144,8 @@ Version policy going forward: pin exact versions in `.csproj`/`package.json` (no
 - `ListLikes(list_id, user_id, created_at)` — one per user per list; `ListTags(list_id, tag)` — normalised lowercase tags, max 8 per list. List comments use the shared `Comments` table with `target_type = List`
 - `ListChallenges(id, list_id, user_id, goal_date, started_at)` — one per reader per list; goal_date is a plain date; progress is computed from Read logs, never stored
 - `ListCollaborators(list_id, user_id, status, invited_at, responded_at)` — Pending/Accepted; max 10 per list; declining or leaving deletes the row
-- `Follows(follower_id, followee_id, created_at)`
+- `Follows(follower_id, followee_id, created_at)` (approved follows only)
+- `FollowRequests(id, requester_id, target_id, created_at, declined_at)` (requests to private accounts; `specs/account-privacy.md`). `AspNetUsers.IsPrivate` marks a private account.
 - `Blocks(blocker_id, blocked_id, created_at)` — key on the pair; applies both ways once it exists: blocking deletes follows between the two readers and stops new ones, and hides each from the other in search and discovery. `DismissedSuggestions(user_id, dismissed_user_id, created_at)` — permanent "Not interested" on a suggested reader (`specs/find-readers-discovery.md`)
 - `LogContentWarnings(log_id, warning_key, severity)` — reader-reported content warnings on a review, from a fixed catalog (`specs/reviews-improvements.md`)
 - `ReviewLikes(log_id, user_id, created_at)` and `FavouriteBooks(user_id, book_id, created_at, showcase_position)` — likes on reviews, and hearted books with up to 4 picked for the profile row (`specs/reviews-improvements.md`)
