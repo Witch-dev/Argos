@@ -431,7 +431,11 @@ Items marked *(app-hardening)* were built there; items marked *(Stage 4)* wait f
 ### Phase 5 — Export and delete account
 
 #### Backend
-- [ ] **First:** prototype the `DeactivatedAt` global query filters and check them against the feed `UNION ALL` and the heaviest list queries. Decide filters vs. the fallback in §2 before going further.
+- [x] **First:** prototype the `DeactivatedAt` global query filters and check them against the feed `UNION ALL` and the heaviest list queries. **Done 2026-10-11, decision: filters, not the fallback.** The Feed's `UNION ALL` is LINQ `Concat`, so filters apply to both halves. Test (`AccountDeactivationFilterTests`): a deactivated reader's review and note leave the Feed and their follow is hidden; clearing the flag brings all back. Timing on 12,000 reviews from 300 followed readers (10% deactivated): Feed page 32 ms, and the filtered log query is no slower than the unfiltered one. Whole suite still green (616).
+  - **Left to do from the prototype:** only `Log`, `Writing`, `Comment` and `Follow` have filters so far (`ConfigureDeactivationFilters` in `ArgosDbContext`). Add the other ~25 user-owned entities from the list in §3.1.
+  - **EF warning 10622:** an entity that is the required end of a relationship with a filtered entity (`CommentVoteRecord` → `Comment`, likes → `Log`) needs a matching filter, or the warning is accepted on purpose. Decide per entity when adding them.
+  - **`Users` is not filtered** (the owner must still log in to cancel, and erasure has to find them); profile, search and follower lists exclude `DeactivatedAt != null` explicitly.
+  - Delete confirmation is password only until Phase 4 (2FA, Google) exists.
 - [ ] `GET /me/export` (zip of CSVs, rate-limited)
 - [ ] `DeactivatedAt`, `DeletionKeepsContributions`; seed `deleted` user; delete + cancel-deletion endpoints; deactivated login answer
 - [ ] `AccountErasureService` (keep/delete contributions, club Admin handover, Restrict FKs)
