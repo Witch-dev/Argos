@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-11 — Refresh token moved into an httpOnly `__Host-argos_refresh` cookie, login token kept in memory only and cut to 15 minutes, tabs take turns renewing (Web Locks), logout ends the whole session; reviewer + security review findings fixed → `specs/account-system.md` §0, §3.2, "Stage 4 review notes"
 - 2026-10-11 — Phone pass: 44 px tap targets, bottom-sheet dialogs, thumb-sized star picker, quick-log (+10 pages, Finished! then stars) in the "+" list and on the book page, installable web app (manifest, icons, no offline), focus ring, skip link, 404 page, `100dvh`, 65-character reading width → `specs/phone-pass.md`, `testing/phone.md`
 
 - 2026-10-08 — Books / Community split finished: full browser pass in all five themes at desktop and phone width, phone menu panel now reaches the bottom of the screen, manual test plan for the privacy rules → `specs/books-community-split.md` Phase 4, `testing/books-and-privacy.md`

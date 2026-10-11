@@ -23,7 +23,9 @@ A stopped Vite can survive as a process. Check who owns a port (`netstat -ano | 
 In the session scratchpad (never in Apollon): `npm init -y && npm i playwright@1.63.0`. Chromium is already installed in `%LOCALAPPDATA%\ms-playwright`.
 
 - **Point the page at port 5259.** `web/public/config.js` hard-codes `apiBaseUrl: 'http://localhost:5258/api'` and wins over `VITE_API_BASE_URL`. Use `context.route('**/config.js', …)` to serve `window.__ARGOS_CONFIG__ = { apiBaseUrl: 'http://localhost:5259/api' }` instead.
-- **Log in without the UI:** `POST http://localhost:5259/api/auth/login`, then put the returned tokens into localStorage as `argos_token` and `argos_refresh_token` with `context.addInitScript`. The keys are defined in `web/src/api/authToken.ts`. If the token storage has changed (Roadmap Stage 4 moves to a cookie + in-memory token), check that file and adapt.
+- **Log in through the page, not by hand.** Since 2026-10-11 the refresh token is an httpOnly cookie (`__Host-argos_refresh`, path `/`) and the login token lives only in memory (`web/src/api/authToken.ts`), so there's nothing to put in localStorage. Fill `#emailOrUsername` and `#password` on `/login` and click `form button[type=submit]`. The cookie then stays in the Playwright context, and a reload or a second page in the same context stays signed in. Log in once per context and reuse it.
+- **English UI:** pass `locale: 'en-US'` to `browser.newContext`, or the site follows Windows' Spanish and English button names won't match.
+- **Reading the cookie:** `context.cookies()` with no URL lists everything, which is the simplest.
 - **Theme:** localStorage key `argos_theme` (`paper`, `white`, `warm-gray`, `sepia`, `dark`).
 
 ## 3. Seed test readers

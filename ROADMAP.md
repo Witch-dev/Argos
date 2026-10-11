@@ -125,7 +125,7 @@ Small things that are cheaper now than later.
 - [x] **Quick-log**: "+10 pages" and "Finished!" with a quick rating, from the "+" tile's book list and the book page (the Readings strip itself shows people's stories, so it has no quick-log).
 - [x] **Installable web app (PWA)**: manifest and icons, no offline mode.
 - [x] **Look-and-feel polish** from the `taste-skill` review: global focus ring, press feedback, `100dvh`, skip link, 404 page, tabular numerals, 65-character reading width.
-- [ ] **Real-phone check**: log a book, +10 pages, finish with a rating, add to the home screen.
+- [ ] **Real-phone check**: log a book, +10 pages, finish with a rating, add to the home screen. **Deferred to the live site (decided 2026-10-11):** do it with `testing/phone.md` once Stage 4 has the site up, since only HTTPS gives a true install. Tracked as the last item of Stage 4's "Safety nets".
 
 *Size M.*
 
@@ -146,16 +146,17 @@ Small things that are cheaper now than later.
 
 **Security setup** (`ACCOUNTS-AND-HOSTING.md` §2.6)
 - [ ] HTTPS everywhere, with HSTS.
-- [ ] `ForwardedHeaders` with the real proxy listed, so rate limits see real visitor IPs instead of making everyone share one limit. The login lockout (`LoginAttemptLimiter`, 5 wrong passwords per account per address) depends on this too.
+- [ ] *(Deploy with or before the cookie change: every page load of a signed-in reader now calls `/refresh`, so without real IPs the 30/min refresh limit would be one bucket for the whole site.)* `ForwardedHeaders` with the real proxy listed, so rate limits see real visitor IPs instead of making everyone share one limit. The login lockout (`LoginAttemptLimiter`, 5 wrong passwords per account per address) depends on this too.
 - [ ] **Bot check on login and sign-up (Cloudflare Turnstile, free).** Shown after a few failed logins from one address, or always on sign-up. Stops bots trying leaked email/password pairs from thousands of addresses, which per-address limits can't. *Size S.*
-- [ ] Move login tokens into an httpOnly cookie (the part left over from Stage 1), now that the site and API share a domain. In the same change, shorten the login token from 60 to 15 minutes (`specs/account-system.md` §0 and §3.2).
-- [ ] Production secrets (JWT key, database password, Resend key) live in the host's secret settings, never in the repo.
+- [x] Move login tokens into an httpOnly cookie (the part left over from Stage 1), now that the site and API share a domain. In the same change, shorten the login token from 60 to 15 minutes (`specs/account-system.md` §0 and §3.2). **Done 2026-10-11**, ahead of hosting: localhost on any port is already one site. Check it again on the live domain (log in, reload, still logged in).
+- [ ] Production secrets (JWT key, database password, Resend key) live in the host's secret settings, never in the repo. Also set `Cors__AllowedOrigins__0=https://wingedwords.app`, and make the API refuse to start outside Development when it's missing (today it falls back to `http://localhost:5173`).
 
 **Safety nets**
 - [ ] Database backups: Render Postgres's paid plan backs up automatically. Do **one real test restore** into a scratch database. A backup that has never been restored doesn't count.
 - [ ] Error tracking (Sentry, free plan) on the API and the site.
 - [ ] Uptime alert (UptimeRobot, free).
 - [ ] **Deploy only after CI passes.** On each Render service (site and API), set auto-deploy to "After CI checks pass" instead of "On commit", so a push to `main` goes live only once the GitHub Actions tests are green; a red build never reaches readers. Note it in `DEPLOY.md`.
+- [ ] **Real-phone check on the live site** (carried over from Stage 3): walk `testing/phone.md` on a real phone against `wingedwords.app`, including P18/P19 (home-screen install over HTTPS). Fix what fails, then tick Stage 3's last box.
 
 **Landing page** (`specs/landing-page.md`, Phase 1)
 - [ ] Landing page for logged-out visitors at `/`: pitch, mascot, four feature cards built from live mini-components, a join button that follows the invite-only switch, and link-preview tags. Do this after the privacy policy exists, so the page's trust line can be checked against it. *Size M.*

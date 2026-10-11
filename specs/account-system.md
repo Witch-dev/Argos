@@ -1,8 +1,8 @@
 # Feature Spec — Account System
 
-**Status:** 🚧 Phases 1–3 done (2026-10-07), except the parts moved to Roadmap Stage 4 (cookie, in-memory token, 15-minute token). Part of Phase 1 was already built by `specs/app-hardening.md`; see §0. Phases 4–5 not started. **Phase 6 (Goodreads import) moved to `specs/book-import.md`** (2026-10-07; built and done 2026-10-08), which adds StoryGraph and supersedes §2 "Goodreads import", §3.11 and the Phase 6 tasks here.
+**Status:** 🚧 Phases 1–3 done (2026-10-07). The parts moved to Roadmap Stage 4 (cookie, in-memory token, 15-minute token) were built on 2026-10-11. Part of Phase 1 was already built by `specs/app-hardening.md`; see §0. Phases 4–5 not started. **Phase 6 (Goodreads import) moved to `specs/book-import.md`** (2026-10-07; built and done 2026-10-08), which adds StoryGraph and supersedes §2 "Goodreads import", §3.11 and the Phase 6 tasks here.
 
-Builds on the existing auth: ASP.NET Core Identity with `ApplicationUser` (`Argos.Infrastructure/Identity/ApplicationUser.cs`), JWTs issued by `TokenService`, refresh tokens from `RefreshTokenService`, and `AuthController` (`/api/auth/register`, `/login`, `/refresh`, `/logout`, `/me`). On the frontend: `AuthContext`, `api/authToken.ts` (login token and refresh token in `localStorage`) and `api/client.ts` (adds the `Authorization` header; on a 401 it refreshes once and retries). The research behind this spec, including the Goodreads/Letterboxd comparison, is in `ACCOUNTS-AND-HOSTING.md`. Read that first.
+Builds on the existing auth: ASP.NET Core Identity with `ApplicationUser` (`Argos.Infrastructure/Identity/ApplicationUser.cs`), JWTs issued by `TokenService`, refresh tokens from `RefreshTokenService`, and `AuthController` (`/api/auth/register`, `/login`, `/refresh`, `/logout`, `/me`). On the frontend: `AuthContext`, `api/authToken.ts` (login token in memory; the refresh token is an `httpOnly` cookie since 2026-10-11) and `api/client.ts` (adds the `Authorization` header; on a 401 it refreshes once and retries). The research behind this spec, including the Goodreads/Letterboxd comparison, is in `ACCOUNTS-AND-HOSTING.md`. Read that first.
 
 ## 0. What app-hardening already shipped (read first)
 
@@ -11,10 +11,10 @@ Builds on the existing auth: ASP.NET Core Identity with `ApplicationUser` (`Argo
 | Topic | This spec originally said | What's built (app-hardening) | Decision |
 |---|---|---|---|
 | Refresh tokens | 30 days, rotated on every use, SHA-256 hashed, 60-second reuse window, revoke all on later reuse | Same. `RefreshToken` entity, `RefreshTokenService` (`IssueAsync` / `RotateAsync` / `RevokeAsync`), daily `RefreshTokenCleanupService` | ✅ Done. Nothing to build. |
-| `/refresh` and `/logout` | Take the refresh token from a cookie | Take it in the JSON body (`{ refreshToken }`) | Keep the body for now. Switching to the cookie is **Roadmap Stage 4** (below). |
-| Where tokens live | Login token in memory, refresh token in an `httpOnly` cookie | Both in `localStorage` (`argos_token`, `argos_refresh_token`) | **Moves to Roadmap Stage 4.** The cookie needs the site and API on the same domain, which only exists once hosting does. Until then `localStorage` stays. |
-| Login token lifetime | 15 minutes | 60 minutes (`Jwt:ExpirationMinutes`) | **Keep 60 until the cookie move, then drop to 15 in the same change.** Renewal is already automatic, so the short lifetime only matters once the cookie makes refresh cheap and safe. |
-| Frontend refresh-and-retry | One shared refresh promise on 401, then retry | Done, plus cross-tab handling (a token changed by another tab is reused; a refresh that races a logout is thrown away) | ✅ Done. |
+| `/refresh` and `/logout` | Take the refresh token from a cookie | Took it in the JSON body (`{ refreshToken }`) | ✅ **Cookie only since 2026-10-11** (Roadmap Stage 4). |
+| Where tokens live | Login token in memory, refresh token in an `httpOnly` cookie | Both were in `localStorage` (`argos_token`, `argos_refresh_token`) | ✅ **Built 2026-10-11** (Roadmap Stage 4). Localhost on any port counts as one site, so it didn't need to wait for hosting after all. A non-secret `argos_session` marker in `localStorage` says whether this browser has logged in (so logged-out visitors send no refresh on page load) and keeps tabs in step. The old keys are deleted on load. |
+| Login token lifetime | 15 minutes | Was 60 minutes (`Jwt:ExpirationMinutes`) | ✅ **15 since 2026-10-11**, in the same change as the cookie. |
+| Frontend refresh-and-retry | One shared refresh promise on 401, then retry | Done, plus cross-tab handling | ✅ Done. With the shared cookie (2026-10-11): a refresh refused because another tab rotated the cookie first tries once more after 1 s; a refresh that races a logout is thrown away; requests made while the page-load refresh is in flight wait for it. |
 | Lockout | 5 wrong passwords → 15 minutes, 429 | Same, with "Too many failed attempts. Try again in 15 minutes." | ✅ Done, then **changed in Phase 1 (2026-10-07, security review)**: logging in by username made per-account lockout a harassment tool, since usernames are public and 5 wrong tries would lock anyone out. Now 5 wrong passwords block only *that network address* for that account for 15 minutes (`LoginAttemptLimiter`, in memory), and Identity's account-wide lockout is a backstop at **20**. Behind a proxy this depends on `ForwardedHeaders` (Roadmap Stage 4); until then every visitor shares one address, which is no worse than before. Phase 4's wrong 2FA codes must also count toward both. |
 | Rate limits | `auth-strict` (10/min) and `auth-light` (30/min) | `auth` (10/min: login, register), `refresh` (30/min: refresh, logout), `search` (30/min), `public` (60/min) in `RateLimitOptions` | **Use the existing policies; don't add new ones.** New strict endpoints (forgot/reset password, `login/2fa`, Google) use `auth`. `username-available` uses `public`. |
 | Username rules | 3–20 characters, letters/digits/`_` | 3–30 characters, `^[A-Za-z0-9_]+$`, checked in `AuthController` at registration | **Keep 3–30.** It's built and tested, test accounts use up to 30 characters, and a shorter limit gains little. Phase 1 adds only the reserved list. |
@@ -43,7 +43,7 @@ Sign up and login work, but nothing around them does. (Written 2026-10-02. Items
 ## 2. Clarifying decisions made (via questions to the user)
 
 - **Everything is in scope**, in six phases (§5): the basics, email, the settings page, 2FA + Google sign-in, export + delete account, and the Goodreads import.
-- **Stay logged in with a refresh token for 30 days.** A short login token (15 minutes) is renewed quietly by a cookie that lasts 30 days from your last visit. This gives a sessions list and "log out everywhere". *(§0: the refresh token is built but kept in `localStorage` with a 60-minute login token until Roadmap Stage 4.)*
+- **Stay logged in with a refresh token for 30 days.** A short login token (15 minutes) is renewed quietly by a cookie that lasts 30 days from your last visit. This gives a sessions list and "log out everywhere". *(Built; the cookie and 15-minute token since 2026-10-11.)*
 - **Email confirmation is required before posting anything others can read.** Blocked until confirmed: reviews with text, comments, posts, writings, club messages and suggestions, creating clubs, making lists public, importing from Goodreads. Allowed: browsing, logging books, star ratings, private lists, following people, joining clubs.
 - **Usernames can change once a year.**
 - **Account deletion: the person chooses** between "Remove everything" and "Keep my comments and club messages as *Deleted user*". Reviews, lists, writings, posts and logs are always removed. The account is hidden at once and fully erased after 30 days; logging in before then can cancel the deletion.
@@ -54,11 +54,11 @@ Sign up and login work, but nothing around them does. (Written 2026-10-02. Items
 
 **Decisions made while writing the spec (not asked; change any of these before starting):**
 
-*Sessions* (the refresh-token parts are built; the cookie and in-memory parts are Roadmap Stage 4, see §0)
+*Sessions* (all built; the cookie and in-memory parts on 2026-10-11, see §0)
 - **The login token lives in memory, not `localStorage`.** On page load, the app calls `/api/auth/refresh` to get a fresh one from the cookie. A script injected into the page can't read an `httpOnly` cookie, and can no longer find a token in `localStorage`.
 - **The refresh token rotates on every use.** Each refresh returns a new one and retires the old one. If a retired token is used again, someone may have copied it, so the whole session is ended. Exception: **reuse within 60 seconds is allowed** without ending the session, because two open tabs refreshing at the same moment would otherwise log you out.
 - **Refresh tokens are stored hashed** (SHA-256), like passwords. A leaked database row can't be used as a login.
-- **The cookie is `argos_refresh`**: `HttpOnly`, `Secure`, `SameSite=Strict`, `Path=/api/auth`. That's why the site and API must share a domain (`argos.app` / `api.argos.app`, see `ACCOUNTS-AND-HOSTING.md` §2.1). `localhost:5173` and `localhost:8080` already count as the same site.
+- **The cookie is `__Host-argos_refresh`**: `HttpOnly`, `Secure`, `SameSite=Strict`, `Path=/`, no `Domain` *(2026-10-11 security review: the `__Host-` prefix, which requires `Path=/`, stops a page on another subdomain from planting its own cookie; it was `argos_refresh` on `Path=/api/auth`)*. That's why the site and API must share a domain (`argos.app` / `api.argos.app`, see `ACCOUNTS-AND-HOSTING.md` §2.1). `localhost:5173` and `localhost:8080` already count as the same site.
 - **No IP addresses are stored.** The sessions list shows the browser and device (from the User-Agent), when the session started and when it was last used.
 - **Changing or resetting the password ends every other session.** An already-issued login token stays valid for up to 15 minutes; we accept that rather than checking the database on every request.
 
@@ -139,10 +139,10 @@ Seed: the `deleted` system user. Migration: set `EmailConfirmed = true` for ever
 
 ### 3.2 Phase 1: sessions
 
-> **Moved (2026-10-06, §0).** Refresh, rotation, logout and the frontend refresh-and-retry are built, with the tokens in the request body and `localStorage`. What's left here (the `argos_refresh` cookie, the in-memory login token, 15-minute login tokens, `AllowCredentials()`, removing the old `localStorage` keys) is done in **Roadmap Stage 4**, once the site and API share a domain. The design below is kept for that work.
+> **Built 2026-10-11 (Roadmap Stage 4).** Earlier note: **Moved (2026-10-06, §0).** Refresh, rotation, logout and the frontend refresh-and-retry are built, with the tokens in the request body and `localStorage`. What's left here (the `argos_refresh` cookie, the in-memory login token, 15-minute login tokens, `AllowCredentials()`, removing the old `localStorage` keys) is done in **Roadmap Stage 4**, once the site and API share a domain. The design below is kept for that work.
 
 ```
-POST /api/auth/register   → { token }  + Set-Cookie argos_refresh
+POST /api/auth/register   → { token }  + Set-Cookie __Host-argos_refresh
 POST /api/auth/login      → { token } | { requiresTwoFactor: true, challengeToken }  + cookie
 POST /api/auth/refresh    (cookie only) → { token } + rotated cookie   | 401
 POST /api/auth/logout     (cookie only) → revokes this session, clears cookie
@@ -336,7 +336,7 @@ Items marked *(app-hardening)* were built there; items marked *(Stage 4)* wait f
 #### Backend
 - [x] `RefreshTokens` table + migration; `RefreshTokenService` (issue, rotate with the 60-second reuse window, revoke, hash with SHA-256) *(app-hardening)*
 - [x] New `/refresh` and `/logout` *(app-hardening, body not cookie)*
-- [ ] *(Stage 4)* `/register` and `/login` set the `argos_refresh` cookie; `/refresh` and `/logout` read it; `Jwt:ExpirationMinutes` → 15; CORS `AllowCredentials()`
+- [x] *(Stage 4, built 2026-10-11)* `/register` and `/login` set the `__Host-argos_refresh` cookie; `/refresh` and `/logout` read it; `Jwt:ExpirationMinutes` → 15; CORS `AllowCredentials()`
 - [x] Password options (12 minimum, no character-type rules) + `CommonPasswordValidator` (username/email check). The 128 max is already built. *Built with the top **1 million** list filtered to 12+ characters (46k entries) instead of the top 10k: only ~30 of the top 10k are 12+ characters, so the 12-character minimum already stops the rest.*
 - [x] Lockout options; login via `CheckPasswordSignInAsync(lockoutOnFailure: true)`; 429 when locked *(app-hardening)*
 - [x] Rate-limit policies *(app-hardening: `auth`, `refresh`, `search`, `public`; reuse them)*
@@ -348,7 +348,7 @@ Items marked *(app-hardening)* were built there; items marked *(Stage 4)* wait f
 - [x] *(Added 2026-10-07, security review)* Lockout counted per account **and** network address (`LoginAttemptLimiter`, 5 per address), with Identity's account-wide lockout raised to 20 as a backstop (§0)
 - [x] *(Added 2026-10-07)* **Breached-password check**: `PwnedPasswordsClient` asks Have I Been Pwned's range API, sending only the first 5 characters of the password's SHA-1 hash (k-anonymity, with padding). Runs after the local checks when a password is set; 3-second timeout; if the service is down the password is let through. Error `identity.PasswordBreached`. Tests use `FakePwnedPasswordsClient`, never the real service.
 #### Frontend
-- [ ] *(Stage 4)* In-memory token; startup refresh in `AuthContext`; delete the old `localStorage` keys; `credentials: 'include'`
+- [x] *(Stage 4, built 2026-10-11)* In-memory token; startup refresh in `AuthContext`; delete the old `localStorage` keys; `credentials: 'include'`
 - [x] `client.ts`: single shared refresh-and-retry on 401 *(app-hardening, plus cross-tab handling)*
 - [x] `passwordPolicy.ts` hint/validation → length only (12–128); show/hide toggle; "Email or username" field
 - [x] Live username availability on register
@@ -457,8 +457,20 @@ Items marked *(app-hardening)* were built there; items marked *(Stage 4)* wait f
 - [ ] Import page: instructions, upload, progress (2 s polling), results, Not found table with "Find it", undo
 - [ ] Tests for upload → progress → results
 
+### Stage 4 review notes (2026-10-11)
+The reviewer and argos-security passes on the cookie move led to these changes, all built:
+- Everything that changes the cookie (refresh, login, sign-up, logout) takes turns across tabs with Web Locks (`navigator.locks`), so three tabs renewing at once no longer log each other out, and a refresh answered after a login can't put the old session's cookie back. Browsers without Web Locks take turns within the tab and retry a refused refresh once after 1 s.
+- An in-flight refresh is shared only within one session; after a login or logout (in this tab or another) a fresh one starts, and any stale answer counts as superseded.
+- A request sent without a login token never triggers a refresh, so a cookie left behind by a logout that didn't reach the server can't sign a logged-out visitor back in.
+- A refresh gives up after 20 s and shows the retry button.
+- Logout ends the token's whole session (closes a logout/refresh race), and only removes the cookie when the request brought one (another site can't force a logout).
+- A refused refresh sends a best-effort logout, so a dead cookie isn't resent on every page load.
+- The cookie is `__Host-argos_refresh` on `Path=/`, so another subdomain can't plant one.
+
+Accepted, not changed: the 60-second reuse window stays; if a refresh *answer* is lost and the reader retries more than 60 s later, reuse detection logs them out everywhere (pre-existing, rare). Refresh tokens issued before the cookie stay valid on the dev database; production starts empty.
+
 ### Local setup needed (all phases run fully on localhost)
-- **Phase 1:** open the site at `http://localhost:5173`, not `127.0.0.1`. The API is at `localhost:5258`, so both count as the same site and the `SameSite=Strict` cookie is sent.
+- **Phase 1:** open the site at `http://localhost:5173`, not `127.0.0.1`. The API is at `localhost:5258`, so both count as the same site and the `SameSite=Strict` cookie is sent. The cookie is `Secure`: Chrome, Edge and Firefox accept that on `http://localhost`, but **Safari and any LAN address (a phone on `http://192.168.…`) don't**, so there you can log in but are logged out after 15 minutes or on reload. Test on a phone against the live HTTPS site instead (Roadmap Stage 4).
 - **Phase 2:** Docker running (Mailpit joins Postgres in `docker-compose.yml`). Read emails at `localhost:8025`.
 - **Phase 4:**
   - An authenticator app on a phone (Google Authenticator, Microsoft Authenticator, Authy).
