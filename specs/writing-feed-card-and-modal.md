@@ -1,5 +1,7 @@
 # Feature Spec — Writing Feed Card Redesign + Instagram-Style Modal
 
+> **Changed 2026-10-12** (`ux-reviews/community-feed.md` finding 2): the square image slot in §3.2 is now a small book-cover thumbnail beside the text, because a 710px block per writing pushed the text below the fold. The full-width slot is reserved for real uploaded images, a future feature (`FUTURE-IDEAS.md`).
+
 **Status:** 📝 Spec drafted (2026-09-30), not yet implemented
 
 **Supersedes:** `specs/writings-and-annotations.md` §3.6's detail-page layout only (the "Genius-style split view, text above, whole-post comments below" description). Everything else in that spec — the `Writing`/`Comment`/`CommentVoteRecord` data model, highlight-merge behavior, voting, staleness — is unchanged and this feature builds directly on top of it.
