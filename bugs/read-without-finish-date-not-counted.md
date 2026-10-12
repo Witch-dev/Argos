@@ -1,6 +1,6 @@
 # A book saved as Read without a finish date shows as "Finished" but isn't counted
 
-**Priority:** P1 · **Size:** S · **Area:** Frontend (log form), stats · **Found:** 2026-10-12 (checked in the browser after `ux-reviews/books-home.md`) · **Status:** Open
+**Priority:** P1 · **Size:** S · **Area:** Frontend (log form), stats · **Found:** 2026-10-12 (checked in the browser after `ux-reviews/books-home.md`) · **Status:** Fixed 2026-10-12 (Apollon f312403)
 
 ## What happens
 
@@ -25,3 +25,7 @@ Setting the Finished date to today makes the same book count immediately (verifi
 3. Decide what to do with the existing undated Read logs of non-import readers: leave them (they are honest "unknown date" rows), or let the stats fall back to the log's creation date. Imports should stay out of the count unless dated.
 
 Tests: `LogForm.test.tsx` (prefill, and clearing it keeps null); a backend test is not needed if the fix stays in the form.
+
+## Fix
+
+The log form fills today's date when Read or Did not finish is chosen (and when a new log opens as Read), keeps it editable and clearable, and shows "Add a finish date so this book counts in your year" when a Read log has none. Existing logs are not touched, so undated imports stay undated. Backend unchanged. Verified in the browser with a new reader: Read with the date untouched gave 1 on the year card and 1 on the stats page.  has five new tests. The third point above (what to do with existing undated Read logs from non-import readers) was left as is.

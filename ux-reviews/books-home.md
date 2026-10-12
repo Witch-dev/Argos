@@ -98,7 +98,7 @@ Count: 1 × P1, 6 × P2, 4 × P3. Quick wins (S): 1, 2, 3, 5, 7, 8, 9, 10, 11.
 
 ## Not verified
 
-- ~~"0 books read" while the Journal says "Finished"~~ **Checked on 2026-10-12 through the real log form, and it is a bug**: a book saved as Read with the finish date left empty (the default) counts as 0 in the year card, stats and goal until a date is added. Filed as `bugs/read-without-finish-date-not-counted.md` (P1).
+- ~~"0 books read" while the Journal says "Finished"~~ **Checked on 2026-10-12 through the real log form, and it is a bug**: a book saved as Read with the finish date left empty (the default) counts as 0 in the year card, stats and goal until a date is added. Filed as `bugs/read-without-finish-date-not-counted.md` (P1) and fixed the same day (Apollon `f312403`).
 - Not covered: the Community tab (reviewed separately, `ux-reviews/community-feed.md`), Sepia, very long book titles, the German layout, and the logged-out landing page.
 
 ## Notes on the skill (first run)
