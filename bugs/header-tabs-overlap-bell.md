@@ -1,6 +1,6 @@
 # The bell covers the "Community" tab on tablet-width windows
 
-**Priority:** P1 · **Size:** S · **Area:** Frontend, layout · **Found:** 2026-10-11 (`ux-reviews/books-home.md`, finding 1) · **Status:** Open
+**Priority:** P1 · **Size:** S · **Area:** Frontend, layout · **Found:** 2026-10-11 (`ux-reviews/books-home.md`, finding 1) · **Status:** Fixed 2026-10-11 (Apollon 1e90c48)
 
 ## What happens
 
@@ -17,3 +17,7 @@ Widths measured (tabs right edge vs bell left edge): 1100px: 695 vs 737 (fine); 
 ## Suggested fix
 
 Start the existing ≤640px behaviour (tabs on their own row) at about 1000px, or let the search collapse to an icon first. Check `Header.module.css` for the media query and re-measure at 1000, 900, 760 and 660px in a browser. Also look at it with a longer translation of the tab labels (German).
+
+## Fix
+
+The header uses the two-row layout from 1100px down (it used to start at 640px). Measured at 16 widths between 1366 and 320px with real bounding boxes: no overlaps, and the bar stays 88px tall down to 375px.
