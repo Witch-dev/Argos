@@ -24,7 +24,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Priority | Size | Area |
 |---|---|---|---|
-| [The header wraps to a third row at 320px wide](header-wraps-at-320px.md) | P3 | S | Frontend, layout |
+| [A book saved as Read without a finish date shows as "Finished" but isn't counted](read-without-finish-date-not-counted.md) | P1 | S | Frontend, stats |
 | [List collaborator invites ignore blocks](list-invites-ignore-blocks.md) | P2 | S | Backend, lists, privacy |
 | [Blocks only apply while signed in](blocks-only-apply-signed-in.md) | P3 | L | Backend, privacy |
 | [Blocks don't apply in book club discussions](blocks-not-applied-in-club-discussions.md) | P3 | M | Backend, clubs |
@@ -43,6 +43,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [The header wraps to a third row at 320px wide](header-wraps-at-320px.md) | Won't fix, 2026-10-12 | Below the supported width; fits from 360px |
 | [The bell covers the "Community" tab on tablet-width windows](header-tabs-overlap-bell.md) | 2026-10-11 | Apollon 1e90c48 |
 | [Imports have no limit over time](import-no-quota-over-time.md) | 2026-10-08 | Apollon e7e1651 |
 | [One slow import row stalls everyone's imports](import-worker-sleeps-inline-on-retries.md) | 2026-10-08 | Apollon f4a246e |

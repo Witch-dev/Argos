@@ -125,6 +125,7 @@ Small things that are cheaper now than later.
 - [x] **Quick-log**: "+10 pages" and "Finished!" with a quick rating, from the "+" tile's book list and the book page (the Readings strip itself shows people's stories, so it has no quick-log).
 - [x] **Installable web app (PWA)**: manifest and icons, no offline mode.
 - [x] **Look-and-feel polish** from the `taste-skill` review: global focus ring, press feedback, `100dvh`, skip link, 404 page, tabular numerals, 65-character reading width.
+- [ ] **Font-size scale** (`specs/font-size-scale.md`, from `ux-reviews/community-feed.md` #11): 7 `--font-size-*` tokens in place of 19 raw sizes across 127 CSS files, a test that stops new raw sizes, then migrate area by area. Size M.
 - [ ] **Real-phone check**: log a book, +10 pages, finish with a rating, add to the home screen. **Deferred to the live site (decided 2026-10-11):** do it with `testing/phone.md` once Stage 4 has the site up, since only HTTPS gives a true install. Tracked as the last item of Stage 4's "Safety nets".
 
 *Size M.*

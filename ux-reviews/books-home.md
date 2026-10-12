@@ -12,7 +12,7 @@ The page itself is calm and well ordered: clear sections, one rhythm (`--space-6
 
 Count: 1 × P1, 6 × P2, 4 × P3. Quick wins (S): 1, 2, 3, 5, 7, 8, 9, 10, 11.
 
-**All 11 fixed on 2026-10-11** (Apollon `1e90c48`) and re-checked in a browser: Paper and Dark, 1366, 900 and 375px, the drawer, and the empty reader. The Journal and Community pages, which share the changed pieces, were checked for regressions. One older problem turned up while sweeping widths: at exactly 320px the header still wraps to a third row (`bugs/header-wraps-at-320px.md`).
+**All 11 fixed on 2026-10-11** (Apollon `1e90c48`) and re-checked in a browser: Paper and Dark, 1366, 900 and 375px, the drawer, and the empty reader. The Journal and Community pages, which share the changed pieces, were checked for regressions. One older problem turned up while sweeping widths: at exactly 320px the header still wraps to a third row (`bugs/header-wraps-at-320px.md`, closed as won't fix on 2026-10-12).
 
 ## Findings
 
@@ -98,8 +98,8 @@ Count: 1 × P1, 6 × P2, 4 × P3. Quick wins (S): 1, 2, 3, 5, 7, 8, 9, 10, 11.
 
 ## Not verified
 
-- **"0 books read" while the Journal says "Finished" twice.** The reader's two Read logs were created through the API without a finish date, which probably explains it, but the Journal shows them as finished. Worth reproducing through the UI: if a log marked Read with no date is dropped from the year count, that is a bug to file.
-- Not covered: the Community tab, Sepia, very long book titles, the German layout, and the logged-out landing page.
+- ~~"0 books read" while the Journal says "Finished"~~ **Checked on 2026-10-12 through the real log form, and it is a bug**: a book saved as Read with the finish date left empty (the default) counts as 0 in the year card, stats and goal until a date is added. Filed as `bugs/read-without-finish-date-not-counted.md` (P1).
+- Not covered: the Community tab (reviewed separately, `ux-reviews/community-feed.md`), Sepia, very long book titles, the German layout, and the logged-out landing page.
 
 ## Notes on the skill (first run)
 

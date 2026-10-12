@@ -11,7 +11,7 @@ The feed's structure works: filters live in the URL, Escape closes the composer 
 
 Count: 0 × P1, 5 × P2, 7 × P3. Quick wins (S): 1, 3, 5, 6, 7, 8, 9, 10, 12.
 
-**11 of 12 fixed on 2026-10-11** (Apollon `40fdd84`) and re-checked in a browser at 1366, 900 and 375px, in Paper and Dark, with the composer and writing modal. Open: finding 11 (a font-size scale), which is a cross-page job. Smaller things noticed while verifying and left alone: "Show anyway" is 17px tall, a review row's cover link and its title link are two tab stops to the same page, and "More" on a writing whose cut lands on a blank line shows a lone "…" above it.
+**11 of 12 fixed on 2026-10-11** (Apollon `40fdd84`) and re-checked in a browser at 1366, 900 and 375px, in Paper and Dark, with the composer and writing modal. Finding 11 (a font-size scale) is a cross-page job and has its own spec: `specs/font-size-scale.md`, on the ROADMAP in Stage 3. Two small leftovers found while verifying were fixed on 2026-10-12: "Show anyway" is now 24px (44px on a phone) and a review row's cover link is no longer a tab stop. Accepted as is: "More" on a writing whose cut lands on a blank line shows a lone "…" above it.
 
 ## Findings
 
@@ -82,7 +82,7 @@ Count: 0 × P1, 5 × P2, 7 × P3. Quick wins (S): 1, 3, 5, 6, 7, 8, 9, 10, 12.
 **Where:** across the feed and shared components: 12, 12.8, 13.6, 14.4, 15.2, 16 and 16.8px, plus an 11.2px badge. They are picked per component (`0.75rem`, `0.8rem`, `0.85rem`, `0.9rem`, `0.95rem`, `1.05rem`, ...).
 **What:** the steps are less than 1px apart, so the differences read as accidents, not hierarchy. This is the same pattern noted in `design-tokens.md` ("no type-scale tokens exist yet").
 **Fix:** a cross-page decision, not a one-off: add 4 or 5 `--font-size-*` tokens (small, body, large, title, heading) and move components onto them as pages are touched. Raise it as its own piece of work.
-**Status:** open
+**Status:** Handed to `specs/font-size-scale.md` (2026-10-12), tracked in ROADMAP Stage 3.
 
 ### 12. On a phone the activity line breaks before "minutes ago": P3 · S · Judgement
 **Where:** `ActivityGroupCard`: "ux_c_dee_893440 finished 2 books 2 / minutes ago".

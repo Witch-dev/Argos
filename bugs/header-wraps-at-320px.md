@@ -1,6 +1,6 @@
 # The header wraps to a third row at 320px wide
 
-**Priority:** P3 · **Size:** S · **Area:** Frontend, layout · **Found:** 2026-10-11 (width sweep during the Books home fixes, `ux-reviews/books-home.md`) · **Status:** Open
+**Priority:** P3 · **Size:** S · **Area:** Frontend, layout · **Found:** 2026-10-11 (width sweep during the Books home fixes, `ux-reviews/books-home.md`) · **Status:** Won't fix (2026-10-12). 320px is a first-generation iPhone SE or a very narrow split window, the header fits from 360px up, and two attempted fixes changed nothing. Reopen if a real reader reports it.
 
 ## What happens
 

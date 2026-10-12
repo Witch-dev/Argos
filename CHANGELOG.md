@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-12 — Closing the UX reviews: font-size scale specced and on the roadmap, "Show anyway" and the review cover link fixed, 320px header closed as won't fix, and a real bug found and filed (a Read book without a finish date isn't counted) → `specs/font-size-scale.md`, `bugs/read-without-finish-date-not-counted.md`, `ux-reviews/community-feed.md` (Apollon 09193d0)
 - 2026-10-12 — Community feed UX fixes (11 of 12 findings): a book on a writing is a small thumbnail so the text leads, sidebar drops Reviews and Writings (they are Feed tabs), like/comment targets 24px+ with themed SVG icons, reviews cut at six lines, one tab stop per writing, h1 before the strip, composer labels → `ux-reviews/community-feed.md` (Apollon 40fdd84)
 - 2026-10-11 — `ux-review` of the Community feed: 12 findings (P2: tiny like/comment targets, 710px image block on every book writing, unclamped long reviews, "Feed/Writings/Reviews" three times, unthemed emoji icons) → `ux-reviews/community-feed.md`
 - 2026-10-11 — Books home UX fixes (all 11 findings): header in two rows from 1100px so the bell no longer covers the Community tab, wrapping account name, one profile link in Books, year card and goal on the page below 1100px, palette-icon theme button, scroll arrows on cover rows, "Find a book" in empty states, drawer scrim → `ux-reviews/books-home.md`, `bugs/header-tabs-overlap-bell.md` (Apollon 1e90c48)
