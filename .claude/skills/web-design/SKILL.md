@@ -36,10 +36,17 @@ If a real gap exists (no token fits), add it to `index.css` in every theme block
 2. Write/update the `.module.css`, using only tokens from Phase 2.
 3. Confirm all 5 themes (Paper, White, Warm Gray, Sepia, Dark): every color decision has to work in each, not just the default. Check every theme block in `index.css` defines the tokens used.
 4. Confirm the 640px collapse: does this layout need to reflow to single-column / hide the sidebar-offset / collapse nav at mobile width? Follow the pattern in `Layout.module.css` (drop `margin-left`, adjust padding) rather than a new mechanism.
-5. Accessibility: real `<button>`/`<a>` for interactive elements, `<label htmlFor>` on form fields, alt text with real fallback semantics on any image, `aria-expanded`/`aria-controls` on any collapsible nav — match the baseline in `references/design-tokens.md`, don't regress it.
+5. Accessibility: real `<button>`/`<a>` for interactive elements, `<label htmlFor>` on form fields, alt text with real fallback semantics on any image, `aria-expanded`/`aria-controls` on any collapsible nav — match the baseline in `references/design-tokens.md`, don't regress it. Also, for anything new:
+   - **Keyboard and focus:** everything works without a mouse; a visible `:focus-visible` outline (never `outline: none` alone); modals trap Tab, close on Escape and return focus to the opener.
+   - **Forms:** visible labels (a placeholder is not a label), inline errors linked with `aria-describedby`/`aria-invalid`, a pending state on submit.
+   - **Announcements:** `role="status"`/`aria-live="polite"` for non-urgent results, `role="alert"` only for errors; icon-only buttons get an `aria-label` through `t('…')`.
+   - **Touch and motion:** targets at least 44×44px; a `prefers-reduced-motion` variant for any animation, animating `transform`/`opacity` only (never `transition: all`).
+   - **Dates and numbers** through `Intl`, never a hardcoded format.
+   The full list is `.claude/skills/ux-review/references/code-checklist.md`.
 
 ## Phase 4 — Verify
 
 - `npm run build` and `npm run lint` clean (per the project's existing verification norm — a passing typecheck says nothing about how it looks).
 - Actually view it in a browser (the `browser-check` skill; set the theme with the `argos_theme` localStorage key or the ThemeMenu): at least Paper and Dark, plus Sepia for anything colour-heavy, at one width above and one at/below 640px. Don't declare a visual change done from reading the CSS alone.
 - If this touched shared components (`StateMessage`, `Avatar`, `BookCard`, etc.), check the other pages that use them for regressions, not just the page that motivated the change.
+- To judge whether a screen is clear and well laid out (rather than build it), use the `ux-review` skill. It writes findings to `ux-reviews/`, and its fixes come back here.

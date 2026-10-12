@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-11 — New `ux-review` skill (audit how a screen looks and reads, findings to `ux-reviews/`), keyboard/focus/forms/motion/`Intl` checks added to `web-design`; criteria from WCAG, Nielsen and Vercel/other public guides → `.claude/skills/ux-review/`, `FUTURE-IDEAS.md`
 - 2026-10-11 — Stage 5 Phase 1 (backend): notifications bell API — new follower, follow requests, grouped likes, comments, replies, club and list invites, checkpoint-due reminders, per-group switches (likes off by default); reviewer and security findings fixed → `specs/notifications.md`, `bugs/list-invites-ignore-blocks.md`
 - 2026-10-11 — Stage 8 done: private accounts verified in a real browser (four readers, desktop and phone width, two themes), manual test plan written → `testing/account-privacy.md`, `specs/account-privacy.md`
 - 2026-10-11 — Stage 8 Phase 2 (frontend): "Private account" switch (asks first, with the number of waiting requests), Follow requests list with approve / decline and a badge, locked profile for strangers, Follow / Requested / Following button everywhere, Remove follower; reviewer findings fixed → `specs/account-privacy.md` (Apollon ac4d9b1)

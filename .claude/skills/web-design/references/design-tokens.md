@@ -82,3 +82,5 @@ CSS Modules, one `ComponentName.module.css` next to each `ComponentName.tsx`, im
 - Nav toggles use `aria-expanded`/`aria-controls`.
 
 Match this baseline in new work; it's already the bar, not an aspiration.
+
+Beyond this baseline (keyboard, focus, form errors, live regions, touch targets, reduced motion, `Intl`), the checklist is `.claude/skills/ux-review/references/code-checklist.md`. Not every existing screen has been audited against it yet; `ux-review` is how that audit happens.
