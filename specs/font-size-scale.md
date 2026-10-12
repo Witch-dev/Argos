@@ -1,6 +1,6 @@
 # Feature Spec — Font-size scale
 
-**Status:** 🚧 Phase 1 and 2 done (2026-10-12): 420 raw sizes migrated to the tokens, one kept raw on purpose. Phase 3 (ux-review of the journal and landing page) still to do.
+**Status:** 🚧 Phase 1 and 2 done (2026-10-12): 419 of 420 raw sizes migrated to the tokens, one kept raw on purpose. Phase 3 (ux-review of the journal and landing page) still to do.
 
 ## 1. Problem
 
