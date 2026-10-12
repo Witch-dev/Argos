@@ -23,6 +23,8 @@ Pin down, asking the user only if unclear:
 
 Use the `browser-check` skill (side ports, Playwright, seeded readers). Take screenshots into the scratchpad and **look at each one** with Read; don't review from the CSS alone.
 
+**Use viewport screenshots at a real first-view size (e.g. 1366×768, 1280×800, 375×700) for every layout judgement.** `fullPage` screenshots resize the viewport, so sticky sidebars and `100vh` layouts look wrong in them; use `fullPage` only to check content order. Also sweep the header and any shared chrome across a range of widths (1280 down to 320) with measured bounding boxes, since collisions hide between the standard breakpoints.
+
 Capture, for each page: the normal state, the empty state, the loading state if it can be caught, an error state if reachable, and long content (a very long title or username, a review at its maximum length). Then do one keyboard pass: Tab through the page and note where focus goes and whether it is always visible.
 
 ## Phase 3 — Review
