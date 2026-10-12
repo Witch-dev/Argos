@@ -1,6 +1,6 @@
 # Feature Spec — Font-size scale
 
-**Status:** 🚧 Phase 1 and 2 done (2026-10-12): 419 of 420 raw sizes migrated to the tokens, one kept raw on purpose. Phase 3 (ux-review of the journal and landing page) still to do.
+**Status:** 🚧 Phases 1-3 done (2026-10-12): 419 of 420 raw sizes migrated, one kept raw on purpose; ux-review found 5 follow-ups (`ux-reviews/font-size-scale.md`). Left open in section 6: Sepia, the German spot-check, and the one allowlist entry.
 
 ## 1. Problem
 
@@ -64,13 +64,13 @@ Convert by area, one commit each, checking a screenshot of the area before and a
 - [x] Remove each file from the allowlist as it is done; the last batch empties it and the guard becomes absolute. *(One entry remains on purpose: `ListDetailPage` keeps its 0.65rem cover badge. The guard now also rejects raw `px` and `em`.)*
 
 ### Phase 3: review
-- [ ] Run `ux-review` on one dense page (the journal) and one sparse page (the landing page) to confirm the hierarchy reads better, not just more uniform.
+- [x] Run `ux-review` on one dense page (the journal) and one sparse page (the landing page) to confirm the hierarchy reads better, not just more uniform. *(Done 2026-10-12, `ux-reviews/font-size-scale.md`: 5 findings, all open. Verdict: the pages look as they did and the scale is in place, but the hierarchy is not better by itself. Two real follow-ups: the iOS-zoom select on the Journal (P2) and `md` being 0.8px under `base`.)*
 
 ## 6. Verification
-- [ ] `npm test`, `npm run lint`, `npm run build` clean after each batch.
-- [ ] The guard test passes with an empty allowlist at the end.
-- [ ] Browser: Paper, Dark and Sepia at 1366 and 375px for the pages in each batch; no text clipped, no layout jump in the cover rows or the header (their heights are coupled to font sizes in a few places, e.g. the 5.5rem header).
-- [ ] Spot-check German (the longest strings) on the sidebar, the header tabs and a card with a long title.
+- [x] `npm test`, `npm run lint`, `npm run build` clean after each batch. *(Every batch: 675 tests, lint and build clean.)*
+- [ ] The guard test passes with an empty allowlist at the end. *(Not as written: one entry stays, the 0.65rem list-cover badge, by decision. Either accept that and tick this, or give the badge a token-sized fix.)*
+- [ ] Browser: Paper, Dark and Sepia at 1366 and 375px for the pages in each batch; no text clipped, no layout jump in the cover rows or the header (their heights are coupled to font sizes in a few places, e.g. the 5.5rem header). *(Paper and Dark only; Sepia was not rendered in any batch.)*
+- [ ] Spot-check German (the longest strings) on the sidebar, the header tabs and a card with a long title. *(Not done.)*
 
 ## 7. Out of scope
 - A line-height or spacing change (the space scale already exists).
