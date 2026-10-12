@@ -21,6 +21,7 @@ Before touching styles, pin down (ask the user if unclear):
 
 - Colors: only the tokens in `index.css` (`--bg`, `--bg-elevated`, `--text`, `--text-muted`, `--text-subtle`, `--border`, `--accent`, `--accent-contrast`, `--danger`). No hardcoded hex in component CSS.
 - Fonts: `--font-serif` (Literata) for headings, book titles and reading text; `--font-sans` (Public Sans) for UI chrome.
+- Font sizes: only `--font-size-xs`, `-sm`, `-md`, `-base`, `-lg`, `-xl`, `-2xl`. No raw `rem` in `font-size` (a Vitest guard fails on it).
 - Shadow: `--shadow-elevated` only, and only on floating overlays (modals, popovers, dropdowns), never on a resting card.
 - Spacing: only `--space-1`, `-2`, `-3`, `-4`, `-6` and `-8` (there is no 5 or 7). No literal pixel/rem margins that aren't one of these.
 - Corners: `--radius` everywhere a radius is needed, not a per-component value.

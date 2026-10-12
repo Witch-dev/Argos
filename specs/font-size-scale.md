@@ -1,6 +1,6 @@
 # Feature Spec — Font-size scale
 
-**Status:** 📝 Spec drafted (2026-10-12), not yet implemented. Raised by `ux-reviews/community-feed.md` finding 11 (and noted in `design-tokens.md` since the 5-theme work).
+**Status:** 🚧 Phase 1 done (2026-10-12: tokens, docs, guard); Phase 2 waiting on the 0.9rem decision. Raised by `ux-reviews/community-feed.md` finding 11 (and noted in `design-tokens.md` since the 5-theme work).
 
 ## 1. Problem
 
@@ -50,9 +50,9 @@ None.
 ## 5. Frontend
 
 ### Phase 1: the tokens and a guard
-- [ ] Add the seven tokens to the bare `:root` block of `web/src/index.css`.
-- [ ] Update `.claude/skills/web-design/references/design-tokens.md` (Typography section: remove "no type-scale tokens exist yet") and the `web-design` skill's Phase 2 list (font sizes only from `--font-size-*`).
-- [ ] A Vitest that reads every `*.module.css` and `index.css` and fails on a raw `font-size: <n>rem` outside an allowlist file. The allowlist starts as every file that still has one and only shrinks, so new code can't add a raw size while the migration is in progress.
+- [x] Add the seven tokens to the bare `:root` block of `web/src/index.css`.
+- [x] Update `.claude/skills/web-design/references/design-tokens.md` (Typography section: remove "no type-scale tokens exist yet") and the `web-design` skill's Phase 2 list (font sizes only from `--font-size-*`).
+- [x] A Vitest that reads every `*.module.css` and `index.css` and fails on a raw `font-size: <n>rem` outside an allowlist file. The allowlist starts as every file that still has one and only shrinks, so new code can't add a raw size while the migration is in progress. *(Built as `web/src/styles/fontSizeScale.test.ts` + `fontSizeAllowlist.ts`: the allowlist maps each file to how many raw sizes it may keep (127 files, 420 sizes), and the test also fails on a stale entry, so a converted file's line must be deleted.)*
 
 ### Phase 2: migrate in batches, with a look at each
 Convert by area, one commit each, checking a screenshot of the area before and after (Paper and Dark, 1366 and 375px):
