@@ -56,7 +56,7 @@ None.
 
 ### Phase 2: migrate in batches, with a look at each
 Convert by area, one commit each, checking a screenshot of the area before and after (Paper and Dark, 1366 and 375px):
-- [ ] Layout and shared: `layout/`, `StateMessage`, `BookCover`, `Avatar`, buttons and forms in `index.css`.
+- [x] Layout and shared: `layout/`, `StateMessage`, `BookCover`, `Avatar`, buttons and forms in `index.css`. *(Done 2026-10-12, Apollon 308de39: 9 files, 20 sizes. `StateMessage` and `index.css` had no raw sizes. Checked logged out in Paper and Dark at 1366 and 375px: page heights identical before/after. The logged-in sidebar, section switch and book covers were not rendered.)*
 - [ ] Books: Books home, book page, shelves, journal, stats.
 - [ ] Community: feed, writings, reviews, composer, modals.
 - [ ] Lists, clubs, people.
