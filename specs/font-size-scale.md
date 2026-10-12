@@ -1,6 +1,6 @@
 # Feature Spec — Font-size scale
 
-**Status:** 🚧 Phase 1 done (2026-10-12: tokens, docs, guard); Phase 2 waiting on the 0.9rem decision. Raised by `ux-reviews/community-feed.md` finding 11 (and noted in `design-tokens.md` since the 5-theme work).
+**Status:** 🚧 Phase 1 and 2 done (2026-10-12): 420 raw sizes migrated to the tokens, one kept raw on purpose. Phase 3 (ux-review of the journal and landing page) still to do.
 
 ## 1. Problem
 
@@ -60,8 +60,8 @@ Convert by area, one commit each, checking a screenshot of the area before and a
 - [x] Books: Books home, book page, shelves, journal, stats. *(Done 2026-10-12, Apollon 12df207: 28 files, 81 sizes. `BookReviewsSection` and `ReviewFilterBar` left for the Community batch. Rendered logged in at 1366 and 375px, Paper and Dark, before/after: no clipping, page heights moved 1-8px. The phone star picker goes 36px to 32px. Stats had no data in the test reader, so only its empty state was seen.)*
 - [x] Community: feed, writings, reviews, composer, modals. *(Done 2026-10-12, Apollon 1437856: 28 files, 93 sizes, plus the two journal privacy controls missed in batch 2. Rendered logged in with a followed reader's posts: feed, writings, reviews, news, review and writing detail, Paper and Dark, 1366 and 375px, before/after. No clipping, heights moved 4-20px. The composer modal was not opened.)*
 - [x] Lists, clubs, people. *(Done 2026-10-12, Apollon 9da2ff7: 37 files, 141 sizes. One size kept raw on purpose: the 0.65rem status badge on a list cover in `ListDetailPage`, a nowrap label that 0.75rem would overflow; it stays in the allowlist. Rendered logged in: lists, list detail, clubs, a club, people, profile and compare, Paper and Dark, 1366 and 375px, before/after. No clipping; 375px pages got 14-130px shorter, the list detail 54px taller. Found, already present before this batch: the other reader's profile and the compare page are 386px wide at 375px, a horizontal overflow.)*
-- [ ] Settings, auth, legal, landing page (the `2xl` hero).
-- [ ] Remove each file from the allowlist as it is done; the last batch empties it and the guard becomes absolute.
+- [x] Settings, auth, legal, landing page. *(Done 2026-10-12, Apollon e11c3d6: 25 files, 87 sizes, including notifications, import dialogs and the shared leftovers no batch named. The landing page has no `2xl` hero: its two big headings are fluid `clamp()` sizes, left as they are. Rendered landing, login, register, privacy, terms, settings, notifications, import and delete-account, Paper and Dark, 1366 and 375px, before/after: no clipping, heights moved 0-52px. The import dialogs were not opened.)*
+- [x] Remove each file from the allowlist as it is done; the last batch empties it and the guard becomes absolute. *(One entry remains on purpose: `ListDetailPage` keeps its 0.65rem cover badge. The guard now also rejects raw `px` and `em`.)*
 
 ### Phase 3: review
 - [ ] Run `ux-review` on one dense page (the journal) and one sparse page (the landing page) to confirm the hierarchy reads better, not just more uniform.

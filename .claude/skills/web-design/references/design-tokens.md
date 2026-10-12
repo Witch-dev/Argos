@@ -61,7 +61,7 @@ A third, **480px**, exists only in `LandingPage.module.css` to hide the top bar'
 
 - Two font tokens: `--font-sans` (`Public Sans` + system-ui fallback stack) for UI chrome, `--font-serif` (`Literata` + Georgia fallback) for headings, book titles, and review/post body text. `body` sets `--font-sans`; `h1`–`h4` are switched to `--font-serif` by a base rule in `index.css`. Both load from Google Fonts (see `index.html`).
 - Seven size tokens in the bare `:root` of `index.css` (not theme-dependent, so not repeated per theme), named by size: `--font-size-xs` 0.75rem (badges, chips, counters), `-sm` 0.85rem (metadata, timestamps, captions), `-md` 0.95rem (secondary body text, form hints), `-base` 1rem (body, card titles), `-lg` 1.15rem (section headings, nav links), `-xl` 1.5rem (page and big-number text), `-2xl` 2rem (landing hero). Component text uses these, never a raw `rem`; `h1`–`h4` keep their own rules in `index.css`. Spec: `specs/font-size-scale.md`.
-- Migration in progress: `web/src/styles/fontSizeScale.test.ts` fails on any new raw `font-size: <n>rem`, and `fontSizeAllowlist.ts` lists the files not yet converted (a file's line is deleted when it is migrated). A file in that list may be edited, but must not gain a raw size.
+- Migration finished 2026-10-12: `web/src/styles/fontSizeScale.test.ts` fails on any raw `font-size: <n>rem` (also `px`, `em`; fluid `clamp()` is the only exception, on two landing-page headings). `fontSizeAllowlist.ts` lists the one deliberate exception (a 0.65rem nowrap badge on list covers) and a file in it may not gain a raw size.
 
 ## Grids
 
