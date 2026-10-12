@@ -56,8 +56,8 @@ None.
 
 ### Phase 2: migrate in batches, with a look at each
 Convert by area, one commit each, checking a screenshot of the area before and after (Paper and Dark, 1366 and 375px):
-- [x] Layout and shared: `layout/`, `StateMessage`, `BookCover`, `Avatar`, buttons and forms in `index.css`. *(Done 2026-10-12, Apollon 308de39: 9 files, 20 sizes. `StateMessage` and `index.css` had no raw sizes. Checked logged out in Paper and Dark at 1366 and 375px: page heights identical before/after. The logged-in sidebar, section switch and book covers were not rendered.)*
-- [ ] Books: Books home, book page, shelves, journal, stats.
+- [x] Layout and shared: `layout/`, `StateMessage`, `BookCover`, `Avatar`, buttons and forms in `index.css`. *(Done 2026-10-12, Apollon 308de39: 9 files, 17 sizes. `StateMessage` and `index.css` had no raw sizes. Checked logged out in Paper and Dark at 1366 and 375px: page heights identical before/after. The logged-in sidebar, section switch and book covers were not rendered.)*
+- [x] Books: Books home, book page, shelves, journal, stats. *(Done 2026-10-12, Apollon 12df207: 28 files, 81 sizes. `BookReviewsSection` and `ReviewFilterBar` left for the Community batch. Rendered logged in at 1366 and 375px, Paper and Dark, before/after: no clipping, page heights moved 1-8px. The phone star picker goes 36px to 32px. Stats had no data in the test reader, so only its empty state was seen.)*
 - [ ] Community: feed, writings, reviews, composer, modals.
 - [ ] Lists, clubs, people.
 - [ ] Settings, auth, legal, landing page (the `2xl` hero).
