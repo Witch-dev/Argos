@@ -23,7 +23,7 @@ Font sizes are chosen per component, as raw `rem` values. A count on 2026-10-12 
 
 ## 2. Decisions to confirm before building
 
-- **Number of steps: 7**, named by size not by role (`xs` to `2xl`), so a component can't be "wrong" about which role it plays. Fewer than 7 forces too many merges; more recreates the problem.
+- **Number of steps: 7 at first, 6 in the end** (see the note under the table), named by size not by role (`xs` to `2xl`), so a component can't be "wrong" about which role it plays. Fewer than 7 forces too many merges; more recreates the problem.
 - **Merging moves a size by at most 0.05rem (0.8px).** No component changes by more than that, except the rare one-offs in the last row, which are looked at one by one.
 - **`rem` stays**, so text still follows the reader's browser setting.
 - **Tokens do not vary by theme**, so they live once in the bare `:root` block of `index.css`, not in the five theme blocks.
@@ -35,13 +35,12 @@ Font sizes are chosen per component, as raw `rem` values. A count on 2026-10-12 
 |---|---|---|---|
 | `--font-size-xs` | 0.75rem | 0.65, 0.7, 0.75 | badges, chips, counters |
 | `--font-size-sm` | 0.85rem | 0.8, 0.85 | metadata, timestamps, captions |
-| `--font-size-md` | 0.95rem | 0.9, 0.95 | secondary body text, form hints |
-| `--font-size-base` | 1rem | 1, 1.05 | body, card titles |
+| `--font-size-base` | 1rem | 0.9, 0.95, 1, 1.05 | body, secondary body text, form hints, card titles |
 | `--font-size-lg` | 1.15rem | 1.1, 1.15, 1.2, 1.25 | section headings, nav links |
 | `--font-size-xl` | 1.5rem | 1.35, 1.5, 1.6, 1.75 | page and big-number text |
 | `--font-size-2xl` | 2rem | 2, 2.25 | hero text (landing page) |
 
-`--font-size-md` at 0.95rem makes the 101 uses of 0.9rem about 0.8px larger. If that looks heavier in dense lists (shelves, journal), the alternative is to merge 0.9 into `sm` (0.85rem); decide by looking at those two pages first.
+**Decided 2026-10-12, in two steps.** The 0.9rem uses first went to `md` (0.95rem). The Phase 3 review then showed `md` sat 0.8px under `base` and read as the same size, so `md` was removed and its 108 uses folded into `base`. The scale is **six** steps, each at least 1.6px apart.
 
 ## 4. Backend
 

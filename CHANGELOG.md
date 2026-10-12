@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-12 — UX fixes from the font-size review, all 5 findings: selects 16px on phones, dead landing overrides removed, journal month headings `lg`, journal visibility select quiet at rest, and `--font-size-md` folded into `base` (scale is now six steps) → `ux-reviews/font-size-scale.md` (Apollon 495e1d1, 7eed7cc)
 - 2026-10-12 — Font-size scale phase 3: ux-review of the journal and landing page found 5 follow-ups (iOS-zoom select P2, four P3) → `ux-reviews/font-size-scale.md`
 - 2026-10-12 — Font-size scale phase 2 finished (all five batches): 419 of 420 raw font sizes now use the tokens, the guard has one deliberate exception, phase 3 review still to do (Apollon 308de39, 12df207, 1437856, 9da2ff7, e11c3d6) → `specs/font-size-scale.md`
 - 2026-10-12 — Font-size scale phase 1: seven `--font-size-*` tokens in `index.css`, web-design docs updated, and a Vitest guard that blocks new raw `font-size: <n>rem` (127 files allowlisted until migrated) → `specs/font-size-scale.md` (Apollon 84a69c1)

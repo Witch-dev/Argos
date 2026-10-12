@@ -8,4 +8,4 @@ These are not bugs: broken behaviour goes in `bugs/`. This folder is for "it wor
 |---|---|---|---|---|
 | Books home (`/books`) | 2026-10-11 | 0 | 11 | [books-home.md](books-home.md) |
 | Community feed (`/feed`) | 2026-10-11 | 0 | 11 (+1 specced) | [community-feed.md](community-feed.md) |
-| Font-size scale: Journal and landing page | 2026-10-12 | 5 | 0 | [font-size-scale.md](font-size-scale.md) |
+| Font-size scale: Journal and landing page | 2026-10-12 | 0 | 5 | [font-size-scale.md](font-size-scale.md) |
