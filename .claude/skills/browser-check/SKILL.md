@@ -30,7 +30,7 @@ In the session scratchpad (never in Apollon): `npm init -y && npm i playwright@1
 
 ## 3. Seed test readers
 
-Create fresh readers through the API (register, then follows, logs, `/booklists`, `/clubs`) rather than using the hand-made dev data. The seeded `alice_reads` and friends exist, but their passwords aren't recorded. Name them so the run is recognisable (e.g. `bc_a_<timestamp>`).
+Create fresh readers through the API (register, then follows, logs, `/booklists`, `/clubs`) rather than using the hand-made dev data. Sign-up is rate limited to about 5 a minute from one address (HTTP 429): when seeding more than 5 readers, wait 65 seconds and retry. A password that appears in a data breach is refused, so use a random one. The seeded `alice_reads` and friends exist, but their passwords aren't recorded. Name them so the run is recognisable (e.g. `bc_a_<timestamp>`).
 
 **Confirm their emails.** Since Accounts Phase 2, an unconfirmed reader can't post anything others can read (reviews with text, notes, comments, writings, clubs, public lists). Either click the link in Mailpit (http://localhost:8025), or mark them confirmed directly:
 

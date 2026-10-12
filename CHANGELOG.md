@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-11 — `ux-review` of the Community feed: 12 findings (P2: tiny like/comment targets, 710px image block on every book writing, unclamped long reviews, "Feed/Writings/Reviews" three times, unthemed emoji icons) → `ux-reviews/community-feed.md`
 - 2026-10-11 — Books home UX fixes (all 11 findings): header in two rows from 1100px so the bell no longer covers the Community tab, wrapping account name, one profile link in Books, year card and goal on the page below 1100px, palette-icon theme button, scroll arrows on cover rows, "Find a book" in empty states, drawer scrim → `ux-reviews/books-home.md`, `bugs/header-tabs-overlap-bell.md` (Apollon 1e90c48)
 - 2026-10-11 — First `ux-review`: Books home, 11 findings (P1 header bell covers the Community tab at tablet widths, P2 clipped username, duplicate sidebar entry, vanishing year card on phone); skill gains viewport-screenshot and width-sweep guidance → `ux-reviews/books-home.md`, `bugs/header-tabs-overlap-bell.md`
 - 2026-10-11 — New `ux-review` skill (audit how a screen looks and reads, findings to `ux-reviews/`), keyboard/focus/forms/motion/`Intl` checks added to `web-design`; criteria from WCAG, Nielsen and Vercel/other public guides → `.claude/skills/ux-review/`, `FUTURE-IDEAS.md`
