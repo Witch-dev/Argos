@@ -35,3 +35,21 @@ The API refuses to start outside Development when either list is empty, or when 
 **Leave `ASPNETCORE_FORWARDEDHEADERS_ENABLED` unset.** Some hosting guides recommend it, but the API switches that built-in step off anyway, because it would trust every connection.
 
 **If Cloudflare changes its ranges** (rare), update `EdgeNetworks` in `appsettings.Production.json` from <https://www.cloudflare.com/ips/> rather than on Render. An environment variable like `Proxy__EdgeNetworks__0` replaces only the first entry of the list, not the whole list.
+
+## Bot check on login and sign-up (Cloudflare Turnstile)
+
+Per-address limits can't stop leaked email/password pairs being tried from thousands of addresses, one or two guesses each. With the bot check on, login and sign-up each need a solved Turnstile challenge (usually invisible to a real reader). Code and decisions: `specs/bot-check.md`.
+
+**It is off until both keys are set.** Nothing to deploy for the closed beta; turn it on before public launch (ROADMAP Stage 10). The API refuses to start if only one of the two is set.
+
+**Turning it on:**
+1. In the Cloudflare dashboard (free account) → Turnstile → add a widget. Hostname `wingedwords.app` (add `localhost` only on a separate dev widget). Mode: Managed.
+2. On the API service in Render, set `Turnstile__SiteKey` (public) and `Turnstile__SecretKey` (secret, never in the repo), then redeploy. The site needs no change: it gets the site key from `GET /api/auth/registration-status`.
+3. Check: open `/login` in a private window; the challenge appears (or runs silently) and logging in works. Then block `challenges.cloudflare.com` in the browser and check the form says the bot check couldn't load.
+4. The site's Content-Security-Policy (`web/docker/entrypoint.sh`) already allows `challenges.cloudflare.com` for script, frame and connect.
+
+**For development**, Cloudflare's published test keys work on `localhost` and need no account: site key `1x00000000000000000000AA` with secret `1x0000000000000000000000000000000AA` always passes; secret `2x0000000000000000000000000000000AA` always fails. Put them in `dotnet user-secrets` for `Argos.Api`, not in `appsettings.Development.json`.
+
+**If Cloudflare is down or the secret is wrong**, nobody can log in or sign up: the check fails closed on purpose. The API logs "Couldn't check a Turnstile token with Cloudflare". Unset `Turnstile__SiteKey` and `Turnstile__SecretKey` to switch the check off while you fix it.
+
+**Visitor addresses:** the API sends Cloudflare the visitor address from the section above, so that check matters here too.
