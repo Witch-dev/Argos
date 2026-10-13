@@ -9,3 +9,6 @@ These are not bugs: broken behaviour goes in `bugs/`. This folder is for "it wor
 | Books home (`/books`) | 2026-10-11 | 0 | 11 | [books-home.md](books-home.md) |
 | Community feed (`/feed`) | 2026-10-11 | 0 | 11 (+1 specced) | [community-feed.md](community-feed.md) |
 | Font-size scale: Journal and landing page | 2026-10-12 | 0 | 5 | [font-size-scale.md](font-size-scale.md) |
+| Header, sidebar and right rail after the layout changes | 2026-10-12 | 4 | 4 | [rail-and-header-layout.md](rail-and-header-layout.md) |
+| Story viewer (Readings strip) | 2026-10-12 | 0 | 7 | [story-viewer.md](story-viewer.md) |
+| Buttons across the site | 2026-10-13 | 0 | 6 | [buttons.md](buttons.md) |
