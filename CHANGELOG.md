@@ -8,6 +8,9 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-13 — Your edition: the log form lets a reader pick the edition they read (picker of Open Library editions with covers, filter by language), checked and copied server-side; its cover shows on their shelf, journal and stories, its page count fills an empty one, rereads start with it, imports take it from the ISBN, export includes it → `specs/formats-editions.md`
+- 2026-10-13 — Better default book cover: picked from the original-language edition (the language translations name) or else an English one, never a random translation; large covers use the sharper image; dates like "Jun 29, 1981" no longer read as 2919 → `specs/formats-editions.md`
+- 2026-10-13 — Formats and editions specced: automatic default cover, edition stored on the reader's log (no edition table), audiobooks in minutes kept apart from pages; series split into its own Roadmap item → `specs/formats-editions.md`
 - 2026-10-12 — Font-size scale closed: the one remaining raw size (the 0.65rem list-cover badge) accepted as a documented exception, roadmap box ticked → `specs/font-size-scale.md`
 - 2026-10-12 — Font-size scale: Sepia and German checked; fixed a profile stats overflow in German at 375px (Apollon f0cf46a) → `specs/font-size-scale.md`
 - 2026-10-12 — Fixed two layout bugs found during the font-size work: a long username made the other reader's profile and compare 11px wider than a 375px phone, and the profile tab row cut off its last tab at desktop width (Apollon 64deec1)
