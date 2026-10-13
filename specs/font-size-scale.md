@@ -1,6 +1,6 @@
 # Feature Spec — Font-size scale
 
-**Status:** ✅ Done 2026-10-12 apart from one decision: 419 of 420 raw sizes migrated, the scale is six steps after the Phase 3 review, and Sepia and German are checked. The 0.65rem list-cover badge stays raw and in the guard allowlist, so the "empty allowlist" box is not ticked.
+**Status:** ✅ Done 2026-10-12. 419 of 420 raw sizes use the tokens, the scale is six steps after the Phase 3 review, and Sepia and German are checked. One documented exception: the 0.65rem status badge on list covers.
 
 ## 1. Problem
 
@@ -67,7 +67,7 @@ Convert by area, one commit each, checking a screenshot of the area before and a
 
 ## 6. Verification
 - [x] `npm test`, `npm run lint`, `npm run build` clean after each batch. *(Every batch: 675 tests, lint and build clean.)*
-- [ ] The guard test passes with an empty allowlist at the end. *(Not as written: one entry stays, the 0.65rem list-cover badge, by decision. Either accept that and tick this, or give the badge a token-sized fix.)*
+- [x] The guard test passes with an empty allowlist at the end. *(Decided 2026-10-12: the allowlist keeps one entry on purpose, `ListDetailPage.module.css` with 1, for the 0.65rem status badge on list covers. It is a nowrap label that has to fit a 56px cover; any token size is larger and overflows it, in German already at 0.65rem. The guard still fails on any other raw size, and on this file gaining a second. Revisit only if the badge is redesigned, e.g. as an icon.)*
 - [x] Browser: Paper, Dark and Sepia at 1366 and 375px for the pages in each batch; no text clipped, no layout jump in the cover rows or the header (their heights are coupled to font sizes in a few places, e.g. the 5.5rem header). *(Paper and Dark in every batch; Sepia on 10 logged-in pages at both widths on 2026-10-12: no horizontal overflow and no clipped text found by script, club page looked at.)*
 - [x] Spot-check German (the longest strings) on the sidebar, the header tabs and a card with a long title. *(2026-10-12, account language switched to German: the same 10 pages at 1366 and 375px. Sidebar, header tabs and the long list and book titles are fine. One real overflow found and fixed: the profile stats row at 375px ("Durchschnittsbewertung"), Apollon f0cf46a. The profile tab row wraps to two lines in German, as designed. Left alone: the German placeholder of the club invite field is cut off at 375px.)*
 

@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-12 — Font-size scale closed: the one remaining raw size (the 0.65rem list-cover badge) accepted as a documented exception, roadmap box ticked → `specs/font-size-scale.md`
 - 2026-10-12 — Font-size scale: Sepia and German checked; fixed a profile stats overflow in German at 375px (Apollon f0cf46a) → `specs/font-size-scale.md`
 - 2026-10-12 — Fixed two layout bugs found during the font-size work: a long username made the other reader's profile and compare 11px wider than a 375px phone, and the profile tab row cut off its last tab at desktop width (Apollon 64deec1)
 - 2026-10-12 — UX fixes from the font-size review, all 5 findings: selects 16px on phones, dead landing overrides removed, journal month headings `lg`, journal visibility select quiet at rest, and `--font-size-md` folded into `base` (scale is now six steps) → `ux-reviews/font-size-scale.md` (Apollon 495e1d1, 7eed7cc)
