@@ -277,7 +277,7 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 
 In rough order. None of these block launch.
 
-1. **Formats and editions** (SPEC.md Next up #8, `specs/formats-editions.md`): better default cover, choosing your edition, audiobook in hours:minutes.
+1. ✅ **Formats and editions** (SPEC.md Next up #8, `specs/formats-editions.md`): better default cover, choosing your edition, audiobook in hours:minutes. **Done 2026-10-13.**
    - **Series** ("Book 3 of 7"), split out 2026-10-13: Open Library has no structured series data, so it needs its own spec and an answer to who corrects it.
 2. **Argos Wrapped / monthly wrap-up** as a shareable image, made from fixed rules, not AI. Aim for December 2026 if the launch lands before then; otherwise December 2027.
 3. **Account Phase 4: 2FA, passkeys and "Continue with Google"** (`specs/account-system.md`). Passkeys added 2026-10-07: the strongest protection for readers who turn it on.

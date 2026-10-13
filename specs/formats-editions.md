@@ -1,6 +1,6 @@
 # Feature Spec — Formats and editions
 
-**Status:** 🚧 Phase 1 (better default cover) and Phase 2 (your edition) done 2026-10-13; Phase 3 not started. Roadmap Stage 11 item 1 (series split out to its own item, see §4).
+**Status:** ✅ All three phases done 2026-10-13: better default cover, your edition, format and audiobooks. Roadmap Stage 11 item 1 (series split out to its own item, see §4).
 
 ## 1. Problem
 
@@ -198,19 +198,34 @@ Kept: a create of a Read log with an edition gets the edition's page count even 
 
 ### Phase 3 — Format and audiobooks
 **Backend**
-- [ ] Migration: `Format`, `TotalMinutes`, `CurrentMinute`; validation (audio ↔ minutes only)
-- [ ] `ReadingProgress.Percent` used everywhere progress is computed
-- [ ] Stats overview and goals: pages exclude audio, `minutesListened`, audiobooks-left-out count
-- [ ] Club member progress as a percentage; export includes the new fields
-- [ ] Integration tests: audio never adds pages, mixed-format club, goal counts
+- [x] Migration: `Format`, `TotalMinutes`, `CurrentMinute`; validation (audio ↔ minutes only)
+- [x] `ReadingProgress.Percent` used everywhere progress is computed
+- [x] Stats overview and goals: pages exclude audio, `minutesListened`, audiobooks-left-out count
+- [x] Club member progress as a percentage; export includes the new fields
+- [x] Integration tests: audio never adds pages, mixed-format club, goal counts
 
 **Frontend**
-- [ ] Format selector, hours:minutes inputs, progress display in log card, progress modal and stories
-- [ ] Stats hours listened; goal card note; `lib/clubPace.ts` audio rule with unit tests
-- [ ] Translations (five languages) and Vitest tests
+- [x] Format selector, hours:minutes inputs, progress display in log card, progress modal and stories
+- [x] Stats hours listened; goal card note; `lib/clubPace.ts` audio rule with unit tests
+- [x] Translations (five languages) and Vitest tests
 
 **Verification**
-- [ ] Browser check (phone width, five themes, an audio log in a club)
-- [ ] Reviewer; argos-security
-- [ ] Manual test plan `testing/formats-editions.md` (`test-plan` skill)
-- [ ] CHANGELOG line, ROADMAP item ticked, `FUTURE-IDEAS.md` cover/edition idea marked done
+- [x] Browser check (phone width, five themes, an audio log in a club)
+- [x] Reviewer; argos-security
+- [x] Manual test plan `testing/formats-editions.md` (`test-plan` skill)
+- [x] CHANGELOG line, ROADMAP item ticked, `FUTURE-IDEAS.md` cover/edition idea marked done
+
+**Phase 3 results (2026-10-13).** Built as specified, with these choices:
+
+- *Data.* `ReadingFormat` (`Print`/`Ebook`/`Audio`, stored as an int, null = not said) and `TotalMinutes`/`CurrentMinute` on `Logs` (migration `AddLogFormat`, three nullable columns, no backfill). `LogService.ValidateFormat` refuses minutes on anything but an audiobook and pages on an audiobook (≤ 10,000 minutes, position ≤ length); six new error codes (`logs.invalidFormat`, `minutesOnlyAudio`, `audioNoPages`, `totalMinutesRange`, `currentMinuteRange`, `currentMinuteOverTotal`). An edition's page count never fills an audiobook.
+- *Left out vs null.* As with the edition, the request DTOs record whether `format` was in the JSON: left out keeps it on update (so QuickLog and other partial updates never lose it) and, on create, takes the newest earlier log's format, unless that was audio and the new log comes with page numbers. Minutes are sent as the full value, like pages.
+- *One percentage.* `ReadingProgress.Percent` (Domain) for club progress and club activity; `lib/readingFormat.ts` `progressPercent`/`progressText` in the browser (log card, stories, club card). Both round halves up.
+- *Finished audiobooks keep their length* ("Finished!" and the form clear only the position), because stats add up `TotalMinutes`. Stats: `minutesListened` and `audiobooks` on the overview, shown as an "Hours listened" tile when there is at least one; pages totals, longest/shortest and "without a page count" skip audio. Goals: a pages goal leaves audiobooks out and `audiobooksLeftOut` says how many; a books goal counts them.
+- *Clubs.* `ClubMembershipDto` carries format and minutes. `lib/clubPace.ts` `referencePages` takes the median page count of the members reading in pages; an audio member's marker and On track / Behind are measured against it, and with none there is no marker and the member counts as on track.
+- *Form.* A Format select (Not said / Print / Ebook / Audiobook) under Edition. For an audiobook, "Length" and "Listened so far" (or "Stopped at") as hours + minutes (`DurationInput`), stacked so they fit a phone; on a Read log only the length. A new log shows the format of your last reading of the book (until those logs load, `format` is left out and the server picks the same). Picking an edition whose `physical_format` is a recording (audio, cassette, MP3, sound recording, Audible; not a bare "CD") pre-selects Audiobook when no format is set. The quick log on an audiobook offers "+15 min" and shows "4 h 10 m of 12 h".
+- Tests: `FormatTests` (integration: rules, left-out format, reread default, the Readings strip moving, stats and goal counts, export), a mixed-format club test, an audiobook-edition test, `ReadingProgressTests` (unit); `readingFormat.test.ts`, `LogFormFormat.test.tsx`, audio cases in `clubPace.test.ts` and `quickLog.test.ts`. Backend 809 passing on a private test database, frontend 700+.
+- Browser check: an audiobook reader and a print reader in one club on side ports, 375 px in all five themes and desktop: quick log, new-log form (format pre-filled from the last reading), story label, stats tile, goal note, club bars with the audio marker at 25%. No horizontal overflow.
+
+**Phase 3 review fixes.** Security: nothing found (enum/range checks hold, no new privacy path; club progress already ignores reading privacy, `bugs/club-progress-ignores-reading-visibility.md`, and now also shows a private audiobook's minutes, so its fix must hide those too). Reviewer, all low: server rounding now matches the browser (halves up); the test fake passes format and minutes; a bare "CD" no longer counts as audio; the new-log form leaves `format` out until your last reading has loaded.
+
+Left for later: the club checkpoint reminder (`NotificationRepository`) still judges by page only, so an audio member can be reminded although on track; the "Currently reading" rail card (`RailCards.tsx`, built in another session) still shows pages only; the landing page's demo card is sample data and stays in pages.

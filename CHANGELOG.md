@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-13 — Formats and audiobooks: a log can be print, ebook or audiobook; an audiobook's progress is hours and minutes ("4 h 10 m of 12 h", "+15 min"), never pages, so stats show hours listened and a pages goal leaves audiobooks out; clubs compare percentages and place checkpoints on an audio member's bar; an audio edition pre-selects Audiobook → `specs/formats-editions.md`
+- 2026-10-13 — Manual test plan for formats and editions (40 steps) → `testing/formats-editions.md`
 - 2026-10-13 — Your edition: the log form lets a reader pick the edition they read (picker of Open Library editions with covers, filter by language), checked and copied server-side; its cover shows on their shelf, journal and stories, its page count fills an empty one, rereads start with it, imports take it from the ISBN, export includes it → `specs/formats-editions.md`
 - 2026-10-13 — Better default book cover: picked from the original-language edition (the language translations name) or else an English one, never a random translation; large covers use the sharper image; dates like "Jun 29, 1981" no longer read as 2919 → `specs/formats-editions.md`
 - 2026-10-13 — Formats and editions specced: automatic default cover, edition stored on the reader's log (no edition table), audiobooks in minutes kept apart from pages; series split into its own Roadmap item → `specs/formats-editions.md`
