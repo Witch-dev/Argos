@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-13 — First live deploy on Render (API, site, database) at `wingedwords.app` / `api.wingedwords.app`, email through Resend on port 2587; found and fixed missing production JWT issuer/audience (every login token was rejected), which the API now refuses to start without → `DEPLOY.md` ("How the live site is set up on Render")
 - 2026-10-13 — Bot check on login and sign-up (Cloudflare Turnstile): built but off until the two keys are set; required on every login and sign-up when on, checked first and failing closed, site key delivered by the registration status, Cloudflare added to the privacy policy and the CSP; the keys step stays in Stage 10 → `specs/bot-check.md`
 - 2026-10-13 — Formats and audiobooks: a log can be print, ebook or audiobook; an audiobook's progress is hours and minutes ("4 h 10 m of 12 h", "+15 min"), never pages, so stats show hours listened and a pages goal leaves audiobooks out; clubs compare percentages and place checkpoints on an audio member's bar; an audio edition pre-selects Audiobook → `specs/formats-editions.md`
 - 2026-10-13 — Manual test plan for formats and editions (40 steps) → `testing/formats-editions.md`

@@ -53,3 +53,41 @@ Per-address limits can't stop leaked email/password pairs being tried from thous
 **If Cloudflare is down or the secret is wrong**, nobody can log in or sign up: the check fails closed on purpose. The API logs "Couldn't check a Turnstile token with Cloudflare". Unset `Turnstile__SiteKey` and `Turnstile__SecretKey` to switch the check off while you fix it.
 
 **Visitor addresses:** the API sends Cloudflare the visitor address from the section above, so that check matters here too.
+
+## How the live site is set up on Render (first deploy, 2026-10-13)
+
+Everything is in one Render account, region **Virginia (US East)**. The domain is at Porkbun, email sending at Resend.
+
+| Piece | Render service | Notes |
+|---|---|---|
+| Database | PostgreSQL `wingedwords-db` | **Free plan: deleted after 30 days.** Move to the paid plan (~$6–7/month) before real readers join. |
+| API | Web service `wingedwords-api`, Docker, `./Dockerfile` (repo root) | Health check path `/health`. Free plan sleeps after 15 minutes (first request ~30–60 s, background jobs pause); move to the $7 plan before launch. Runs the database migrations itself on start. |
+| Site | Web service `wingedwords-web`, Docker, root directory `web`, `web/Dockerfile` | Docker rather than a static site on purpose: the nginx image writes `config.js` and the security headers (CSP) at startup. |
+
+**Domains** (Render → Settings → Custom Domains, DNS at Porkbun):
+- `wingedwords.app` (ALIAS to the site service's `.onrender.com` address) and `www.wingedwords.app` (CNAME, redirects to the bare domain) → site.
+- `api.wingedwords.app` (CNAME) → API.
+
+**Environment variables on the API service** (names; values live only in Render):
+
+| Name | Value / meaning |
+|---|---|
+| `Database__ConnectionString` | `Host=<internal hostname>;Port=5432;Database=…;Username=…;Password=…` (key=value form, **not** Render's `postgres://` URL, which Npgsql can't read here) |
+| `Jwt__SigningKey` | long random value (Render's *Generate* button); changing it logs everyone out |
+| `Cors__AllowedOrigins__0` | `https://wingedwords.app` |
+| `App__FrontendBaseUrl` | `https://wingedwords.app` |
+| `Registration__InviteOnly` | `true` during the beta. Set to `false` only to register the very first account, then back. |
+| `Email__Host` / `Email__Username` / `Email__Password` | `smtp.resend.com` / `resend` / a Resend API key with *sending access* for `wingedwords.app` |
+| `Email__Port` | **`2587`** (see below) |
+| `Email__FromAddress` / `Email__ReplyToAddress` | `hello@wingedwords.app` |
+| `Turnstile__SiteKey` / `Turnstile__SecretKey` | not set yet (bot check off; see its section) |
+
+On the site service: `API_BASE_URL` = `https://api.wingedwords.app/api` (a plain https URL; the container refuses anything else).
+
+**Things that bit us on the first deploy**
+- **Email timed out ("Sending … failed (TimeoutException); retrying").** Render's free instances block the standard outgoing SMTP ports 25, 465 and 587. Resend also listens on **2587** (STARTTLS, same as 587) and **2465** (implicit TLS, needs `Email__UseSsl=true`); `Email__Port=2587` works. Paid instances aren't blocked, but 2587 keeps working there too.
+- **Sign-up or login ended in "something went wrong" and the console showed `GET /auth/me` → 401.** Production had no `Jwt:Issuer` / `Jwt:Audience`, so tokens were issued with blank labels and rejected on the next request. Both are now set in `appsettings.json`, and the API refuses to start if either is empty.
+- **Render deploys on every push to `main`**, whether or not CI passed. Switching each service to *After CI checks pass* (Settings → Build & Deploy → Auto-Deploy) is still to do.
+- **Resend: leave click and open tracking off.** Tracking rewrites the confirmation and reset links through a third-party address, and the privacy policy doesn't mention it.
+
+**First-account recipe** (no readers exist, so nobody can create an invite): set `Registration__InviteOnly` to `false`, register, set it back to `true`, and check that the confirmation email arrives.
