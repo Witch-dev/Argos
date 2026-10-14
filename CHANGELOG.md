@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-14 — Top-bar search suggests books as you type (cover, title, author; keyboard and phone friendly) → specs/search-sort-and-filters.md
+- 2026-10-14 — Search page: sort (best match, most popular, highest rated, newest, oldest) and filters (language, publication era), and a "Show more results" button past the first 20 → specs/search-sort-and-filters.md
 - 2026-10-14 — Header search box empties when you leave the search page (and shows the query on it) → Apollon, Header.tsx
 - 2026-10-14 — Stories only show books being read (started a book or moved on in it); want-to-read and finished no longer appear, so imports don't flood the strip → specs/reading-stories.md
 - 2026-10-14 — Clearer book search results: reader's alphabet and covers ranked first, Latin author names, "Russian edition" note → specs/search-result-clarity.md
