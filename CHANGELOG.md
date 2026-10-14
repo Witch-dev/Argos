@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-14 — Header search box empties when you leave the search page (and shows the query on it) → Apollon, Header.tsx
 - 2026-10-14 — Stories only show books being read (started a book or moved on in it); want-to-read and finished no longer appear, so imports don't flood the strip → specs/reading-stories.md
 - 2026-10-14 — Clearer book search results: reader's alphabet and covers ranked first, Latin author names, "Russian edition" note → specs/search-result-clarity.md
 - 2026-10-14 — Import "Find the book" dialog no longer resets its search when the worker finds another row (list keeps old rows while reloading) → Apollon, ImportRowLists.tsx
