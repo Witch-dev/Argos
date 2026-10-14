@@ -12,3 +12,4 @@ These are not bugs: broken behaviour goes in `bugs/`. This folder is for "it wor
 | Header, sidebar and right rail after the layout changes | 2026-10-12 | 4 | 4 | [rail-and-header-layout.md](rail-and-header-layout.md) |
 | Story viewer (Readings strip) | 2026-10-12 | 0 | 7 | [story-viewer.md](story-viewer.md) |
 | Buttons across the site | 2026-10-13 | 0 | 6 | [buttons.md](buttons.md) |
+| Book covers in the feed group and People reader card | 2026-10-14 | 1 | 2 | [book-covers-in-feed-and-people.md](book-covers-in-feed-and-people.md) |

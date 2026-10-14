@@ -8,6 +8,10 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-14 — Feed group covers bigger (3.5rem) and the no-cover placeholder fixed (mid-word breaks, link underline); UX-reviewed → ux-reviews/book-covers-in-feed-and-people.md, Apollon 0557297
+- 2026-10-14 — Column divider lines run down to the footer on short pages → Apollon ee1aa5e
+- 2026-10-14 — 23 reading-animal avatar presets sliced from avatar-sheet2 (47 in total) → Apollon ae421d8
+- 2026-10-14 — Reader card: no cover slot without a cover (title overlapped "Reading"), cover 2.5rem → Apollon e3ed466
 - 2026-10-13 — Search box lost focus and dropped letters while typing (the debounced URL update remounted the input); now a controlled input → Apollon c77870f
 - 2026-10-13 — First live deploy on Render (API, site, database) at `wingedwords.app` / `api.wingedwords.app`, email through Resend on port 2587; found and fixed missing production JWT issuer/audience (every login token was rejected), which the API now refuses to start without → `DEPLOY.md` ("How the live site is set up on Render")
 - 2026-10-13 — Bot check on login and sign-up (Cloudflare Turnstile): built but off until the two keys are set; required on every login and sign-up when on, checked first and failing closed, site key delivered by the registration status, Cloudflare added to the privacy policy and the CSP; the keys step stays in Stage 10 → `specs/bot-check.md`
