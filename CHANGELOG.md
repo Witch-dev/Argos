@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-14 — Add books from each profile tab (search in empty tabs, "+ Add a book" otherwise, undo, optional rating) → specs/profile-add-books.md
 - 2026-10-14 — Feed group covers bigger (3.5rem) and the no-cover placeholder fixed (mid-word breaks, link underline); UX-reviewed → ux-reviews/book-covers-in-feed-and-people.md, Apollon 0557297
 - 2026-10-14 — Column divider lines run down to the footer on short pages → Apollon ee1aa5e
 - 2026-10-14 — 23 reading-animal avatar presets sliced from avatar-sheet2 (47 in total) → Apollon ae421d8
