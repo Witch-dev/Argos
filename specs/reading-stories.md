@@ -10,6 +10,7 @@ The user wants the strip to work like Instagram stories, and wants people to be 
 
 ## 2. Clarifying decisions
 
+- **Only books being read are stories** (changed 2026-10-14). A story is "started a new book" or "moved on in the one you're reading": logs with status CurrentlyReading and no review text. Want-to-read, finished and did-not-finish logs stay out, so importing a shelf no longer fills the strip. Done in `LogRepository.GetRecentStatusUpdatesByUserIdsAsync`.
 - **A story is one `Log`.** The strip's data is already one item per `Log` (`ActivityItemDto.logId`). The story keeps its likes and comments as its owner moves it from want-to-read → page 95 → page 260. The conversation is about *this person's read of this book*, which is the point.
 - **Stories don't expire.** Unlike Instagram, there's no 24-hour cutoff. Reading progress changes slowly, so a 3-day-old update is still news.
 - **Grouped by person, manual navigation only.** One tile per friend (their newest cover). Opening it steps through that friend's recent stories (up to 5), then on to the next friend. **No auto-advance timer**: the card has a note and a comment thread to read, and auto-advancing too fast is the most common complaint about stories.

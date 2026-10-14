@@ -8,6 +8,9 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-14 — Stories only show books being read (started a book or moved on in it); want-to-read and finished no longer appear, so imports don't flood the strip → specs/reading-stories.md
+- 2026-10-14 — Clearer book search results: reader's alphabet and covers ranked first, Latin author names, "Russian edition" note → specs/search-result-clarity.md
+- 2026-10-14 — Import "Find the book" dialog no longer resets its search when the worker finds another row (list keeps old rows while reloading) → Apollon, ImportRowLists.tsx
 - 2026-10-14 — Dog-with-book image as the site favicon (favicon.ico + 32px png, linked in index.html) → Apollon 3461270
 - 2026-10-14 — Add books from each profile tab (search in empty tabs, "+ Add a book" otherwise, undo, optional rating) → specs/profile-add-books.md
 - 2026-10-14 — Feed group covers bigger (3.5rem) and the no-cover placeholder fixed (mid-word breaks, link underline); UX-reviewed → ux-reviews/book-covers-in-feed-and-people.md, Apollon 0557297
