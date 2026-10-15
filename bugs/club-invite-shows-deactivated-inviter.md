@@ -13,3 +13,7 @@ The invitee already knows who invited them, the name is a public username, and t
 ## Fix
 
 Show a neutral label, or hide the invite, while the inviter has `DeactivatedAt` set. Add a test next to `ClubInviteAndReadersTests`.
+
+## Fixed
+
+2026-10-14, Apollon 52d5d08 (branch `bugfix-small-backend`, waiting to be merged to main). Tests added next to the existing ones for this area.

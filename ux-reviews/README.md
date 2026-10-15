@@ -13,3 +13,4 @@ These are not bugs: broken behaviour goes in `bugs/`. This folder is for "it wor
 | Story viewer (Readings strip) | 2026-10-12 | 0 | 7 | [story-viewer.md](story-viewer.md) |
 | Buttons across the site | 2026-10-13 | 0 | 6 | [buttons.md](buttons.md) |
 | Book covers in the feed group and People reader card | 2026-10-14 | 1 | 2 | [book-covers-in-feed-and-people.md](book-covers-in-feed-and-people.md) |
+| Top bar, right side (search, suggestions, bell, account name) | 2026-10-14 | 3 | 0 | [top-bar-right.md](top-bar-right.md) |

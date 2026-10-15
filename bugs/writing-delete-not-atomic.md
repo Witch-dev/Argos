@@ -15,3 +15,7 @@ The order was chosen on purpose (writing first) so that a failure can never do t
 ## Suggested fix
 
 Wrap both steps in one database transaction (`dbContext.Database.BeginTransactionAsync()`), for example with a small repository method that deletes a writing and its comments together. Lists (`BookListService` delete) have the same two-step pattern and could get the same fix.
+
+## Fixed
+
+2026-10-14, Apollon 52d5d08 (branch `bugfix-small-backend`, waiting to be merged to main). Tests added next to the existing ones for this area.

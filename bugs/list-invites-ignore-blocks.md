@@ -17,3 +17,7 @@ A reader can invite someone to collaborate on a list even when either of them ha
 - Refuse the invite when `ExistsEitherWayAsync(ownerId, inviteeId)`, with the same "That user doesn't exist." answer so a block can't be probed.
 - When a block is saved, delete `Pending` collaborator rows between the two readers on each other's lists (accepted collaborators are a separate decision: they may stay, since they already hold the list's edit rights).
 - Tests: invite refused under a block either way; a pending invite disappears when the invitee blocks the owner and when the owner blocks the invitee.
+
+## Fixed
+
+2026-10-14, Apollon 52d5d08 (branch `bugfix-small-backend`, waiting to be merged to main). Tests added next to the existing ones for this area.

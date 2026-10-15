@@ -8,6 +8,10 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-15 — Top-bar search suggestions line up with the search box's left edge when there is room → Apollon f8edd7d
+- 2026-10-15 — Book picker (reading progress, club suggestion, writing, list add) searches like the search page: author/year/labels, Show more, your languages first, "See all results" opens the search page and returns to the progress dialog with the chosen book → specs/book-picker-search.md
+- 2026-10-14 — Five small backend bugs fixed together: list invites respect blocks, club invites hide a deactivated inviter, writing/list delete is one transaction, unknown Feed time zones fall back to UTC, Readings strip drops blocked readers → Apollon 52d5d08 (branch `bugfix-small-backend`, not yet merged to main), `bugs/README.md`
+- 2026-10-14 — Search defaults and labels: most-shelved book first, "Italian edition" / "Graphic novel" tags, language filter defaults to your languages plus English with a "search all languages" fallback → specs/search-defaults-and-labels.md
 - 2026-10-14 — Top-bar search suggests books as you type (cover, title, author; keyboard and phone friendly) → specs/search-sort-and-filters.md
 - 2026-10-14 — Search page: sort (best match, most popular, highest rated, newest, oldest) and filters (language, publication era), and a "Show more results" button past the first 20 → specs/search-sort-and-filters.md
 - 2026-10-14 — Header search box empties when you leave the search page (and shows the query on it) → Apollon, Header.tsx

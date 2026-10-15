@@ -15,3 +15,7 @@ The Feed itself (`GET /api/feed`) also removes readers in a block from its autho
 ## Suggested fix
 
 In `FeedService.GetActivityAsync`, remove `GetHiddenUserIdsAsync(userId)` from the followed ids before querying, the same way `GetFeedAsync` does. Add a test that seeds a follow row after a block and checks the strip leaves that reader out (like `FeedControllerTests.GetFeed_LeavesOutAReaderInABlock_EvenIfAFollowRemains_…`).
+
+## Fixed
+
+2026-10-14, Apollon 52d5d08 (branch `bugfix-small-backend`, waiting to be merged to main). Tests added next to the existing ones for this area.

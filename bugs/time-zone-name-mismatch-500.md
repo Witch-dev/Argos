@@ -19,3 +19,7 @@ The Feed sends the reader's time zone (for example `Europe/Madrid`) so a day's a
 - Or validate against Postgres instead: cache the names from `SELECT name FROM pg_timezone_names` (once at startup or hourly) and accept only those, falling back to UTC.
 - Before deploying, check `InvariantGlobalization` isn't enabled for the API (`Argos.Api.csproj` / Docker image), or switch to the Postgres-based check above, which doesn't depend on it.
 - Confirm the production error handler never returns exception text (it currently returns a generic 500).
+
+## Fixed
+
+2026-10-14, Apollon 52d5d08 (branch `bugfix-small-backend`, waiting to be merged to main). Tests added next to the existing ones for this area.

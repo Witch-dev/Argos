@@ -24,24 +24,24 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Priority | Size | Area |
 |---|---|---|---|
-| [List collaborator invites ignore blocks](list-invites-ignore-blocks.md) | P2 | S | Backend, lists, privacy |
 | [Blocks only apply while signed in](blocks-only-apply-signed-in.md) | P3 | L | Backend, privacy |
 | [Blocks don't apply in book club discussions](blocks-not-applied-in-club-discussions.md) | P3 | M | Backend, clubs |
 | [Writings' Popular list ranks every writing on every request](writings-popular-query-cost.md) | P3 | M | Backend, performance |
 | [Removing a title can race with a new highlight-comment](remove-title-highlight-race.md) | P3 | S | Backend, writings |
-| [Pending club invites still show a deactivated inviter's name](club-invite-shows-deactivated-inviter.md) | P3 | S | Backend, clubs |
 | [Account emails have no overall daily budget](email-sending-has-no-overall-budget.md) | P3 | M | Backend, email, security |
 | [A sign-up racing a rename can take the name being given up](username-hold-race.md) | P3 | S | Backend, accounts |
 | [An old username only redirects on the profile page](held-username-only-on-profile.md) | P3 | S | Backend + frontend, accounts |
-| [Deleting a writing isn't one transaction](writing-delete-not-atomic.md) | P3 | S | Backend, writings |
-| [A time zone .NET knows but Postgres doesn't would break the Feed](time-zone-name-mismatch-500.md) | P3 | S | Backend, Feed |
-| [The Readings strip relies only on follows being removed when someone blocks](readings-strip-no-block-safety-net.md) | P3 | S | Backend, privacy |
 | [Book clubs show a member's progress even when that book is private](club-progress-ignores-reading-visibility.md) | P3 | M | Backend, clubs, privacy |
 
 ## Fixed
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [List collaborator invites ignore blocks](list-invites-ignore-blocks.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |
+| [Pending club invites still show a deactivated inviter's name](club-invite-shows-deactivated-inviter.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |
+| [Deleting a writing isn't one transaction](writing-delete-not-atomic.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |
+| [A time zone .NET knows but Postgres doesn't would break the Feed](time-zone-name-mismatch-500.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |
+| [The Readings strip relies only on follows being removed when someone blocks](readings-strip-no-block-safety-net.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |
 | [A book saved as Read without a finish date shows as "Finished" but isn't counted](read-without-finish-date-not-counted.md) | 2026-10-12 | Apollon f312403 |
 | [The header wraps to a third row at 320px wide](header-wraps-at-320px.md) | Won't fix, 2026-10-12 | Below the supported width; fits from 360px |
 | [The bell covers the "Community" tab on tablet-width windows](header-tabs-overlap-bell.md) | 2026-10-11 | Apollon 1e90c48 |
