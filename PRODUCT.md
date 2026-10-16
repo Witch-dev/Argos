@@ -24,7 +24,7 @@ A place to keep track of the books you read and share them with friends: Letterb
 
 ## Positioning
 
-Discovery through people you follow, not an opaque algorithm (`SPEC.md` §1); no streak pressure or engagement tricks; private by choice (private accounts, blocks, reading visibility); your data is yours (import from Goodreads and StoryGraph, full export, deletion).
+Discovery through people you follow, not an opaque algorithm (`SPEC.md` §1); light, optional gamification but no engagement tricks; private by choice (private accounts, blocks, reading visibility); your data is yours (import from Goodreads and StoryGraph, full export, deletion).
 
 ## Operating Context
 
@@ -56,7 +56,7 @@ Confirmed by the user 2026-10-16.
 2. Reading comes first: text is comfortable to read and nothing performs behind it.
 3. People over algorithms: show who read, liked and quoted, always with names, never anonymous counts alone.
 4. Private by default where it matters: privacy rules are visible, predictable and never leak.
-5. Calm, not compulsive: no streaks, badges or counters designed to pull readers back.
+5. Light gamification, never pressure (changed 2026-10-16 from "no streaks or badges"): goals, streaks, badges and wrap-ups are welcome when they are **optional** (a reader can turn them off or hide them; streaks are off by default), **kind** (missing a day or stopping a goal is never punished, shamed or nagged about: no "you'll lose your streak!" warnings or guilt notifications), **private by default** (shown on a profile only when the reader chooses) and **about reading, not the app** (books finished, pages, authors discovered; never daily log-ins). No leaderboards ranking readers against each other. Existing examples: the yearly goal, list challenges, the planned wrap-up; ideas: optional reading streaks, a "Founding member" badge (`FUTURE-IDEAS.md`).
 
 ## Accessibility & Inclusion
 
