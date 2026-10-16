@@ -15,7 +15,7 @@ Follow the pinned technology versions in `SPEC.md` §6 (React, TypeScript, Vite,
 - **Build and test in Release** (`dotnet build -c Release`, `dotnet test test/Argos.Tests -c Release`). The user's running dev API locks `bin/Debug`; don't kill it.
 - **Frontend checks** (in `web/`): `npm test` (Vitest), `npm run build` (typecheck + build), `npm run lint`.
 - **Every on-screen text is translated** (i18next) into en, es, pt-BR, de and fr, in `web/src/locales/<lang>/<section>.json`. New or changed UI text goes into all five files. `locales.test.ts` fails if a key is missing. Backend error messages have codes in `src/Argos.Api/Errors/ErrorCodes.cs`, and the frontend translates them, so a new error message needs a code there too.
-- **Styling** uses the design tokens in `web/src/index.css` (5 themes). Don't invent new colours or spacing. The `web-design` skill in `Argos/.claude/skills/` describes the conventions.
+- **Design:** before any UI work read `C:/Users/jramo/Argos/PRODUCT.md` and `C:/Users/jramo/Argos/DESIGN.md` (the target look, motion rules and quality floor), then follow `C:/Users/jramo/Argos/.claude/skills/web-design/SKILL.md`: a short plan before markup (including a motion plan when anything animates), only the tokens in `web/src/index.css` (5 themes), and the screenshot critique round at the end with `node C:/Users/jramo/Argos/scripts/shoot.mjs <routes>`.
 - **Browser checks:** follow `C:/Users/jramo/Argos/.claude/skills/browser-check/SKILL.md` (current code on side ports 5259/5174, logging in through the API, seeding test readers). Don't test against the user's own dev servers, which often run an older build.
 
 ## Conventions
@@ -35,5 +35,6 @@ The MVP is built and well past it: auth with self-renewing sessions, book search
 - Run the relevant component tests (Vitest + React Testing Library), `npm run build` and `npm run lint`.
 - If the change is a user-visible flow, actually exercise it in a browser (see the browser-check line in Project facts) rather than relying on types/tests alone. Typechecking proves the code compiles, not that the feature works.
 - New or changed text is in all five locale files, and new styles use only existing tokens.
+- The web-design critique round ran: screenshots of the changed routes in Paper and Dark at 1280 and 375 were looked at, checked against DESIGN.md's quality floor, fixed and looked at again. Animations have a reduced-motion variant. Say what the round changed.
 
 Don't add loading-state/error-handling abstractions or config options beyond what the current feature needs. A new page doesn't need a new layout system.

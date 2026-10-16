@@ -12,6 +12,10 @@ Two passes, because they find different things:
 - **Visual pass**: look at real screenshots (hierarchy, spacing, sizes, menus, labels). Criteria in `references/visual-checklist.md`.
 - **Code pass**: read the page's component files for rules a screenshot can't show (keyboard, focus, forms, live regions, motion, `Intl`). Criteria in `references/code-checklist.md`.
 
+## Phase 0 — Context
+
+Read `C:/Users/jramo/Argos/PRODUCT.md` (who the readers are, how it should feel) and `C:/Users/jramo/Argos/DESIGN.md` (the target look, motion, the quality floor and what is deliberate). The review judges the screen against these, not against generic taste. Check `specs/shelf-design-refresh.md` for which phases are built: a page whose phase isn't built yet still has the old look, and that alone isn't a finding (note it once in the summary).
+
 ## Phase 1 — Scope
 
 Pin down, asking the user only if unclear:
@@ -21,7 +25,9 @@ Pin down, asking the user only if unclear:
 
 ## Phase 2 — Capture
 
-Use the `browser-check` skill (side ports, Playwright, seeded readers). Take screenshots into the scratchpad and **look at each one** with Read; don't review from the CSS alone.
+Use the `browser-check` skill (side ports, Playwright, seeded readers). For plain page captures use `node C:/Users/jramo/Argos/scripts/shoot.mjs <route…> --out <scratchpad>/shots` (Paper and Dark at 1280 and 375 by default); write your own Playwright script only for states that need clicks or seeded data. Take screenshots into the scratchpad and **look at each one** with Read; don't review from the CSS alone.
+
+**Motion:** for anything that animates, record a short video or take frames at 0 / 50 / 100% of the duration, and capture it again with `reducedMotion: 'reduce'`.
 
 **Use viewport screenshots at a real first-view size (e.g. 1366×768, 1280×800, 375×700) for every layout judgement.** `fullPage` screenshots resize the viewport, so sticky sidebars and `100vh` layouts look wrong in them; use `fullPage` only to check content order. Also sweep the header and any shared chrome across a range of widths (1280 down to 320) with measured bounding boxes, since collisions hide between the standard breakpoints.
 
@@ -33,7 +39,14 @@ Capture, for each page: the normal state, the empty state, the loading state if 
 2. Walk `references/code-checklist.md` against the page's `.tsx` and `.module.css` files (find them from the route, then follow imports one level).
 3. For anything involving colour, spacing or size, **phrase the finding against the Argos tokens** (`--space-*`, `--text-muted`, `--radius`; see `.claude/skills/web-design/references/design-tokens.md`): "the gap between the title and the byline is `--space-1`, the section gap is `--space-2`, so they read as one block; use `--space-4` between sections". Never "needs more space" alone.
 
-**Judge by Argos's own conventions, not generic taste.** These are deliberate and are not findings: flat 3px corners, no shadow on resting cards (borders define them), the 5.5rem header, the centred 3-column shell, the gaps in the spacing scale (no 5 or 7), serif for titles and sans for chrome. A real conflict with one of these is worth raising as a question, not a defect.
+4. **Score it** (adapted from Impeccable's critique, Apache 2.0):
+   - **Nielsen's 10 heuristics, 0–4 each** (4 = genuinely excellent; most real screens land at 20–32 of 40): visibility of status, match with the real world, user control, consistency, error prevention, recognition over recall, flexibility, aesthetic and minimalist design, error recovery, help. Mark one n/a when it truly can't apply and give a percentage instead. Bands: 36–40 excellent, 28–35 good, 20–27 acceptable, 12–19 poor, below that critical.
+   - **Cognitive load, 8 checks** (one focus; chunks of at most 4; related things grouped; clear hierarchy; one decision at a time; at most 4 visible options per choice; nothing to remember between steps; detail revealed progressively). 0–1 failures low, 2–3 moderate, 4+ high.
+   - **2–3 personas** that fit the screen: a first-timer, a power user (logs every day), a screen-reader user, a distracted reader on a phone, a stress tester (long names, 500 books, slow network). Each red flag names the exact element that fails them.
+   - **Specificity:** could an unrelated product use this screen or block unchanged? If yes, that's a Judgement finding: say what would make it Winged Words (DESIGN.md: the shelf, the type, people with names).
+   - **Motion** (DESIGN.md "Motion"): does each animation have a job; durations from the table; reduced motion keeps the meaning; anything static that should acknowledge an action (a like, a follow, a save) is a finding too.
+
+**Judge by Argos's own conventions, not generic taste.** What DESIGN.md lists under "What is deliberate" (the cream page, serif display type, the shelf) is never a finding, and neither are the 5.5rem header, the centred 3-column shell or the gaps in the spacing scale (no 5 or 7). A real conflict with one of these is worth raising as a question, not a defect.
 
 **Tag every finding** as one of:
 - **Rule**: objectively checkable (contrast ratio, missing label, target under 44px, hardcoded date format). These are defensible.
@@ -53,6 +66,9 @@ Screenshots looked at: <list the states captured>
 
 ## Summary
 Two or three sentences: the overall impression and the single biggest thing to fix.
+
+## Scores
+Nielsen: NN/40 (band) — one line per heuristic scored below 3, saying why. Cognitive load: low/moderate/high (which checks failed). Personas: who was considered. Specificity: one line. Re-reviews keep the earlier score beside the new one, so the trend shows.
 
 ## Findings
 ### 1. <short title> — P2 · S · Rule
@@ -76,6 +92,6 @@ New translatable text from a fix still goes through `t('…')` in all five local
 
 ## Sources
 
-Criteria condense: WCAG 2.2 AA, Nielsen's 10 usability heuristics, Vercel's Web Interface Guidelines (`vercel-labs/web-interface-guidelines`, snapshot read 2026-10-11, pinned here on purpose rather than fetched at run time), the accessibility chapter of `vercel/components.build`, and a few layout, forms and feedback rules from the 119-row UX guidelines of `nextlevelbuilder/ui-ux-pro-max-skill` (MIT). Rules that assume English or server rendering were dropped or adapted (see the notes in `references/code-checklist.md`).
+Criteria condense: Impeccable's critique rubric and quality floor (`pbakaus/impeccable`, Apache 2.0, read 2026-10-16: Nielsen scoring, cognitive-load checks, personas, the specificity question, motion rules), WCAG 2.2 AA, Nielsen's 10 usability heuristics, Vercel's Web Interface Guidelines (`vercel-labs/web-interface-guidelines`, snapshot read 2026-10-11, pinned here on purpose rather than fetched at run time), the accessibility chapter of `vercel/components.build`, and a few layout, forms and feedback rules from the 119-row UX guidelines of `nextlevelbuilder/ui-ux-pro-max-skill` (MIT). Rules that assume English or server rendering were dropped or adapted (see the notes in `references/code-checklist.md`).
 
 **Deliberately not used from `ui-ux-pro-max-skill`:** its style, palette, font-pairing and "generate a design system" engine. Argos already has a fixed design system (5 themes, Literata and Public Sans, the token scale), and a generator would pull toward a different look per run. Its stack guides (Tailwind, Vue, Flutter, SwiftUI) don't apply either.

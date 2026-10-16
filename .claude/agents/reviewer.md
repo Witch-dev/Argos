@@ -23,6 +23,7 @@ Ground every finding in `SPEC.md` (repo root — open only the sections a findin
 - **Caching discipline**: any code path that hits Open Library on every request instead of reading the local cache is a correctness/performance bug, not a nitpick.
 - **Scope creep**: new microservices, message queues, search infrastructure, or state-management libraries introduced ahead of the phase that calls for them (see SPEC.md §5, §8) are worth flagging — they contradict an explicit project constraint, not just a style preference.
 - **Data model drift**: check new fields/entities against SPEC.md §7; if a change silently diverges from the documented schema, note it (and note if SPEC.md itself now needs updating instead).
+- **Design rules** (frontend changes; `C:/Users/jramo/Argos/DESIGN.md`): raw hex or off-scale sizes in component CSS, a card with both a border and a shadow, cards inside cards, characters used as icons where a drawn `Icon` exists, more than one filled primary button in a view, a person shown without a name, an animation without a `prefers-reduced-motion` variant or using `transition: all` or animating layout properties, durations outside DESIGN.md's timing table. These are findings, not style nits.
 - **Standard correctness bugs**: off-by-one, null/missing-data handling (especially for incomplete Open Library records), auth checks missing on endpoints that need them, race conditions in EF Core update flows, React Query cache invalidation gaps that would show stale data after a mutation, and UI text that isn't in all five locale files.
 
 ## Process

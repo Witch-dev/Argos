@@ -1,0 +1,9 @@
+{
+  "name": "argos-scripts",
+  "private": true,
+  "type": "module",
+  "description": "Helper scripts for working on Apollon (screenshots for design work).",
+  "dependencies": {
+    "playwright": "1.63.0"
+  }
+}

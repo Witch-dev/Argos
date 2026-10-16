@@ -65,6 +65,38 @@ Other themes keep their own page colour and get their own values for each role; 
 - **Operate** (shelves, journal, settings, search, stats): clean and standard controls first; the look shows through type, palette, the shelf and one warm detail, never by hiding the task.
 - **Persuade** (landing page): may be bolder, still with the cream page and the shelf.
 
+## Motion
+
+Adapted from Impeccable's `animate` and `delight` references. Motion is part of the design, planned before it is built, and every animation has a job: **acknowledge an action, show a change of state, keep continuity when something moves, or be the one focal moment.** Anything else is decoration and is left out. Test: removing it would lose meaning or character, not only decoration.
+
+**What already exists (keep):** skeleton placeholders while loading (opacity only), a 150ms fade-in when a page mounts, the thin loading line under the header. A page-turn between Books and Community was tried on 2026-10-13 and rejected: no page-level effects.
+
+**The focal moment: a book settles onto the shelf.** When a reader adds a book or marks it read, its cover drops into its place on the shelf and its shadow settles (500 to 600ms, the arrival curve). It is the only motion allowed to take that long.
+
+**Bigger moments, in proportion to effort** (from `delight`): finishing a book and reaching the yearly goal get a slightly larger response (the book settles onto the Read shelf, the goal bar fills). Ordinary clicks never get a celebration, and every moment must still feel right the hundredth time.
+
+**Feedback (100 to 150ms):** the heart fills with a small scale pop; stars fill as you rate; Follow crossfades to Following with a check icon; a pressed button dips slightly.
+
+**Under consideration (judge it in the mockup first):** on focus or hover, a cover tilts slightly forward, like pulling a book off a shelf. A plain "lift on hover" is not allowed (a generic default).
+
+**Timing:**
+
+| Duration | Use |
+|---|---|
+| 100–150 ms | Feedback on a press |
+| 150–300 ms | Routine change of state (open, close, swap) |
+| 300–500 ms | Panels and layout changes |
+| 500–800 ms | Only the focal moment |
+
+- Arrivals use `cubic-bezier(0.16, 1, 0.3, 1)` (as `--ease-out`); exits are faster than entrances. No bounce or elastic curves.
+- Animate `transform` and `opacity` (colour too for state); never `width`, `height`, `top`, `left` or margins, and never `transition: all`.
+- A list that appears after "Show more" may stagger its new items, capped at about 300ms in total. No scroll reveals, no fade-and-rise on sections, no parallax, no hover lifts.
+- Content is visible by default, so a failed script never hides it. Interrupting an animation (a second click) must leave the right end state.
+- **Reduced motion** (`prefers-reduced-motion: reduce`): remove the movement, keep the meaning. The cover appears in place with a short fade, the heart and Follow still change colour and icon at once. Fewer and gentler, not nothing.
+- Durations and the curve are tokens (`--duration-feedback`, `--duration-state`, `--duration-focal`, `--ease-out`), added in Phase 1 of the shelf refresh.
+
+**Plan first:** any change that animates something writes a one-line motion plan before code: what moves, why (which of the four jobs), how long, and what reduced motion shows instead.
+
 ## Quality floor (checked on every visual change)
 
 - Text contrast 4.5:1 (3:1 at 24px+), in every theme.
@@ -73,7 +105,7 @@ Other themes keep their own page colour and get their own values for each role; 
 - No nested cards; no border on a card that already has a shadow; no coloured side stripes on cards.
 - No gradient text, no glow, no glass or blur as decoration, no decorative grid or dot backgrounds.
 - No middle-dot strings when the parts are different kinds of fact: give each its own line or label.
-- Motion: only to show what changed after an action; respects reduced motion.
+- Motion follows the Motion section: a job for every animation, the timing table, reduced motion handled.
 - Check at 375px and 1280px, in Paper and Dark at least, with real data.
 
 ## What is deliberate (not a defect)

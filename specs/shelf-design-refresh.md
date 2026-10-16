@@ -25,9 +25,12 @@ The look itself is `DESIGN.md`. This spec only says what gets built and in what 
 
 ### Phase 0 — Context and tooling
 - [x] `PRODUCT.md` and `DESIGN.md` at the root of Argos
-- [ ] `web-design` skill: read `PRODUCT.md` and `DESIGN.md` first; a plan step (which pieces, which mode) before code; a mandatory screenshot critique round after it ("remove one accessory", check against the quality floor)
-- [ ] `ux-review` skill: Nielsen 0–4 scoring (out of 40), the 8-point cognitive-load check, 2–3 personas with named elements, the "could another product use this unchanged?" test
-- [ ] A reusable screenshot script (`scripts/shoot.mjs <route…>`: side ports, seeded reader, Paper and Dark, 1280 and 375) so every visual task can look at itself cheaply
+- [x] `web-design` skill: read `PRODUCT.md` and `DESIGN.md` first; a plan step (which pieces, which kind of screen, a motion plan) before code; a required screenshot critique round after it (2026-10-16)
+- [x] `ux-review` skill: Nielsen 0–4 scoring (out of 40), the 8-point cognitive-load check, 2–3 personas with named elements, the specificity test, motion checks, a Scores section in the findings file (2026-10-16)
+- [x] `scripts/shoot.mjs <route…>`: side ports, its own confirmed reader, Paper and Dark, 1280 and 375 (2026-10-16; tested)
+- [x] The same rules wired into `new-react-feature`, `browser-check`, the `frontend-dev` and `reviewer` agents and `CLAUDE.md`, so every frontend step reads `DESIGN.md` (2026-10-16)
+- [x] Motion rules in `DESIGN.md` (adapted from Impeccable's `animate` and `delight`): a job for every animation, the timing table, the focal "book settles onto the shelf" moment, reduced motion (2026-10-16)
+- [ ] A clickable motion board in the mockup (book onto the shelf, heart, Follow, finishing a book, the cover tilt) for the user to judge before anything is built
 
 ### Phase 1 — Foundations (Apollon `web/`)
 - [ ] Tokens in every theme block: accent green, frame, raised, sunken, gold, heart; `--radius-card` 14px, `--radius-control` 10px, `--radius-pill`; `--shadow-card`. Values for White, Warm Gray, Sepia and Dark chosen and contrast-checked (Dark: a lighter green)
@@ -35,7 +38,8 @@ The look itself is `DESIGN.md`. This spec only says what gets built and in what 
 - [ ] `Icon` component with one drawn set; every character icon replaced (✓ ♡ ✦ × + and the sidebar glyphs)
 - [ ] Shared pieces: `Card` (raised / sunken), `.btn` variants at 44px and 10px corners, `Pill`, `Shelf` (covers on a shelf, used by every cover row), `StatTiles` restyled; `YearSoFarCard` and the Stats page moved onto `StatTiles`
 - [ ] A dev-only style sheet page (`/dev/styleguide`) showing every shared piece in every theme
-- [ ] Guard tests: no raw hex in component CSS, no `border` together with `--shadow-card`, no character icons in JSX
+- [ ] Motion tokens: `--duration-feedback`, `--duration-state`, `--duration-focal`, `--ease-out`, with reduced-motion values
+- [ ] Guard tests: no raw hex in component CSS, no `border` together with `--shadow-card`, no character icons in JSX, no `transition: all`
 
 ### Phase 2 — The shell
 - [ ] Header in the frame tint, Books/Community as a segmented control, search with an icon, bell and avatar
@@ -43,6 +47,7 @@ The look itself is `DESIGN.md`. This spec only says what gets built and in what 
 
 ### Phase 3 — Pages (one at a time, each with before/after screenshots)
 - [ ] Author page (as the mockup)
+- [ ] The focal motion: a book settles onto the shelf when added or marked read; finishing a book and reaching the goal get the larger moment; heart, stars and Follow feedback
 - [ ] Book page
 - [ ] Profile and shelves (shelf on every cover row)
 - [ ] Lists and list pages

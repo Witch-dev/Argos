@@ -16,3 +16,4 @@
 - [Parallel sessions and the test DB](project_parallel_sessions_test_db.md) — concurrent test runs wipe the shared argos_test; test a staged snapshot on a private DB, re-check the index before committing
 - [Books/Community split](project_books_community_split.md) — decisions so far for the two top tabs (Books default, reviews in Community, journal, private books, no off switch); spec still to write
 - [Authors feature effort reminder](project_authors_feature_effort_reminder.md) — remind: high effort for Phase 1 migration + backfill and Phase 2 privacy endpoints; rest at medium
+- [Restyle direction](project_design_restyle_direction.md) — approved mockup 2026-10-16: cream page stays, shelf effect is the signature; DESIGN.md first, then tokens and pieces

@@ -42,6 +42,10 @@ For longer SQL, `docker cp file.sql apollon-postgres-1:/tmp/x.sql` and run it wi
 
 ## 4. Check, then clean up
 
+**Screenshots for design work:** `node C:/Users/jramo/Argos/scripts/shoot.mjs <route…> --out <scratchpad>/shots` does the login, themes and widths for you (Paper and Dark at 1280 and 375 by default; `--themes`, `--widths`, `--scroll`, `--full`). It registers and confirms its own reader the first time and reuses it from `<out>/reader.json`. Needs this section's side-port servers and a one-time `npm install` in `Argos/scripts`. Write your own Playwright script only for flows (clicking, typing, seeding data).
+
+**Animations:** record a video (`browser.newContext({ recordVideo: { dir } })`) or take screenshots at 0 / 50 / 100% of the duration; check once more with `reducedMotion: 'reduce'` in the context options.
+
 - Check at phone width (~375px) and desktop, and in the themes the change affects. Take screenshots into the scratchpad and look at them.
 - Playwright gotchas: `name:` matching is a substring ("Like this list" also matches "Unlike this list"), so use `exact: true`. `dragTo` doesn't drive the list's HTML5 drag-and-drop: dispatch `dragstart`/`dragover`/`drop` DragEvents with one shared `DataTransfer`, pausing between them.
 - Stop the side-port API and Vite when done. Leave the user's own servers alone, and remind them to restart their API if backend code changed.
