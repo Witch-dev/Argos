@@ -12,14 +12,16 @@ colors:
   bookbinding-green: "#2e5e4e"
   bookbinding-green-deep: "#1f4237"
   green-wash: "#e7efe9"
-  foil-gold: "#b8862b"
+  foil-gold: "#a87a22"
   heart: "#a15c3e"
   danger: "#9c3b2e"
   shelf-light: "#e6d9c2"
   shelf-dark: "#d8c8ad"
+  cloth: "#3d5c4a"
+  cloth-text: "#f3ecdc"
 typography:
   display:
-    fontFamily: "TBD in Phase 1 (recommended: Literata at display optical size), Georgia, serif"
+    fontFamily: "Literata (optical size follows the font size), Georgia, serif"
     fontWeight: 600
     letterSpacing: "-0.02em"
     lineHeight: 1.1
@@ -79,7 +81,7 @@ components:
 
 # Design System: Winged Words
 
-The target look of the site, read by the `web-design` and `ux-review` skills, the `frontend-dev` agent and the `design-reviewer` agent before any visual work, after `PRODUCT.md`. Approved 2026-10-16 from the mockup at https://claude.ai/artifact/WEAaHS3iF7bWMXLw2HbkHZ (boards "Today", "Proposed", "Style sheet", "Motion"). The rollout is `specs/shelf-design-refresh.md`; until a phase is built, the code still shows the older look. The tokens above are **proposed** values; they become normative as Phase 1 puts them into `web/src/index.css`.
+The target look of the site, read by the `web-design` and `ux-review` skills, the `frontend-dev` agent and the `design-reviewer` agent before any visual work, after `PRODUCT.md`. Approved 2026-10-16 from the mockup at https://claude.ai/artifact/WEAaHS3iF7bWMXLw2HbkHZ (boards "Today", "Proposed", "Style sheet", "Motion"). The rollout is `specs/shelf-design-refresh.md`; until a phase is built, the code still shows the older look. The tokens above are Paper's values and are normative since Phase 1 (2026-10-16) put them into `web/src/index.css`, which holds all five themes and is the source of truth for exact values.
 
 Structure follows the DESIGN.md format used by Impeccable and Google's Stitch; much of the doctrine is adapted from Impeccable (Apache 2.0) and Anthropic's frontend-design skill, see `THIRD-PARTY-NOTICES.md`.
 
@@ -97,14 +99,14 @@ A warm reading room: the cream page stays, books stand on a shelf, and everythin
 
 ## Colors
 
-Roles, not swatches; each keeps one meaning in every theme. Values above are Paper; the other four themes (White, Warm Gray, Sepia, Dark) get their own values per role in Phase 1, built in OKLCH, contrast-checked. Dark is designed, not inverted: its own depth (raised lighter than page) and a lighter green.
+Roles, not swatches; each keeps one meaning in every theme. Values above are Paper; the other four themes (White, Warm Gray, Sepia, Dark) have their own value per role in `index.css`, chosen on the mockup's "five themes" board (2026-10-16) and contrast-checked (text and links 4.5:1 on page, raised, sunken and frame; stars and the heart 3:1). Dark is designed for evening reading on a phone, not inverted: a warm near-black page (#1b1a17), raised surfaces lighter than it, soft ivory text (#e8e3d7) rather than white, a lighter green (#86bba3) with dark text on buttons. A `designGuards` test checks every theme defines every role.
 
 ### Primary
 - **Bookbinding green** (#2e5e4e): actions, links, the current selection, focus. **The One Green Button Rule:** one filled green button per view; the green is never decoration.
 - Green wash (#e7efe9) behind the selected menu item and "Following"-type states.
 
 ### Secondary
-- **Foil gold** (#b8862b): stars and the unread dot only. **The Gold Is Not Text Rule:** never for text (contrast).
+- **Foil gold** (#a87a22; deepened from #b8862b, which was 2.9:1 on the page): stars and the unread dot only. **The Gold Is Not Text Rule:** never for text (contrast).
 - **Heart** (#a15c3e): the favourite heart only; the old terracotta kept as one small warm note.
 
 ### Neutral
@@ -113,6 +115,7 @@ Roles, not swatches; each keeps one meaning in every theme. Values above are Pap
 - **Raised** (#fffdf8) cards, **Sunken** (#f1eadc) wells and chips, **Hairline** (#ece4d6) separators.
 - **Ink** (#1f1d1a) text, **Muted ink** (#6b665e) labels and metadata, never for text a reader must act on.
 - **Danger** (#9c3b2e): destructive actions and errors.
+- **Book cloth** (#3d5c4a, title in #f3ecdc): the cover of a book with no cover image, so a coverless book still looks like a book on the shelf.
 
 ### Named Rules
 - **The No-Grey-On-Colour Rule.** Secondary text on a coloured surface is a shade of that surface or the foreground, never generic grey.
@@ -122,7 +125,7 @@ Roles, not swatches; each keeps one meaning in every theme. Values above are Pap
 
 ## Typography
 
-- **Display** for names, page titles, section headings and headline numbers in stat tiles. **Open decision (Phase 1):** the mockup used Fraunces, but Impeccable lists Fraunces among the most overused "default" faces, and says a book subject alone is not a reason for one. Recommended: **Literata at its display optical size, weight 600** (one serif family for display and reading, which the Operate guidance favours), compared on a board against one or two less common bookish serifs before choosing. Large sizes tracked -0.01 to -0.02em (floor -0.04em); headings balanced (`text-wrap: balance`).
+- **Display:** Literata 600 (chosen 2026-10-16 on the mockup's display-face board over Brygada 1918 and Besley): names, page titles, section headings and headline numbers in stat tiles. One family for display and reading; its optical-size axis follows the font size, so large names get the display cut. `--font-display`, with `--font-size-display` (2.5rem) only for a page's name and a lead stat. Large sizes tracked -0.01 to -0.02em (floor -0.04em); headings balanced (`text-wrap: balance`).
 - **Reading:** Literata 400, ~17px, line height 1.7, 60–75 characters a line: bios, reviews, writings, quotes.
 - **Interface:** Public Sans, **16px body floor**; labels and metadata 14px (`--font-size-sm` rises from 13.6px to 14px in Phase 1); nothing a reader needs below 13px.
 
@@ -183,7 +186,7 @@ Raised for main blocks, sunken for secondary ones (see Elevation). Padding 20–
 Header and sidebar in the frame tint. Sidebar items: drawn icon + label, 44px rows, 10px corners; the selected one in a green-wash pill with green text. Header: logo, the Books/Community segmented control, search with an icon, bell, avatar.
 
 ### Icons
-One drawn line set: 24px grid, 1.8px stroke, round caps and joins, `currentColor`. **The No-Glyph Rule:** never characters or emoji as icons (✓ ♡ ✦ × + ⌂ and the like).
+One drawn line set (`components/Icon.tsx`): 24px grid, 1.8px stroke, round caps and joins, `currentColor`. **The No-Glyph Rule:** never characters or emoji as icons (✓ ♡ ✦ × + ⌂ and the like); a `designGuards` test fails on them. A star as a unit right beside a number ("4★", "★4") is typography, not an icon.
 
 ### Stat tiles (`StatTiles`)
 A big display number over a muted label, with an optional quiet detail line; a real `<dl>`. Only inside a card, never as a page's hero.
@@ -226,7 +229,7 @@ Adapted from Impeccable's `animate` and `delight`. Motion is planned before it i
 - New items after "Show more" may stagger, capped ~300ms in total. No scroll reveals, section fade-ins, parallax or hover lifts. On Operate screens no page-load choreography.
 - Content visible by default; a second click mid-animation lands in the right end state; `will-change` only during a known animation.
 - **Reduced motion:** remove the movement, keep the meaning (the cover appears with a short fade, the heart and Follow still change at once). Fewer and gentler, not nothing.
-- Tokens: `--duration-feedback`, `--duration-state`, `--duration-focal`, `--ease-out` (Phase 1).
+- Tokens: `--duration-feedback` 120ms, `--duration-state` 200ms, `--duration-panel` 320ms, `--duration-focal` 560ms, `--ease-out` (arrivals), `--ease-in` (exits); under reduced motion they shorten to fades (feedback 0ms, the rest 120–150ms).
 - **Plan first:** one line before code: what moves, which job, how long, what reduced motion shows.
 
 ## Do's and Don'ts

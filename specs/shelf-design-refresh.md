@@ -1,6 +1,6 @@
 # Feature Spec — Shelf design refresh
 
-**Status:** 🟡 Direction approved 2026-10-16 (mockup https://claude.ai/artifact/WEAaHS3iF7bWMXLw2HbkHZ). Nothing built yet. The target look is `DESIGN.md`; the product context is `PRODUCT.md`.
+**Status:** 🟡 Direction approved 2026-10-16 (mockup https://claude.ai/artifact/WEAaHS3iF7bWMXLw2HbkHZ). Phase 1 (foundations) built 2026-10-16; Phase 2 next. The target look is `DESIGN.md`; the product context is `PRODUCT.md`.
 
 Supersedes most of `reading-room-design-refresh.md`: the cream page and the Literata + Public Sans pairing stay; the terracotta accent, flat 3px bordered boxes and glyph icons go.
 
@@ -34,22 +34,22 @@ The look itself is `DESIGN.md`. This spec only says what gets built and in what 
 - [x] A clickable motion board in the mockup (book onto the shelf, heart, Follow, finishing a book, the cover tilt) for the user to judge before anything is built
 
 ### Phase 1 — Foundations (Apollon `web/`)
-- [ ] Tokens in every theme block: accent green, frame, raised, sunken, gold, heart; `--radius-card` 14px, `--radius-control` 10px, `--radius-pill`; `--shadow-card`. Values for White, Warm Gray, Sepia and Dark chosen and contrast-checked (Dark: a lighter green)
-- [ ] **Display face decision:** a board comparing Literata at display size (recommended) with 1–2 less common bookish serifs (not on Impeccable's overused list: Fraunces, Playfair, Cormorant, Lora, Crimson, Newsreader, Instrument Serif, DM Serif…) on the author page header and a stat tile; the user picks; then the Google Fonts link, `--font-display`, metric-matched fallbacks
-- [ ] `--font-size-sm` from 0.85rem to 0.875rem; body text 16px everywhere; `tabular-nums` on aligned numbers
-- [ ] Browser surfaces themed: `::selection`, `caret-color`, `text-underline-offset`, focus rings
-- [ ] `Icon` component with one drawn set; every character icon replaced (✓ ♡ ✦ × + and the sidebar glyphs)
-- [ ] Shared pieces: `Card` (raised / sunken), `.btn` variants at 44px and 10px corners, `Pill`, `Shelf` (covers on a shelf, used by every cover row), `StatTiles` restyled; `YearSoFarCard` and the Stats page moved onto `StatTiles`
-- [ ] A dev-only style sheet page (`/dev/styleguide`) showing every shared piece in every theme
-- [ ] Motion tokens: `--duration-feedback`, `--duration-state`, `--duration-focal`, `--ease-out`, with reduced-motion values
-- [ ] Guard tests (our own version of Impeccable's deterministic rules, run by Vitest so they block a push): no raw hex or rgb colours in component CSS; font sizes only from tokens (exists); radii only from tokens; no `border` together with `--shadow-card`; no coloured side border over 1px; no `transition: all`; no bounce/elastic easing; no `background-clip: text` gradients; no glyph icons (✓ ♡ ✦ × + ⌂…) as JSX text; no uppercase letter-spaced label directly before a heading (kicker); no `line-height` under 1.3 or body `letter-spacing` over 0.05em; no `text-align: justify`; locale copy (en) free of marketing buzzwords (streamline, empower, supercharge, world-class, cutting-edge, next-generation, seamless) and "theater" framing
+- [x] Tokens in every theme block: accent green, frame, raised, sunken, gold, heart; `--radius-card` 14px, `--radius-control` 10px, `--radius-pill`; `--shadow-card`. Values for White, Warm Gray, Sepia and Dark chosen and contrast-checked (Dark: a lighter green). *Built: values from the mockup's "Choice 2" board, plus `--hairline`, `--accent-deep`, `--accent-wash`, `--cloth`/`--cloth-text` (coverless books), `--shadow-cover`/`-shelf`/`-control`, `--scrim`, `--radius-cover`, `--font-size-display`. Paper's gold deepened to #a87a22 (3:1 on the page). Theme blocks match any `[data-theme]` element so themes can nest.*
+- [x] **Display face decision:** a board comparing Literata at display size (recommended) with 1–2 less common bookish serifs (not on Impeccable's overused list: Fraunces, Playfair, Cormorant, Lora, Crimson, Newsreader, Instrument Serif, DM Serif…) on the author page header and a stat tile; the user picks; then the Google Fonts link, `--font-display`, metric-matched fallbacks. *Chosen 2026-10-16: Literata 600 (over Brygada 1918 and Besley), with its opsz axis; Georgia/Arial fallbacks sized from @capsizecss/metrics.*
+- [x] `--font-size-sm` from 0.85rem to 0.875rem; body text 16px everywhere; `tabular-nums` on aligned numbers
+- [x] Browser surfaces themed: `::selection`, `caret-color`, `text-underline-offset`, focus rings
+- [x] `Icon` component with one drawn set; every character icon replaced (✓ ♡ ✦ × + and the sidebar glyphs). *Also the emoji, arrows, vote triangles and stars; glyphs stripped from 15 locale strings in five languages; NavIcons and SocialIcons folded in.*
+- [x] Shared pieces: `Card` (raised / sunken), `.btn` variants at 44px and 10px corners, `Pill`, `Shelf` (covers on a shelf, used by every cover row), `StatTiles` restyled; `YearSoFarCard` and the Stats page moved onto `StatTiles`. *Built: `Card`, `Pill`/`PillLink`, `Shelf`, `StatTiles` (with a lead variant), `.btn-quiet`, `.btn-small`, busy buttons (`aria-busy`) keep full colour. Deferred: the segmented control (Phase 2, header), the quote card and input fields (Phase 3, with their pages). `Shelf` is adopted by cover rows in Phase 3.*
+- [x] A dev-only style sheet page (`/dev/styleguide`) showing every shared piece in every theme
+- [x] Motion tokens: `--duration-feedback`, `--duration-state`, `--duration-focal`, `--ease-out`, with reduced-motion values
+- [x] Guard tests (our own version of Impeccable's deterministic rules, run by Vitest so they block a push): no raw hex or rgb colours in component CSS; font sizes only from tokens (exists); radii only from tokens; no `border` together with `--shadow-card`; no coloured side border over 1px; no `transition: all`; no bounce/elastic easing; no `background-clip: text` gradients; no glyph icons (✓ ♡ ✦ × + ⌂…) as JSX text; no uppercase letter-spaced label directly before a heading (kicker); no `line-height` under 1.3 or body `letter-spacing` over 0.05em; no `text-align: justify`; locale copy (en) free of marketing buzzwords (streamline, empower, supercharge, world-class, cutting-edge, next-generation, seamless) and "theater" framing. *Built as `styles/designGuards.test.ts` with a shrink-only `designGuardAllowlist.ts` for older stylesheets; the kicker check flags any rule that is both uppercase and letter-spaced; also checks that every theme defines every colour role and the system-dark fallback matches Dark. Reviewed 2026-10-16: own critique round (cloth-bound coverless books, a visible Dark shelf, the author bio's mask that made Dark text bold), then design-reviewer: fix → ship.*
 
 ### Phase 2 — The shell
 - [ ] Header in the frame tint, Books/Community as a segmented control, search with an icon, bell and avatar
 - [ ] Sidebar with drawn icons and a pill for the selected item; right rail as raised cards
 
 ### Phase 3 — Pages (one at a time, each with before/after screenshots)
-- [ ] Author page (as the mockup)
+- [ ] Author page (as the mockup, but in the order chosen 2026-10-16 on the "Order option" board: header, a "Most popular" shelf of 5 with "All N books", the readers box, quotes, then all books with sort; plus the compact phone header from ux-reviews/author-page.md finding 4)
 - [ ] The focal motion: a book settles onto the shelf when added or marked read; finishing a book and reaching the goal get the larger moment; heart, stars and Follow feedback
 - [ ] Book page
 - [ ] Profile and shelves (shelf on every cover row)

@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-16 — Shelf refresh Phase 1 (foundations): Literata display face, five themes recoloured (bookbinding green, evening Dark), new surface/radius/shadow/motion tokens, one drawn icon set replacing every glyph and emoji icon, Card/Pill/Shelf/StatTiles pieces, 44px buttons, /dev/styleguide, Vitest design guards; author bio fade no longer bolds Dark text → specs/shelf-design-refresh.md (Apollon cccc214)
 - 2026-10-16 — UX fixes on the author page and site-wide: no footer jump while pages load (phone CLS 0.20 → 0.02), one shared Show more button for seven lists, steady Follow/favourite buttons, a hint saying what Follow does → ux-reviews/author-page.md (Apollon edcbd41)
 - 2026-10-16 — Author page baseline before the shelf refresh: critique (Nielsen 24/36, acceptable) and audit (13/20); found a site-wide footer layout shift (CLS 0.20 on phones) and five unstyled "Show more" buttons; `shoot.mjs` gains `--anon`, `--metrics`, `--shifts` → ux-reviews/author-page.md, ux-reviews/author-page-audit.md
 - 2026-10-16 — Impeccable adopted into the design workflow (Apache 2.0): 16 named web-design passes plus shape and modes, ux-review scoring guide/personas/audit mode, a design-reviewer agent, DESIGN.md rewritten with named rules and the full refuse list, PRODUCT.md restructured with open facts marked; Fraunces flagged as an overused face (display font now an open Phase 1 decision) → specs/shelf-design-refresh.md, THIRD-PARTY-NOTICES.md

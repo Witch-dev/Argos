@@ -53,7 +53,7 @@ A solid, accessible page that reads as "any book site": everything is a bordered
 **What:** the works grid starts at ~1,430px on desktop and ~1,580px on a phone. At 375 the first two screens are the photo, name, buttons, five other names, a folded bio and links.
 **Why it matters:** most readers come for the books (Lucía wants to find and log one); everything above them is secondary.
 **Fix:** in the Phase 3 restyle: a compact phone header (other names behind "Also known as (5)", a shorter bio fold on phones, the links as one "Links (6)" row) and a first shelf of the author's most popular books right after the header, with "All 200 books" leading to the full grid. Keep quotes and the readers box after that first shelf.
-**Status:** open (Phase 3 of the shelf refresh)
+**Status:** open (Phase 3 of the shelf refresh). Order approved 2026-10-16 on the mockup's "Order option" board: popular shelf right after the header, then readers, quotes, all books.
 
 ### 5. On a phone, the years are separated from the name by the buttons — P3 · S · Judgement
 **Where:** `AuthorPage.tsx` header (`.nameRow` holds the name and `.actions`; `.meta` follows).
@@ -86,7 +86,7 @@ A solid, accessible page that reads as "any book site": everything is a bordered
 **Where:** `BookCard.tsx:26`.
 **What:** the read mark is the "✓" character; DESIGN.md's No-Glyph Rule wants a drawn icon.
 **Fix:** the drawn `Icon` set in Phase 1 of the refresh.
-**Status:** open (Phase 1)
+**Status:** fixed 2026-10-16 (Phase 1 of the shelf refresh): a drawn check from the `Icon` set
 
 ### 10. Following and favouriting aren't acknowledged — P3 · S · Judgement
 **Where:** the two header buttons.

@@ -10,7 +10,7 @@ Governs visual decisions on the frontend: color, spacing, layout, responsive beh
 ## Start here, every time
 
 1. Read `C:/Users/jramo/Argos/PRODUCT.md` (who the readers are, how the site should feel) and `C:/Users/jramo/Argos/DESIGN.md` (the target look: colour roles, type, surfaces, controls, icons, the shelf, **motion**, the quality floor). DESIGN.md wins over generic taste and over anything in this file that contradicts it.
-2. Check `specs/shelf-design-refresh.md` for which phases are built. Until Phase 1 is built, the code still has the older tokens (terracotta, 3px, borders): new work uses the tokens that exist in `index.css` but already follows DESIGN.md's structure rules (block anatomy, one primary action, people with names, drawn icons where an `Icon` exists, motion rules, quality floor). Colour, font and corner changes land only through the spec's phases, so the site never ends up half one look and half the other.
+2. Check `specs/shelf-design-refresh.md` for which phases are built. Phase 1 (tokens, fonts, `Icon`, `Card`, `Pill`, `Shelf`, `StatTiles`, buttons, guards) is built; pages keep their older structure (bordered boxes, 3px corners) until Phase 3 restyles them. New work uses the shared pieces and follows DESIGN.md's structure rules (block anatomy, one primary action, people with names, drawn icons where an `Icon` exists, motion rules, quality floor). Colour, font and corner changes land only through the spec's phases, so the site never ends up half one look and half the other.
 
 ## Passes, briefs and kinds of screen
 
@@ -33,12 +33,12 @@ Before touching styles, pin down (ask the user if unclear):
 
 ## Phase 2 — Use the existing system, don't invent a parallel one
 
-- Colors: only the tokens in `index.css` (`--bg`, `--bg-elevated`, `--text`, `--text-muted`, `--text-subtle`, `--border`, `--accent`, `--accent-contrast`, `--danger`). No hardcoded hex in component CSS.
+- Colors: only the role tokens in `index.css` (page, frame, raised, sunken, hairline, border, ink, accent and its deep/wash, gold, heart, danger, shelf, cloth: table in `references/design-tokens.md`). No raw colour in component CSS; `designGuards.test.ts` fails on one.
 - Fonts: `--font-serif` (Literata) for headings, book titles and reading text; `--font-sans` (Public Sans) for UI chrome.
 - Font sizes: only `--font-size-xs`, `-sm`, `-base`, `-lg`, `-xl`, `-2xl`. No raw `rem` in `font-size` (a Vitest guard fails on it).
-- Shadow: `--shadow-elevated` only, and only on floating overlays (modals, popovers, dropdowns), never on a resting card. *(Changes with Phase 1 of the shelf refresh: raised cards get `--shadow-card` and no border; see DESIGN.md "Surfaces".)*
+- Shadow: `--shadow-card` on raised cards (and then no border), `--shadow-elevated` on floating overlays (modals, popovers, dropdowns), `--shadow-cover`/`--shadow-shelf` only inside `Shelf`.
 - Spacing: only `--space-1`, `-2`, `-3`, `-4`, `-6` and `-8` (there is no 5 or 7). No literal pixel/rem margins that aren't one of these.
-- Corners: `--radius` everywhere a radius is needed, not a per-component value. *(Phase 1 of the shelf refresh adds `--radius-card`, `--radius-control` and `--radius-pill`.)*
+- Corners: `--radius-control` (10px), `--radius-card` (14px), `--radius-pill`, `--radius-cover`; the old `--radius` (3px) only in stylesheets Phase 3 hasn't restyled yet.
 - Breakpoints: `@media (max-width: 640px)` for page and nav collapse. `1100px` exists only in `Layout.module.css` for the right rail, and `480px` only on the landing page. Don't add another unless a layout genuinely breaks.
 - Mechanism: CSS Modules, one `ComponentName.module.css` per component, short unprefixed class names (`.card`, `.title`) — matches every existing file in `Apollon/web/src/components` and `src/pages`.
 - Loading/error/empty states: reuse `LoadingMessage`/`ErrorMessage`/`EmptyMessage` from `src/components/StateMessage.tsx` rather than writing new one-off markup for the same three states.
