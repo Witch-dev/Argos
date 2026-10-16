@@ -29,6 +29,17 @@ Before touching styles, pin down (ask the user if unclear):
 - Mechanism: CSS Modules, one `ComponentName.module.css` per component, short unprefixed class names (`.card`, `.title`) — matches every existing file in `Apollon/web/src/components` and `src/pages`.
 - Loading/error/empty states: reuse `LoadingMessage`/`ErrorMessage`/`EmptyMessage` from `src/components/StateMessage.tsx` rather than writing new one-off markup for the same three states.
 
+### Build a block from the shared pieces, then design its anatomy
+
+Tokens keep colours and sizes consistent; they do not stop a block from being a pile of loose lines (the first author "readers" box was: counts, a rating, a book link and avatars as four sentences in one grey box). Before writing markup for any card, box or panel:
+
+1. **Look for a shared piece first.** Facts side by side (a few numbers, a rating, a most-read book) are `StatTiles`: big serif value over a small label, a real `<dl>`. Also: `BookCard`, `Avatar`, `AuthorPhoto`, `StateMessage`, the `.btn` variants, `WritingCard`. If a second place needs the same look as a first, extract the piece (as `StatTiles` was extracted from the year card and the Stats page) instead of copying its CSS.
+2. **One kind of fact per row.** Numbers in one row, people in another, actions in another. Separate kinds with a hairline (`border-top: 1px solid var(--border)` and `--space-4`), not by running them together.
+3. **Say what each fact is.** A bare number or a bare avatar is a mystery: give a label under the value ("Readers", "Average rating") and put people's names next to their pictures (a pill: avatar and name).
+4. **A short sentence is not a layout.** "Average rating 3.8 from 8 ratings" becomes a value (3.8), a label (Average rating) and a quiet detail (from 8 ratings).
+5. **Decide the hierarchy on purpose**: the value is the biggest thing (`--font-size-xl`, serif), labels and details are `--font-size-sm` in `--text-muted`. Only one primary action per view.
+6. **Check it with real data and at 375px** (tiles wrap two to a row, pills wrap, long names truncate with the full name in `title`), in Paper and Dark, before calling it done.
+
 If a real gap exists (no token fits), add it to `index.css` in every theme block (bare `:root`, the five `[data-theme]` blocks and the `prefers-color-scheme: dark` fallback), and update `references/design-tokens.md` in the same change — don't let the reference doc drift from what's actually in the file.
 
 ## Phase 3 — Build
