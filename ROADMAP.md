@@ -283,7 +283,8 @@ In rough order. None of these block launch.
 3. **Account Phase 4: 2FA, passkeys and "Continue with Google"** (`specs/account-system.md`). Passkeys added 2026-10-07: the strongest protection for readers who turn it on.
 4. **Buddy reads** with page-locked comments.
 5. **Mood & trope browsing**, "Popular this week", genre pages.
-6. Everything else in `FUTURE-IDEAS.md`, ordered by what beta and launch users ask for most.
+6. **Author pages** (`specs/authors.md`, specced 2026-10-15): author page and linked author names, then search + "your history with this author", then follow and new-release alerts, then favourites and quotes. Four phases; Phase 1 is size L (new tables, backfill).
+7. Everything else in `FUTURE-IDEAS.md`, ordered by what beta and launch users ask for most.
 
 ---
 
