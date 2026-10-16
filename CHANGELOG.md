@@ -8,6 +8,12 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-16 — Authors, Phase 4: favourite authors (up to 4) on profiles, and a Quotes section on author pages from readers' book quotes (privacy as for Writings), favourites in export → specs/authors.md
+- 2026-10-16 — Authors, Phase 3: follow an author, "Authors you follow" on profiles and `/u/:username/authors` (profile privacy rules), a paced daily new-release check that tells followers in the bell and the Feed (new "New books" switch), follows in export and erasure → specs/authors.md
+- 2026-10-16 — Authors: merge repair only moves books whose author name resembles the new author's, author rating counts one per reader and book, stats and friends refresh after logs and follows → specs/authors.md (§7.2)
+- 2026-10-16 — Author names link to author pages in list item rows and journal entries → specs/authors.md (§5.5)
+- 2026-10-15 — Author pages, Phase 2: Authors tab in search, "on Winged Words" stats, your history with the author (progress bar, read marks), followed readers who read them, stats top authors link to author pages; authors stored under a merged id are moved to the current one → specs/authors.md
+- 2026-10-15 — Author pages, Phase 1: `/authors/:id` with photo, years, bio, links and a works grid (sort, cover filter, Show more); author names on book pages link there; books keep their authors' Open Library ids (`Books.AuthorKeys`, new `Authors` table) and older books are backfilled by the paced refresh job, which can no longer stop the API → specs/authors.md
 - 2026-10-15 — Authors feature researched and specced in four phases (author page, search + your history, follow, extras) → specs/authors.md
 - 2026-10-15 — Pre-push check: `scripts/precheck.ps1` runs what CI runs for the files being pushed, and a Claude Code hook runs it before every Apollon `git push` → CLAUDE.md ("Building and checking")
 - 2026-10-15 — Top-bar search suggestions line up with the search box's left edge when there is room → Apollon f8edd7d

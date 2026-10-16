@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 8be8ce53-36cd-4760-8a03-9651ebc2bc82
-  modified: 2026-10-08T23:39:55.775Z
+  modified: 2026-10-16T03:44:42.963Z
 ---
 
 When a task, a spec phase or a roadmap stage is finished (built, reviewed, logged in the changelog, committed), end the reply with a short prompt the user can paste into a new session to continue.
@@ -17,4 +17,5 @@ When a task, a spec phase or a roadmap stage is finished (built, reviewed, logge
 - Keep it to 2–4 lines in a code block. Name the next piece of work by file (e.g. "Accounts Phase 4 in `specs/account-system.md`", or "the next unticked box in `ROADMAP.md`"). Don't restate what `CLAUDE.md`, the spec or memory already say.
 - Include only what isn't written down anywhere yet: unpushed commits, a pending API restart, a decision the user still owes.
 - **Always** add the suggested model/effort for that next task, on its own line next to the prompt ("Use: Opus medium", "Use: Sonnet"), never leave it out ([[feedback-suggest-model-effort]]). The user had to remind Claude on 2026-10-08 after a handoff without it.
+- **Every phase, no exception:** the closing message has (1) a pasteable prompt, (2) the model and effort line, and (3) the open questions asked with AskUserQuestion so the user can close them before leaving the session. The user had to remind Claude of this again on 2026-10-16 (authors Phase 2 ended without the prompt/model line). Gather every undecided point from the phase (left-on-purpose review findings, unverified checks, uncommitted work) and ask them; don't just list them.
 - Before giving it, make sure the state it relies on is saved: spec ticked, changelog line, bug files ([[feedback-maintain-changelog]], [[feedback-bug-files]]).
