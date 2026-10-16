@@ -15,8 +15,8 @@ web (a responsive site and PWA; a native app is out of scope for now, `ROADMAP.m
 - **Social readers:** follow friends and see what they read, liked and quoted.
 - **Curators:** build themed lists and favourite rows.
 - Readers are not designers or software power users.
-- **(to confirm)** Many read and log in the evening, often on a phone.
-- **(to confirm)** The first readers are a closed beta of friends, many of them Spanish speakers.
+- Most use it **on a phone, often in the evening** (confirmed 2026-10-16): phone layouts and the Dark theme matter most; every flow is designed for 375px first and checked on desktop.
+- The first readers are a closed beta of friends **in mixed languages** (confirmed 2026-10-16): no single main language, so all five are checked evenly, German for length.
 
 ## Product Purpose
 
@@ -50,7 +50,7 @@ Real Open Library data (covers, author photos, bios) and the readers' own logs. 
 
 ## Product Principles
 
-**(to confirm)** Drafted from `SPEC.md` and the design conversations of 2026-10-16.
+Confirmed by the user 2026-10-16.
 
 1. Logging a book is fast from anywhere: the most frequent action is never more than a few taps away.
 2. Reading comes first: text is comfortable to read and nothing performs behind it.
