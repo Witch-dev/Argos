@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-15 — Pre-push check: `scripts/precheck.ps1` runs what CI runs for the files being pushed, and a Claude Code hook runs it before every Apollon `git push` → CLAUDE.md ("Building and checking")
 - 2026-10-15 — Top-bar search suggestions line up with the search box's left edge when there is room → Apollon f8edd7d
 - 2026-10-15 — Book picker (reading progress, club suggestion, writing, list add) searches like the search page: author/year/labels, Show more, your languages first, "See all results" opens the search page and returns to the progress dialog with the chosen book → specs/book-picker-search.md
 - 2026-10-14 — Five small backend bugs fixed together: list invites respect blocks, club invites hide a deactivated inviter, writing/list delete is one transaction, unknown Feed time zones fall back to UTC, Readings strip drops blocked readers → Apollon 52d5d08 (branch `bugfix-small-backend`, not yet merged to main), `bugs/README.md`
