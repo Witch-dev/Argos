@@ -18,7 +18,7 @@ Argos is a Letterboxd-like app for books. Its public name is **Winged Words** (r
 ## Rules that apply to every change
 
 - **Translations:** every on-screen text (including `aria-label`, `title`, placeholders) goes through `t('…')` with a key in all five `web/src/locales/<lang>/` files (en, es, pt-BR, de, fr). `locales.test.ts` fails if one is missing. A new backend error message needs a code in `src/Argos.Api/Errors/ErrorCodes.cs` and a translation under `errors.codes`.
-- **Design:** `PRODUCT.md` (who and why) and `DESIGN.md` (the target look, motion and quality floor) in this folder are read before any frontend work. Only the design tokens in `web/src/index.css` (5 themes). The `web-design` skill has the rules, including a short plan before markup and a screenshot critique round (`scripts/shoot.mjs`) before a visual change is done. The rollout of the new look is `specs/shelf-design-refresh.md`.
+- **Design:** `PRODUCT.md` (who and why) and `DESIGN.md` (the target look, motion and quality floor) in this folder are read before any frontend work. Only the design tokens in `web/src/index.css` (5 themes). The `web-design` skill has the rules, including a short plan before markup and a screenshot critique round (`scripts/shoot.mjs`) before a visual change is done. The rollout of the new look is `specs/shelf-design-refresh.md`. Named design passes (`/web-design bolder <target>`, `harden`, `polish`…) and the `design-reviewer` agent are adapted from Impeccable (`THIRD-PARTY-NOTICES.md`).
 - **Architecture:** Controllers → Services → Repositories (EF Core) → PostgreSQL. Open Library only through `OpenLibraryClient`. No microservices, queues or search clusters.
 
 ## Records to keep

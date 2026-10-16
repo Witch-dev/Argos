@@ -7,7 +7,9 @@ description: Use to audit how an Argos screen looks and reads, without changing 
 
 Judges whether a screen is *good*: is it clear what to read first, is there enough room, are the sizes right, do the menus and options make sense. `web-design` builds consistently with the tokens; this skill checks the result and writes down what to fix. **It never edits the app.** Reviewing and fixing are separate jobs, and the user often wants the review alone.
 
-Two passes, because they find different things:
+Two modes: **critique** (the default: how it looks, reads and works, scored with Nielsen /40, cognitive load and personas; `references/scoring.md` has the scoring guide, persona list including Winged Words' own readers, and the named cognitive-load violations) and **audit** ("/ux-review audit <area>": technical quality scored /20 across accessibility, performance, theming, responsive and implementation integrity; `references/audit.md`). Both write to `ux-reviews/`, both never edit the app.
+
+A critique has two passes, because they find different things:
 
 - **Visual pass**: look at real screenshots (hierarchy, spacing, sizes, menus, labels). Criteria in `references/visual-checklist.md`.
 - **Code pass**: read the page's component files for rules a screenshot can't show (keyboard, focus, forms, live regions, motion, `Intl`). Criteria in `references/code-checklist.md`.
@@ -39,7 +41,7 @@ Capture, for each page: the normal state, the empty state, the loading state if 
 2. Walk `references/code-checklist.md` against the page's `.tsx` and `.module.css` files (find them from the route, then follow imports one level).
 3. For anything involving colour, spacing or size, **phrase the finding against the Argos tokens** (`--space-*`, `--text-muted`, `--radius`; see `.claude/skills/web-design/references/design-tokens.md`): "the gap between the title and the byline is `--space-1`, the section gap is `--space-2`, so they read as one block; use `--space-4` between sections". Never "needs more space" alone.
 
-4. **Score it** (adapted from Impeccable's critique, Apache 2.0):
+4. **Score it** (adapted from Impeccable's critique, Apache 2.0; the full 0–4 tables, personas and violations are in `references/scoring.md`, use them so scores stay comparable):
    - **Nielsen's 10 heuristics, 0–4 each** (4 = genuinely excellent; most real screens land at 20–32 of 40): visibility of status, match with the real world, user control, consistency, error prevention, recognition over recall, flexibility, aesthetic and minimalist design, error recovery, help. Mark one n/a when it truly can't apply and give a percentage instead. Bands: 36–40 excellent, 28–35 good, 20–27 acceptable, 12–19 poor, below that critical.
    - **Cognitive load, 8 checks** (one focus; chunks of at most 4; related things grouped; clear hierarchy; one decision at a time; at most 4 visible options per choice; nothing to remember between steps; detail revealed progressively). 0–1 failures low, 2–3 moderate, 4+ high.
    - **2–3 personas** that fit the screen: a first-timer, a power user (logs every day), a screen-reader user, a distracted reader on a phone, a stress tester (long names, 500 books, slow network). Each red flag names the exact element that fails them.
@@ -86,7 +88,7 @@ Priorities and sizes match `bugs/`: **P1** a reader can't complete the task or c
 
 ## Phase 5 — Hand off
 
-Summarise for the user: the count by priority, the top three, and the quick wins. Then ask which findings to fix. Fixes go through `web-design` (and `new-react-feature` if behaviour changes), one finding or one coherent group at a time. After fixing, **re-capture the same screenshots** and mark the findings `fixed` in the file; add a CHANGELOG line when a batch is done: `- YYYY-MM-DD — UX fixes on <page> → ux-reviews/<file>.md`.
+Summarise for the user: the scores, the count by priority, the top three, and the quick wins. Recommend the passes that fit (`polish` for a list of P1/P2 findings, `bolder`/`distill` for a low "aesthetic" score, `harden`/`clarify` for low error scores; `web-design/references/passes/`), and end with 2–4 targeted questions tied to specific findings, each with 2–3 options (or say why questions were skipped, only when there are fewer than three priority findings). Then ask which findings to fix. Fixes go through `web-design` (and `new-react-feature` if behaviour changes), one finding or one coherent group at a time. After fixing, **re-capture the same screenshots** and mark the findings `fixed` in the file; add a CHANGELOG line when a batch is done: `- YYYY-MM-DD — UX fixes on <page> → ux-reviews/<file>.md`.
 
 New translatable text from a fix still goes through `t('…')` in all five locale files. When reviewing copy, review it in English first, then spot-check that the longest language (German) doesn't overflow.
 

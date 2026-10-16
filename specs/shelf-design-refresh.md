@@ -30,16 +30,19 @@ The look itself is `DESIGN.md`. This spec only says what gets built and in what 
 - [x] `scripts/shoot.mjs <route…>`: side ports, its own confirmed reader, Paper and Dark, 1280 and 375 (2026-10-16; tested)
 - [x] The same rules wired into `new-react-feature`, `browser-check`, the `frontend-dev` and `reviewer` agents and `CLAUDE.md`, so every frontend step reads `DESIGN.md` (2026-10-16)
 - [x] Motion rules in `DESIGN.md` (adapted from Impeccable's `animate` and `delight`): a job for every animation, the timing table, the focal "book settles onto the shelf" moment, reduced motion (2026-10-16)
-- [ ] A clickable motion board in the mockup (book onto the shelf, heart, Follow, finishing a book, the cover tilt) for the user to judge before anything is built
+- [x] Impeccable adapted into our tooling (2026-10-16, commit 6af45ac of pbakaus/impeccable, Apache 2.0): 16 named passes + `shape` + `modes` for web-design; scoring guide, personas (incl. our own readers) and an audit mode for ux-review; the `design-reviewer` agent (fresh eyes, disposition ship/fix/rebuild/recapture); DESIGN.md rewritten in the DESIGN.md format with named rules, the full refuse list and browser-surface theming; PRODUCT.md in its product-record structure with unconfirmed facts marked; `THIRD-PARTY-NOTICES.md`
+- [x] A clickable motion board in the mockup (book onto the shelf, heart, Follow, finishing a book, the cover tilt) for the user to judge before anything is built
 
 ### Phase 1 — Foundations (Apollon `web/`)
 - [ ] Tokens in every theme block: accent green, frame, raised, sunken, gold, heart; `--radius-card` 14px, `--radius-control` 10px, `--radius-pill`; `--shadow-card`. Values for White, Warm Gray, Sepia and Dark chosen and contrast-checked (Dark: a lighter green)
-- [ ] Fraunces added to the Google Fonts link; `--font-display`
+- [ ] **Display face decision:** a board comparing Literata at display size (recommended) with 1–2 less common bookish serifs (not on Impeccable's overused list: Fraunces, Playfair, Cormorant, Lora, Crimson, Newsreader, Instrument Serif, DM Serif…) on the author page header and a stat tile; the user picks; then the Google Fonts link, `--font-display`, metric-matched fallbacks
+- [ ] `--font-size-sm` from 0.85rem to 0.875rem; body text 16px everywhere; `tabular-nums` on aligned numbers
+- [ ] Browser surfaces themed: `::selection`, `caret-color`, `text-underline-offset`, focus rings
 - [ ] `Icon` component with one drawn set; every character icon replaced (✓ ♡ ✦ × + and the sidebar glyphs)
 - [ ] Shared pieces: `Card` (raised / sunken), `.btn` variants at 44px and 10px corners, `Pill`, `Shelf` (covers on a shelf, used by every cover row), `StatTiles` restyled; `YearSoFarCard` and the Stats page moved onto `StatTiles`
 - [ ] A dev-only style sheet page (`/dev/styleguide`) showing every shared piece in every theme
 - [ ] Motion tokens: `--duration-feedback`, `--duration-state`, `--duration-focal`, `--ease-out`, with reduced-motion values
-- [ ] Guard tests: no raw hex in component CSS, no `border` together with `--shadow-card`, no character icons in JSX, no `transition: all`
+- [ ] Guard tests (our own version of Impeccable's deterministic rules, run by Vitest so they block a push): no raw hex or rgb colours in component CSS; font sizes only from tokens (exists); radii only from tokens; no `border` together with `--shadow-card`; no coloured side border over 1px; no `transition: all`; no bounce/elastic easing; no `background-clip: text` gradients; no glyph icons (✓ ♡ ✦ × + ⌂…) as JSX text; no uppercase letter-spaced label directly before a heading (kicker); no `line-height` under 1.3 or body `letter-spacing` over 0.05em; no `text-align: justify`; locale copy (en) free of marketing buzzwords (streamline, empower, supercharge, world-class, cutting-edge, next-generation, seamless) and "theater" framing
 
 ### Phase 2 — The shell
 - [ ] Header in the frame tint, Books/Community as a segmented control, search with an icon, bell and avatar

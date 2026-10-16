@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-16 — Impeccable adopted into the design workflow (Apache 2.0): 16 named web-design passes plus shape and modes, ux-review scoring guide/personas/audit mode, a design-reviewer agent, DESIGN.md rewritten with named rules and the full refuse list, PRODUCT.md restructured with open facts marked; Fraunces flagged as an overused face (display font now an open Phase 1 decision) → specs/shelf-design-refresh.md, THIRD-PARTY-NOTICES.md
 - 2026-10-16 — Design tooling: every frontend skill and agent reads PRODUCT.md and DESIGN.md first, plans before markup (with a motion plan), and ends with a screenshot critique round (`scripts/shoot.mjs`); ux-review scores screens (Nielsen /40, cognitive load, personas); motion rules in DESIGN.md → specs/shelf-design-refresh.md
 - 2026-10-16 — Design direction approved from a mockup (cream page kept, green accent, raised cards, books on a shelf); PRODUCT.md and DESIGN.md added, rollout specced → specs/shelf-design-refresh.md
 - 2026-10-16 — Author page readers box redesigned: shared StatTiles (value over label) and named reader pills; web-design skill gets a 'block anatomy' checklist → Apollon 6df3601
