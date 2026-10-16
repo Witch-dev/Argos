@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-16 — UX fixes on the authors feature: Follow and favourites buttons grouped with one primary, shorter first look on author pages (2 quotes, 3 links), Favourite authors under Favourite books, quote-style quote cards with a book link, grid on the followed-authors page, clearer empty hints and button names → ux-reviews/authors-feature.md
 - 2026-10-16 — A book with more than three authors (anthologies) reads "A, B and others" on cards, header suggestions, pickers, compare and imports, instead of the whole list → Apollon 8db2110
 - 2026-10-16 — Authors, Phase 4: favourite authors (up to 4) on profiles, and a Quotes section on author pages from readers' book quotes (privacy as for Writings), favourites in export → specs/authors.md
 - 2026-10-16 — Authors, Phase 3: follow an author, "Authors you follow" on profiles and `/u/:username/authors` (profile privacy rules), a paced daily new-release check that tells followers in the bell and the Feed (new "New books" switch), follows in export and erasure → specs/authors.md
