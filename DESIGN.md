@@ -240,6 +240,7 @@ Adapted from Impeccable's `animate` and `delight`. Motion is planned before it i
   - **Browser surfaces carry the design:** text selection (`::selection`), caret (`caret-color`), focus rings, link underline offset (`text-underline-offset`), tabular numerals, and scrollbars where custom, all from the palette. The cheapest sign a page was built rather than assembled.
   - Copy in the product's own words: controls name their action, errors name the problem and the recovery.
   - Every requirement of the spec present and findable within seconds.
+- **Reserve space for late-arriving things:** personal state (follow, favourite, read marks), counts and images keep their size while loading (a disabled placeholder, `aspect-ratio`), and the page column has a minimum height so the footer never jumps. Target CLS < 0.1 at 375 and 1280 (`scripts/shoot.mjs --metrics --shifts`).
 - Keep claims true: no invented stats, quotes or testimonials; sample data labelled.
 - Choose light or dark defaults from the reading scene, not habit.
 

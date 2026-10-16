@@ -15,3 +15,5 @@ These are not bugs: broken behaviour goes in `bugs/`. This folder is for "it wor
 | Book covers in the feed group and People reader card | 2026-10-14 | 1 | 2 | [book-covers-in-feed-and-people.md](book-covers-in-feed-and-people.md) |
 | Top bar, right side (search, suggestions, bell, account name) | 2026-10-14 | 3 | 0 | [top-bar-right.md](top-bar-right.md) |
 | Authors feature (author page, search tab, profile rows, follow, favourites, quotes) | 2026-10-16 | 0 | 8 | [authors-feature.md](authors-feature.md) |
+| Author page, baseline before the shelf refresh (critique: Nielsen 24/36) | 2026-10-16 | 10 | 0 | [author-page.md](author-page.md) |
+| Author page audit, baseline (13/20) | 2026-10-16 | 7 | 0 | [author-page-audit.md](author-page-audit.md) |

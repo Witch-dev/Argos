@@ -2,6 +2,8 @@
 
 A code-level audit, not a design critique: what is measurable in the implementation. Run it with "/ux-review audit <page or area>". It documents, it doesn't fix (fixes go through the web-design passes). Adapted from Impeccable's `audit` (Apache 2.0, see `Argos/THIRD-PARTY-NOTICES.md`).
 
+**Measuring:** screenshots and numbers come from `node Argos/scripts/shoot.mjs <route> --metrics --shifts` (largest contentful paint, layout shift with the elements that moved, requests, kilobytes, long tasks). For performance numbers use a **production build**: in `Apollon/web` run `npm run build`, stop Vite on 5174 and start `npx vite preview --port 5174 --strictPort` (the API only allows that port); the dev server's request count and size are meaningless. Targets: LCP < 2.5s, CLS < 0.1 (at 375 and 1280), INP < 200ms. Layout shift caused by shared chrome (header, footer, rail) is a finding on that shared piece, not on the page.
+
 Score five dimensions 0–4 from evidence (source, screenshots from `scripts/shoot.mjs`, Playwright measurements, Lighthouse when performance matters).
 
 1. **Accessibility:** contrast below 4.5:1 (3:1 large text and controls), reduced-motion handled with an intentional alternative (not a global kill that removes useful feedback), missing names, roles or states, focus indicators, tab order, keyboard traps, heading order and landmarks, `div`s acting as buttons, alt text, form labels, errors and required markers.
