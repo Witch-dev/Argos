@@ -8,7 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
-- 2026-10-16 — Book cards: a book with more than three authors (anthologies) shows two names and "and N more" instead of the whole list → Apollon 9bea828
+- 2026-10-16 — A book with more than three authors (anthologies) reads "A, B and others" on cards, header suggestions, pickers, compare and imports, instead of the whole list → Apollon 8db2110
 - 2026-10-16 — Authors, Phase 4: favourite authors (up to 4) on profiles, and a Quotes section on author pages from readers' book quotes (privacy as for Writings), favourites in export → specs/authors.md
 - 2026-10-16 — Authors, Phase 3: follow an author, "Authors you follow" on profiles and `/u/:username/authors` (profile privacy rules), a paced daily new-release check that tells followers in the bell and the Feed (new "New books" switch), follows in export and erasure → specs/authors.md
 - 2026-10-16 — Authors: merge repair only moves books whose author name resembles the new author's, author rating counts one per reader and book, stats and friends refresh after logs and follows → specs/authors.md (§7.2)
