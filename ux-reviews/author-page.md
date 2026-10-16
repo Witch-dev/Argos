@@ -32,21 +32,21 @@ A solid, accessible page that reads as "any book site": everything is a bordered
 **What:** while a page's data loads its content is short, so the footer sits near the top of the screen; when the content arrives it is pushed down (0.096 + 0.163 at 375px; 0.016 at 1280px). Production build: CLS 0.20 at 375 (dev 0.28), 0.04 at 1280. Signed out the same.
 **Why it matters:** the page visibly jumps on every visit, worst on phones where most readers are; Google counts above 0.1 as poor.
 **Fix:** give the column a minimum height so the footer starts below the fold: `.column { min-height: calc(100dvh - 5.5rem); }` (the header height), checked at 375 and 1280 and on short pages (settings, empty states).
-**Status:** open
+**Status:** fixed 2026-10-16 (Apollon edcbd41) — `.content` is at least `100dvh - 5.5rem` tall, so the footer starts below the fold and the scrollbar is there from the start. Measured on a production build: author page at 375 CLS 0.20 → 0.002–0.016 signed in, 0.26 → 0.001 signed out; feed and settings at 375 0.002; desktop header no longer shifts sideways.
 
 ### 2. Unstyled "Show more" buttons, here and on four other pages — P2 · M · Rule
 **Where:** `AuthorQuotes.tsx:57` ("Show more quotes"), and `FeedPage.tsx:128`, `ReviewsPage.tsx:74`, `WritingsPage.tsx:74`, `FollowedAuthorsPage.tsx:95`.
 **What:** a plain `<button>` with no class shows the browser's default grey box with a dark border; in Dark it's a grey slab. Every other button in the app uses `.btn`.
 **Why it matters:** it looks broken next to the styled controls and ignores the themes.
 **Fix:** the `extract` pass: one shared `ShowMoreButton` (secondary style, 44px, a pending label, an error line with retry), used in all five places.
-**Status:** open
+**Status:** fixed 2026-10-16 (Apollon edcbd41) — `ShowMoreButton` (secondary style, centred, disabled with a loading label while pending) replaces all seven paged-list buttons: the five unstyled ones plus search results and the author's books.
 
 ### 3. The Follow and favourite buttons appear late and push the header down — P2 · S · Rule
 **Where:** `AuthorFollowButton.tsx`, `AuthorFavouriteButton.tsx` (render nothing until `/authors/{id}/me` answers); `AuthorPage.tsx` `.actions`.
 **What:** for a signed-in reader the buttons arrive after the rest of the header, moving the years, names, bio and links by 24px at 375 (part of the 0.013 shift after the footer's).
 **Why it matters:** a small jump right where the reader is looking, and a tap can land on the wrong thing.
 **Fix:** when signed in, render the two buttons straight away in a disabled "loading" state (same size), then fill in their state; signed out, render nothing as now.
-**Status:** open
+**Status:** fixed 2026-10-16 (Apollon edcbd41) — signed in, both buttons render at once, disabled, until the reader's state arrives.
 
 ### 4. The books are far down the page — P2 · M · Judgement
 **Where:** `AuthorPage.tsx` (order: header, readers box, quotes, works); "Tolkien at 375 and 1280".
@@ -67,7 +67,7 @@ A solid, accessible page that reads as "any book site": everything is a bordered
 **What:** "Follow" and "Add to favourites" sit side by side with no hint of the difference: following gives new-book alerts in the bell and the Feed; favourites show on your profile.
 **Why it matters:** Jordan can't predict the result; some readers will favourite when they wanted alerts, or the reverse.
 **Fix:** the `clarify` pass: a short muted line under the buttons while not following ("Follow to hear about new books"), in all five languages; or a `title` plus the same text after the first follow.
-**Status:** open
+**Status:** fixed 2026-10-16 (Apollon edcbd41) — a muted line under the buttons for signed-in readers: "Follow to hear about their new books.", then "You'll hear about their new books." once following (feedback too). Always one line (two reserved on phones), so it never moves the page. Five languages.
 
 ### 7. Four different "more" treatments on one page — P3 · S · Rule
 **Where:** `AuthorPage.tsx` ("Read more", "Show all 6 links"), `WritingCard.tsx` quote variant ("More"), `AuthorQuotes.tsx` ("Show more quotes").

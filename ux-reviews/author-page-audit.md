@@ -14,6 +14,8 @@ Audited: 2026-10-16 · Apollon at `6df3601` · Evidence: source (`AuthorPage.tsx
 
 **Integrity verdict: pass, with a systemic gap.** The page uses the shared pieces and tokens consistently within the old look; the gap is a missing shared "Show more" control (five copies, none styled) and no shared expander style.
 
+**Update 2026-10-16 (Apollon edcbd41):** the three P2 findings are fixed (footer jump, shared `ShowMoreButton`, header button placeholders); performance and integrity would each score one point higher now. Re-score after the Phase 3 restyle.
+
 ## Summary
 
 13/20. Issues: 3 P2, 4 P3. Top: the footer's layout shift on every page; the unstyled "Show more" buttons on five pages; the late header buttons. Next: fix the footer and the buttons now (small, shared, independent of the refresh); the rest lands with the refresh.
