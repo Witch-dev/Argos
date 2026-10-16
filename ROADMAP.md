@@ -284,7 +284,8 @@ In rough order. None of these block launch.
 4. **Buddy reads** with page-locked comments.
 5. **Mood & trope browsing**, "Popular this week", genre pages.
 6. **Author pages** (`specs/authors.md`, specced 2026-10-15): author page and linked author names, then search + "your history with this author", then follow and new-release alerts, then favourites and quotes. Four phases; Phase 1 is size L (new tables, backfill). **Phase 1 done 2026-10-15** (built ahead of its place in the order, at the user's request). **Phase 2 done 2026-10-15, Phase 3 (follow, new-release alerts) done 2026-10-16, Phase 4 (favourites, quotes) done 2026-10-16**; all four phases done.
-7. Everything else in `FUTURE-IDEAS.md`, ordered by what beta and launch users ask for most.
+7. **Shelf design refresh** (`specs/shelf-design-refresh.md`, `DESIGN.md`, approved 2026-10-16 at the user's request): cream page stays, bookbinding green accent, raised cards, drawn icons, covers on a shelf. Foundations first, then the shell, then pages one by one.
+8. Everything else in `FUTURE-IDEAS.md`, ordered by what beta and launch users ask for most.
 
 ---
 
