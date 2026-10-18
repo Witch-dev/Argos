@@ -127,7 +127,7 @@ Roles, not swatches; each keeps one meaning in every theme. Values above are Pap
 
 ## Typography
 
-- **Display:** Literata 600 (chosen 2026-10-16 on the mockup's display-face board over Brygada 1918 and Besley): names, page titles, section headings and headline numbers in stat tiles. One family for display and reading; its optical-size axis follows the font size, so large names get the display cut. `--font-display`, with `--font-size-display` (2.5rem) only for a page's name and a lead stat. Large sizes tracked -0.01 to -0.02em (floor -0.04em); headings balanced (`text-wrap: balance`).
+- **Display:** Literata 600 (chosen 2026-10-16 on the mockup's display-face board over Brygada 1918 and Besley): names, page titles, section headings and headline numbers in stat tiles. One family for display and reading; its optical-size axis follows the font size, so large names get the display cut. `--font-display`, with `--font-size-display` (2.5rem) only for a page's name and a lead stat. `--font-size-hero` (`clamp(2.25rem, 1.5rem + 2.6vw, 3.25rem)`, 36→52px; added 2026-10-18) only for the landing page's pitch: the one fluid size, and only on a Persuade screen. Large sizes tracked -0.01 to -0.02em (floor -0.04em); headings balanced (`text-wrap: balance`).
 - **Reading:** Literata 400, ~17px, line height 1.7, 60–75 characters a line: bios, reviews, writings, quotes.
 - **Interface:** Public Sans, **16px body floor**; labels and metadata 14px (`--font-size-sm` rises from 13.6px to 14px in Phase 1); nothing a reader needs below 13px.
 
@@ -216,6 +216,8 @@ Adapted from Impeccable's `animate` and `delight`. Motion is planned before it i
 **The focal moment: a book settles onto the shelf** when a reader adds it or marks it read: the cover drops into place and its shadow settles (500–600ms, the arrival curve). The only motion allowed that long.
 
 *Built 2026-10-16:* the global classes `motion-settle`, `motion-pop` and `motion-fade` in `index.css`, and `lib/arrivals.ts` for which books just arrived. A cover settles only once its image has loaded, and only one cover per moment.
+
+*The one exception (2026-10-18), the landing page's opening:* its shelf of three sample books arrives once as the page opens, each cover settling in turn (`Shelf arriving`, a 60ms stagger, ≤300ms in all), waiting out of sight for its image. It is that page's one sensory moment (Persuade); reduced motion fades the covers in place. No other page plays a settle on load.
 
 **Bigger moments, in proportion to effort:** finishing a book and reaching the yearly goal get a slightly larger response (the book settles onto the Read shelf, the goal bar fills). Ordinary clicks never celebrate; every moment must feel right the hundredth time.
 
