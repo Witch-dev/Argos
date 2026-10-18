@@ -11,7 +11,7 @@
 - [Bug files](feedback_bug_files.md) — every unfixed bug gets its own md in Argos/bugs/, indexed by priority P1-P3 and size S/M/L
 - [CI and pushing](project_apollon_ci_and_pushing.md) — Apollon CI is green; offer commit+push after each finished piece, user checks Actions tab
 - [Token efficiency](feedback_token_efficiency.md) — small work done directly, not via subagents; Sonnet agents except argos-security on Opus; no orchestrator
-- [Suggest model/effort](feedback_suggest_model_effort.md) — before each task, one line: keep Opus medium, or switch to high/Sonnet
+- [Suggest model/effort](feedback_suggest_model_effort.md) — first line of every task AND a line in every handoff prompt: keep Opus medium, or switch to high/Sonnet
 - [Handoff prompt for new session](feedback_handoff_prompt_new_session.md) — at the end of a finished task/phase/stage, give a 2–4 line prompt to continue in a fresh session
 - [Parallel sessions and the test DB](project_parallel_sessions_test_db.md) — concurrent test runs wipe the shared argos_test; test a staged snapshot on a private DB, re-check the index before committing
 - [Books/Community split](project_books_community_split.md) — decisions so far for the two top tabs (Books default, reviews in Community, journal, private books, no off switch); spec still to write

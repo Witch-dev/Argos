@@ -4,6 +4,7 @@ description: A warm reading room for logging books and sharing them with friends
 colors:
   page: "#f7f3e8"
   frame: "#efe7d6"
+  frame-well: "#e4dac6"
   raised: "#fffdf8"
   sunken: "#f1eadc"
   ink: "#1f1d1a"
@@ -112,6 +113,7 @@ Roles, not swatches; each keeps one meaning in every theme. Values above are Pap
 ### Neutral
 - **Page** (#f7f3e8): the reading background. **The Unchanged Page Rule:** it never changes in Paper.
 - **Frame** (#efe7d6): header and sidebar tint, a second neutral layer so the frame has a colour of its own.
+- **Frame well** (#e4dac6; added 2026-10-16 in Phase 2): a step deeper than the frame, for things sunk into it: the Books/Community track and the hover tint of header buttons and sidebar rows. `--sunken` is nearly the frame colour in the light themes, so it would vanish there.
 - **Raised** (#fffdf8) cards, **Sunken** (#f1eadc) wells and chips, **Hairline** (#ece4d6) separators.
 - **Ink** (#1f1d1a) text, **Muted ink** (#6b665e) labels and metadata, never for text a reader must act on.
 - **Danger** (#9c3b2e): destructive actions and errors.
@@ -183,7 +185,9 @@ Raised for main blocks, sunken for secondary ones (see Elevation). Padding 20–
 44px, 10px corners, a persistent visible label (never placeholder-only), inline errors beside the field, the green focus ring.
 
 ### Navigation
-Header and sidebar in the frame tint. Sidebar items: drawn icon + label, 44px rows, 10px corners; the selected one in a green-wash pill with green text. Header: logo, the Books/Community segmented control, search with an icon, bell, avatar.
+Header and sidebar in the frame tint, one L around the cream page: no divider lines, and the sidebar's tint runs on to the window's left edge. Sidebar items: drawn icon + label, 44px rows, 10px corners; the selected one in a green-wash pill with green text; hover in the frame well. Header: logo, the Books/Community segmented control (frame-well track, raised selected segment), search with an icon, bell, avatar with name where there is room. Height `--header-height` (4.5rem; 7rem on a phone, 3.5rem there when signed out).
+- **Phone (chosen 2026-10-16, "Books / Community on a phone" board, option A):** row 1 is menu, logo, search field and bell; row 2 is the switch, full width. The sidebar is a drawer behind the menu button.
+- **Right rail:** each block a raised card with 16px padding (narrower than the 20–24px of page cards, because the rail is 17rem wide); rows inside are plain rows with a sunken hover, never boxes of their own.
 
 ### Icons
 One drawn line set (`components/Icon.tsx`): 24px grid, 1.8px stroke, round caps and joins, `currentColor`. **The No-Glyph Rule:** never characters or emoji as icons (✓ ♡ ✦ × + ⌂ and the like); a `designGuards` test fails on them. A star as a unit right beside a number ("4★", "★4") is typography, not an icon.
@@ -195,7 +199,7 @@ A big display number over a muted label, with an optional quiet detail line; a r
 **The Named-Person Rule.** Always a picture and a name (a pill), never an anonymous avatar row.
 
 ### Quotes
-Their own raised card; an oversized green opening quote mark; the passage in the reading face; the book as a link; who shared it last and small.
+Their own raised card; an oversized green opening quote mark (`--font-size-quote-mark`, 4.5rem, only for this mark); the passage in the reading face; the book as a link; who shared it last and small.
 
 ### Empty states
 Say what the area is for and link to the first step; first use, cleared, no results, no permission and error each read differently.
@@ -211,11 +215,13 @@ Adapted from Impeccable's `animate` and `delight`. Motion is planned before it i
 
 **The focal moment: a book settles onto the shelf** when a reader adds it or marks it read: the cover drops into place and its shadow settles (500–600ms, the arrival curve). The only motion allowed that long.
 
+*Built 2026-10-16:* the global classes `motion-settle`, `motion-pop` and `motion-fade` in `index.css`, and `lib/arrivals.ts` for which books just arrived. A cover settles only once its image has loaded, and only one cover per moment.
+
 **Bigger moments, in proportion to effort:** finishing a book and reaching the yearly goal get a slightly larger response (the book settles onto the Read shelf, the goal bar fills). Ordinary clicks never celebrate; every moment must feel right the hundredth time.
 
 **Feedback (100–180ms):** the heart fills with a small pop; stars fill as you rate; Follow crossfades to Following with a check; a pressed button dips.
 
-**Under consideration:** a cover tilts slightly forward on hover or focus, like pulling a book off a shelf (approved in the motion board 2026-10-16 as "liked"; confirm before building). A plain "lift on hover" is not allowed.
+**The cover tilt:** a cover on a shelf tips slightly forward when pointed at or when its title has keyboard focus, like pulling a book off a shelf (`perspective(500px) rotateX(9deg) translateY(-3px)`, 200ms; confirmed and built 2026-10-16). Only on devices with a real hover, so a tap on a phone doesn't leave a book tipped; none under reduced motion. Only shelf covers get it; a plain "lift on hover" anywhere else is not allowed.
 
 | Duration | Use |
 |---|---|

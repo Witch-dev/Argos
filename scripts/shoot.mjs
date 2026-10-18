@@ -2,7 +2,7 @@
 //
 //   node scripts/shoot.mjs /authors/OL26320A /u/someone [--themes paper,dark] [--widths 1280,375]
 //                          [--out <dir>] [--user <name> --password <pw>] [--scroll 0,700] [--full]
-//                          [--anon] [--metrics] [--shifts]
+//                          [--anon] [--metrics] [--shifts] [--lang de]
 //
 // For trustworthy --metrics numbers measure a production build: stop Vite on 5174 and run
 // `npx vite preview --port 5174 --strictPort` in Apollon/web after `npm run build` (the API only
@@ -28,7 +28,7 @@ const flag = (name, fallback) => {
 }
 // Every word that isn't a flag or a flag's value is a route. Git Bash turns "/authors/x" into
 // "C:/Program Files/Git/authors/x", so that prefix is undone; "authors/x" without a slash works too.
-const VALUE_FLAGS = ['--themes', '--widths', '--out', '--user', '--password', '--scroll']
+const VALUE_FLAGS = ['--themes', '--widths', '--out', '--user', '--password', '--scroll', '--lang']
 const routes = args
   .filter((a, i) => !a.startsWith('--') && !(i > 0 && VALUE_FLAGS.includes(args[i - 1])))
   .map((a) => a.replace(/\\/g, '/').replace(/^[A-Za-z]:\/.*?\/Git\//, '/'))
@@ -41,6 +41,8 @@ const themes = flag('themes', 'paper,dark').split(',')
 const widths = flag('widths', '1280,375').split(',').map(Number)
 const scrolls = flag('scroll', '0').split(',').map(Number)
 const full = args.includes('--full')
+// --lang: the site's language (en, es, pt-BR, de, fr); German is the longest, for checking fit.
+const lang = flag('lang')
 // --anon: a signed-out visitor (no reader, no login). --metrics: per route, the largest contentful
 // paint, layout shift, request count and transferred bytes, and long tasks (for ux-review's audit).
 const anon = args.includes('--anon')
@@ -126,6 +128,25 @@ async function readMetrics(page) {
 
 await ensureServers()
 const login = anon ? null : await reader()
+if (login) await saveLanguage(login, lang ?? 'en')
+
+// After login the site switches to the account's saved language, which beats localStorage, and the
+// shoot reader is reused between runs, so the language is saved on the account too.
+async function saveLanguage(login, language) {
+  const res = await fetch(`${API}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ emailOrUsername: login.username, password: login.password }),
+  })
+  if (!res.ok) throw new Error(`Logging in to set the language failed: ${res.status} ${await res.text()}`)
+  const { token } = await res.json()
+  const put = await fetch(`${API}/users/me/preferences`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ preferredLanguage: language }),
+  })
+  if (!put.ok) throw new Error(`Saving the language failed: ${put.status} ${await put.text()}`)
+}
 const browser = await chromium.launch()
 try {
   for (const theme of themes) {
@@ -136,11 +157,12 @@ try {
       )
       await context.addInitScript((t) => {
         try {
-          localStorage.setItem('argos_theme', t)
+          localStorage.setItem('argos_theme', t.theme)
+          if (t.lang) localStorage.setItem('argos_language', t.lang)
         } catch {
           /* private mode */
         }
-      }, theme)
+      }, { theme, lang })
       if (metrics) await context.addInitScript(OBSERVE)
       const page = await context.newPage()
       if (login) {
@@ -164,7 +186,7 @@ try {
         for (const y of scrolls) {
           await page.evaluate((v) => window.scrollTo(0, v), y)
           await page.waitForTimeout(250)
-          const file = path.join(out, `${slug(route)}-${theme}-${width}${y ? `-y${y}` : ''}.png`)
+          const file = path.join(out, `${slug(route)}-${theme}-${width}${lang ? `-${lang}` : ''}${y ? `-y${y}` : ''}.png`)
           await page.screenshot({ path: file, fullPage: full })
           console.log(`${file}${sideways ? '   ⚠ scrolls sideways' : ''}`)
         }

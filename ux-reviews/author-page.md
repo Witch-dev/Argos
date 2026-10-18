@@ -53,14 +53,14 @@ A solid, accessible page that reads as "any book site": everything is a bordered
 **What:** the works grid starts at ~1,430px on desktop and ~1,580px on a phone. At 375 the first two screens are the photo, name, buttons, five other names, a folded bio and links.
 **Why it matters:** most readers come for the books (Lucía wants to find and log one); everything above them is secondary.
 **Fix:** in the Phase 3 restyle: a compact phone header (other names behind "Also known as (5)", a shorter bio fold on phones, the links as one "Links (6)" row) and a first shelf of the author's most popular books right after the header, with "All 200 books" leading to the full grid. Keep quotes and the readers box after that first shelf.
-**Status:** open (Phase 3 of the shelf refresh). Order approved 2026-10-16 on the mockup's "Order option" board: popular shelf right after the header, then readers, quotes, all books.
+**Status:** fixed 2026-10-16 (Phase 3 of the shelf refresh, author page). Order from the mockup's "Order option" board: header, a "Most popular" shelf of five with "All N books", the readers card, quotes, all books on shelves. Other names fold behind "Also known as (5)", the bio folds shorter on phones, links fold to one toggle on phones. At 375 "Most popular" now starts at about 640px (was ~1,580px for the first book).
 
 ### 5. On a phone, the years are separated from the name by the buttons — P3 · S · Judgement
 **Where:** `AuthorPage.tsx` header (`.nameRow` holds the name and `.actions`; `.meta` follows).
 **What:** at 375 the order is name, Following / Add to favourites, then "1892–1973".
 **Why it matters:** the years describe the name; split by controls they read as an afterthought.
 **Fix:** order name → years → other names → actions on phones (move `.actions` after the meta lines at ≤640px, or always).
-**Status:** open
+**Status:** fixed 2026-10-16 (Phase 3): name, years, other names, then the buttons, at every width.
 
 ### 6. Nothing says what "Follow" does — P3 · S · Judgement
 **Where:** `AuthorFollowButton.tsx`.
@@ -74,13 +74,13 @@ A solid, accessible page that reads as "any book site": everything is a bordered
 **What:** an underlined accent link, a bold grey word outside the quote's indent, another accent link, and an unstyled button. The quote's "More" sits at the card's left edge while the passage is indented by `--space-4`.
 **Why it matters:** the same kind of action looks different each time, and the quote's "More" looks unrelated to its passage.
 **Fix:** one quiet text-button style for in-place expanders, aligned with what it expands (the quote's "More" indented like the passage); "Show more" lists use the shared button from finding 2.
-**Status:** open
+**Status:** fixed 2026-10-16 (Phase 3): Read more, Also known as and Show all links are one quiet green text button with a chevron; the quote card's More lines up with its passage (no indent any more); Show more quotes is the shared button.
 
 ### 8. A loose gap around "Show all 6 links" — P3 · S · Rule
 **Where:** `AuthorPage.module.css` `.textButton` after `.links`.
 **What:** about 40px above the toggle (the list's bottom plus the button's `--space-2` margin and 44px minimum height) against `--space-4` between the other header parts, so it floats away from the links it controls.
 **Fix:** no top margin on the links toggle, and reach 44px through padding so the visible text sits close to the list.
-**Status:** open
+**Status:** fixed 2026-10-16 (Phase 3): the toggle sits inside the row of link pills it controls.
 
 ### 9. A character used as an icon: "✓ Read" on book cards — P3 · S · Rule
 **Where:** `BookCard.tsx:26`.

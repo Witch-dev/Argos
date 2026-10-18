@@ -68,5 +68,5 @@ Applied to screenshots. Each line is a question; a "no" is a finding. Tag it Rul
 ## 8. Consistency across the app
 
 - Does this screen look like it belongs to the same app as `Home`, `Shelves` and `Lists`: same card style, same header treatment, same spacing, same button hierarchy?
-- Do shared components (`BookCard`, `Avatar`, `StateMessage`, `ThemeMenu`) look and behave the same wherever they appear?
+- Do shared components (`Shelf`, `ThumbCover`, `Avatar`, `StateMessage`, `ThemeMenu`) look and behave the same wherever they appear?
 - Does it hold up in all five themes, not just the one it was designed in?
