@@ -1,6 +1,6 @@
 # Feature Spec — Reading update redesign (the story viewer)
 
-**Status:** 📝 Specced 2026-10-18 with the user, from the mockups at https://claude.ai/artifact/MGU9BPDPANSr9MvpsMZvPv (second row: "Chosen: A with B's journey" and the three "Book colour" screens). Phase 1 built 2026-10-18 (the new look with today's data); Phase 2 built 2026-10-19 (the book's colour); Phase 3 not started.
+**Status:** 📝 Specced 2026-10-18 with the user, from the mockups at https://claude.ai/artifact/MGU9BPDPANSr9MvpsMZvPv (second row: "Chosen: A with B's journey" and the three "Book colour" screens). Phase 1 built 2026-10-18 (the new look with today's data); Phase 2 built 2026-10-19 (the book's colour); Phase 3 built 2026-10-19 (the progress history). ✅ All three phases done.
 
 Builds on `specs/reading-stories.md` (the viewer, likes and comments) and follows `DESIGN.md` and `PRODUCT.md`.
 
@@ -97,10 +97,12 @@ The deep version and a full-bleed layout (§6); sharing an update outside the ap
 ### Phase 3 — The progress history (size M)
 
 **Backend**
-- [ ] `ReadingProgressEntries` + migration; written on progress changes (one per log per hour); `progressHistory`, `pagesSincePrevious`, `previousAt` on the story; included in export and removed with the log/account. Integration tests: entries written and collapsed within the hour, visibility as the log's, deletion.
+- [x] `ReadingProgressEntries` + migration; written on progress changes (one per log per hour); `progressHistory`, `pagesSincePrevious`, `previousAt` on the story; included in export and removed with the log/account. Integration tests: entries written and collapsed within the hour, visibility as the log's, deletion.
 
 **Frontend**
-- [ ] Earlier dots on the journey (up to four), the "+N pages since <day>" pill (relative day names through `Intl`), the fill sliding from the previous point.
+- [x] Earlier dots on the journey (up to four), the "+N pages since <day>" pill (relative day names through `Intl`), the fill sliding from the previous point.
 
 **Verification**
-- [ ] `browser-check` with a seeded reader who updates a book several times over days; `reviewer` and `argos-security` (new personal data: export and deletion); `CHANGELOG.md` line per phase.
+- [x] `browser-check` with a seeded reader who updates a book several times over days; `reviewer` and `argos-security` (new personal data: export and deletion); `CHANGELOG.md` line per phase.
+
+**Built notes (Phase 3):** a point keeps the `CreatedAt` of its hour's first change and takes the hour's last value. A point is staged on create when a page or minute is given, and on update when the page or minute changes to a new value; a cleared page writes none. The story's latest five come from one query (a correlated "fewer than five newer" count over the `(LogId, CreatedAt)` index, since EF can't translate group-then-take). The pill counts pages only, so an audiobook gets the dots but no pill. It shows only when the latest point is the reading's current page (reviewer: the history can lag behind a cleared page) and the page went up. Times go out rounded down to the hour (argos-security: the viewer names days, and followers needn't learn a routine to the minute). Points written while a reading was private show if it is opened up later, as its other fields do (accepted, security review). The pill reads "+12 pages today" for an earlier update the same day, "since yesterday", "since Friday" within the week (`Intl` weekday), then "since 3 Oct". The fill and ring slide from the previous point (measured: 34% → 41% for pages 142 → 168 of 412). Export: `progress.csv` (book, Open Library ID, log added, page, minute, time in UTC). Data is kept as the reading's: deleted with it and with the account (DB cascade), covered by tests. The privacy policy should mention it at its pre-launch re-read (ROADMAP Stage 10).

@@ -265,7 +265,7 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 - [ ] **Turn the bot check on (Cloudflare Turnstile, free).** The code is built (Stage 4, `specs/bot-check.md`) and the privacy policy already names the service. Left: create the Cloudflare widget for `wingedwords.app`, set `Turnstile__SiteKey` and `Turnstile__SecretKey` on the API in Render, and do the checks in `DEPLOY.md` ("Bot check on login and sign-up").
 - [ ] Turn off invite-only sign-up.
 - [ ] Landing page Phase 2 (`specs/landing-page.md`): live "What readers are into this week" rows, now that moderation (Stage 7) and private accounts (Stage 8) exist. *Built 2026-10-06 but switched off (`Landing:ShowcaseEnabled`).* To finish: add the private-account and moderation rules to `LandingRepository`, with tests, then switch it on. Check that the "Import from Goodreads" and "Export your data" copy (spec §7) went in when Stages 2 and 6 shipped.
-- [ ] Privacy policy and terms re-read against what actually shipped (notifications, export, delete, private accounts).
+- [ ] Privacy policy and terms re-read against what actually shipped (notifications, export, delete, private accounts, and the reading progress history: page and time per update, in the export as `progress.csv`, deleted with the reading).
 
 ---
 
@@ -285,7 +285,7 @@ In rough order. None of these block launch.
 5. **Mood & trope browsing**, "Popular this week", genre pages.
 6. **Author pages** (`specs/authors.md`, specced 2026-10-15): author page and linked author names, then search + "your history with this author", then follow and new-release alerts, then favourites and quotes. Four phases; Phase 1 is size L (new tables, backfill). **Phase 1 done 2026-10-15** (built ahead of its place in the order, at the user's request). **Phase 2 done 2026-10-15, Phase 3 (follow, new-release alerts) done 2026-10-16, Phase 4 (favourites, quotes) done 2026-10-16**; all four phases done.
 7. **Shelf design refresh** (`specs/shelf-design-refresh.md`, `DESIGN.md`, approved 2026-10-16 at the user's request): cream page stays, bookbinding green accent, raised cards, drawn icons, covers on a shelf. Foundations first, then the shell, then pages one by one. **Done 2026-10-18**: Phases 0–3, then Phase 4's review sweep and fixes; afterwards the sidebar moved onto the page colour and the header logo became the lettered dog alone, in green.
-8. **Reading update redesign** (`specs/reading-update-redesign.md`, specced 2026-10-18 from the user's mockups): the story viewer as the book on its shelf with a journey line, named likes and quick replies; then the background in the book's colour; then a progress history for the line's earlier points. Three phases, each size M.
+8. ✅ **Reading update redesign** (`specs/reading-update-redesign.md`, specced 2026-10-18 from the user's mockups): the story viewer as the book on its shelf with a journey line, named likes and quick replies; then the background in the book's colour; then a progress history for the line's earlier points. Three phases, each size M. **Done 2026-10-19** (quick replies removed at the user's request).
 9. Everything else in `FUTURE-IDEAS.md`, ordered by what beta and launch users ask for most.
 
 ---
