@@ -1,6 +1,6 @@
 # Feature Spec — Request an invite
 
-**Status:** 📝 Specced 2026-10-19. Roadmap Stage 4 (before the closed beta starts).
+**Status:** 🚧 Phase 1 (backend) done 2026-10-19; Phase 2 (frontend) next. Roadmap Stage 4 (before the closed beta starts).
 
 ## 1. Problem
 
@@ -19,9 +19,9 @@ What we want: a **Request an invite** button on the landing page. It leads to a 
 
 Smaller decisions made while writing the spec (not asked; change them if you disagree):
 
-- **Every submission gets the same thank-you.** This holds for a new request, a repeat of one already waiting, and an address that already has an account. So the form can't be used to find out who has an account. A repeat while one is pending replaces the note and keeps the original date, so the person keeps their place in line.
+- **Every submission gets the same thank-you.** This holds for a new request, a repeat of one already waiting, and an address that already has an account. So the form can't be used to find out who has an account. A repeat while one is pending keeps the original date, so the person keeps their place in line. *(Security review: it also keeps the original note and language, and only fills a note left empty. Anyone who knows an address can send it, so a repeat mustn't rewrite what the person said.)*
 - **The form exists only while invite-only is on.** When the switch is off at public launch, the button disappears and the endpoint answers 404. Anyone can sign up then anyway.
-- **Requests are kept for 90 days.** Any request decided more than 90 days ago (invited or dismissed) is deleted by the existing nightly clean-up, or by a new small one. Pending requests stay until they are decided. The privacy policy says so (§3.6).
+- **Requests are kept for 90 days.** Any request decided more than 90 days ago (invited or dismissed) is deleted by the existing nightly clean-up, or by a new small one. ~~Pending requests stay until they are decided.~~ *(Security review: a request nobody answers is deleted 180 days after it was made, so the list doesn't stay forever, including after sign-up opens. An unused team invite goes with its request.)* The privacy policy says so (§3.6).
 - **The email goes out in the language the visitor was using** when they asked. It is saved with the request, because there's no account to read it from.
 - **A cap of 5,000 pending requests** (`InviteRequests:MaxPending`). Past it, new requests still get the thank-you but aren't saved, and a warning is logged. This keeps a bot that gets past Turnstile from filling the table.
 
@@ -30,15 +30,15 @@ Smaller decisions made while writing the spec (not asked; change them if you dis
 ### 3.1 Admin role (minimal)
 
 - An Identity role called **`Admin`**. Identity's role tables already exist and are unused.
-- **Who is admin comes from config:** `Admin:Usernames` (a list). On startup the API makes the role match the list. Everyone listed gets it, and anyone not listed loses it. On Render this is `Admin__Usernames__0=<your username>`. No admin screens for managing admins.
-- **Checked on every request, from the database.** It isn't put in the login token, so removing someone from the list takes effect when the API restarts, not when their token expires. An `[RequireAdmin]` filter (like `[RequireConfirmedEmail]`) answers 404 to non-admins, so the admin endpoints look like they don't exist. Admins must also have a confirmed email.
-- `GET /api/users/me` (or whatever endpoint feeds the current-user context) gains `isAdmin`, so the frontend can show the link.
+- **Who is admin comes from config:** ~~`Admin:Usernames`~~ **`Admin:UserIds`** (a list of account ids). On startup the API makes the role match the list. Everyone listed gets it, and anyone not listed loses it. On Render this is `Admin__UserIds__0=<your account id>` (the `id` from `/api/auth/me`). *(Security review: a username can be given up and taken by someone else 30 days later, who'd become admin at the next restart; an id never changes hands.)* No admin screens for managing admins. *(Built: `Admin:SyncOnStart`, default on, is turned off in the test factory, because every test host shares one database and its start would take other tests' admins away.)*
+- **Checked on every request, from the database.** It isn't put in the login token, so removing someone from the list takes effect when the API restarts, not when their token expires. An `[RequireAdmin]` filter (like `[RequireConfirmedEmail]`) answers 404 to non-admins and to logged-out callers (the controller has no `[Authorize]`, which would answer 401), so the admin endpoints look like they don't exist. Admins must also have a confirmed email.
+- `GET /api/auth/me` gains `isAdmin`, so the frontend can show the link. *(Review: so do the settings endpoints that answer with the same object, since the site writes their answers into its "me" cache.)*
 
 Stage 7's "A site admin role" box is then partly done. Update its wording to say so.
 
 ### 3.2 Invites that belong to no reader
 
-`Invite.InviterId` becomes **nullable**. A null inviter means "from the Winged Words team". Readers' invite counts, lists and deletes all filter by `InviterId`, so they don't see these. Migration `AllowTeamInvites`. Claim, release and use work exactly as today, with no change to sign-up.
+`Invite.InviterId` becomes **nullable**. A null inviter means "from the Winged Words team". Readers' invite counts, lists and deletes all filter by `InviterId`, so they don't see these. *(Built: one migration, `AddInviteRequests`, holds this and §3.3.)* Claim, release and use work exactly as today, with no change to sign-up.
 
 ### 3.3 Table `InviteRequests`
 
@@ -59,7 +59,7 @@ POST /api/invite-requests            anonymous · { email, note?, language, botT
                                      → 202 always (same body whether new, repeat or existing reader)
                                      → 400 bad email / note too long · 400 bot check failed
                                      → 404 while invite-only is off
-                                     rate limit: the Auth policy (per address, per minute)
+                                     rate limit: the Auth policy (per network address, per minute)
 
 GET  /api/admin/invite-requests?status=pending&page=1
                                      → { items: [{ id, email, note, createdAt, status, decidedAt,
@@ -71,7 +71,8 @@ POST /api/admin/invite-requests/{id}/dismiss  → 204   (409 if not pending)
 
 - `alreadyReader`: an account already uses that email. It's shown only to the admin, so you don't invite someone twice.
 - Inviting runs in one transaction: make the invite, mark the request `Invited`, and queue the email through `EmailQueue`. Two clicks at once must not create two invites. Use the conditional `UPDATE … WHERE Status = Pending`, the same pattern as invite claims.
-- New error codes in `ErrorCodes.cs` with `errors.codes` translations: `InviteRequestNotPending`, plus the form's validation messages if they aren't covered by existing codes.
+- New error codes in `ErrorCodes.cs` with `errors.codes` translations: `inviteRequests.notPending` and `inviteRequests.noteTooLong` (the email messages reuse `auth.emailInvalid` and `auth.emailTooLong`).
+- *(Review: the email is checked as MimeKit will parse it when sending, so "Name <x@y>" is refused and an invite can't silently go nowhere.)*
 
 ### 3.5 The invite email
 
@@ -83,7 +84,7 @@ A new method, `AccountEmails.InviteFromRequest(email, language, code)`, built wi
 - **`/request-invite` page:** a logged-out page in the same look as `/register` (`AuthForm` styles). It has the email field, the optional note with a character count, the bot-check widget and **Send request**. After sending, the same card shows the thank-you message with a link back to the landing page. A logged-in reader who opens it is sent to Settings → Invites. While invite-only is off, it redirects to `/register`.
 - **Register page:** while invite-only is on, under the invite field: "No invite? Request one" links to `/request-invite`.
 - **Admin page `/admin/invite-requests`:** reached from a link in the account menu that only admins see. It has Pending / Invited / Dismissed pills and one row per request: email, the date, the note (folded if long), and an "Already has an account" tag. Pending rows have **Invite** (green) and **Dismiss** (asks first). Invited rows show the code with **Copy link**, and "Joined" once the code is used. It's built with the shared pieces (raised card, hairline rows, segmented control) and works at phone width. Non-admins get the normal not-found page.
-- **Privacy policy:** a new short section in all five languages: "If you ask for an invite, we keep your email and note to decide and to send the invite. We delete them 90 days after we decide, and you can ask us to delete them sooner at hello@wingedwords.app."
+- **Privacy policy:** a new short section in all five languages: "If you ask for an invite, we keep your email and note to decide and to send the invite. We delete them 90 days after we decide, or after 180 days if we never do, and you can ask us to delete them sooner at hello@wingedwords.app."
 
 ## 4. Out of scope
 
@@ -95,31 +96,48 @@ A new method, `AccountEmails.InviteFromRequest(email, language, code)`, built wi
 
 ## 5. Tasks
 
-### Phase 1 — Backend
+### Phase 1 — Backend ✅ 2026-10-19
 
-- [ ] `AdminOptions` (`Admin:Usernames`), startup sync of the `Admin` role, `[RequireAdmin]` filter (404, confirmed email), `isAdmin` on the current-user DTO
-- [ ] `Invite.InviterId` nullable + migration `AllowTeamInvites`; check that readers' invite queries still filter by inviter
-- [ ] `InviteRequest` entity, `IInviteRequestRepository`, migration `AddInviteRequests` (partial unique index on pending email)
-- [ ] `InviteRequestService`: submit (normalise, same answer for every case, repeat replaces the note, pending cap), list, invite (one transaction, conditional update, queue email), dismiss, 90-day clean-up
-- [ ] `InviteRequestsController` (anonymous submit, Auth rate limit, bot check, 404 while open sign-up) and `AdminInviteRequestsController`
-- [ ] `AccountEmails.InviteFromRequest` in five languages
-- [ ] Error codes + `errors.codes` translations
-- [ ] Tests (`InviteRequestTests`, `AdminRoleTests`):
-  - submit works, a repeat keeps the date and replaces the note, an existing reader's email gets the same answer and no row
-  - 404 while open, bot check enforced, note too long refused, pending cap
-  - non-admin and logged-out get 404 on the admin endpoints, an unconfirmed admin is refused
+- [x] `AdminOptions` (`Admin:UserIds`, `Admin:SyncOnStart`), startup sync of the `Admin` role (`AdminRoles`), `[RequireAdmin]` filter (404, confirmed email), `isAdmin` on the current-user DTO
+- [x] `Invite.InviterId` nullable; readers' invite queries still filter by inviter
+- [x] `InviteRequest` entity, `IInviteRequestRepository`, migration `AddInviteRequests` (also holds the nullable inviter; partial unique index on pending email)
+- [x] `InviteRequestService`: submit (normalise, same answer for every case, a repeat can't rewrite, pending cap), list, invite (one transaction, conditional update, queue email), dismiss; `InviteRequestCleanupService` (90 / 180 days)
+- [x] `InviteRequestsController` (anonymous submit, Auth rate limit, bot check, 404 while open sign-up) and `AdminInviteRequestsController`
+- [x] `AccountEmails.InviteFromRequest` in five languages
+- [x] Error codes + `errors.codes` translations
+- [x] Tests (`InviteRequestTests`, `InviteRequestBotCheckTests`; the role tests live in `InviteRequestTests`):
+  - submit works, a repeat keeps its date, note and language (fills an empty note), the same address at once makes one row, an existing reader's email gets the same answer and no row
+  - 404 while open, bot check enforced, bad email (also "Name <x@y>") and note too long refused, pending cap
+  - non-admin and logged-out get 404 on the admin endpoints, an unconfirmed admin is refused; `isAdmin` survives saving a setting
   - invite makes a team invite, queues one email in the saved language, and the code signs someone up
   - two parallel invites on one request make one invite; invite or dismiss on a decided request → 409
-  - team invites don't count against or appear for any reader; the role sync adds and removes
-  - the clean-up deletes only requests decided over 90 days ago
-- [ ] Bruno requests (`bruno/InviteRequests`)
-- [ ] Review: `reviewer` + `argos-security` (anonymous input, email sending, a new role)
+  - team invites don't count against or appear for any reader; the role sync adds and removes by id
+  - the clean-up deletes answered requests after 90 days and unanswered ones after 180, with unused team invites
+- [x] Bruno requests (`bruno/InviteRequests`)
+- [x] Review: `reviewer` + `argos-security`
+
+#### Review pass (2026-10-19)
+- [x] Fixed:
+  - **(Security, Medium) Admins were listed by username.** A name the owner gave up, or hadn't registered yet, could be taken by someone else and made admin at the next restart. Now listed by account id.
+  - **(Security) A repeat request could rewrite someone's note and language.** It now keeps them.
+  - **(Security) Unanswered requests stayed forever.** Deleted after 180 days.
+  - **(Security) "Name <x@y>" passed the email check,** slipping past the one-per-address rule and putting text in the email's To line. The address must now parse to itself in MimeKit.
+  - **(Review) `isAdmin` was only on `/api/auth/me`.** Saving a setting answers with the same object, which the site writes into its cache, so the admin link would have vanished.
+  - **(Review) Logged-out callers got 401** from the admin endpoints, showing they exist. Now 404.
+  - **(Review) A huge page number gave a 500.** Clamped.
+  - **(Review) Unused team invites outlived their request.** Deleted with it.
+  - **(Review) Missing tests:** the bot check on the form, and the same address sent at once.
+- [x] Left as is:
+  - **A bot past Turnstile could fill the 5,000 cap** with made-up addresses, after which real requests aren't saved (logged). Acceptable at beta scale; a bulk dismiss can come later.
+  - **A few milliseconds' timing difference** between an existing reader's address and a new one. It's weaker than what sign-up with an invite already reveals, and each try needs a solved bot check.
+  - **The invite email can fail after the request is marked invited** (in-memory queue, 3 retries). The admin page shows the link to copy (Phase 2 task).
 
 ### Phase 2 — Frontend
 
 - [ ] Read `PRODUCT.md`, `DESIGN.md`; a short plan per the `web-design` skill
 - [ ] API client + hooks: `requestInvite`, `useAdminInviteRequests`, `inviteRequest`, `dismissRequest`; `isAdmin` in the auth context
 - [ ] `/request-invite` page (form, bot check, thank-you, redirects)
+- [ ] Admin page: after Invite, say the email is on its way and show the link to copy (the send happens in the background and can fail; the review noted the admin otherwise gets no sign)
 - [ ] Landing page second button + new beta line; register page "No invite? Request one"
 - [ ] `/admin/invite-requests` page and the admin-only menu link
 - [ ] Privacy policy section
@@ -132,5 +150,6 @@ A new method, `AccountEmails.InviteFromRequest(email, language, code)`, built wi
 
 - [ ] Tests, build, lint, `precheck.ps1`
 - [ ] Browser pass (`browser-check`): logged out → landing → Request an invite → thank-you; as admin → invite → email in Mailpit → link → sign up → the row shows "Joined"
-- [ ] `DEPLOY.md`: set `Admin__Usernames__0` on Render
+- [ ] `DEPLOY.md`: set `Admin__UserIds__0` on Render (your account id)
+- [ ] SPEC.md §7: `Invites` (nullable `InviterId`) and `InviteRequests`
 - [ ] CHANGELOG, roadmap box, Stage 7 admin-role wording

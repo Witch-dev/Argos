@@ -25,6 +25,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | Bug | Priority | Size | Area |
 |---|---|---|---|
 | [Opening a public club from Discover is a dead end for non-members](public-club-dead-end-for-non-members.md) | P1 | M | Clubs, backend + frontend |
+| [Two account erasures at once can both create the "Deleted user" placeholder](deleted-user-placeholder-race.md) | P2 | S | Backend, account deletion (flaky test) |
 | [Blocks only apply while signed in](blocks-only-apply-signed-in.md) | P3 | L | Backend, privacy |
 | [Blocks don't apply in book club discussions](blocks-not-applied-in-club-discussions.md) | P3 | M | Backend, clubs |
 | [Writings' Popular list ranks every writing on every request](writings-popular-query-cost.md) | P3 | M | Backend, performance |
