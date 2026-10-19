@@ -165,6 +165,7 @@ Small things that are cheaper now than later.
     - ~~add privacy and terms links to the footer~~ (done 2026-10-11);
     - check the trust line against the privacy policy;
     - make `og:image` an absolute URL and test a real link preview.
+- [ ] **Request an invite** (`specs/invite-requests.md`): a "Request an invite" button on the landing page, a short form (email + optional note), and an admin page where you turn a request into an emailed invite. Adds the minimal admin role Stage 7 builds on. *Size M.*
 
 **Legal basics** (plain-language templates are fine at this size; not legal advice)
 - [x] Privacy policy at `/privacy`, in all five languages. **Written 2026-10-11** from the facts below. Before going live, re-read it for three things: backup retention (it says only that backups are overwritten; add the number once Render's plan is chosen), the error-tracking paragraph (true only once Sentry is wired) and that `hello@wingedwords.app` really receives mail. Original task: what's stored, why, how to export and delete it. **Facts to put in it (built in Stage 6, 2026-10-11):**
@@ -217,7 +218,7 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 
 **Needs spec** (one spec covering all of this).
 
-- [ ] **A site admin role.** Nothing in the app is admin-only today. Identity's role tables exist but are unused. Moderation needs someone allowed to act.
+- [ ] **A site admin role.** Nothing in the app is admin-only today. Identity's role tables exist but are unused. Moderation needs someone allowed to act. *The role itself (config-driven, checked per request) comes earlier with `specs/invite-requests.md`; Stage 7 reuses it.*
 - [ ] **Report** a review, writing, comment, list or user, with a reason.
 - [ ] **Admin queue**: see reports, hide content, suspend an account.
 - [ ] **Review-bombing rules:**
