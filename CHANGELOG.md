@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-19 — HSTS: the API and the site send `Strict-Transport-Security` (one year, subdomains); the API sets it itself because Render's proxy ends HTTPS and `UseHsts` would never fire; live checks in DEPLOY.md → Apollon b8b62b0
 - 2026-10-19 — Request an invite, Phase 1 (backend): anonymous request form endpoint (bot check, same answer for every address, no email until invited), admin endpoints that answer a request with an emailed one-use team invite, an Admin role from `Admin:UserIds` checked per request (404 for everyone else), new `InviteRequests` table cleaned after 90/180 days; reviewer and security fixes (admins by id not username, a repeat can't rewrite a request) → specs/invite-requests.md
 - 2026-10-19 — Idea captured: show Open Library ratings on the book page (chosen over Google Books/Hardcover; kept apart from Argos ratings) → FUTURE-IDEAS.md
 - 2026-10-19 — Request an invite specced: a landing-page form (email + optional note, bot check, no email until invited) and an admin page that emails a one-use team invite; adds a minimal config-driven admin role; replaces the earlier "no waitlist" decisions → specs/invite-requests.md

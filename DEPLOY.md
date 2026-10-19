@@ -54,6 +54,22 @@ Per-address limits can't stop leaked email/password pairs being tried from thous
 
 **Visitor addresses:** the API sends Cloudflare the visitor address from the section above, so that check matters here too.
 
+## HTTPS and HSTS
+
+**HTTPS** comes from Render: it issues and renews the certificates for `wingedwords.app`, `www.` and `api.`, and redirects any `http://` request to `https://`. Nothing to set.
+
+**HSTS** (the `Strict-Transport-Security` header) tells a browser to use only HTTPS for the site and every subdomain for the next year, even if someone types or links `http://`. Both the site (`web/docker/entrypoint.sh`) and the API (`Program.cs`) send `max-age=31536000; includeSubDomains`. The API can't use ASP.NET's `UseHsts`: Render ends HTTPS at its proxy, so requests reach the API as plain HTTP and `UseHsts` would never send it. Browsers ignore the header on plain HTTP, so local runs are unaffected.
+
+**Already the rule for `.app`:** the whole `.app` domain is on the browsers' built-in HSTS list, so browsers refuse plain HTTP for `wingedwords.app` and its subdomains before ever seeing our header. The header is the second layer, for anything that doesn't ship that list. Either way, **every subdomain must serve HTTPS**. Render does that for anything pointed at it; keep it in mind for any other service.
+
+**Check after deploying** (from Git Bash):
+```
+curl -sI https://wingedwords.app | grep -i strict-transport
+curl -sI https://api.wingedwords.app/health | grep -i strict-transport
+curl -sI http://wingedwords.app | head -3
+```
+The first two each print `strict-transport-security: max-age=31536000; includeSubDomains`. The third prints a `301` or `308` redirect to `https://`.
+
 ## How the live site is set up on Render (first deploy, 2026-10-13)
 
 Everything is in one Render account, region **Virginia (US East)**. The domain is at Porkbun, email sending at Resend.
