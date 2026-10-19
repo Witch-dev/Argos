@@ -1,6 +1,6 @@
 # Book descriptions show Open Library's Markdown as raw characters
 
-**Priority:** P3 · **Size:** S · **Area:** Frontend, books · **Found:** 2026-10-16 (motion check of the book page restyle, `specs/shelf-design-refresh.md` Phase 3) · **Status:** Open
+**Priority:** P3 · **Size:** S · **Area:** Frontend, books · **Found:** 2026-10-16 (motion check of the book page restyle, `specs/shelf-design-refresh.md` Phase 3) · **Status:** Fixed 2026-10-19
 
 ## What happens
 
@@ -13,3 +13,7 @@ The description is plain text from Open Library, shown as is (`FoldedText`, `web
 ## Suggested fix
 
 Turn the few marks Open Library uses into text before showing it: `*x*` / `_x_` as emphasis, `[text](url)` as just the text (or a safe external link), and drop `----` rules and trailing source notes. Do it in the frontend (a small `lib/` helper with tests) and never with `dangerouslySetInnerHTML`. Check Frankenstein and a few classics afterwards.
+
+## Fixed 2026-10-19
+
+`web/src/lib/openLibraryText.ts` (tested) turns `*x*`/`_x_`/`**x**` into emphasis, keeps only a link's text, drops `[1]: url` lines and ends the text at a `----` rule. `FoldedText` takes `openLibrary` on the book description and the author bio only; readers' bios stay exactly as typed. Rendered as React elements, never HTML. Frankenstein now opens with its title in italics.

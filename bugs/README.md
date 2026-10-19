@@ -25,8 +25,6 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | Bug | Priority | Size | Area |
 |---|---|---|---|
 | [Opening a public club from Discover is a dead end for non-members](public-club-dead-end-for-non-members.md) | P1 | M | Clubs, backend + frontend |
-| [The right rail jumps when "My Book Clubs" arrives](rail-clubs-card-shifts-layout.md) | P2 | S | Frontend, layout |
-| [Like and comment buttons are smaller than 44px](social-bar-small-tap-targets.md) | 2026-10-18 | `CHANGELOG.md`, "Shelf refresh Phase 3, Feed, writings and reviews" |
 | [Blocks only apply while signed in](blocks-only-apply-signed-in.md) | P3 | L | Backend, privacy |
 | [Blocks don't apply in book club discussions](blocks-not-applied-in-club-discussions.md) | P3 | M | Backend, clubs |
 | [Writings' Popular list ranks every writing on every request](writings-popular-query-cost.md) | P3 | M | Backend, performance |
@@ -35,12 +33,14 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | [A sign-up racing a rename can take the name being given up](username-hold-race.md) | P3 | S | Backend, accounts |
 | [An old username only redirects on the profile page](held-username-only-on-profile.md) | P3 | S | Backend + frontend, accounts |
 | [Book clubs show a member's progress even when that book is private](club-progress-ignores-reading-visibility.md) | P3 | M | Backend, clubs, privacy |
-| [Book descriptions show Open Library's Markdown as raw characters](book-description-shows-markdown.md) | P3 | S | Frontend, books |
 
 ## Fixed
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [The right rail jumps when "My Book Clubs" arrives](rail-clubs-card-shifts-layout.md) | 2026-10-19 | `CHANGELOG.md`, "Design leftovers" |
+| [Book descriptions show Open Library's Markdown as raw characters](book-description-shows-markdown.md) | 2026-10-19 | `CHANGELOG.md`, "Design leftovers" |
+| [Like and comment buttons are smaller than 44px](social-bar-small-tap-targets.md) | 2026-10-18 | `CHANGELOG.md`, "Shelf refresh Phase 3, Feed, writings and reviews" |
 | [The rail's club card shows the next checkpoint a day early west of UTC](rail-club-checkpoint-date-day-early.md) | 2026-10-18 | `CHANGELOG.md`, "Shelf refresh Phase 4: fixes" |
 | [A club says "You've finished the book" on its page and "Not started" everywhere else](club-progress-differs-between-page-and-rail.md) | 2026-10-18 | `CHANGELOG.md`, "Shelf refresh Phase 4: fixes" |
 | [Searching a common word in "My languages" finds nothing](search-common-word-in-language-finds-nothing.md) | Worked around, 2026-10-18 | `CHANGELOG.md`, "Shelf refresh Phase 4: fixes" |

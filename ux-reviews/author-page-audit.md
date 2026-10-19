@@ -30,6 +30,10 @@ Audited: 2026-10-16 · Apollon at `6df3601` · Evidence: source (`AuthorPage.tsx
 - **[P3] Glyph icon "✓".** `BookCard.tsx:26`. Integrity (DESIGN.md No-Glyph Rule). Fix: the Phase 1 `Icon` set.
 - **[P3] Phone header order** (years after the buttons). `AuthorPage.tsx`. Responsive. Fix: name → years → actions. Pass: `adapt`.
 
+## Re-checked 2026-10-19
+
+All seven are done, by the shelf refresh and the author page review (`author-page.md`): the page column has a minimum height (`Layout.module.css`, the footer no longer shifts); `ShowMoreButton` is used on every "Show more"/"Load more"; the follow and favourite buttons hold their place while loading (disabled, `aria-busy`); the expanders and the links toggle were redone in `author-page.md`; `BookCard` and its ✓ glyph are gone; the years sit under the name on a phone.
+
 ## Patterns
 
 - **Missing shared controls breed copies:** "Show more" exists five times, unstyled each time; the expander ("Read more", "More", "Show all") exists in three styles. The `extract` pass should produce a `ShowMoreButton` and an expander text-button, and the refresh's Phase 1 shared pieces should include both.

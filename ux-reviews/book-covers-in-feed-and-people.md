@@ -24,7 +24,7 @@ Bigger covers (3.5rem in the feed group, 2.5rem on the reader card) read well, a
 **Where:** `BookCover` placeholder, ~5 lines fit in the 2:3 box
 **What:** "The death of Iván Ilých" fits in 4 lines now; a 6+ word title would be clipped. The full title stays in the `aria-label` and in the "started N books" detail, so nothing is lost for a screen reader, but a sighted reader sees a cut-off title.
 **Fix:** acceptable for now; if it bothers, show the title in the row below the covers or widen to 4rem.
-**Status:** open
+**Status:** fixed 2026-10-19: the placeholder aligns with `safe center`, so a title too long for the slot starts at the top and only its end is cut, never its beginning.
 
 ## Looked fine
 Reader card row without a cover (no empty gap, text aligned under the name), 2.5rem cover on the reader card, covers in Dark, and the 375px feed (no horizontal scroll). Contrast of the placeholder text (`--text-muted` on `--bg-elevated`) in Paper and Dark.

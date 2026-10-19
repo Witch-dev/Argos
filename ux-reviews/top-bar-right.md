@@ -12,21 +12,21 @@ The right side is crowded and the suggestions list does not line up with anythin
 **What:** the name gets 88px. "wingedwords" is cut to "wingedw…"; "Alexandra Montgomery-Whitfield" (251px) to "Alexandr…". There is no `title`, so the full name is not reachable on hover. The 5.5rem cap was set on 2026-10-12 to keep the bell clear of the tabs.
 **Why it matters:** a reader's own name looks broken. A name cut mid-word reads as a bug, and the reader can't see the rest.
 **Fix:** raise the cap to `7.5rem` (120px). Measured gap between the Community tab and the search box is 76px at 1250 and 91px at 1280, so this uses 32px of it and leaves 44px at the narrowest width. Add `title={name}` on the link so a longer name is readable on hover. (An alternative is to drop the name and keep the avatar at every width, as it already is below 1250px; that frees room to widen the search. Judgement, say if you prefer it.)
-**Status:** open
+**Status:** no change needed, re-checked 2026-10-19: since the header rebuild the name gets 9rem; a 16-letter username shows whole at 1250–1600px, and the link has an `aria-label`.
 
 ### 2. The suggestions list is not aligned with the box, and covers the Community tab — P2 · M · Judgement
 **Where:** `HeaderSearch.module.css` `.list` (`right: 0; width: 22rem`, positioned from `.search`).
 **What:** the list is anchored to the input's right edge and is 352px wide against a 176px box, so it starts 176px to the left of the box (128px on the ≤1100px layout). At 1280 it spans 700→1052 and sits over the Community tab (tabs end at 785). It lines up with neither the box nor the right rail below it. Below 1100px it covers the second row of tabs.
 **Why it matters:** the dropdown looks detached from the field that opened it, and it hides a tab. This is what the review request called "not aligned with the search box".
 **Fix:** anchor the list to the right column instead of the box: `position: relative` on `.right`, list `right: var(--space-4)` and `width: calc(17rem - 2 * var(--space-4))` so its edges match the right rail under it, and no tab is covered. Where the rail is gone (≤1100px) keep `width: min(20rem, 100vw - 2 * var(--space-4))`, right-aligned to the bar's gutter. A second option is to widen the box itself on focus, but there is only about 90px of room before it reaches the tabs.
-**Status:** open
+**Status:** fixed: since the header rebuild the list lines up with the box's left edge and no longer covers a tab (measured 2026-10-19 at 1280 and 900). On 2026-10-19 its room is measured without the page's scrollbar (`clientWidth`), so at 900px it keeps the 16px gutter instead of touching the scrollbar.
 
 ### 3. The search box jumps 95px sideways at 1250px — P3 · S · Judgement
 **Where:** `AccountSummary.module.css` (`@media (min-width: 1250px)` shows the name).
 **What:** measured box position: 846→1022 at 1250px, 941→1117 at 1249px. The name appearing pushes the whole cluster left.
 **Why it matters:** resizing a window, or moving between a laptop and a monitor, makes the search box jump. It also means the box has two different positions relative to the rail.
 **Fix:** if finding 1 is done with the name always hidden, this goes away. If the name stays, reserve its width from the start (a fixed-width `.name` block) or show it from 1100px, where there is already room (search→bell gap is stable there).
-**Status:** open
+**Status:** kept, decided 2026-10-19: still a 152px jump when the window crosses 1250px, because DESIGN.md asks for the avatar with the name where there is room; it only shows while resizing.
 
 ## Looked fine
 - Bar height is a constant 88px at all 17 widths; no horizontal scroll from 1600 down to 320.

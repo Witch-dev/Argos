@@ -41,28 +41,28 @@ The new layout works: the menu sits at the top, the Log progress / Write button 
 **What:** both open the same modal, and on a wide screen they are one glance apart.
 **Why it matters:** duplicates make a reader wonder whether they differ. Mild, because the tile is part of the Readings strip pattern shared with Community.
 **Fix:** leave as is and decide after using it; or keep only the tile in Books.
-**Status:** open
+**Status:** no change needed, re-checked 2026-10-19: the sidebar's Log progress button is gone since the shelf refresh; the "+" tile is the only one.
 
 ### 6. A "Currently reading" book with no page shows only a title — P3 · S · Judgement
 **Where:** `RailCards.tsx`, `CurrentlyReadingCard`.
 **What:** "Brave New World" has no bar and no line, while its neighbours do, so it looks unfinished.
 **Why it matters:** this card is the quick way to see progress; a row that offers nothing reads as a gap.
 **Fix:** when there is no page, show a muted "Add your page" line (a new translated string) that links to the book. Optional.
-**Status:** open
+**Status:** fixed 2026-10-19: a reading without a page shows a muted "Add your page" (`rightPanel.noPage`, five languages); the row opens the book, whose log form has the page field.
 
 ### 7. The Books rail is taller than a laptop screen, so Popular is out of sight — P3 · S · Judgement
 **Where:** `RightPanel` in Books at 768px tall.
 **What:** Currently reading, Year, Goal, Up next and Popular add up to more than the viewport. The rail scrolls inside itself with a thin scrollbar and no cue, so Popular (the last card) is easy to miss and the Up next covers sit right at the fold.
 **Why it matters:** the least personal card is the one hidden, so this is mostly fine, but a reader won't know the rail scrolls.
 **Fix:** limit Popular to 3 books and make the Up next covers smaller (about 100px each, bigger than the Currently reading covers). Optional.
-**Status:** open
+**Status:** fixed 2026-10-19: on Books home the rail leaves out Up next, which repeated the page's want-to-read shelf, and Popular shows 3 books (was 4). At 1366×768 the rail went from 1528 to 1260px; it still scrolls on its own below the goal card, which is accepted.
 
 ### 8. Headings in the Community rail do not match — P3 · S · Judgement
 **Where:** `SuggestedAccounts.module.css` (`.heading` is `--text-muted` with a bigger top margin) vs `RightPanel.module.css` (`.heading`, full text colour).
 **What:** "People you may know" is grey while "My Book Clubs", "Lists" and "Popular on Winged Words" are dark.
 **Why it matters:** it reads as a less important block, which is probably not intended.
 **Fix:** use the rail's `.heading` style for all of them.
-**Status:** open
+**Status:** no change needed, re-checked 2026-10-19: every rail heading now shares one style (`.panel h2` in `RightPanel.module.css`).
 
 ## Looked fine
 - Menu fixed at the top with Log progress / Write as the single filled action; nothing else in the left column competes with it.

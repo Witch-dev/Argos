@@ -9,3 +9,7 @@ For a reader who belongs to clubs, the rail's "My Book Clubs" card renders once 
 ## Fix
 
 Reserve the card's place while `/clubs/mine` loads (a skeleton of the heading and a row or two, as DESIGN.md "Reserve space for late-arriving things" asks), or load the rail's cards in a fixed order that doesn't insert above ones already shown. Check with `node scripts/shoot.mjs /feed --shifts --widths 1280` using a reader in two or three clubs.
+
+## Fixed 2026-10-19
+
+`MyClubsCard` shows its heading and `Skeleton` lines while `/clubs/mine` loads instead of nothing (a failed request still leaves it out). With the reader in two clubs, a cold load of `/feed` at 1366 measured CLS 0.054 (was 0.118 for the rail alone). Test: `MyClubsCard.test.tsx`, "holds its place".
