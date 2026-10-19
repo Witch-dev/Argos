@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-19 — Lighter images: the 47 preset avatars as 240px WebP (4.1 MB → 261 KB), icons, logo and link-preview image at 256 colours (330 KB → 69 KB), the two avatar source sheets (4.6 MB) moved out of `public/` so they no longer ship → Apollon f42a39e
 - 2026-10-19 — Landing page leftovers: the link-preview image still showed the old Toffee mascot, redrawn with the winged-dog logo; `og:image` is a full URL (plus `og:url`, `og:image:alt`); the trust line adds "we don't sell your data" and download/delete, as the privacy policy backs → specs/landing-page.md, Apollon 1b1ffda
 - 2026-10-19 — Uptime alerts: UptimeRobot checks the site and the API's `/health` (and so the database) every 5 minutes and emails on an outage → DEPLOY.md "Uptime alerts"
 - 2026-10-19 — Render deploys only after CI passes (both services set to "After CI checks pass") → DEPLOY.md "Things that bit us on the first deploy"
