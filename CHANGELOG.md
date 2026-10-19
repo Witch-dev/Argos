@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-19 — Open Library ratings as a stand-in: the book page shows Open Library's average (labelled and linked, under a hairline) while a book has fewer than 10 counted ratings here and Open Library has at least 5; stored on `Books` (two columns), fetched on cache and refresh, backfilled by the refresh job (a failed fetch retried after a week); reviewer + security fixes → specs/open-library-ratings.md
 - 2026-10-19 — Lighter images: the 47 preset avatars as 240px WebP (4.1 MB → 261 KB), icons, logo and link-preview image at 256 colours (330 KB → 69 KB), the two avatar source sheets (4.6 MB) moved out of `public/` so they no longer ship → Apollon f42a39e
 - 2026-10-19 — Landing page leftovers: the link-preview image still showed the old Toffee mascot, redrawn with the winged-dog logo; `og:image` is a full URL (plus `og:url`, `og:image:alt`); the trust line adds "we don't sell your data" and download/delete, as the privacy policy backs → specs/landing-page.md, Apollon 1b1ffda
 - 2026-10-19 — Uptime alerts: UptimeRobot checks the site and the API's `/health` (and so the database) every 5 minutes and emails on an outage → DEPLOY.md "Uptime alerts"
