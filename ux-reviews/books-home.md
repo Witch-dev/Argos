@@ -14,7 +14,34 @@ Count: 1 × P1, 6 × P2, 4 × P3. Quick wins (S): 1, 2, 3, 5, 7, 8, 9, 10, 11.
 
 **All 11 fixed on 2026-10-11** (Apollon `1e90c48`) and re-checked in a browser: Paper and Dark, 1366, 900 and 375px, the drawer, and the empty reader. The Journal and Community pages, which share the changed pieces, were checked for regressions. One older problem turned up while sweeping widths: at exactly 320px the header still wraps to a third row (`bugs/header-wraps-at-320px.md`, closed as won't fix on 2026-10-12).
 
-## Findings
+## Re-review after the shelf refresh (2026-10-18)
+
+Reviewed: 2026-10-18 · Themes: all five · Widths: 375, 1280 · Reader: logged in with data (seeded `sw_mveb1frt`, see `shell-and-shared-pieces.md`) · Apollon at `be32e1c`
+Looked at: the page at the top and scrolled 700 and 1,400px at 1280 and 375, Paper and Dark (other themes on contact sheets); Tab walk at 375 Dark; `BooksHomePage.tsx`, `YearSoFarCard.tsx`, `journalShelfBook.tsx`, `Shelf.tsx`.
+
+**Summary.** It looks like Winged Words now: the reader's own strip, want-to-read and the journal standing on shelves, the year and goal in raised cards. Two things to fix: on a phone the year and goal cards fill the first screen and push the books below it, and the goal's "8 books behind pace" is the kind of pressure PRODUCT.md's fifth principle rules out.
+
+**Nielsen: 27/40 (acceptable**, 2026-10-11 not scored). Scored 2: user control (3: books six and seven of want-to-read can't be reached at 1280 without knowing to scroll, shared #3), flexibility (7: no sort or way to the whole want-to-read shelf under 8 books), help (10: what "behind pace" counts isn't said). Cognitive load: low (1 failed: *single focus* on a phone, three cards before the books). Personas: Alex (logs daily, phone): opens the app to log and sees two stat cards before a book. Riya (first-timer with a goal): reads "8 books behind pace" in October and feels behind. Sam (keyboard): nine drawer stops first (shared #1), then a clean order. Specificity: passes (the shelves, the display type).
+
+### R1. "8 books behind pace" judges the reader — P2 · S · Judgement
+**Where:** `ReadingGoalCard` / `HomeGoalCard` (`stats.goal.behindBooks_*`); Books home, the rail on every Books page, Stats.
+**What:** with 16 of 30 in mid-October the card says "8 books behind pace" in muted text under the bar, on every Books page.
+**Why it matters:** PRODUCT.md principle 5: a goal is kind, "never punished, shamed or nagged about". A count of how far behind you are is a small nag shown many times a day.
+**Fix:** say what's left, not what's missing: "14 to go by December 31" (or "About 6 a month to reach 30"); keep "On track" / "Ahead of pace" when they're true, since those are encouraging. Five languages, plural forms.
+**Status:** fixed 2026-10-18: "14 books to go by Dec 31" (what's left, `stats.goal.left*`, five languages); "On track" and "ahead" stay.
+
+### R2. On a phone the year and goal cards come before the books — P2 · M · Judgement
+**Where:** `BooksHomePage.tsx` `.yearInline` (below 1100px the year card and goal sit right after the strip); "375 at the top".
+**What:** at 375 the first screen is the strip, "Your 2026 so far" and half of the goal card; "Your want-to-read" starts at about 900px.
+**Why it matters:** PRODUCT.md: most visits are short and on a phone (log, rate, leave); the page's books should come first, the numbers after.
+**Fix:** below 640px move the two cards after the journal preview (or merge them into one compact card: "16 read this year, 16 of 30 for your goal" with the bar), keeping them above the books only from 641 to 1100px where they sit side by side.
+**Status:** fixed 2026-10-18: below 640px the year and goal cards come after the journal preview (CSS order); 641–1100px unchanged.
+
+### R3. Want-to-read hides books six and seven at 1280 — P2 · M · Rule
+Shared: `shell-and-shared-pieces.md` #3 (a regression of #6 below).
+**Status:** fixed 2026-10-18: with shared #3 (arrows and an always-there "See all").
+
+## Findings (2026-10-11)
 
 ### 1. The bell sits on top of the "Community" tab between ~660 and ~1000px: P1 · S · Rule
 **Where:** the header (`layout/Header.tsx`, `Header.module.css`), at 660–1000px wide. Same overlap in every theme.

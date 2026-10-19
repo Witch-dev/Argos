@@ -128,6 +128,7 @@ Specific versions we're building against, so there's no ambiguity during setup. 
 | Frontend testing | Vitest | **2.x** | |
 | Frontend testing | React Testing Library | **16.x** | |
 | Containerization | Docker / Docker Compose | current stable | local Postgres + optional full-stack compose |
+| Images | SkiaSharp (+ `SkiaSharp.NativeAssets.Linux.NoDependencies`) | **4.153.1** | MIT; reads a cover's main colour (`specs/reading-update-redesign.md` §4). Chosen over ImageSharp, whose Split License turns paid above US$1M revenue. Native code: the Linux package is what the Render container loads |
 
 Version policy going forward: pin exact versions in `.csproj`/`package.json` (no floating majors in production dependencies), bump deliberately rather than on every release, and note any version bump that changes behavior in the relevant spec and the changelog rather than silently upgrading mid-feature.
 
@@ -154,6 +155,7 @@ Version policy going forward: pin exact versions in `.csproj`/`package.json` (no
 - `Blocks(blocker_id, blocked_id, created_at)` — key on the pair; applies both ways once it exists: blocking deletes follows between the two readers and stops new ones, and hides each from the other in search and discovery. `DismissedSuggestions(user_id, dismissed_user_id, created_at)` — permanent "Not interested" on a suggested reader (`specs/find-readers-discovery.md`)
 - `LogContentWarnings(log_id, warning_key, severity)` — reader-reported content warnings on a review, from a fixed catalog (`specs/reviews-improvements.md`)
 - `ReviewLikes(log_id, user_id, created_at)` and `FavouriteBooks(user_id, book_id, created_at, showcase_position)` — likes on reviews, and hearted books with up to 4 picked for the profile row (`specs/reviews-improvements.md`)
+- `CoverColors(cover_url varchar(512) PK, color char(7) null, failed, attempted_at)` — a cover's main colour by address, not by book (a reading shows its chosen edition's cover); filled by `CoverColorService` for the covers of readings in progress, a limited number per paced run; null color = no usable colour, failed = retried after 7 days (`specs/reading-update-redesign.md` §4)
 - `ReadingLikes(log_id, user_id, created_at)` — likes on reading stories, separate from review likes; story comments are `Comment` rows with target type Reading (`specs/reading-stories.md`)
 - `ActivityEvents(id, user_id, type, log_id, book_id, list_id, rating, created_at, updated_at)` and `ActivityLikes(activity_event_id, user_id, created_at)` — reading history recorded as it happens (started / finished / did not finish a book, made a list) for the Feed's grouped activity rows; who may see an event is decided when the Feed is read (`specs/feed-redesign.md`)
 - `WritingLikes(writing_id, user_id, created_at)` — likes on writings, notes and titled pieces alike (`specs/feed-redesign.md`). The old `Posts` table was folded into `Writings` and dropped (migration `FoldPostsIntoWritings`).

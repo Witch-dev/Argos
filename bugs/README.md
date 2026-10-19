@@ -41,6 +41,9 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [The rail's club card shows the next checkpoint a day early west of UTC](rail-club-checkpoint-date-day-early.md) | 2026-10-18 | `CHANGELOG.md`, "Shelf refresh Phase 4: fixes" |
+| [A club says "You've finished the book" on its page and "Not started" everywhere else](club-progress-differs-between-page-and-rail.md) | 2026-10-18 | `CHANGELOG.md`, "Shelf refresh Phase 4: fixes" |
+| [Searching a common word in "My languages" finds nothing](search-common-word-in-language-finds-nothing.md) | Worked around, 2026-10-18 | `CHANGELOG.md`, "Shelf refresh Phase 4: fixes" |
 | [List collaborator invites ignore blocks](list-invites-ignore-blocks.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |
 | [Pending club invites still show a deactivated inviter's name](club-invite-shows-deactivated-inviter.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |
 | [Deleting a writing isn't one transaction](writing-delete-not-atomic.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |

@@ -39,7 +39,7 @@ Book data comes from Open Library (covers, authors, editions), so records can be
 
 ## Brand Commitments
 
-- Public name **Winged Words** (code name Argos); the winged-book logo.
+- Public name **Winged Words** (code name Argos); the logo is a winged dog whose body spells "Winged Words" (in the header in the theme's green, in its original colours on the landing page).
 - **The cream page background stays** (`#f7f3e8` in Paper), chosen by the user for reading comfort. Everything else in the look was open and is now set in `DESIGN.md`.
 - Feel: a quiet reading room, not a dashboard; warm, unhurried, a bit literary, books as physical objects; social parts feel like friends recommending books, not a feed competing for attention.
 - Voice: plain, friendly and short. Controls say what they do; errors say what happened and what to do; empty states invite the first step and link to it.

@@ -13,7 +13,32 @@ Count: 0 × P1, 5 × P2, 7 × P3. Quick wins (S): 1, 3, 5, 6, 7, 8, 9, 10, 12.
 
 **11 of 12 fixed on 2026-10-11** (Apollon `40fdd84`) and re-checked in a browser at 1366, 900 and 375px, in Paper and Dark, with the composer and writing modal. Finding 11 (a font-size scale) is a cross-page job and has its own spec: `specs/font-size-scale.md`, on the ROADMAP in Stage 3. Two small leftovers found while verifying were fixed on 2026-10-12: "Show anyway" is now 24px (44px on a phone) and a review row's cover link is no longer a tab stop. Accepted as is: "More" on a writing whose cut lands on a blank line shows a lone "…" above it.
 
-## Findings
+## Re-review after the shelf refresh (2026-10-18)
+
+Reviewed: 2026-10-18 · Themes: all five · Widths: 375, 1280 · Reader: logged in with data, following five readers (seeded `sw_mveb1frt`, see `shell-and-shared-pieces.md`) · Apollon at `be32e1c`
+Looked at: the Feed at the top and 700px down at 1280 and 375, Paper and Dark (other themes on contact sheets); Tab walk at 1280 Paper; `ActivityStrip.tsx`, `FeedItemCard.tsx`, `Shelf.tsx`.
+
+**Summary.** The refresh suits the Feed: the Readings strip on a shelf with gold unread dots, reviews as raised cards in the reading face, named people everywhere. What's left is small: a reader's day group squeezes its one book's caption to the width of the cover, and a Readings cover that fails to load shows the browser's broken-image mark.
+
+**Nielsen: 29/40 (good**, 2026-10-11 not scored). Scored 2: flexibility (7: no way to hide one reader's activity), help (10). Cognitive load: low (1 failed: *minimal choices*, Feed / Writings / Reviews tabs and All / Reviews / Writings / Activity filters on one screen, kept as decided in #4 below). Personas: Tomás (social reader): sees who read what by name, likes and comments 44px on a phone. Stress tester (slow Open Library): strip covers turn into broken-image marks while feed covers fall back to cloth. Specificity: passes.
+
+### R1. A reader's day squeezes its book's caption to the cover's width — P2 · S · Rule
+**Where:** `FeedItemCard` activity group, `Shelf size="small"`; "1280 at the top": "Metamorpl" cut mid-letter, "Stopped / reading" on two lines, under a board that runs the card's whole width.
+**Why it matters:** the book's title is the content of the row; cut text with no ellipsis looks broken.
+**Fix:** let a small shelf's captions take a fixed width larger than the cover (about 7rem), wrap titles to two lines with an ellipsis after that, and end the board after the last book instead of the full card width.
+**Status:** fixed 2026-10-18: a small shelf gives each caption 7rem (the cover keeps 4.5rem) and its board ends after the last book: "Metamorphosis / Stopped reading" in full.
+
+### R2. A Readings cover that fails to load shows a broken-image mark — P3 · S · Rule
+**Where:** `ActivityStrip.tsx:148` (a bare `<img>` with no fallback); "Dark 375": three strip tiles with Chrome's broken-image icon while the feed below shows cloth covers.
+**Fix:** draw the strip's cover through `BookCover` (or add an `onError` that swaps to the cloth cover), as everywhere else.
+**Status:** fixed 2026-10-18: the strip's cover falls back to the reader's picture when it fails to load (`StripCover`).
+
+### R3. "Made 2 lists" names two lists the group doesn't show — P3 · S · Judgement
+**Where:** the activity group "stopped reading 1 book and made 2 lists"; only the book is shown until "Show all 3".
+**Fix:** when the group mixes kinds, show one item of each kind before "Show all" (the book and a list), or name the lists in the line as links.
+**Status:** fixed 2026-10-18: a group's events without a cover (a new list) are named under the shelf before Show all.
+
+## Findings (2026-10-11)
 
 ### 1. Like, comment and the small text actions are below the minimum target size: P2 · S · Rule
 **Where:** `FeedSocialBar.tsx:58-69` (and its CSS), `WritingCard.tsx` ("… more"), `ActivityGroupCard` ("Show all N"), `FeedItemCard.tsx` ("Open review"), `WritingDetailModal` close button.

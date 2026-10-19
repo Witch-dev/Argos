@@ -6,8 +6,8 @@ These are not bugs: broken behaviour goes in `bugs/`. This folder is for "it wor
 
 | Page / flow | Reviewed | Open | Fixed | File |
 |---|---|---|---|---|
-| Books home (`/books`) | 2026-10-11 | 0 | 11 | [books-home.md](books-home.md) |
-| Community feed (`/feed`) | 2026-10-11 | 0 | 11 (+1 specced) | [community-feed.md](community-feed.md) |
+| Books home (`/books`), re-reviewed after the shelf refresh (27/40) | 2026-10-18 | 0 | 14 | [books-home.md](books-home.md) |
+| Community feed (`/feed`), re-reviewed after the shelf refresh (29/40) | 2026-10-18 | 0 | 14 (+1 specced) | [community-feed.md](community-feed.md) |
 | Font-size scale: Journal and landing page | 2026-10-12 | 0 | 5 | [font-size-scale.md](font-size-scale.md) |
 | Header, sidebar and right rail after the layout changes | 2026-10-12 | 4 | 4 | [rail-and-header-layout.md](rail-and-header-layout.md) |
 | Story viewer (Readings strip) | 2026-10-12 | 0 | 7 | [story-viewer.md](story-viewer.md) |
@@ -19,3 +19,10 @@ These are not bugs: broken behaviour goes in `bugs/`. This folder is for "it wor
 | Author page audit, baseline (13/20) | 2026-10-16 | 4 | 3 | [author-page-audit.md](author-page-audit.md) |
 | Book page (`/books/:id`), after the shelf refresh (Nielsen 25/36) | 2026-10-18 | 0 | 6 | [book-page.md](book-page.md) |
 | Profile and shelves (`/u/:username`), after the shelf refresh (Nielsen 25/36) | 2026-10-18 | 0 | 5 | [profile.md](profile.md) |
+| Shell and shared pieces (drawer focus, selected pills, row shelves, rail repeats), found in the Phase 4 sweep | 2026-10-18 | 0 | 6 (+1 no change needed) | [shell-and-shared-pieces.md](shell-and-shared-pieces.md) |
+| Journal and Stats (`/journal`, `/stats`) (28/40) | 2026-10-18 | 0 | 5 | [journal-and-stats.md](journal-and-stats.md) |
+| Lists (`/lists`, browse, a list) (26/40) | 2026-10-18 | 0 | 5 | [lists.md](lists.md) |
+| Search (`/search`) (28/40) | 2026-10-18 | 0 | 2 | [search.md](search.md) |
+| Clubs (`/clubs`, a club) (25/40) | 2026-10-18 | 0 | 4 | [clubs.md](clubs.md) |
+| Settings (`/settings`, all tabs) (31/40) | 2026-10-18 | 0 | 2 | [settings.md](settings.md) |
+| Landing page (`/`, signed out) (31/36) | 2026-10-18 | 0 | 3 | [landing.md](landing.md) |

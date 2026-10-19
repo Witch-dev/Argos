@@ -103,7 +103,7 @@ A warm reading room: the cream page stays, books stand on a shelf, and everythin
 Roles, not swatches; each keeps one meaning in every theme. Values above are Paper; the other four themes (White, Warm Gray, Sepia, Dark) have their own value per role in `index.css`, chosen on the mockup's "five themes" board (2026-10-16) and contrast-checked (text and links 4.5:1 on page, raised, sunken and frame; stars and the heart 3:1). Dark is designed for evening reading on a phone, not inverted: a warm near-black page (#1b1a17), raised surfaces lighter than it, soft ivory text (#e8e3d7) rather than white, a lighter green (#86bba3) with dark text on buttons. A `designGuards` test checks every theme defines every role.
 
 ### Primary
-- **Bookbinding green** (#2e5e4e): actions, links, the current selection, focus. **The One Green Button Rule:** one filled green button per view; the green is never decoration.
+- **Bookbinding green** (#2e5e4e): actions, links, the current selection, focus, and the header's logo (its one use that isn't an action, chosen by the user 2026-10-18). **The One Green Button Rule:** one filled green button per view; apart from the logo, the green is never decoration.
 - Green wash (#e7efe9) behind the selected menu item and "Following"-type states.
 
 ### Secondary
@@ -112,7 +112,7 @@ Roles, not swatches; each keeps one meaning in every theme. Values above are Pap
 
 ### Neutral
 - **Page** (#f7f3e8): the reading background. **The Unchanged Page Rule:** it never changes in Paper.
-- **Frame** (#efe7d6): header and sidebar tint, a second neutral layer so the frame has a colour of its own.
+- **Frame** (#efe7d6): the header's tint, a second neutral layer so the frame has a colour of its own (the sidebar sits on the page colour since 2026-10-18).
 - **Frame well** (#e4dac6; added 2026-10-16 in Phase 2): a step deeper than the frame, for things sunk into it: the Books/Community track and the hover tint of header buttons and sidebar rows. `--sunken` is nearly the frame colour in the light themes, so it would vanish there.
 - **Raised** (#fffdf8) cards, **Sunken** (#f1eadc) wells and chips, **Hairline** (#ece4d6) separators.
 - **Ink** (#1f1d1a) text, **Muted ink** (#6b665e) labels and metadata, never for text a reader must act on.
@@ -185,7 +185,7 @@ Raised for main blocks, sunken for secondary ones (see Elevation). Padding 20–
 44px, 10px corners, a persistent visible label (never placeholder-only), inline errors beside the field, the green focus ring.
 
 ### Navigation
-Header and sidebar in the frame tint, one L around the cream page: no divider lines, and the sidebar's tint runs on to the window's left edge. Sidebar items: drawn icon + label, 44px rows, 10px corners; the selected one in a green-wash pill with green text; hover in the frame well. Header: logo, the Books/Community segmented control (frame-well track, raised selected segment), search with an icon, bell, avatar with name where there is room. Height `--header-height` (4.5rem; 7rem on a phone, 3.5rem there when signed out).
+The header in the frame tint, the sidebar on the page colour, as on the approved mockup (changed 2026-10-18: a tinted sidebar running to the window's left edge made wide windows lopsided); no divider lines. **The Symmetry Rule:** nothing in the shell reaches one edge of the window without the same on the other. Sidebar items: drawn icon + label, 44px rows, 10px corners; the selected one in a green-wash pill with green text; hover in the frame well. Header: the logo alone (the lettered winged dog, 62px tall, 46px on a phone, filled with the theme's bookbinding green so its "WINGED WORDS" reads; no name in text beside it, which said the name twice; chosen 2026-10-18), the Books/Community segmented control (frame-well track, raised selected segment), search with an icon, bell, avatar with name where there is room. Height `--header-height` (4.5rem; 7rem on a phone, 3.5rem there when signed out).
 - **Phone (chosen 2026-10-16, "Books / Community on a phone" board, option A):** row 1 is menu, logo, search field and bell; row 2 is the switch, full width. The sidebar is a drawer behind the menu button.
 - **Right rail:** each block a raised card with 16px padding (narrower than the 20–24px of page cards, because the rail is 17rem wide); rows inside are plain rows with a sunken hover, never boxes of their own.
 

@@ -284,8 +284,9 @@ In rough order. None of these block launch.
 4. **Buddy reads** with page-locked comments.
 5. **Mood & trope browsing**, "Popular this week", genre pages.
 6. **Author pages** (`specs/authors.md`, specced 2026-10-15): author page and linked author names, then search + "your history with this author", then follow and new-release alerts, then favourites and quotes. Four phases; Phase 1 is size L (new tables, backfill). **Phase 1 done 2026-10-15** (built ahead of its place in the order, at the user's request). **Phase 2 done 2026-10-15, Phase 3 (follow, new-release alerts) done 2026-10-16, Phase 4 (favourites, quotes) done 2026-10-16**; all four phases done.
-7. **Shelf design refresh** (`specs/shelf-design-refresh.md`, `DESIGN.md`, approved 2026-10-16 at the user's request): cream page stays, bookbinding green accent, raised cards, drawn icons, covers on a shelf. Foundations first, then the shell, then pages one by one. **Phases 0–3 done 2026-10-18** (the landing page last); Phase 4 (verification sweep) next.
-8. Everything else in `FUTURE-IDEAS.md`, ordered by what beta and launch users ask for most.
+7. **Shelf design refresh** (`specs/shelf-design-refresh.md`, `DESIGN.md`, approved 2026-10-16 at the user's request): cream page stays, bookbinding green accent, raised cards, drawn icons, covers on a shelf. Foundations first, then the shell, then pages one by one. **Done 2026-10-18**: Phases 0–3, then Phase 4's review sweep and fixes; afterwards the sidebar moved onto the page colour and the header logo became the lettered dog alone, in green.
+8. **Reading update redesign** (`specs/reading-update-redesign.md`, specced 2026-10-18 from the user's mockups): the story viewer as the book on its shelf with a journey line, named likes and quick replies; then the background in the book's colour; then a progress history for the line's earlier points. Three phases, each size M.
+9. Everything else in `FUTURE-IDEAS.md`, ordered by what beta and launch users ask for most.
 
 ---
 
