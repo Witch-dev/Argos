@@ -200,7 +200,7 @@ Both phases were built on 2026-10-06. Phase 2 is **switched off** (`Landing:Show
 - **Highlight demo (§3):** the highlighted sentence is a `<mark role="button" tabIndex={0}>` that handles Enter and Space. It was a real `<button>` at first, but the browser check showed a button can't wrap across lines inside a sentence.
 - **Trust line (§2.5)** for now: "Independent, and not owned by Amazon. Toffee is made by readers, for readers. No ads." The "we don't sell your data" claim waits until the privacy policy exists.
 - **Footer (§2.7):** has no privacy or terms links yet, since those pages don't exist. They're added in Stage 4.
-- **`og:image` (§5)** is a relative URL (`/og-image.png`) until the site has a domain.
+- **`og:image` (§5)** was a relative URL (`/og-image.png`) until the site had a domain. **Since 2026-10-19** it is `https://wingedwords.app/og-image.png`, with `og:url` and `og:image:alt`; the image itself was redrawn then, because it still showed the old Toffee mascot (now the winged-dog logo in Paper's green over the pitch in Literata, shot from HTML with Playwright at 1200×630; the logo comes from the 1610×977 `wg-image.png`, cut out of its painted checkerboard background by colour, since `logo-mark.png` is only 276 px wide).
 - **Phase 2 eligibility (§6).** Today the rules are:
   - Public visibility only.
   - No spoiler flag and no inline `||` spoiler text.
@@ -282,7 +282,7 @@ Kept as is, on purpose:
   - the network tab shows only the `registration-status` call to the API, plus `landing/showcase` once Phase 2 was added.
 - [x] Browser pass, logged in: `/` goes straight to the Feed with no landing-page flash, including after a hard reload.
 - [ ] Paste the site address into a chat app or a link-preview checker to confirm the preview shows (once Stage 4 has a public address).
-- [ ] Check the trust line against the privacy policy (Stage 4).
+- [x] Check the trust line against the privacy policy (Stage 4). **Done 2026-10-19:** the policy backs "no ads" and "we don't sell your data", so the line now says both ("not owned by Amazon" stays out, as it was dropped before).
 - [x] `reviewer` and `security-review` agents, then fix their findings (2026-10-06, see "As built").
 - [x] `CHANGELOG.md` entry. `ROADMAP.md` Stage 4 item annotated (not ticked: footer links, trust-line check and real link preview wait for the live site).
 
@@ -320,4 +320,4 @@ Kept as is, on purpose:
 ### Added later (when the feature they describe ships)
 
 - [ ] After Roadmap Stage 2 (import) ships: "Bring your books" section and a "Coming from Goodreads?" link (§7). Use the import's real numbers.
-- [ ] After Roadmap Stage 6 (export and delete) ships: extend the trust line (§7).
+- [x] After Roadmap Stage 6 (export and delete) ships: extend the trust line (§7). **Done 2026-10-19:** "…you can download all of it or delete your account whenever you like" (not "in one click": deleting asks for the password and has a 30-day grace period).

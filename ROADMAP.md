@@ -163,8 +163,8 @@ Small things that are cheaper now than later.
 - [ ] Landing page for logged-out visitors at `/`: pitch, mascot, four feature cards built from live mini-components, a join button that follows the invite-only switch, and link-preview tags. Do this after the privacy policy exists, so the page's trust line can be checked against it. *Size M.*
   - *Built and verified 2026-10-06.* Three things are left for this stage, once the site is live:
     - ~~add privacy and terms links to the footer~~ (done 2026-10-11);
-    - check the trust line against the privacy policy;
-    - make `og:image` an absolute URL and test a real link preview.
+    - ~~check the trust line against the privacy policy~~ (done 2026-10-19: it now also says "we don't sell your data" and that you can download or delete everything);
+    - ~~make `og:image` an absolute URL~~ (done 2026-10-19, with a redrawn image: the old one still said Toffee); **left: test a real link preview** once deployed (paste `https://wingedwords.app` into a chat), then tick.
 - [x] **Request an invite** (`specs/invite-requests.md`): a "Request an invite" button on the landing page, a short form (email + optional note), and an admin page where you turn a request into an emailed invite. Adds the minimal admin role Stage 7 builds on. *Size M.* **Done 2026-10-19.** On deploy, set `Admin__UserIds__0` (`DEPLOY.md`, "Admin role").
 
 **Legal basics** (plain-language templates are fine at this size; not legal advice)

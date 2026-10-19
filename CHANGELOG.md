@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-19 — Landing page leftovers: the link-preview image still showed the old Toffee mascot, redrawn with the winged-dog logo; `og:image` is a full URL (plus `og:url`, `og:image:alt`); the trust line adds "we don't sell your data" and download/delete, as the privacy policy backs → specs/landing-page.md, Apollon 1b1ffda
 - 2026-10-19 — Uptime alerts: UptimeRobot checks the site and the API's `/health` (and so the database) every 5 minutes and emails on an outage → DEPLOY.md "Uptime alerts"
 - 2026-10-19 — Render deploys only after CI passes (both services set to "After CI checks pass") → DEPLOY.md "Things that bit us on the first deploy"
 - 2026-10-19 — Error tracking with Sentry on the API and the site: errors only, reports stripped of tokens, cookies, addresses, queries and bodies (checked against a fake Sentry server), the site loads Sentry only when `SENTRY_DSN` is set; the privacy policy names Sentry and US storage → DEPLOY.md "Error tracking (Sentry)", Apollon 648e7a8
