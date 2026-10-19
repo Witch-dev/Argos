@@ -70,6 +70,41 @@ curl -sI http://wingedwords.app | head -3
 ```
 The first two each print `strict-transport-security: max-age=31536000; includeSubDomains`. The third prints a `301` or `308` redirect to `https://`.
 
+## Error tracking (Sentry)
+
+Crashes on the API and the site are reported to Sentry (free Developer plan, organization `winged-words`, data stored in the **US**), which emails you the first time each new kind of error appears. Two projects: `wingedwords-api` (ASP.NET Core) and `wingedwords-web` (React). Both use **error monitoring only**: no tracing, logs, metrics or session replay, and no linked GitHub repo. The org's "generative AI features" switch is off, and **Settings → Security & Privacy → "Prevent Storing of IP Addresses"** is on (a second guard: the code already sends no addresses).
+
+**What a report carries:** the error and where in the code it happened, the deployed commit (`RENDER_GIT_COMMIT`), the page or API path, the browser (User-Agent) and language, and the clicks, page changes and API calls just before it. **Never** the reader's account, cookies, tokens, IP address, query strings, request bodies or console lines. The privacy policy's error-tracking paragraph says exactly this; change the code and the policy together. Code: `Configuration/ErrorTracking.cs` (API, which strips each report in `Scrub`), `web/src/lib/errorTracking.ts` (site).
+
+**Where the DSNs live:** a DSN is the address a project sends its reports to. It isn't secret (the site's is visible in `config.js` to anyone).
+- API: `Sentry:Dsn` in `src/Argos.Api/appsettings.Production.json`. Development and the tests have it empty, so they send nothing. Nothing to set on Render.
+- Site: the environment variable **`SENTRY_DSN`** on the site service in Render, set to the `wingedwords-web` DSN (Sentry → Settings → Projects → wingedwords-web → Client Keys). `docker/entrypoint.sh` writes it into `config.js` and adds Sentry's address to the CSP's `connect-src`; it refuses to start with anything that isn't a Sentry DSN. Without it, the site never downloads Sentry at all.
+
+**Check after deploying:**
+1. Open `https://wingedwords.app`, open the browser's developer tools → Console, and run `setTimeout(() => { throw new Error('Sentry check from the site') })`. Within a minute it appears in Sentry under `wingedwords-web` → Issues, with the commit as its release. Resolve it afterwards.
+2. In the same developer tools → Network, check the report went to `o4512284441706496.ingest.us.sentry.io` and wasn't blocked by the CSP (no red CSP error in the Console).
+3. The API has no button that crashes on purpose; its first real error is the check. Its scrubbing was verified locally on 2026-10-19 against a fake Sentry server: a crash carrying a login token, a cookie, an `X-Forwarded-For` address and a search query reached it with none of the four.
+
+**If Sentry gets noisy or its quota fills** (5,000 errors a month on the free plan): resolve or ignore the issue in Sentry; to stop sending altogether, unset `SENTRY_DSN` on the site, or set `Sentry__Dsn` to an empty value on the API service.
+
+## Admin role (invite requests)
+
+The admin page `/admin/invite-requests` (where "Request an invite" submissions land) is open only to accounts listed in `Admin:UserIds`. The list holds **account ids, not usernames**: a username can be given up and taken by someone else, an id never changes hands (`specs/invite-requests.md` §3.1).
+
+1. Find your account id: log in on `https://wingedwords.app`, open the browser's developer tools → Network, reload, click the `me` request and copy `id` from its response. (Opening `/api/auth/me` directly doesn't work: it needs the login token, which only the page holds.)
+2. On the API service in Render, set `Admin__UserIds__0` to that id and redeploy (the role is synced at startup: everyone listed gets it, anyone not listed loses it).
+3. Reload the site: an **Invite requests** link appears in the account menu. Your account must have a confirmed email, or the page is not found.
+
+Removing someone: delete their entry and redeploy; it takes effect at the restart, not when their login expires. With `Registration__InviteOnly=false` the request form and its endpoint disappear (404), but the admin page still lists old requests.
+
+## Uptime alerts (UptimeRobot)
+
+A free UptimeRobot account (signed up with your Gmail) checks two addresses every 5 minutes and emails you when one stops answering, and again when it's back:
+- `https://wingedwords.app` (the site)
+- `https://api.wingedwords.app/health` (the API; `/health` also checks the database, so a database outage shows here too)
+
+**While the API is on Render's free plan**, which sleeps after 15 minutes without visits, the 5-minute checks keep it awake (one always-on service fits in the free 750 hours a month). If a check ever lands while it's waking (30–60 s) and reports a false "Down", raise the monitor's request timeout to 60 seconds.
+
 ## How the live site is set up on Render (first deploy, 2026-10-13)
 
 Everything is in one Render account, region **Virginia (US East)**. The domain is at Porkbun, email sending at Resend.
@@ -97,13 +132,14 @@ Everything is in one Render account, region **Virginia (US East)**. The domain i
 | `Email__Port` | **`2587`** (see below) |
 | `Email__FromAddress` / `Email__ReplyToAddress` | `hello@wingedwords.app` |
 | `Turnstile__SiteKey` / `Turnstile__SecretKey` | not set yet (bot check off; see its section) |
+| `Admin__UserIds__0` | your account id (see "Admin role" below). More admins: `Admin__UserIds__1`, … |
 
 On the site service: `API_BASE_URL` = `https://api.wingedwords.app/api` (a plain https URL; the container refuses anything else).
 
 **Things that bit us on the first deploy**
 - **Email timed out ("Sending … failed (TimeoutException); retrying").** Render's free instances block the standard outgoing SMTP ports 25, 465 and 587. Resend also listens on **2587** (STARTTLS, same as 587) and **2465** (implicit TLS, needs `Email__UseSsl=true`); `Email__Port=2587` works. Paid instances aren't blocked, but 2587 keeps working there too.
 - **Sign-up or login ended in "something went wrong" and the console showed `GET /auth/me` → 401.** Production had no `Jwt:Issuer` / `Jwt:Audience`, so tokens were issued with blank labels and rejected on the next request. Both are now set in `appsettings.json`, and the API refuses to start if either is empty.
-- **Render deploys on every push to `main`**, whether or not CI passed. Switching each service to *After CI checks pass* (Settings → Build & Deploy → Auto-Deploy) is still to do.
+- **Render deployed on every push to `main`**, whether or not CI passed. Since 2026-10-19 both services (site and API) are set to *After CI checks pass* (Settings → Build & Deploy → Auto-Deploy): a push goes live only once the GitHub Actions run is green, and a red run deploys nothing. To ship without waiting (an urgent fix while CI is down), use *Manual Deploy* on the service.
 - **Resend: leave click and open tracking off.** Tracking rewrites the confirmation and reset links through a third-party address, and the privacy policy doesn't mention it.
 
 **First-account recipe** (no readers exist, so nobody can create an invite): set `Registration__InviteOnly` to `false`, register, set it back to `true`, and check that the confirmation email arrives.

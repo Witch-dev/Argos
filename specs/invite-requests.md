@@ -1,6 +1,6 @@
 # Feature Spec — Request an invite
 
-**Status:** 🚧 Phase 1 (backend) done 2026-10-19; Phase 2 (frontend) next. Roadmap Stage 4 (before the closed beta starts).
+**Status:** ✅ Done 2026-10-19 (all three phases). Roadmap Stage 4 (before the closed beta starts). Left for deploy: set `Admin__UserIds__0` on Render (`DEPLOY.md`, "Admin role").
 
 ## 1. Problem
 
@@ -132,24 +132,37 @@ A new method, `AccountEmails.InviteFromRequest(email, language, code)`, built wi
   - **A few milliseconds' timing difference** between an existing reader's address and a new one. It's weaker than what sign-up with an invite already reveals, and each try needs a solved bot check.
   - **The invite email can fail after the request is marked invited** (in-memory queue, 3 retries). The admin page shows the link to copy (Phase 2 task).
 
-### Phase 2 — Frontend
+### Phase 2 — Frontend ✅ 2026-10-19
 
-- [ ] Read `PRODUCT.md`, `DESIGN.md`; a short plan per the `web-design` skill
-- [ ] API client + hooks: `requestInvite`, `useAdminInviteRequests`, `inviteRequest`, `dismissRequest`; `isAdmin` in the auth context
-- [ ] `/request-invite` page (form, bot check, thank-you, redirects)
-- [ ] Admin page: after Invite, say the email is on its way and show the link to copy (the send happens in the background and can fail; the review noted the admin otherwise gets no sign)
-- [ ] Landing page second button + new beta line; register page "No invite? Request one"
-- [ ] `/admin/invite-requests` page and the admin-only menu link
-- [ ] Privacy policy section
-- [ ] Every new string in all five locale files
-- [ ] Tests: form sends and shows the thank-you; buttons follow `inviteOnly`; admin page lists, invites, copies, dismisses (with confirm); admin link hidden for non-admins
-- [ ] Screenshot critique round (`scripts/shoot.mjs`) in all five themes and at phone width, then `design-reviewer`
-- [ ] Review: `reviewer`
+- [x] Read `PRODUCT.md`, `DESIGN.md`; a short plan per the `web-design` skill
+- [x] API client + hooks: `requestInvite`, `getInviteRequests`, `inviteRequest`, `dismissRequest` (`api/inviteRequests.ts`); `isAdmin` on the current user
+- [x] `/request-invite` page (form, bot check, thank-you, redirects; a status that can't be read shows an error and Try again instead of redirecting)
+- [x] Admin page: after Invite, a notice says the email is on its way and shows the link with Copy link
+- [x] Landing page second button (opening and closing) + new beta line; register page "No invite? Request one" (not shown to someone who came with an invite link)
+- [x] `/admin/invite-requests` page and the admin-only sidebar link (new drawn `mail` icon)
+- [x] Privacy policy section (after "Deleting your account"), the Turnstile sentence now names the request form, date moved to October 19
+- [x] Every new string in all five locale files (new `requestInvite.json` and `admin.json`)
+- [x] Tests: `RequestInvitePage.test.tsx`, `admin/AdminInviteRequestsPage.test.tsx`, additions to `LandingPage`, `RegisterInvite`, `SectionNav` (admin link) and `LegalPage` tests
+- [x] Screenshot critique round (`scripts/shoot.mjs`) in Paper, Dark and Sepia (German) at 1280 and 375, then `design-reviewer`
+- [x] Review: `reviewer`
 
-### Phase 3 — Verification & docs
+*Built differently from §3.6, on purpose:* **Invite** is a green outline (`btn-soft`), not filled: a list of rows would otherwise be a column of green buttons (DESIGN.md's One Green Button Rule). The status control is the shared `Segmented`, not pills. Dismiss is a quiet button that asks inline ("Dismiss this request? They won't be told…"), like removing a goal.
 
-- [ ] Tests, build, lint, `precheck.ps1`
-- [ ] Browser pass (`browser-check`): logged out → landing → Request an invite → thank-you; as admin → invite → email in Mailpit → link → sign up → the row shows "Joined"
-- [ ] `DEPLOY.md`: set `Admin__UserIds__0` on Render (your account id)
-- [ ] SPEC.md §7: `Invites` (nullable `InviterId`) and `InviteRequests`
-- [ ] CHANGELOG, roadmap box, Stage 7 admin-role wording
+#### Review pass (2026-10-19)
+- [x] Critique round changed: the note was 17px reading type and outranked the email, so it is now a step smaller; `FoldedText`'s fade was page-coloured and showed as a band on the raised card, so it takes `--folded-fade` (and `--folded-size`) from the page; the landing beta line no longer leaves one word on its last line; the German beta line reworded.
+- [x] Fixed (reviewer):
+  - **"Show more" could skip a request** after an invite or dismiss (the server pages by offset, the row was only removed in the cache). The pending list is now read again after each answer.
+  - **A status that failed to load redirected to /register** (it reads as "sign-up open"). Now an error with Try again.
+  - **The "Invite sent" notice came back** after switching tabs. Cleared on a tab change.
+  - **A 404 on Invite/Dismiss** (request gone, or no longer admin) only showed a message; the list is now read again, which turns the page into not-found for a removed admin.
+  - **The thank-you was announced twice** (a live region and the focused heading). The live region is gone.
+- [x] Fixed (design-reviewer, disposition **ship** after one fix round): a long email split mid-word on a phone; it now breaks before the @ or after a dot.
+- [x] Left as is (design-reviewer): the thank-you stays a plain heading and line, like forgot-password's "sent" screen. Its 44px and contrast notes were already met (`.btn-small` is 44px under 640px; Dismiss is the accent green).
+
+### Phase 3 — Verification & docs ✅ 2026-10-19
+
+- [x] Tests, build, lint, `precheck.ps1` (`PRECHECK_ALL=1`: 995 backend, 897 web tests)
+- [x] Browser pass (`browser-check`): logged out → landing → Request an invite → thank-you; as admin → invite → email in Mailpit → link → sign up → the row shows "Joined". Side API invite-only with `Admin__UserIds__0` set; the email's link pre-filled the code on `/register`; the row checked at 1280 and 375. *Fixed on the spot:* a joined row also said "Already has an account" (the invitee's own new account), which read as a warning; the tag is now hidden once the invite is used (test added).
+- [x] `DEPLOY.md`: `Admin__UserIds__0` in the Render table and an "Admin role" section (finding your id, adding and removing admins)
+- [x] SPEC.md §7: `Invites` (nullable `InviterId`) and `InviteRequests`
+- [x] CHANGELOG, roadmap box, Stage 7 admin-role wording (and the "No admin role" gap row)

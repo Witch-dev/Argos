@@ -16,7 +16,7 @@ Problems found by checking the code and docs on 2026-10-06. Each one is already 
 |---|---|---|---|
 | **No automatic tests on push** | `Apollon/.github/workflows/` exists but is empty. SPEC.md §9 Phase 0 planned CI, but it was never set up. | A change that breaks something is only caught if someone remembers to run the tests by hand. That's risky once real users depend on the site. | Stage 0 |
 | **The account spec is out of date** | `specs/app-hardening.md` already shipped refresh tokens, lockout, rate limits and username rules. `specs/account-system.md` still lists them as to-do, with different numbers: 15-minute vs 60-minute login token, 3–20 vs 3–30 character usernames, and a cookie vs `localStorage` for the refresh token. | Following the account spec as written would rebuild finished work and quietly change settings that already work. | Stage 0 (update the spec), then Stage 1 and Stage 4 (cookie move) |
-| **No admin role** | Identity's role tables exist (`IdentityRole<Guid>` in `Program.cs`), but no role is ever created or checked. Nothing in the app is admin-only. | Reports and moderation need someone allowed to hide content or suspend an account. | Stage 7 |
+| **No admin role** | Identity's role tables exist (`IdentityRole<Guid>` in `Program.cs`), but no role is ever created or checked. Nothing in the app is admin-only. *(The role itself shipped 2026-10-19 with invite requests; only that page uses it.)* | Reports and moderation need someone allowed to hide content or suspend an account. | Stage 4 (role), Stage 7 (moderation) |
 | **Everyone's shelves are public** | `GET /api/logs?userId=` returns any reader's shelves, reading progress and progress notes to anyone, even logged-out visitors. Only reviews have privacy settings. | Strangers arriving at public launch could see everything every reader has logged. | Stage 8 (must ship before public launch) |
 | **Blocks don't reach likes and comments** | Blocking hides people from search, discovery, follows and feeds, but a blocked reader can still like and comment on the blocker's things. This includes `bugs/blocks-not-applied-between-commenters.md`. | The 2026-10-03 security review named this as the most likely way a blocked person keeps reaching someone. | Stage 0 (the bug), Stage 7 (the full fix) |
 | **Shipped features never checked in a browser** | The book clubs, lists and reviews improvements are all marked "manual browser pass still outstanding". | They pass their tests, but nobody has looked at them on screen, at phone width or in every theme. | Stage 0 |
@@ -154,9 +154,9 @@ Small things that are cheaper now than later.
 
 **Safety nets**
 - [ ] Database backups: Render Postgres's paid plan backs up automatically. Do **one real test restore** into a scratch database. A backup that has never been restored doesn't count.
-- [ ] Error tracking (Sentry, free plan) on the API and the site.
-- [ ] Uptime alert (UptimeRobot, free).
-- [ ] **Deploy only after CI passes.** On each Render service (site and API), set auto-deploy to "After CI checks pass" instead of "On commit", so a push to `main` goes live only once the GitHub Actions tests are green; a red build never reaches readers. Note it in `DEPLOY.md`.
+- [ ] Error tracking (Sentry, free plan) on the API and the site. **Built and pushed 2026-10-19** (Apollon 648e7a8: errors only, reports stripped of anything about the reader; `SENTRY_DSN` set on the site service; the privacy policy names Sentry and US storage). Left: once deployed, the check in `DEPLOY.md` ("Error tracking (Sentry)"), then tick.
+- [x] Uptime alert (UptimeRobot, free). **Done 2026-10-19:** the site and `api.wingedwords.app/health` (which also checks the database) every 5 minutes, alerts by email (`DEPLOY.md`, "Uptime alerts").
+- [x] **Deploy only after CI passes.** On each Render service (site and API), set auto-deploy to "After CI checks pass" instead of "On commit", so a push to `main` goes live only once the GitHub Actions tests are green; a red build never reaches readers. Note it in `DEPLOY.md`. **Done 2026-10-19** on both services (`DEPLOY.md`, "Things that bit us on the first deploy").
 - [ ] **Real-phone check on the live site** (carried over from Stage 3): walk `testing/phone.md` on a real phone against `wingedwords.app`, including P18/P19 (home-screen install over HTTPS). Fix what fails, then tick Stage 3's last box.
 
 **Landing page** (`specs/landing-page.md`, Phase 1)
@@ -165,10 +165,10 @@ Small things that are cheaper now than later.
     - ~~add privacy and terms links to the footer~~ (done 2026-10-11);
     - check the trust line against the privacy policy;
     - make `og:image` an absolute URL and test a real link preview.
-- [ ] **Request an invite** (`specs/invite-requests.md`): a "Request an invite" button on the landing page, a short form (email + optional note), and an admin page where you turn a request into an emailed invite. Adds the minimal admin role Stage 7 builds on. *Size M.*
+- [x] **Request an invite** (`specs/invite-requests.md`): a "Request an invite" button on the landing page, a short form (email + optional note), and an admin page where you turn a request into an emailed invite. Adds the minimal admin role Stage 7 builds on. *Size M.* **Done 2026-10-19.** On deploy, set `Admin__UserIds__0` (`DEPLOY.md`, "Admin role").
 
 **Legal basics** (plain-language templates are fine at this size; not legal advice)
-- [x] Privacy policy at `/privacy`, in all five languages. **Written 2026-10-11** from the facts below. Before going live, re-read it for three things: backup retention (it says only that backups are overwritten; add the number once Render's plan is chosen), the error-tracking paragraph (true only once Sentry is wired) and that `hello@wingedwords.app` really receives mail. Original task: what's stored, why, how to export and delete it. **Facts to put in it (built in Stage 6, 2026-10-11):**
+- [x] Privacy policy at `/privacy`, in all five languages. **Written 2026-10-11** from the facts below. Before going live, re-read it for three things: backup retention (it says only that backups are overwritten; add the number once Render's plan is chosen), the error-tracking paragraph (true only once Sentry is wired; **rewritten 2026-10-19** with Sentry wired: names it, US storage, what a report carries) and that `hello@wingedwords.app` really receives mail. Original task: what's stored, why, how to export and delete it. **Facts to put in it (built in Stage 6, 2026-10-11):**
   - **Download:** Settings → Privacy & data → "Download my data" gives a zip of CSV files: profile, book log (Goodreads' columns), lists, writings, comments, club messages, follows and favourites. Up to 5 an hour per reader.
   - **Delete:** Settings → Privacy & data → "Delete my account", password required. The account is hidden at once and every session ends. For 30 days the reader can log in and cancel, and everything comes back. After 30 days it is erased for good, with the reader's own logs, reviews, lists, writings, likes, follows and sign-in records.
   - **Comments:** the reader chooses at deletion time to keep their comments and club messages, shown as "Deleted user" with no profile link, or to have them erased too. Comments other readers left on the erased reader's own writings, lists and reviews are erased with them.
@@ -218,7 +218,7 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 
 **Needs spec** (one spec covering all of this).
 
-- [ ] **A site admin role.** Nothing in the app is admin-only today. Identity's role tables exist but are unused. Moderation needs someone allowed to act. *The role itself (config-driven, checked per request) comes earlier with `specs/invite-requests.md`; Stage 7 reuses it.*
+- [ ] **A site admin role.** *Partly done 2026-10-19 with `specs/invite-requests.md`:* the `Admin` Identity role exists, synced at startup from `Admin:UserIds` (account ids), checked from the database on every request by `[RequireAdmin]` (404 for everyone else, confirmed email required), and `isAdmin` on the current user drives an admin-only menu link. Its only page so far is Invite requests. Left for Stage 7: the moderation actions and screens below use the same role and filter; decide whether moderators need a second, smaller role.
 - [ ] **Report** a review, writing, comment, list or user, with a reason.
 - [ ] **Admin queue**: see reports, hide content, suspend an account.
 - [ ] **Review-bombing rules:**

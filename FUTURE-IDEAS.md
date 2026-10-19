@@ -54,6 +54,11 @@ Not prioritized, not designed, not committed to — just "don't forget this."
 - **Component-quality check from `components.build`**: raised 2026-10-11, lower priority than the `ux-review` skill above. Vercel's spec (github.com/vercel/components.build) is about building reusable components, and most of it doesn't fit a single app (registry/npm publishing, polymorphism and as-child, controlled/uncontrolled state hooks, TypeScript generics). Two small things are worth keeping:
   - **Composition and a clear API** as a checklist item for shared components (`BookCard`, `Avatar`, `StateMessage`): small pieces that nest, one `className` merged with the base classes, no `openClassName`-style props per state. Could go in `new-react-feature` or the `reviewer` agent's checklist.
   - **`data-state` / `data-loading` attributes** for styling component states, instead of state-specific class names. Only for new components if wanted; we use CSS Modules and retrofitting is churn for little gain.
+- **Open Library ratings on the book page**: raised 2026-10-19. The user chose Open Library as the source of outside ratings (Goodreads closed its API in 2020; StoryGraph has none; Google Books and Hardcover would be a second outside service, against SPEC §5). Today Open Library ratings (`ratings_average`, `ratings_count` from search) only sort "Highest rated" in book search and author works (`BookService.Bayesian`); they are never shown. Notes for the spec:
+  - **Endpoint:** `GET /works/{id}/ratings.json` gives `summary.average`, `summary.count` and `counts` per star (1–5). Add it to `OpenLibraryClient` with the usual caching (ratings change slowly, a day or more is fine).
+  - **Keep it apart from ours:** our readers rate 1–10 (half stars) and Open Library 1–5. Show it as its own labelled line ("Open Library: 4.1 ★ from 312 ratings"), never mixed into the Argos average or "Highest rated" in our own data.
+  - **Few ratings:** many works have a handful of ratings or none. Hide the line under a minimum count (5?) rather than show "5.0 from 1 rating".
+  - **Open questions:** shown only on the book page, or also when the book has no Argos ratings yet? Show the star breakdown or only the average? Store it on `Book` (refreshed with the work) or fetch live and cache?
 
 ## From the product analysis (2026-10-06)
 
