@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-20 — A new page opens at its top instead of the old page's scroll position (a book from the landing showcase, `/privacy` from a footer); Back and Forward still return to where the reader was → bugs/new-page-opens-scrolled-down.md
 - 2026-10-20 — Landing page: the top bar's logo appears only once the opening's dog scrolls away (one logo at a time, at every width); tighter spacing between the strengths, the middle one on a sunken well; a bigger, centred opening shelf; "Page 214 of 380" on one line on phones → ux-reviews/landing.md #4–7
 - 2026-10-19 — Sentry checked live: a test error from wingedwords.app reached Sentry; DEPLOY.md notes that ad blockers block reports (`ERR_BLOCKED_BY_CLIENT`) → ROADMAP.md Stage 4, DEPLOY.md "Error tracking (Sentry)"
 - 2026-10-19 — Live checks passed: HSTS on the site and API, HTTP redirects to HTTPS, and the landing page link preview works; both Stage 4 boxes ticked → ROADMAP.md Stage 4, DEPLOY.md "HTTPS and HSTS"
