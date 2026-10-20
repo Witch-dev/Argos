@@ -1,5 +1,7 @@
 # Avatar picker
 
+> **Art replaced 2026-10-19:** the 47 AI-made pictures (dachshunds and reading animals) and their keys are gone, replaced by 33 public-domain pictures with captions. See `specs/public-domain-avatars.md`. The storage and validation design below still holds.
+
 ## Problem
 
 Users currently have no way to set a profile picture at all. `ApplicationUser.AvatarUrl` exists and flows through to the frontend `Avatar` component, but nothing ever writes it — `UsersController` only reads it back. We want users to be able to choose a profile picture from a fixed set of preset avatar illustrations. No file upload, no custom images.
