@@ -24,7 +24,6 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Priority | Size | Area |
 |---|---|---|---|
-| [Opening a public club from Discover is a dead end for non-members](public-club-dead-end-for-non-members.md) | P1 | M | Clubs, backend + frontend |
 | [Two account erasures at once can both create the "Deleted user" placeholder](deleted-user-placeholder-race.md) | P2 | S | Backend, account deletion (flaky test) |
 | [A book saved in the week before ratings shipped waits a week for its Open Library rating](ratings-backfill-waits-a-week.md) | P2 | S | Backend, Open Library refresh |
 | [The log form on a book's page is wider than a phone screen](log-form-overflows-on-phone.md) | P2 | S | Frontend, book page, phone |
@@ -40,6 +39,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [Opening a public club from Discover is a dead end for non-members](public-club-dead-end-for-non-members.md) | 2026-10-20 | the bug file, "Fixed" |
 | [A new page opens at the old page's scroll position](new-page-opens-scrolled-down.md) | 2026-10-20 | the bug file, "Fixed" |
 | [A blocked reader can tell who blocked them in a shared book club](block-detectable-in-shared-club.md) | 2026-10-20 | the bug file, "Built" |
 | [Blocks don't apply in book club discussions](blocks-not-applied-in-club-discussions.md) | 2026-10-19 | `specs/safety-and-moderation.md` Phase 1 |

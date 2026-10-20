@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-20 — A public club opened from Discover by a non-member shows its card (description, members, current book) with Join instead of "Forbidden"; joining opens the club; a private club says it's joined through an invite link → bugs/public-club-dead-end-for-non-members.md
 - 2026-10-20 — A new page opens at its top instead of the old page's scroll position (a book from the landing showcase, `/privacy` from a footer); Back and Forward still return to where the reader was → bugs/new-page-opens-scrolled-down.md
 - 2026-10-20 — Landing page: the top bar's logo appears only once the opening's dog scrolls away (one logo at a time, at every width); tighter spacing between the strengths, the middle one on a sunken well; a bigger, centred opening shelf; "Page 214 of 380" on one line on phones → ux-reviews/landing.md #4–7
 - 2026-10-20 — A blocked reader can no longer tell who blocked them: comment counts and scores match what each reader sees (reviews, lists, writings, reading updates, the Feed, club checkpoints); in a shared club the blocker drops out of the blocked reader's member list, progress, counts and round ratings, and can't be acted on by id; discussion questions and suggestions name nobody but their author; the block confirmation says what a block does, in five languages → bugs/block-detectable-in-shared-club.md
