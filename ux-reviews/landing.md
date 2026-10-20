@@ -52,4 +52,6 @@ The strongest page on the site: the pitch beside a real shelf of three classics,
 
 ## Looked fine
 
+**The showcase** (checked 2026-10-20 with `Landing__ShowcaseEnabled=true` on the side-port API, since it is off in `appsettings.json`): popular books as a shelf that scrolls sideways, recent reviews as three cards (stacked on a phone), Paper and Dark, no sideways page scroll; its book and review links open for a signed-out visitor, but the page they open starts scrolled down (bugs/new-page-opens-scrolled-down.md). The dev data fills it with test readers' reviews of one test book, so its look with real reviews is still to see once it's switched on.
+
 One green button on the first screen (the top bar's Join is secondary); the pitch at the hero size with balanced lines; three covers that keep their size on a phone; the band's heading at display size; demos as raised cards with named readers and the "Example, with made-up readers" line; basics and trust side by side; no layout shift; Dark keeps the band and the cards readable.
