@@ -18,3 +18,4 @@
 - [Authors feature effort reminder](project_authors_feature_effort_reminder.md) — remind: high effort for Phase 1 migration + backfill and Phase 2 privacy endpoints; rest at medium
 - [No AI art](feedback_no_ai_art.md) — no AI-generated images; public-domain/CC0 art instead (AI avatars slated for replacement)
 - [Restyle direction](project_design_restyle_direction.md) — approved mockup 2026-10-16: cream page stays, shelf effect is the signature; DESIGN.md first, then tokens and pieces
+- [Translations checked](project_translations_checked.md) — only English and Spanish reviewed by the user; don't advertise five languages yet

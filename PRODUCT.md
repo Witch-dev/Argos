@@ -16,7 +16,7 @@ web (a responsive site and PWA; a native app is out of scope for now, `ROADMAP.m
 - **Curators:** build themed lists and favourite rows.
 - Readers are not designers or software power users.
 - Most use it **on a phone, often in the evening** (confirmed 2026-10-16): phone layouts and the Dark theme matter most; every flow is designed for 375px first and checked on desktop.
-- The first readers are a closed beta of friends **in mixed languages** (confirmed 2026-10-16): no single main language, so all five are checked evenly, German for length.
+- The first readers are an early-access group **in mixed languages** (confirmed 2026-10-16): friends, plus strangers from Reddit and book communities (2026-10-20, `ROADMAP.md` Stage 4b). No single main language, so all five are checked evenly in layouts, German for length. Only English and Spanish texts have been checked by a person (2026-10-20), so the site doesn't advertise five languages yet.
 
 ## Product Purpose
 

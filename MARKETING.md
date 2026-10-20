@@ -7,6 +7,46 @@ Still to decide: what makes Argos different from Goodreads and StoryGraph (candi
 
 ---
 
+## 0. Positioning: strengths, weaknesses and how to say them (2026-10-20)
+
+Written while preparing to recruit beta readers from Reddit and book communities. Checked against what is built on 2026-10-20. Used by the landing page's Phase 3 (`specs/landing-page.md`).
+
+**The idea to lead with (user, 2026-10-20):** Books and Community are two separate sides. Track your reading for yourself, share it when you feel like it: use one side, the other, or both. The social side never shows up inside Books.
+
+### Strengths, most persuasive first
+
+| Strength | What's true today | How to say it |
+|---|---|---|
+| Two separate sides | Books (journal, stats, shelves, lists) never shows anything from people you follow; Community is one click away | "Track your reading for yourself. Share it when you feel like it." |
+| Moving in loses nothing | Goodreads and StoryGraph import keeps ratings, reviews, read dates, rereads and private notes; custom shelves become lists; unmatched books wait on a review screen | "Bring your whole library with you." |
+| Nothing behind a paywall | Every feature is free; any future money is optional support (`FUTURE-IDEAS.md`, "Making money") | "Every feature is free. No premium plan, nothing locked." |
+| Spoiler-safe clubs | Comments past your page stay hidden until you reach it | "Book clubs that never spoil the ending." |
+| Friends' reading updates | The page they're on, a journey line, replies | "See where your friends are in their books." |
+| Comment on one sentence | Highlight comments on reviews and writings; rare among book trackers | "Comment on the exact sentence." |
+| Five languages | English, Spanish, Brazilian Portuguese, German, French; covers from the original-language edition; your languages first in search | **Don't advertise yet:** only English and Spanish have been checked by a person (2026-10-20). Until the others are, at most "Also in Spanish". |
+| Free goal and stats | Yearly goal, books and pages per month, top authors, genres, moods, pace | "Your year in books, free." Most timely in late December and January. |
+| Careful basics | Half stars, a guilt-free DNF shelf, audiobooks in hours and minutes, the edition you read, follow authors and hear about new books | A list, not headlines. |
+| Trust | Independent, one person, no ads, data never sold, export and delete, private accounts, no ratings before a book is published, a confirmed email to rate, reports read by a person | "Made by one independent person. No ads, and your data is never sold." |
+| The look | Books on a shelf, five themes, a calm reading room | Screenshots, not words. |
+
+### Weaknesses, and what to do about each
+
+| Weakness | What to do |
+|---|---|
+| Few readers yet: Community looks empty to someone arriving alone | Lead with what works alone (import, journal, stats). Invite existing groups (a club, a friend circle) together. Welcome each tester personally. |
+| Open Library's data has gaps (new releases, non-English editions, missing covers) | Say so in posts. Make reporting a wrong book easy. |
+| No phone app, only a site you can add to the home screen | Say "add it to your home screen"; don't call it an app on the landing page. |
+| Little book discovery: no recommendation algorithm | Present it as a choice: discovery through people, not an algorithm. |
+| Many features: unclear what it's for | One promise at the top (the two sides); everything else supports it. |
+| New, made by one person: will it last? | Export answers it: "take everything with you, any time". |
+
+### Claims to avoid
+
+- **"No AI"**: the winged-dog logo was made with ChatGPT (`FUTURE-IDEAS.md`). Until it is replaced, say only "no algorithm deciding what you see" and "no AI summaries".
+- Competitor names on the landing page (Goodreads and StoryGraph only as import sources). In Reddit posts, a plain comparison is fine.
+- **"Five languages"**, until Portuguese, German and French have been checked by a person.
+- Any number, quote or testimonial we don't have (`PRODUCT.md`, "Evidence on Hand").
+
 ## 1. What to have before promoting anything
 
 | Item | Why | Roadmap link |

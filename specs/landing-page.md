@@ -321,3 +321,66 @@ Kept as is, on purpose:
 
 - [ ] After Roadmap Stage 2 (import) ships: "Bring your books" section and a "Coming from Goodreads?" link (§7). Use the import's real numbers.
 - [x] After Roadmap Stage 6 (export and delete) ships: extend the trust line (§7). **Done 2026-10-19:** "…you can download all of it or delete your account whenever you like" (not "in one click": deleting asks for the password and has a 30-day grace period).
+
+## Phase 3 — Books and Community, side by side (planned 2026-10-20)
+
+Asked on 2026-10-20 while preparing to recruit early-access readers from Reddit and book communities: people who don't know a reader already. The page spoke to one visitor (someone with a group to read with) and left out what makes a stranger switch. Strengths, weaknesses and claims to avoid: `MARKETING.md` §0. **Third of three:** `specs/feedback-button.md` and `specs/whats-new.md` come first, because this page promises both.
+
+### Decisions (user, 2026-10-20, eight rounds of questions)
+
+**The idea.** The app's strongest structural idea is that Books (your own reading) and Community (sharing) are separate: use one, the other or both. The landing page is built the same way: a switch at the top shows one side at a time, and a shared part at the bottom covers what both have in common.
+
+**Opening**
+- **Headline (one for both sides):** "Track your reading for yourself. Share it when you feel like it."
+- **The lead line changes with the side** (drafts to write in the copy round).
+- Actions and the access note stay (Have an invite? Join / Request an invite / Log in).
+- **The switch sits in the opening, under the headline and buttons**, labelled **Books / Community** (the app's own names, `sections.books` / `sections.community`). **Books is open on arrival.** No link parameter to open Community directly (kept simple).
+- **Once scrolled past, the switch pins to the top bar** on every screen size, between the logo and Log in.
+- **The shelf beside the headline changes with the side.** Books: your own shelf (one book being read, two read and rated, as today). Community: friends' books, each cover with a friend's name and how far they are ("Maya, page 214"), like the Readings strip.
+
+**Books side**, each with its own section and live demo:
+1. **Bring your library**: an example Goodreads import (how many books, reviews, rereads came in; one book waiting for the reader to pick the right edition).
+2. **The journal**: a year as a bookcase or a month of entries with dates, ratings and a private note.
+3. **Goal and stats**: "18 of 30 books in 2026" with a few numbers (pages, top author, average rating).
+4. **Private by choice**: a book or entry switched between Only me / Followers / Everyone.
+Then a short list of what else is included (half stars, DNF shelf, audiobooks in hours and minutes, the edition you read, mood/pace/content warnings, follow authors and hear about new books, lists).
+
+**Community side**, each with its own section and live demo:
+1. **Spoiler-safe clubs** (existing demo, the cloth band).
+2. **Friends' reading updates** (new demo: a friend's book, the page they're on, the journey line, a reply).
+3. **Comment on a sentence** (existing demo).
+4. **Lists with friends** (existing demo).
+Then a short list: reviews with privacy per review, quotes and writing (the old Writing demo is removed), following readers and comparing taste, the Feed. The live showcase (popular books, recent reviews; still switched off) belongs to this side when it's switched on.
+
+**Shared part, under both sides**
+- **Made by one person:** third person, no name ("made by one independent developer").
+- **Nothing behind a paywall:** every feature is free; if Winged Words ever asks for money, only as optional support, never a locked feature (`FUTURE-IDEAS.md`, "Making money").
+- **Always improving:** links to the public What's new page (`specs/whats-new.md`).
+- **Your feedback shapes it:** during early access, what readers send through the feedback button (`specs/feedback-button.md`) decides what gets built next.
+- **No ads, and your data is never sold.** **Download or delete everything, anytime.**
+- **Five reading themes** (Paper to Dark).
+- **Not on the page:** five languages (only English and Spanish have been checked by a person), review-bombing rules, any "no AI" claim (the logo was made with ChatGPT).
+- Then the closing heading and the join buttons, as today.
+
+**Wording**
+- **"Early access" replaces "private beta" everywhere readers see it:** landing page, Request an invite page, invite emails, and the legal pages if they mention it.
+- Competitors are not named, except Goodreads and StoryGraph as import sources (§7).
+
+### Still to do before building
+
+- [ ] **Copy round:** every line of the page in English (and Spanish, which the user checks), reviewed line by line before any markup.
+- [ ] **Mockup round:** 2–3 layouts on the design canvas, mainly the switch and how a side's sections are arranged; the user picks.
+- [ ] **Final brief** here, with the motion plan (the switch's change of side, the shelf changing with it) and the states, then the tasks below completed.
+
+### Tasks (outline, completed after the copy and mockup rounds)
+
+#### Frontend
+- [ ] Switch (with `role="tablist"` semantics), pinned copy in the top bar, side kept in component state.
+- [ ] Opening shelf per side; new demos: import, journal, goal and stats, privacy, reading update; remove `DemoWriting`.
+- [ ] Shared part; links to What's new; "Early access" wording everywhere.
+- [ ] All text in the five locale files; tests updated.
+
+#### Verification & docs
+- [ ] `npm test`, `npm run build`, `npm run lint`.
+- [ ] Screenshot critique round (Paper and Dark, 1280 and 375, Spanish at 375), then `design-reviewer`.
+- [ ] Tick §"Added later"'s import item; `CHANGELOG.md` entry.

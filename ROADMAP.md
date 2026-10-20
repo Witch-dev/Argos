@@ -41,6 +41,7 @@ There are two launches, not one:
 | **2b** | Books and Community: two sections, a journal, private books | Changes the navigation, so do it before the phone pass redoes it; also closes the "everyone's shelves are public" gap per book | L |
 | **3** | Works well on a phone | Most logging happens on phones; beta testers will use phones | M |
 | **4** | Go live: hosting, email, backups, legal | Puts stages 1–3 in front of people | M |
+| **4b** | Ready for strangers: feedback button, What's new, landing page | The beta now recruits from Reddit and book communities, not only friends | M–L |
 | 🚩 | **Closed beta starts** | | |
 | **5** | Notifications | First feature to build during the beta: makes the social side feel alive | M |
 | **6** | Your data: export and delete account | Required by law (GDPR) and promised in SPEC.md §8 before any public launch | M |
@@ -186,9 +187,19 @@ Small things that are cheaper now than later.
 
 ---
 
+## Stage 4b — Ready for strangers (added 2026-10-20)
+
+The user has few friends who track their reading, so early-access readers will come from Reddit and book communities. Strangers need a landing page that explains the app on its own, and a visible way to give feedback. Planned in eight rounds of questions on 2026-10-20; build in this order:
+
+- [ ] **Feedback button** (`specs/feedback-button.md`): a floating speech-bubble circle for signed-in readers; idea / feedback / problem; emailed to `hello@` and saved on an admin page. *Size M.*
+- [ ] **What's new** (`specs/whats-new.md`): a public updates page with an admin editor (date, title, text, optional image, English required), a gold dot in the sidebar, started with the last month's changes. *Size M–L.*
+- [ ] **Landing page Phase 3** (`specs/landing-page.md`): a Books / Community switch under the headline, four live examples per side, a shared part (one independent developer, nothing behind a paywall, always improving, feedback shapes it, no ads, download or delete, five themes), and "early access" instead of "private beta" everywhere. Copy round and mockup round before any code. *Size M–L.*
+
+---
+
 ## 🚩 Closed beta
 
-Invite 10–30 readers. Ask them to import their Goodreads library on day one, and give them one easy place to send feedback: a club called "Argos feedback" works, so it also tests clubs. Record each problem as a bug file, and each wish in `FUTURE-IDEAS.md`. Stages 5–9 are built during the beta.
+Invite 10–30 readers. Ask them to import their Goodreads library on day one, and give them one easy place to send feedback: the feedback button (Stage 4b). Record each problem as a bug file, and each wish in `FUTURE-IDEAS.md`. Stages 5–9 are built during the beta.
 
 ---
 
