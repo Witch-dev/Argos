@@ -40,6 +40,8 @@ docker exec apollon-postgres-1 sh -c 'psql -U "$POSTGRES_USER" -d argos -c "UPDA
 
 For longer SQL, `docker cp file.sql apollon-postgres-1:/tmp/x.sql` and run it with `psql -f`.
 
+**An admin, for the admin pages** (invite requests, reports): the `Admin` role comes from the `Admin:UserIds` setting, applied at every API start, and is taken from any account not listed. Register the reader, then restart the side-port API with `Admin__UserIds__0=<their id>` added to its environment. First check who already has the role in the dev database (a join of `AspNetUsers`, `AspNetUserRoles` and `AspNetRoles` where the role is `Admin`) and list those ids too (`Admin__UserIds__1=…`), or the restart strips them until the user's own API restarts. Reports made before the reader was an admin don't ring their bell.
+
 ## 4. Check, then clean up
 
 **Screenshots for design work:** `node C:/Users/jramo/Argos/scripts/shoot.mjs <route…> --out <scratchpad>/shots` does the login, themes and widths for you (Paper and Dark at 1280 and 375 by default; `--themes`, `--widths`, `--scroll`, `--full`). It registers and confirms its own reader the first time and reuses it from `<out>/reader.json`. Needs this section's side-port servers and a one-time `npm install` in `Argos/scripts`. Write your own Playwright script only for flows (clicking, typing, seeding data).

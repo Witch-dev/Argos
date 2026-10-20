@@ -1,6 +1,6 @@
 # Blocks don't apply in book club discussions
 
-**Priority:** P3 · **Size:** M · **Area:** Backend, clubs · **Found:** 2026-10-07 (security review of the commenter-blocks fix) · **Status:** Open
+**Priority:** P3 · **Size:** M · **Area:** Backend, clubs · **Found:** 2026-10-07 (security review of the commenter-blocks fix) · **Status:** Fixed 2026-10-19
 
 ## What happens
 
@@ -18,3 +18,5 @@ A club is a space both people chose to join, so it's not obvious the block shoul
 - Leave it, and tell the blocker in the block dialog that shared clubs aren't affected, so they can leave the club.
 
 Belongs with Stage 7 (Safety) in `ROADMAP.md`.
+
+**Decided 2026-10-19:** the first option (hide each other's comments, refuse replies and votes; both stay members). Built in `specs/safety-and-moderation.md` Phase 1.

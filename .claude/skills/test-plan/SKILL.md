@@ -26,6 +26,7 @@ The user names an area. Plans follow **what a reader does**, not spec files, bec
 | `writing-and-posts.md` | Annotations, writings, posts | `writings-and-annotations.md`, `book-posts.md`, `writing-feed-card-and-modal.md` |
 | `feed-and-home.md` | Home dashboard, feed, news | `feed-redesign.md`, `home-dashboard-redesign.md`, `book-news-feed.md` |
 | `social.md` | Find readers, follow, profiles, blocks | `find-readers-discovery.md` |
+| `moderation.md` | Report, the admin's queue, hidden content, suspension, rating rules, blocks in likes and clubs, guidelines | `safety-and-moderation.md` |
 
 If the area isn't in the map, or a new spec doesn't fit, add a row here as part of the change.
 

@@ -216,19 +216,19 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 
 ---
 
-## Stage 7 — Safety
+## Stage 7 — Safety ✅ done 2026-10-20
 
-**Needs spec** (one spec covering all of this).
+**Spec:** `specs/safety-and-moderation.md` (written 2026-10-19; decisions asked the same day: admin only, reports change nothing until the admin decides, suspension locks out and hides until lifted, blocks apply in club discussions). **Done 2026-10-20**: four phases, each reviewed by `reviewer` (and `argos-security` for the backend), then browser-checked. The by-hand checklist is `testing/moderation.md` (82 steps).
 
-- [ ] **A site admin role.** *Partly done 2026-10-19 with `specs/invite-requests.md`:* the `Admin` Identity role exists, synced at startup from `Admin:UserIds` (account ids), checked from the database on every request by `[RequireAdmin]` (404 for everyone else, confirmed email required), and `isAdmin` on the current user drives an admin-only menu link. Its only page so far is Invite requests. Left for Stage 7: the moderation actions and screens below use the same role and filter; decide whether moderators need a second, smaller role.
-- [ ] **Report** a review, writing, comment, list or user, with a reason.
-- [ ] **Admin queue**: see reports, hide content, suspend an account.
-- [ ] **Review-bombing rules:**
+- [x] **A site admin role.** **Done 2026-10-20**: moderation uses the same role and filter, and no second Moderator role (decided in the spec, §2). *Partly done 2026-10-19 with `specs/invite-requests.md`:* the `Admin` Identity role exists, synced at startup from `Admin:UserIds` (account ids), checked from the database on every request by `[RequireAdmin]` (404 for everyone else, confirmed email required), and `isAdmin` on the current user drives an admin-only menu link. Its only page so far is Invite requests. Left for Stage 7: the moderation actions and screens below use the same role and filter; decide whether moderators need a second, smaller role.
+- [x] **Report** a review, writing, comment, list or user, with a reason. **Done 2026-10-20** (`specs/safety-and-moderation.md` Phases 3 and 4): a Report item in the "⋯" menus, club checkpoint comments too.
+- [x] **Admin queue**: see reports, hide content, suspend an account. **Done 2026-10-20**: `/admin/reports` (Open / Decided / Suspended), hide and unhide, dismiss, suspend and lift, reset a profile, hide a rating wave's ratings.
+- [x] **Review-bombing rules:** **Done 2026-10-20** (Phase 2; "publish date" is the first-publish **year**, the only date Open Library gives):
   - no ratings before a book's publish date
   - no ratings or reviews until the email is confirmed
   - flag a sudden wave of low ratings on one book
-- [ ] **Blocks reach likes and comments** (`FUTURE-IDEAS.md`): a blocked reader can't like, comment on or highlight-comment the blocker's things. The 2026-10-03 security review named this as the most likely way a blocked person keeps reaching someone.
-- [ ] **Community guidelines** page: what's not allowed, so moderation decisions have a basis.
+- [x] **Blocks reach likes and comments** (`FUTURE-IDEAS.md`): **Done 2026-10-19** (`specs/safety-and-moderation.md` Phase 1; comments were already covered since 2026-10-07, now likes on everything and club discussions too). a blocked reader can't like, comment on or highlight-comment the blocker's things. The 2026-10-03 security review named this as the most likely way a blocked person keeps reaching someone.
+- [x] **Community guidelines** page: what's not allowed, so moderation decisions have a basis. **Done 2026-10-20**: `/guidelines` in five languages, linked from the footer, terms, the report dialog, the hidden notice and sign-up.
 
 *Size L.*
 
