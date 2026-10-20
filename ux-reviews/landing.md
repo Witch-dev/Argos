@@ -30,6 +30,26 @@ The strongest page on the site: the pitch beside a real shelf of three classics,
 **Fix (question):** confirm the three claims with the user; consider "Independent, with no ads" and leave Amazon out.
 **Status:** changed 2026-10-18 as recommended, waiting on the user: heading "Independent, with no ads", text "Winged Words is made by readers, for readers." (Amazon left out, no new claim added).
 
+### 4. Two logos in the first view on desktop too — P3 · S · Judgement
+**Where:** at 1280 the top bar's dog and the opening's 9rem dog, about 100px apart (#1 had only fixed phones, which then had no logo in the bar at all while scrolling).
+**Fix (chosen by the user 2026-10-20, option A of three):** the top bar's logo waits while the opening's dog is in view (an IntersectionObserver that takes the sticky bar's height off the top) and fades in once it scrolls away, at every width. Hidden with `visibility`, so it can't be tabbed to; 200ms in, 120ms out. A change of state of the bar, not a content reveal (DESIGN.md "Motion").
+**Status:** fixed 2026-10-20.
+
+### 5. The strengths spread out and read as one run — P3 · S · Judgement
+**Where:** 1280, from the clubs band to the basics: 96px between strengths and 64px between each text and its card, three cream sections that look alike.
+**Fix:** 48px between text and card; each strength full width with 48px above and below; the middle one ("Read, and write") on a sunken well across the window, a quiet echo of the band.
+**Status:** fixed 2026-10-20.
+
+### 6. "Page 214 of 380" broke before the last number on a phone — P3 · S · Rule
+**Where:** 375, under Jane Eyre on the opening's shelf.
+**Fix:** kept on one line, at the xs size on phones (checked in German, "Seite 214 von 380").
+**Status:** fixed 2026-10-20.
+
+### 7. The opening's shelf sat small at the bottom of its column — P3 · S · Judgement
+**Where:** 1280: covers of about 10rem aligned to the bottom of the pitch, empty space above them.
+**Fix:** the shelf's column a little wider (40rem, covers about 11rem) and centred against the pitch.
+**Status:** fixed 2026-10-20.
+
 ## Looked fine
 
 One green button on the first screen (the top bar's Join is secondary); the pitch at the hero size with balanced lines; three covers that keep their size on a phone; the band's heading at display size; demos as raised cards with named readers and the "Example, with made-up readers" line; basics and trust side by side; no layout shift; Dark keeps the band and the cards readable.
