@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-19 — Sentry checked live: a test error from wingedwords.app reached Sentry; DEPLOY.md notes that ad blockers block reports (`ERR_BLOCKED_BY_CLIENT`) → ROADMAP.md Stage 4, DEPLOY.md "Error tracking (Sentry)"
 - 2026-10-19 — Live checks passed: HSTS on the site and API, HTTP redirects to HTTPS, and the landing page link preview works; both Stage 4 boxes ticked → ROADMAP.md Stage 4, DEPLOY.md "HTTPS and HSTS"
 - 2026-10-19 — Public-domain avatars: the 47 AI-made presets replaced by 33 public-domain pictures (Potter, Tenniel, Wain, bestiaries, paintings of readers); readers with an old key reset to their initial by a migration; the picker shows each picture's caption and source and saves with "Use this picture" → specs/public-domain-avatars.md, Apollon 9d117ca
 - 2026-10-19 — Open Library ratings as a stand-in: the book page shows Open Library's average (labelled and linked, under a hairline) while a book has fewer than 10 counted ratings here and Open Library has at least 5; stored on `Books` (two columns), fetched on cache and refresh, backfilled by the refresh job (a failed fetch retried after a week); reviewer + security fixes → specs/open-library-ratings.md

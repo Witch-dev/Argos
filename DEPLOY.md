@@ -82,7 +82,7 @@ Crashes on the API and the site are reported to Sentry (free Developer plan, org
 
 **Check after deploying:**
 1. Open `https://wingedwords.app`, open the browser's developer tools → Console, and run `setTimeout(() => { throw new Error('Sentry check from the site') })`. Within a minute it appears in Sentry under `wingedwords-web` → Issues, with the commit as its release. Resolve it afterwards.
-2. In the same developer tools → Network, check the report went to `o4512284441706496.ingest.us.sentry.io` and wasn't blocked by the CSP (no red CSP error in the Console).
+2. In the same developer tools → Network, check the report went to `o4512284441706496.ingest.us.sentry.io` and wasn't blocked by the CSP (no red CSP error in the Console). `net::ERR_BLOCKED_BY_CLIENT` instead means an ad blocker or privacy extension stopped it, not our code: retry in a private window or with the blocker paused for the site. (Readers with blockers send no reports; a Sentry "tunnel" through the API would fix that.)
 3. The API has no button that crashes on purpose; its first real error is the check. Its scrubbing was verified locally on 2026-10-19 against a fake Sentry server: a crash carrying a login token, a cookie, an `X-Forwarded-For` address and a search query reached it with none of the four.
 
 **If Sentry gets noisy or its quota fills** (5,000 errors a month on the free plan): resolve or ignore the issue in Sentry; to stop sending altogether, unset `SENTRY_DSN` on the site, or set `Sentry__Dsn` to an empty value on the API service.
