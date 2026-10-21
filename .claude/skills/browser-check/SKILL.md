@@ -1,6 +1,6 @@
 ---
 name: browser-check
-description: Use when a change to Argos needs to be seen working in a real browser, not just typechecked or unit-tested — triggers on "/browser-check", "check it in the browser", "verify it live", "take a screenshot of X", or the "exercise it in the browser" step of new-react-feature, web-design, test-plan or a spec's verification checklist. Runs the current Apollon code on side ports with Playwright, logs in through the API and seeds fresh test readers. Runs as its own Sonnet agent: pass what to check (routes, the flow, what should happen) as the arguments; it returns a short report.
+description: Use when a change to Argos needs to be seen working in a real browser, not just typechecked or unit-tested — triggers on "/browser-check", "check it in the browser", "verify it live", "take a screenshot of X", or the "exercise it in the browser" step of new-react-feature, web-design, test-plan or a spec's verification checklist. Runs the current Apollon code on side ports with Playwright, logs in through the API and seeds fresh test readers. Runs as its own Sonnet agent; pass what to check (routes, the flow, what should happen) as the arguments, and it returns a short report.
 context: fork
 agent: general-purpose
 model: sonnet

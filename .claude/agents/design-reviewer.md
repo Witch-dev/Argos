@@ -1,6 +1,6 @@
 ---
 name: design-reviewer
-description: Visual review of Argos/Winged Words screenshots against DESIGN.md and the quality floor, so the images stay out of the builder's (more expensive) context. Two modes. Critique mode: the web-design critique round during building — looks at the screenshots and returns a short list of fixes in words; can be sent new screenshots after fixes. Full-review mode (the default): fresh eyes on finished work at the end of a visual phase or page — returns a disposition (recapture / rebuild / fix / ship) and at most eight ordered material fixes. Read-only.
+description: "Visual review of Argos/Winged Words screenshots against DESIGN.md and the quality floor, so the images stay out of the builder's (more expensive) context. Two modes. Critique mode: the web-design critique round during building — looks at the screenshots and returns a short list of fixes in words; can be sent new screenshots after fixes. Full-review mode (the default): fresh eyes on finished work at the end of a visual phase or page — returns a disposition (recapture / rebuild / fix / ship) and at most eight ordered material fixes. Read-only."
 tools: Read, Glob, Grep, Bash
 model: sonnet
 ---
