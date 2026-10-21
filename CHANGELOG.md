@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-20 — What's new screenshots approved for entries 4, 5, 6 and 9 (Paper, 1280 wide, a seeded reader with a year of reading); entering the entries on the live site still to do → content/whats-new-past-entries.md, content/whats-new-shots/
 - 2026-10-20 — What's new: 12 past entries (Oct 8–20) written in English and Spanish and approved; screenshots and entering them on the live site still to do → content/whats-new-past-entries.md, specs/whats-new.md
 - 2026-10-20 — What's new built: a public `/whats-new` page (newest first, the reader's language with an English fallback), a gold dot on the sidebar link until the reader opens it (remembered per account), a footer link, and `/admin/whats-new` to write entries (date, a tab per language, plain text, an image shrunk to WebP with alt text, a Try it link, live preview; draft, publish, unpublish, delete). Past entries still to write → specs/whats-new.md, Apollon 6b7c35b
 - 2026-10-20 — Feedback button: a floating speech-bubble circle for signed-in readers (Idea / Feedback / Problem, page and device shown and optional), emailed to `hello@` with the reader's address to reply to and listed on `/admin/feedback` with a Done tick; "Tell us what happened" on the error page; kept 2 years, in the data download, in the privacy policy. Also fixed: the privacy page never showed its Reports section → specs/feedback-button.md, Apollon 1d1e4ad

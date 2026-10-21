@@ -54,7 +54,9 @@ Winged Words es joven, así que muchos libros todavía tienen pocas valoraciones
 
 ---
 
-## 4. 2026-10-19 · Try it: /feed
+## 4. 2026-10-19 · Try it: /feed · **image**
+
+Image (approved 2026-10-20): `whats-new-shots/04-reading-update.png`, a friend's update with the journey line, "+26 pages since Friday", the quote card and two named likers.
 
 **EN — Reading updates, redrawn**
 
@@ -72,6 +74,8 @@ El fondo toma un tono suave de la portada del libro. Una nota se convierte en un
 
 ## 5. 2026-10-18 · Try it: none · **image**
 
+Image (approved 2026-10-20): `whats-new-shots/05-new-look-profile-top.png`, a profile with the goal bar and four favourite books on a shelf.
+
 **EN — A new look: books on a shelf**
 
 Winged Words has a new design. Covers stand on wooden shelves across the site, on your profile, your journal, lists, search and book clubs. When you add a book or finish one, it settles onto its shelf.
@@ -87,6 +91,8 @@ El texto se lee mejor, con una nueva tipografía para los títulos y un ancho de
 ---
 
 ## 6. 2026-10-16 · Try it: /search?type=authors · **image**
+
+Image (approved 2026-10-20): `whats-new-shots/06-author-page.png`, the top of the page and the "Readers on Winged Words" card in one shot (an entry takes one image).
 
 **EN — Author pages**
 
@@ -135,6 +141,8 @@ También puedes elegir la edición exacta que leíste. Su portada aparece entonc
 ---
 
 ## 9. 2026-10-11 · Try it: /stats · **image**
+
+Image (approved 2026-10-20): `whats-new-shots/09-stats.png`, the goal, the year's totals and the month-by-month chart.
 
 **EN — A yearly goal and your reading stats**
 
