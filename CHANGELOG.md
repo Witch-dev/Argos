@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-21 — Fixed: dates on the English site came out in the browser's language ("20 de octubre de 2026" with a Spanish browser); now English words, keeping an English browser's day-month order → Apollon d8f26be
 - 2026-10-20 — Frontend tests about twice as fast: Vitest's vmThreads pool builds jsdom once per worker, not per file (76 s → 32 s at CI's size, 40 s → 13 s locally) → Apollon e7784fe
 - 2026-10-20 — Fixed a flaky CI test: the What's new admin test didn't mock the entry refetch after publishing, so on CI's slower runner the editor showed "couldn't be loaded" → Apollon 80363e5
 - 2026-10-20 — Landing page Phase 3: a Books / Community switch under the new headline (pinned to the top bar once scrolled past), four strengths with live demos per side (new: import, journal, goal and stats, privacy, a friend's reading update; Writing demo removed), "Also in…" lists, a shared part (one developer, no paywall, What's new, feedback, no ads, download or delete, themes), "early access" instead of "private beta", new link-preview text, the logo in solid theme green instead of the old brown one, the theme picker in the top bar; the user's copy review on the page and a new og-image still to do → specs/landing-page.md (Phase 3), content/landing-phase3-copy.md, Apollon 565dda2
