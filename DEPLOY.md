@@ -87,15 +87,27 @@ Crashes on the API and the site are reported to Sentry (free Developer plan, org
 
 **If Sentry gets noisy or its quota fills** (5,000 errors a month on the free plan): resolve or ignore the issue in Sentry; to stop sending altogether, unset `SENTRY_DSN` on the site, or set `Sentry__Dsn` to an empty value on the API service.
 
-## Admin role (invite requests)
+## Admin role (invite requests, reports, feedback)
 
-The admin page `/admin/invite-requests` (where "Request an invite" submissions land) is open only to accounts listed in `Admin:UserIds`. The list holds **account ids, not usernames**: a username can be given up and taken by someone else, an id never changes hands (`specs/invite-requests.md` §3.1).
+The admin pages `/admin/invite-requests` (where "Request an invite" submissions land), `/admin/reports` and `/admin/feedback` are open only to accounts listed in `Admin:UserIds`. The list holds **account ids, not usernames**: a username can be given up and taken by someone else, an id never changes hands (`specs/invite-requests.md` §3.1).
 
 1. Find your account id: log in on `https://wingedwords.app`, open the browser's developer tools → Network, reload, click the `me` request and copy `id` from its response. (Opening `/api/auth/me` directly doesn't work: it needs the login token, which only the page holds.)
 2. On the API service in Render, set `Admin__UserIds__0` to that id and redeploy (the role is synced at startup: everyone listed gets it, anyone not listed loses it).
 3. Reload the site: an **Invite requests** link appears in the account menu. Your account must have a confirmed email, or the page is not found.
 
 Removing someone: delete their entry and redeploy; it takes effect at the restart, not when their login expires. With `Registration__InviteOnly=false` the request form and its endpoint disappear (404), but the admin page still lists old requests.
+
+## Feedback emails and replying as hello@
+
+Each message sent with the feedback button (`specs/feedback-button.md`) is saved on `/admin/feedback` and emailed to `Feedback:NotifyAddress`. Production sets it to `hello@wingedwords.app` in `appsettings.Production.json` (Porkbun forwards it to your Gmail), so Render needs no variable; set `Feedback__NotifyAddress` there only to send them somewhere else. Empty means no email, only the admin page. The email's reply address is the reader's own, so **Reply** in Gmail answers them.
+
+**One-time Gmail setup, so replies come from `hello@` and not your personal address:**
+1. In Resend, create an API key with *sending access* for `wingedwords.app`, named "Gmail send-as" (separate from the API's key, so either can be revoked alone).
+2. Gmail → Settings (gear) → See all settings → **Accounts and Import** → *Send mail as* → **Add another email address**. Name `Winged Words`, address `hello@wingedwords.app`, leave "Treat as an alias" ticked.
+3. SMTP server `smtp.resend.com`, port `465`, username `resend`, password the key from step 1, "Secured connection using SSL". (Render's port block doesn't apply: Gmail's servers do the sending.)
+4. Gmail emails a confirmation code to `hello@`, which forwards to you; enter it.
+5. Under *Send mail as*, choose **Reply from the same address the message was sent to**. Feedback arrives addressed to `hello@`, so replies to it go out from `hello@`.
+6. Check: send yourself a feedback message on the live site, reply to it from Gmail, and look at the reply in the reader's inbox. The sender should read "Winged Words <hello@wingedwords.app>".
 
 ## Uptime alerts (UptimeRobot)
 

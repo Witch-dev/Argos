@@ -191,7 +191,7 @@ Small things that are cheaper now than later.
 
 The user has few friends who track their reading, so early-access readers will come from Reddit and book communities. Strangers need a landing page that explains the app on its own, and a visible way to give feedback. Planned in eight rounds of questions on 2026-10-20; build in this order:
 
-- [ ] **Feedback button** (`specs/feedback-button.md`): a floating speech-bubble circle for signed-in readers; idea / feedback / problem; emailed to `hello@` and saved on an admin page. *Size M.*
+- [x] **Feedback button** (`specs/feedback-button.md`): a floating speech-bubble circle for signed-in readers; idea / feedback / problem; emailed to `hello@` and saved on an admin page. *Size M.* **Built 2026-10-20.** Left on deploy: the Gmail "Send mail as" setup in `DEPLOY.md` and one test reply.
 - [ ] **What's new** (`specs/whats-new.md`): a public updates page with an admin editor (date, title, text, optional image, English required), a gold dot in the sidebar, started with the last month's changes. *Size M–L.*
 - [ ] **Landing page Phase 3** (`specs/landing-page.md`): a Books / Community switch under the headline, four live examples per side, a shared part (one independent developer, nothing behind a paywall, always improving, feedback shapes it, no ads, download or delete, five themes), and "early access" instead of "private beta" everywhere. Copy round and mockup round before any code. *Size M–L.*
 

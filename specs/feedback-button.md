@@ -1,6 +1,6 @@
 # Feature Spec — Feedback button
 
-**Status:** planned 2026-10-20, not started. First of three before inviting strangers: feedback button → `specs/whats-new.md` → landing page Phase 3 (`specs/landing-page.md`). The landing page promises "your feedback shapes it", so this has to exist first.
+**Status:** built 2026-10-20; the two "By hand" steps are left for deploy. First of three before inviting strangers: feedback button → `specs/whats-new.md` → landing page Phase 3 (`specs/landing-page.md`). The landing page promises "your feedback shapes it", so this has to exist first.
 
 ## 1. Problem
 
@@ -17,7 +17,7 @@ Early-access readers need one obvious way to send ideas, opinions and problems, 
 - **Replies by email, from `hello@`.** The email's reply address is the reader's account email. You reply from Gmail using Gmail's "Send mail as" with `hello@wingedwords.app` (one-time setup, steps go in `DEPLOY.md`), so readers never see your personal address.
 - **The reader sees a thank-you and nothing more.** No history of past feedback in the app.
 
-### 2.1 Decisions I made that need your check
+### 2.1 Decisions I made, confirmed by the user 2026-10-20
 
 1. **Limits:** message 10–2,000 characters; at most 10 messages a reader per day (rate-limited, with a friendly error). Confirmed email required, like rating, so throwaway accounts can't flood it.
 2. **Where the circle doesn't show:** while a modal, sheet or the reading-update viewer is open, on the admin pages, and for logged-out visitors. It sits above the page but below modals.
@@ -27,7 +27,7 @@ Early-access readers need one obvious way to send ideas, opinions and problems, 
 
 ## 3. Design
 
-### 3.1 Table `Feedback`
+### 3.1 Table `FeedbackMessages` (entity `Feedback`)
 
 | Column | Type | Notes |
 |---|---|---|
@@ -49,7 +49,8 @@ Early-access readers need one obvious way to send ideas, opinions and problems, 
 ### 3.3 Email
 
 - `EmailMessage` gains an optional `ReplyTo`. `SmtpEmailSender` uses it when present, else `Email:ReplyToAddress` as today.
-- Sent to a new setting `Feedback:NotifyAddress` (production: `hello@wingedwords.app`, which Porkbun forwards to Gmail).
+- Sent to a new setting `Feedback:NotifyAddress` (production: `hello@wingedwords.app`, set in `appsettings.Production.json`, which Porkbun forwards to Gmail).
+- The log lines of the email queue name it "feedback {id}" (`EmailMessage.LogLabel`), never by its subject, which is the reader's words (security review).
 - The message text is HTML-encoded in the HTML part. It is reader-written content in your inbox.
 
 ### 3.4 Frontend
@@ -60,6 +61,13 @@ Early-access readers need one obvious way to send ideas, opinions and problems, 
 - `/admin/feedback`: Open / Done tabs, one row per message (kind pill, message, reader pill, page link, device, date, Done tick). A sidebar admin link like Invite requests and Reports.
 - **Motion:** the circle slides out of view (transform, `--duration-state`) when scrolling down on a phone and back on scroll up; reduced motion fades instead. The dialog uses the existing modal motion.
 
+## 3.5 What the build added or changed (2026-10-20)
+
+- **Reviews.** `reviewer`: a request with no `kind` was read as Idea (the enum's 0); `Kind` is now nullable and refused when missing. `argos-security`, four Lows, all fixed: the email queue logged feedback subjects (the reader's words), now a log label; the page-path pattern let a trailing newline through (`$` → `\z`); a club invite link's path is the token itself, so `/clubs/join/<token>` is sent as `/clubs/join`; a reply address MimeKit can't parse falls back to the default instead of failing the email.
+- **In "Download my data".** Feedback is the reader's own words, so the export has a `feedback.csv` (kind, message, page, device, date), and the privacy policy's download paragraph says so.
+- **Privacy page fix found on the way.** `LegalPage.tsx` never listed the Stage 7 `reports` section, so the Reports paragraph wasn't shown. Both `reports` and `feedback` are listed now, and `LegalPage.test.tsx` counts the sections from `legal.json`, so a missing one fails.
+- **The button hides by fading** (`opacity: 0`, no pointer events) while a dialog is open, not `visibility: hidden`: hidden, it lost focus before the dialog noted its opener, and Escape left focus nowhere.
+
 ## 4. Out of scope
 
 Screenshots or attachments, replies inside the app, a feedback history for readers, feedback from logged-out visitors, voting on ideas.
@@ -67,33 +75,33 @@ Screenshots or attachments, replies inside the app, a feedback history for reade
 ## 5. Tasks
 
 ### Before building
-- [ ] The user confirms or changes the decisions in §2.1.
+- [x] The user confirms or changes the decisions in §2.1. **Confirmed as written, 2026-10-20.**
 
 ### Backend
-- [ ] `Feedback` entity, configuration, migration.
-- [ ] `EmailMessage.ReplyTo`, used by `SmtpEmailSender`; `Feedback:NotifyAddress` setting (`appsettings*.json`, `DEPLOY.md`).
-- [ ] `FeedbackService` + repository + `FeedbackController` (`POST`), confirmed-email check, a `feedback` rate-limit policy, the email.
-- [ ] Admin list and Done endpoints.
-- [ ] Erasure: deleted with the account. `FeedbackCleanupService` (daily, deletes rows older than 2 years), modelled on `InviteRequestCleanupService`.
-- [ ] Error codes for every new error, translated under `errors.codes`.
-- [ ] Tests: unit (validation, path and device checks, email content encoded) and integration (send, rate limit, unconfirmed email refused, admin-only list, erasure).
+- [x] `Feedback` entity, configuration, migration.
+- [x] `EmailMessage.ReplyTo`, used by `SmtpEmailSender`; `Feedback:NotifyAddress` setting (`appsettings*.json`, `DEPLOY.md`).
+- [x] `FeedbackService` + repository + `FeedbackController` (`POST`), confirmed-email check, a `feedback` rate-limit policy, the email.
+- [x] Admin list and Done endpoints.
+- [x] Erasure: deleted with the account. `FeedbackCleanupService` (daily, deletes rows older than 2 years), modelled on `InviteRequestCleanupService`.
+- [x] Error codes for every new error, translated under `errors.codes`.
+- [x] Tests: unit (validation, path and device checks, email content encoded) and integration (send, rate limit, unconfirmed email refused, admin-only list, erasure).
 
 ### Frontend
-- [ ] Device-label helper + tests.
-- [ ] `FeedbackButton` (hide on scroll down on phones, hidden with modals open and on admin pages) and `FeedbackDialog`.
-- [ ] "Tell us what happened" link on the error page.
-- [ ] `/admin/feedback` page and sidebar link.
-- [ ] All text in the five locale files.
-- [ ] Tests: dialog (kinds, counter, "Sent with" tick box removes page and device, thank-you), button visibility rules.
+- [x] Device-label helper + tests.
+- [x] `FeedbackButton` (hide on scroll down on phones, hidden with modals open and on admin pages) and `FeedbackDialog`.
+- [x] "Tell us what happened" link on the error page.
+- [x] `/admin/feedback` page and sidebar link.
+- [x] All text in the five locale files.
+- [x] Tests: dialog (kinds, counter, "Sent with" tick box removes page and device, thank-you), button visibility rules.
 
 ### Verification & docs
-- [ ] `browser-check`: send each kind on desktop and phone, the hide-on-scroll, the email arriving in Gmail with the reply address, Done tick.
-- [ ] Screenshot critique round (Paper and Dark, 1280 and 375).
-- [ ] `reviewer` and `argos-security` (user input, email, admin endpoints), fix findings.
-- [ ] Privacy policy: a paragraph on feedback messages (what's stored, 2 years), all five languages.
-- [ ] `DEPLOY.md`: `Feedback:NotifyAddress`, and the Gmail "Send mail as" steps with Resend's SMTP.
-- [ ] `CHANGELOG.md`.
+- [x] `browser-check`: send each kind on desktop and phone, the hide-on-scroll, the email arriving in Gmail with the reply address, Done tick. *Done 2026-10-20 on the side ports, with the email checked in Mailpit (reply-to = the reader). Gmail itself is the "By hand" check below.*
+- [x] Screenshot critique round (Paper and Dark, 1280 and 375).
+- [x] `reviewer` and `argos-security` (user input, email, admin endpoints), fix findings.
+- [x] Privacy policy: a paragraph on feedback messages (what's stored, 2 years), all five languages.
+- [x] `DEPLOY.md`: `Feedback:NotifyAddress`, and the Gmail "Send mail as" steps with Resend's SMTP.
+- [x] `CHANGELOG.md`.
 
 ### By hand (the user, on deploy)
-- [ ] Render: set `Feedback__NotifyAddress` on the API service.
+- [x] ~~Render: set `Feedback__NotifyAddress` on the API service.~~ Not needed: `appsettings.Production.json` sets it.
 - [ ] Gmail: set up "Send mail as" `hello@wingedwords.app` (steps in `DEPLOY.md`), then reply to one test message and check the sender shown.

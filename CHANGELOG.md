@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-20 — Feedback button: a floating speech-bubble circle for signed-in readers (Idea / Feedback / Problem, page and device shown and optional), emailed to `hello@` with the reader's address to reply to and listed on `/admin/feedback` with a Done tick; "Tell us what happened" on the error page; kept 2 years, in the data download, in the privacy policy. Also fixed: the privacy page never showed its Reports section → specs/feedback-button.md, Apollon 1d1e4ad
 - 2026-10-20 — Ready for strangers planned (new Roadmap Stage 4b): positioning written up (strengths, weaknesses, claims to avoid), feedback button and What's new specced, landing page Phase 3 decided (Books / Community switch, shared part, "early access") → MARKETING.md §0, specs/feedback-button.md, specs/whats-new.md, specs/landing-page.md
 - 2026-10-20 — A public club opened from Discover by a non-member shows its card (description, members, current book) with Join instead of "Forbidden"; joining opens the club; a private club says it's joined through an invite link → bugs/public-club-dead-end-for-non-members.md
 - 2026-10-20 — A new page opens at its top instead of the old page's scroll position (a book from the landing showcase, `/privacy` from a footer); Back and Forward still return to where the reader was → bugs/new-page-opens-scrolled-down.md
