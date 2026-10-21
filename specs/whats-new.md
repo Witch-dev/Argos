@@ -1,6 +1,6 @@
 # Feature Spec — What's new
 
-**Status:** planned 2026-10-20, not started. Second of three before inviting strangers: `specs/feedback-button.md` → this → landing page Phase 3 (`specs/landing-page.md`). The landing page promises "always improving" and links here.
+**Status:** built 2026-10-20 (backend and frontend); the past entries are still to write. Second of three before inviting strangers: `specs/feedback-button.md` → this → landing page Phase 3 (`specs/landing-page.md`). The landing page promises "always improving" and links here.
 
 ## 1. Problem
 
@@ -17,7 +17,7 @@ Winged Words changes almost every day, but readers can't see it: `CHANGELOG.md` 
 - **The admin page can:** save a draft, publish, edit after publishing, delete, and set the date shown (needed for past updates; otherwise the publish date).
 - **It starts with the last month or so:** Claude drafts 8–12 reader-facing entries from `CHANGELOG.md`, the user approves the list, then they go in through the admin page.
 
-### 2.1 Decisions I made that need your check
+### 2.1 Decisions confirmed by the user (2026-10-20, all as proposed)
 
 1. **Text is plain paragraphs**: a blank line starts a new paragraph. No formatting, links or HTML, which keeps it safe and simple. A single "Try it" link per entry (a path on the site, like `/stats`) is optional.
 2. **Image limits:** JPEG, PNG or WebP up to 5 MB; stored at most 1,600px wide as WebP (about 100–200 KB); metadata stripped. **Alt text is required** when there's an image (English required, other languages optional like the text).
@@ -29,27 +29,29 @@ Winged Words changes almost every day, but readers can't see it: `CHANGELOG.md` 
 
 ### 3.1 Tables
 
-**`WhatsNewEntries`**: `Id`, `ShownOn` (`DateOnly`, the date displayed), `PublishedAt` (`DateTime?`, null = draft), `TryPath` (`string?`, max 200, must start with `/`), `ImageId` (`Guid?`), `CreatedAt`, `UpdatedAt`.
+**`WhatsNewEntries`**: `Id`, `ShownOn` (`DateOnly?`, the date displayed; null only on a draft not yet given one, and publishing sets it to that day), `PublishedAt` (`DateTime?`, null = draft), `TryPath` (`string?`, max 200, must start with `/`), `ImageId` (`Guid?`), `CreatedAt`, `UpdatedAt`.
 
 **`WhatsNewTexts`**: `EntryId` + `Language` (key; `en`, `es`, `pt-BR`, `de`, `fr`), `Title` (max 120), `Body` (max 3,000), `ImageAlt` (max 300, nullable). An `en` row is required.
 
 **`WhatsNewImages`**: `Id`, `Data` (`bytea`), `Width`, `Height`, `CreatedAt`. Kept apart so listing entries never loads image bytes.
 
-**Users** gain `WhatsNewSeenAt` (`DateTime?`).
+**Users** gain `WhatsNewSeenAt` (`DateTime?`). Until a reader first opens the page, their `CreatedAt` counts instead, so a new account doesn't start with a dot for older updates.
 
 ### 3.2 Endpoints
 
-Public (the `public` rate-limit policy the landing page uses):
-- `GET /api/whats-new?lang=es&before=` → published entries in the reader's language with English fallback, image URL and size (for `aspect-ratio`, so nothing jumps), the language actually shown.
-- `GET /api/whats-new/images/{id}` → the WebP, only if its entry is published (admins also see drafts). Long cache headers; the id changes when the image is replaced.
+Public:
+- `GET /api/whats-new?lang=es&page=` (the `public` rate-limit policy; offset paging, the page drops repeats) → published entries in the reader's language with English fallback, image URL and size (for `aspect-ratio`, so nothing jumps), the language actually shown.
+- `GET /api/whats-new/images/{id}` → the WebP, only if its entry is published (admins also see drafts). `public, max-age=86400` (a day, not a year, so a screenshot pulled after publishing is gone from browsers the next day); drafts `private, no-store`. Its own per-IP policy, 300 a minute, so ten images a page don't use up the `public` budget. A browser `<img>` sends no token, so the editor fetches a draft's image as a blob.
 
 Signed in:
-- `GET /api/whats-new/unseen` → `{ hasUnseen }` (latest published entry after `WhatsNewSeenAt`). Fetched with the current-user data so it costs no extra round trip if that's easy, otherwise one small call.
+- `GET /api/whats-new/unseen` → `{ hasUnseen }` (latest published entry after `WhatsNewSeenAt`). One small call of its own: three endpoints build the current-user answer, so folding it in there would have meant changing all three.
 - `POST /api/whats-new/seen` → sets `WhatsNewSeenAt` to now.
 
 Admin (`[RequireAdmin]`):
 - `GET /api/admin/whats-new` (drafts and published), `GET …/{id}` (all languages), `POST`, `PUT …/{id}`, `DELETE …/{id}`, `POST …/{id}/publish`, `POST …/{id}/unpublish`.
-- `POST /api/admin/whats-new/images` (multipart) → validates the type by its bytes, decodes with SkiaSharp (`Argos.Infrastructure.Images`), resizes, re-encodes as WebP (this also strips metadata), returns the id. Unused images are deleted with their entry or when replaced.
+- `POST /api/admin/whats-new/images` (multipart) → validates the type by its bytes, decodes with SkiaSharp (`Argos.Infrastructure.Images`), resizes, re-encodes as WebP (this also strips metadata), returns the id. JPEGs are turned upright from their EXIF orientation first, and decoding is always 4 bytes a pixel under a 16.8-megapixel cap read from the header. Unused images are deleted with their entry or when replaced; an upload never saved into an entry is cleared by the next upload a day later.
+
+Publishing keeps the first publish time, so editing a published entry doesn't light the dot again; unpublishing and publishing again does.
 
 ### 3.3 Frontend
 
@@ -64,28 +66,28 @@ Comments or likes on entries, email or bell notifications for new entries, a pub
 ## 5. Tasks
 
 ### Before building
-- [ ] The user confirms or changes the decisions in §2.1.
+- [x] The user confirms or changes the decisions in §2.1. *(All five confirmed as written, 2026-10-20.)*
 
 ### Backend
-- [ ] Entities, configuration, migration (three tables, `Users.WhatsNewSeenAt`).
-- [ ] Image processing in `Argos.Infrastructure.Images` (type check, decode, resize to ≤1,600px, WebP), with tests on a PNG, a JPEG, a too-big file and a non-image renamed `.png`.
-- [ ] Repository, service, public + signed-in + admin controllers; language fallback; draft images hidden from the public.
-- [ ] Error codes, translated under `errors.codes`.
-- [ ] Tests: integration for publish/draft visibility, fallback, seen/unseen, admin-only, image served only when published, delete cleans up the image.
+- [x] Entities, configuration, migration (three tables, `Users.WhatsNewSeenAt`).
+- [x] Image processing in `Argos.Infrastructure.Images` (type check, decode, resize to ≤1,600px, WebP), with tests on a PNG, a JPEG, a too-big file and a non-image renamed `.png`. *(Plus WebP, a GIF refused, a pixel bomb, and a sideways phone photo turned upright.)*
+- [x] Repository, service, public + signed-in + admin controllers; language fallback; draft images hidden from the public.
+- [x] Error codes, translated under `errors.codes`.
+- [x] Tests: integration for publish/draft visibility, fallback, seen/unseen, admin-only, image served only when published, delete cleans up the image.
 
 ### Frontend
-- [ ] `/whats-new` page (signed-in and visitor), loading, empty and error states, Show more.
-- [ ] Sidebar link with the gold dot; footer link.
-- [ ] `/admin/whats-new` list and editor with preview; sidebar admin link.
-- [ ] All text in the five locale files.
-- [ ] Tests: fallback note, dot clears after visiting, editor (English required, alt text required with an image, publish flow).
+- [x] `/whats-new` page (signed-in and visitor), loading, empty and error states, Show more.
+- [x] Sidebar link with the gold dot; footer link.
+- [x] `/admin/whats-new` list and editor with preview; sidebar admin link.
+- [x] All text in the five locale files.
+- [x] Tests: fallback note, dot clears after visiting, editor (English required, alt text required with an image, publish flow). *(Built 2026-10-20: 11 xUnit integration + 17 unit tests, 21 Vitest tests.)*
 
 ### Content
 - [ ] Claude drafts 8–12 past entries from `CHANGELOG.md` (reader-facing only, English and Spanish), the user approves them.
 - [ ] Screenshots for the entries that need one (`scripts/shoot.mjs`), the user approves; entered through the admin page on the live site.
 
 ### Verification & docs
-- [ ] `browser-check`: visitor and reader views, dot on and off, admin create → draft → publish → edit → unpublish → delete, image upload at both widths.
-- [ ] Screenshot critique round (Paper and Dark, 1280 and 375), then `design-reviewer`.
-- [ ] `reviewer` and `argos-security` (file upload, admin endpoints, public endpoints), fix findings.
-- [ ] `CHANGELOG.md`.
+- [x] `browser-check`: visitor and reader views, dot on and off, admin create → draft → publish → edit → unpublish → delete, image upload at both widths. *(2026-10-20, all steps passed; a Spanish visitor sees the Spanish text.)*
+- [x] Screenshot critique round (Paper and Dark, 1280 and 375), then `design-reviewer`. *(2026-10-20. Own round: the editor's Close moved beside its heading as "Back to the list". Design reviewer said **fix**: the date moved under the title (a date above it is a banned kicker), the admin page renamed "Write What's new"; its other points were already met.)*
+- [x] `reviewer` and `argos-security` (file upload, admin endpoints, public endpoints), fix findings. *(2026-10-20, nothing serious. Fixed: EXIF orientation, the image endpoint's own rate limit, a day's cache instead of a year, decoding at 4 bytes a pixel. Left as is: offset paging (the page drops repeats), orphan uploads cleared only by the next upload.)*
+- [x] `CHANGELOG.md`.
