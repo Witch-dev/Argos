@@ -193,7 +193,7 @@ The user has few friends who track their reading, so early-access readers will c
 
 - [x] **Feedback button** (`specs/feedback-button.md`): a floating speech-bubble circle for signed-in readers; idea / feedback / problem; emailed to `hello@` and saved on an admin page. *Size M.* **Built 2026-10-20.** Left on deploy: the Gmail "Send mail as" setup in `DEPLOY.md` and one test reply.
 - [ ] **What's new** (`specs/whats-new.md`): a public updates page with an admin editor (date, title, text, optional image, English required), a gold dot in the sidebar, started with the last month's changes. *Size M–L.* **Built 2026-10-20** (Apollon 6b7c35b). 12 past entries approved 2026-10-20 (`content/whats-new-past-entries.md`). Left: screenshots for 4 of them, then they go in on the live site.
-- [ ] **Landing page Phase 3** (`specs/landing-page.md`): a Books / Community switch under the headline, four live examples per side, a shared part (one independent developer, nothing behind a paywall, always improving, feedback shapes it, no ads, download or delete, five themes), and "early access" instead of "private beta" everywhere. Copy round and mockup round before any code. *Size M–L.*
+- [ ] **Landing page Phase 3** (`specs/landing-page.md`): a Books / Community switch under the headline, four live examples per side, a shared part (one independent developer, nothing behind a paywall, always improving, feedback shapes it, no ads, download or delete, five themes), and "early access" instead of "private beta" everywhere. Copy round and mockup round before any code. *Size M–L.* **Built 2026-10-20** (Apollon 565dda2; copy approved, mockup round skipped by the user). Left: the user's look at the page and copy changes, a new `og-image.png`.
 
 ---
 

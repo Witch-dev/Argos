@@ -368,19 +368,33 @@ Then a short list: reviews with privacy per review, quotes and writing (the old 
 
 ### Still to do before building
 
-- [ ] **Copy round:** every line of the page in English (and Spanish, which the user checks), reviewed line by line before any markup.
-- [ ] **Mockup round:** 2–3 layouts on the design canvas, mainly the switch and how a side's sections are arranged; the user picks.
-- [ ] **Final brief** here, with the motion plan (the switch's change of side, the shelf changing with it) and the states, then the tasks below completed.
+- [x] **Copy round:** `content/landing-phase3-copy.md`, English and Spanish. **Approved as drafted 2026-10-20**, with the gender-neutral Spanish options; the user changes lines once seen on the page.
+- [x] ~~**Mockup round**~~ **Skipped by the user (2026-10-20):** built straight away, adjusted on the real page.
+- [x] **Brief:** see "As built (Phase 3)" below.
 
-### Tasks (outline, completed after the copy and mockup rounds)
+### Tasks
 
 #### Frontend
-- [ ] Switch (with `role="tablist"` semantics), pinned copy in the top bar, side kept in component state.
-- [ ] Opening shelf per side; new demos: import, journal, goal and stats, privacy, reading update; remove `DemoWriting`.
-- [ ] Shared part; links to What's new; "Early access" wording everywhere.
-- [ ] All text in the five locale files; tests updated.
+- [x] Switch (with `role="tablist"` semantics), pinned copy in the top bar, side kept in component state.
+- [x] Opening shelf per side; new demos: import, journal, goal and stats, privacy, reading update; remove `DemoWriting`.
+- [x] Shared part; links to What's new; "Early access" wording everywhere.
+- [x] All text in the five locale files; tests updated.
 
 #### Verification & docs
-- [ ] `npm test`, `npm run build`, `npm run lint`.
-- [ ] Screenshot critique round (Paper and Dark, 1280 and 375, Spanish at 375), then `design-reviewer`.
-- [ ] Tick §"Added later"'s import item; `CHANGELOG.md` entry.
+- [x] `npm test` (1005/1005), `npm run build`, `npm run lint`.
+- [x] Screenshot critique round (Paper and Dark, 1280 and 375, Spanish at 1280 and 375) with `design-reviewer`: two rounds, fixes below.
+- [ ] The user's look at the live page; their changes to the copy.
+- [ ] Redraw `og-image.png` with the new headline (it still shows the old pitch; the description and title in `index.html` are updated).
+- [x] `CHANGELOG.md` entry. (§"Added later"'s import item stays open: the page names no import time, since there is no measured number.)
+
+### As built (Phase 3, 2026-10-20)
+
+- **Order in the opening:** headline, then the switch with "Use one side, the other, or both.", then the side's lead line, the buttons and the access note. The decision said "under the headline and buttons"; it went right under the headline so the lead line it changes sits under it. Easy to move.
+- **The switch** (`landing/SideSwitch.tsx`) uses the header's `SectionSwitch` styles a size up (10rem segments, 3rem tall). Both copies are tablists over one tabpanel (`#landing-side`), labelled by the opening's tab. The top bar's copy is `visibility: hidden` until the opening's switch scrolls under the bar (the same `IntersectionObserver` as the logo), so only one is ever in the accessibility tree. Choosing a side from the top bar scrolls to the start of that side (smooth, or instant under reduced motion). On a phone it hangs under the bar, full width, so the bar doesn't grow.
+- **Each side:** strength 1 on the book-cloth band (Books: import; Community: clubs), 2 on the cream page, 3 in a sunken well, 4 on the cream page; then "Also in Books / Community" in two columns. The showcase belongs to Community. The shared part is a sunken well of one-claim rows (claim left, meaning right).
+- **Demos:** `DemoFriendsShelf`, `DemoImport` (`StatTiles` + a book to check), `DemoJournal` (in the journal's own words, `sections.journal.*`), `DemoStats` (goal bar + `StatTiles`; the author's name a step smaller), `DemoPrivacy` (the only new interactive one: `Segmented`, the line under it is a `role="status"`), `DemoUpdate` (reuses `ReadingJourney`). None fetch; the demo tests render them without providers.
+- **Motion:** the side's shelf is keyed by side, so changing side replays the opening's settle (≤300ms); the journey line fills as the update appears; nothing else moves.
+- **Copy changes made while building:** the privacy demo's lines say "this book" instead of the title (titles stay English on the covers); Spanish themes are "De Papel a Oscuro" (the app's own names); the translation tag for the What's new link is `<a>` (`<link>` is an empty HTML tag, so the link came out blank).
+- **Critique fixes:** a bigger switch with its hint in ink; headings of "Also in" and the shared part raised to 2xl; shared part from two columns to one column of rows; even two-column checklists; "octubre de 2026" with only the first letter raised; "No ads…" row spans the full width.
+- **Asked for after the build (2026-10-20):** both logos (top bar and opening) are the solid winged dog in the theme's green, drawn as the header draws it (a mask over `--accent`), instead of the old brown original-colour picture, the opening's one 12rem wide (7.5rem on a phone; it was 9rem and 6rem) so its lettering reads; the app's `ThemeMenu` sits in the top bar between the language picker and Log in, its menu opening downward (`opens="down"`). The landing tests stub `matchMedia` for it, as `App.test.tsx` does.
+- **Not a bug:** in English, dates and numbers follow the visitor's browser (`i18n/format.ts`), so screenshots on a Spanish-language Windows show "5.240" on the English page.
