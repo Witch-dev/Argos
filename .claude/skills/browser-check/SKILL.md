@@ -1,9 +1,19 @@
 ---
 name: browser-check
-description: Use when a change to Argos needs to be seen working in a real browser, not just typechecked or unit-tested — triggers on "/browser-check", "check it in the browser", "verify it live", "take a screenshot of X", or the "exercise it in the browser" step of new-react-feature, web-design, test-plan or a spec's verification checklist. Runs the current Apollon code on side ports with Playwright, logs in through the API and seeds fresh test readers.
+description: Use when a change to Argos needs to be seen working in a real browser, not just typechecked or unit-tested — triggers on "/browser-check", "check it in the browser", "verify it live", "take a screenshot of X", or the "exercise it in the browser" step of new-react-feature, web-design, test-plan or a spec's verification checklist. Runs the current Apollon code on side ports with Playwright, logs in through the API and seeds fresh test readers. Runs as its own Sonnet agent: pass what to check (routes, the flow, what should happen) as the arguments; it returns a short report.
+context: fork
+agent: general-purpose
+model: sonnet
 ---
 
 # Argos browser check
+
+You are running as a separate agent. Your task (what to check, or "start the side-port servers") is in the arguments. Your logs, server output and screenshots stay with you; only your final report goes back, so keep it short:
+
+- **Result:** works / doesn't work, in one line.
+- **What broke:** each problem in one line (where, what you did, what happened, what should happen), with the console or API error text if there was one.
+- **Screenshots:** paths, only if the task asked for them. Don't describe every image; say what's wrong in them.
+- **Servers:** whether the side-port API and Vite are still running (with their PIDs) or stopped, and whether the user's own API needs a restart.
 
 Drive the real app with Playwright against the **current** code, without touching the user's own dev servers. Code is in `C:/Users/jramo/Apollon`.
 
@@ -12,8 +22,10 @@ Drive the real app with Playwright against the **current** code, without touchin
 The user's own API on **5258** (and Vite on 5173) often runs an older build, so don't test against it and don't stop it.
 
 1. Build: `dotnet build src/Argos.Api -c Release` (Release, because the user's running API locks `bin/Debug`).
-2. Start the API in the background from `src/Argos.Api`: `dotnet bin/Release/net10.0/Argos.Api.dll` with the environment variables `ASPNETCORE_ENVIRONMENT=Development`, `ASPNETCORE_URLS=http://localhost:5259` and `Cors__AllowedOrigins__0=http://localhost:5174`.
-3. Start Vite in the background from `web/`: `npx vite --port 5174 --strictPort`.
+2. Start the API from `src/Argos.Api`: `dotnet bin/Release/net10.0/Argos.Api.dll` with the environment variables `ASPNETCORE_ENVIRONMENT=Development`, `ASPNETCORE_URLS=http://localhost:5259` and `Cors__AllowedOrigins__0=http://localhost:5174`.
+3. Start Vite from `web/`: `npx vite --port 5174 --strictPort`.
+
+Start both **detached** with PowerShell `Start-Process -WindowStyle Hidden -PassThru` (set the environment variables with `$env:` first, in the same command), not as a background job of your own shell: you are a short-lived agent, and the parent session may need the servers after you finish (for `shoot.mjs`). If they're already up (check the ports), reuse them.
 4. Postgres is the Docker container `apollon-postgres-1` (host port 5433, database `argos`). If Docker isn't running, start Docker Desktop (`Start-Process 'C:\Program Files\Docker\Docker\Docker Desktop.exe'`, about 30 s) and `docker compose up -d postgres mailpit` in Apollon.
 
 A stopped Vite can survive as a process. Check who owns a port (`netstat -ano | findstr :5174`) before restarting.
@@ -44,10 +56,10 @@ For longer SQL, `docker cp file.sql apollon-postgres-1:/tmp/x.sql` and run it wi
 
 ## 4. Check, then clean up
 
-**Screenshots for design work:** `node C:/Users/jramo/Argos/scripts/shoot.mjs <route…> --out <scratchpad>/shots` does the login, themes and widths for you (Paper and Dark at 1280 and 375 by default; `--themes`, `--widths`, `--scroll`, `--full`). It registers and confirms its own reader the first time and reuses it from `<out>/reader.json`. Needs this section's side-port servers and a one-time `npm install` in `Argos/scripts`. Write your own Playwright script only for flows (clicking, typing, seeding data).
+**Screenshots for design work:** `node C:/Users/jramo/Argos/scripts/shoot.mjs <route…> --out <scratchpad>/shots` does the login, themes and widths for you (only Paper at 1280 by default, `--final` for Paper and Dark at 1280 and 375, `--clip <selector>` for one component; `--themes`, `--widths`, `--scroll`, `--full`). It registers and confirms its own reader the first time and reuses it from `<out>/reader.json`. Needs this section's side-port servers and a one-time `npm install` in `Argos/scripts`. Write your own Playwright script only for flows (clicking, typing, seeding data).
 
 **Animations:** record a video (`browser.newContext({ recordVideo: { dir } })`) or take screenshots at 0 / 50 / 100% of the duration; check once more with `reducedMotion: 'reduce'` in the context options.
 
 - Check at phone width (~375px) and desktop, and in the themes the change affects. Take screenshots into the scratchpad and look at them.
 - Playwright gotchas: `name:` matching is a substring ("Like this list" also matches "Unlike this list"), so use `exact: true`. `dragTo` doesn't drive the list's HTML5 drag-and-drop: dispatch `dragstart`/`dragover`/`drop` DragEvents with one shared `DataTransfer`, pausing between them.
-- Stop the side-port API and Vite when done. Leave the user's own servers alone, and remind them to restart their API if backend code changed.
+- Leave the side-port API and Vite running unless the task says this is the last check (then stop them by PID). Never touch the user's own servers on 5258/5173; say in the report if their API needs a restart because backend code changed.

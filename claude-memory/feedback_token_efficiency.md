@@ -1,6 +1,6 @@
 ---
 name: feedback-token-efficiency
-description: "User wants token use kept low: do small work directly instead of via subagents; agent models are Sonnet except argos-security on Opus; the orchestrator was retired"
+description: "User wants token use kept low: short sessions (one per phase), screenshots looked at by a Sonnet agent not the main session, small work done directly; Sonnet agents except argos-security on Opus"
 metadata:
   type: feedback
 ---
@@ -10,6 +10,12 @@ On 2026-10-06 the user asked to cut token use and approved these rules:
 - **Subagents only for big multi-part work.** Do bug fixes, small features and single-area changes directly. Use backend-dev/frontend-dev only for a full spec phase that touches both backend and frontend, or when the user names an agent. The main session plans and delegates itself: the `orchestrator` agent was removed on 2026-10-07, because it added a second Opus layer that started cold and re-read the spec. Phase reviews from [[feedback-review-after-each-phase]] still count as requested.
 - **Models (set in `Argos/.claude/agents/*.md` frontmatter):** Opus for `argos-security` (renamed from `security-review` on 2026-10-07, so it isn't confused with the built-in `/security-review` command); planning happens in the main Opus session. Sonnet for `backend-dev`, `frontend-dev`, `tester` and `reviewer`. The user's words: "only planning and security should use Opus".
 - **Don't make agents read all of SPEC.md.** Agent files now say to open only the sections they need. When delegating, put the relevant facts in the handoff so the subagent doesn't re-read them.
+- **Second round (2026-10-20), after a week's usage went in 3 days.** The usage report showed 74% of usage above 150k context and 34% from web-design + browser-check (screenshots kept in the Opus context). Subagents themselves were only ~7%. The user approved all of these:
+  - **Context length is the main cost.** One session per spec phase: hand off ([[feedback-handoff-prompt-new-session]]) and let the user `/clear`, rather than carrying on into the next phase. The status line (`~/.claude/statusline.mjs`) shows context in k, yellow at 100k, red at 150k. When it turns yellow mid-task, suggest `/compact`.
+  - **Screenshots never sit in the main context.** web-design's critique round hands the paths to `design-reviewer` in critique mode (Sonnet), which replies in words. `shoot.mjs` defaults to Paper at 1280; `--clip <selector>` shoots one component; `--final` takes the full Paper/Dark × 1280/375 set for the last round only.
+  - **browser-check runs as a forked Sonnet agent** (`context: fork` in its frontmatter), starts servers detached so they outlive it, and returns a short report.
+  - **web-design reads less:** only the DESIGN.md sections the work touches, once per session; not the finished shelf-refresh spec; design-tokens.md only when Phase 2's rules don't cover a value.
+  - The exception to "do it directly": looking at images. That always goes to a Sonnet agent, even for small work.
 - **Changelog:** one line per change, see [[feedback-maintain-changelog]].
 
 **Why:** A subagent starts cold and re-reads SPEC.md (~8k tokens) plus code, and the old 134 KB changelog cost ~34k tokens every time it was read to add one entry.

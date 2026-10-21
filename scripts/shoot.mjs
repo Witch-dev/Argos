@@ -1,8 +1,12 @@
 // Screenshots of the current Apollon code for design work (web-design, ux-review, browser-check).
 //
 //   node scripts/shoot.mjs /authors/OL26320A /u/someone [--themes paper,dark] [--widths 1280,375]
-//                          [--out <dir>] [--user <name> --password <pw>] [--scroll 0,700] [--full]
-//                          [--anon] [--metrics] [--shifts] [--lang de]
+//                          [--final] [--clip <css selector>] [--out <dir>] [--user <name> --password <pw>]
+//                          [--scroll 0,700] [--full] [--anon] [--metrics] [--shifts] [--lang de]
+//
+// Default is one shot per route (Paper, 1280), cheap enough for iterating. --final takes the full set
+// (Paper and Dark at 1280 and 375) for the last round. --clip shoots only the first element matching
+// the selector (a component instead of the whole screen): smaller images, fewer tokens to look at.
 //
 // For trustworthy --metrics numbers measure a production build: stop Vite on 5174 and run
 // `npx vite preview --port 5174 --strictPort` in Apollon/web after `npm run build` (the API only
@@ -28,17 +32,19 @@ const flag = (name, fallback) => {
 }
 // Every word that isn't a flag or a flag's value is a route. Git Bash turns "/authors/x" into
 // "C:/Program Files/Git/authors/x", so that prefix is undone; "authors/x" without a slash works too.
-const VALUE_FLAGS = ['--themes', '--widths', '--out', '--user', '--password', '--scroll', '--lang']
+const VALUE_FLAGS = ['--themes', '--widths', '--out', '--user', '--password', '--scroll', '--lang', '--clip']
 const routes = args
   .filter((a, i) => !a.startsWith('--') && !(i > 0 && VALUE_FLAGS.includes(args[i - 1])))
   .map((a) => a.replace(/\\/g, '/').replace(/^[A-Za-z]:\/.*?\/Git\//, '/'))
   .map((a) => (a.startsWith('/') ? a : `/${a}`))
 if (routes.length === 0) {
-  console.error('Usage: node scripts/shoot.mjs <route> [<route>…] [--themes paper,dark] [--widths 1280,375] [--out dir] [--user u --password p] [--scroll 0,700] [--full] [--anon] [--metrics] [--shifts]')
+  console.error('Usage: node scripts/shoot.mjs <route> [<route>…] [--themes paper,dark] [--widths 1280,375] [--final] [--clip selector] [--out dir] [--user u --password p] [--scroll 0,700] [--full] [--anon] [--metrics] [--shifts]')
   process.exit(1)
 }
-const themes = flag('themes', 'paper,dark').split(',')
-const widths = flag('widths', '1280,375').split(',').map(Number)
+const final = args.includes('--final')
+const themes = flag('themes', final ? 'paper,dark' : 'paper').split(',')
+const widths = flag('widths', final ? '1280,375' : '1280').split(',').map(Number)
+const clip = flag('clip')
 const scrolls = flag('scroll', '0').split(',').map(Number)
 const full = args.includes('--full')
 // --lang: the site's language (en, es, pt-BR, de, fr); German is the longest, for checking fit.
@@ -187,7 +193,16 @@ try {
           await page.evaluate((v) => window.scrollTo(0, v), y)
           await page.waitForTimeout(250)
           const file = path.join(out, `${slug(route)}-${theme}-${width}${lang ? `-${lang}` : ''}${y ? `-y${y}` : ''}.png`)
-          await page.screenshot({ path: file, fullPage: full })
+          if (clip) {
+            const el = page.locator(clip).first()
+            if ((await el.count()) === 0) {
+              console.log(`${route} ${theme} ${width}: nothing matches --clip ${clip}, skipped`)
+              continue
+            }
+            await el.screenshot({ path: file })
+          } else {
+            await page.screenshot({ path: file, fullPage: full })
+          }
           console.log(`${file}${sideways ? '   ⚠ scrolls sideways' : ''}`)
         }
       }

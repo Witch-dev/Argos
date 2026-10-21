@@ -27,7 +27,7 @@ Pin down, asking the user only if unclear:
 
 ## Phase 2 — Capture
 
-Use the `browser-check` skill (side ports, Playwright, seeded readers). For plain page captures use `node C:/Users/jramo/Argos/scripts/shoot.mjs <route…> --out <scratchpad>/shots` (Paper and Dark at 1280 and 375 by default); write your own Playwright script only for states that need clicks or seeded data. Take screenshots into the scratchpad and **look at each one** with Read; don't review from the CSS alone.
+Use the `browser-check` skill (side ports, Playwright, seeded readers). For plain page captures use `node C:/Users/jramo/Argos/scripts/shoot.mjs <route…> --out <scratchpad>/shots --final` (Paper and Dark at 1280 and 375; without `--final` only Paper at 1280, and `--clip <selector>` shoots one component); write your own Playwright script only for states that need clicks or seeded data. Take screenshots into the scratchpad and **look at each one** with Read; don't review from the CSS alone.
 
 **Motion:** for anything that animates, record a short video or take frames at 0 / 50 / 100% of the duration, and capture it again with `reducedMotion: 'reduce'`.
 
