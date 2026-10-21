@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-21 — Fixed: a reader leaving mid-request (closing the tab) made the sign-in suspension check throw, and Sentry reported it as an error (GET /api/logs); now ended quietly → Apollon 6963659
 - 2026-10-21 — Fixed: dates on the English site came out in the browser's language ("20 de octubre de 2026" with a Spanish browser); now English words, keeping an English browser's day-month order → Apollon d8f26be
 - 2026-10-20 — Frontend tests about twice as fast: Vitest's vmThreads pool builds jsdom once per worker, not per file (76 s → 32 s at CI's size, 40 s → 13 s locally) → Apollon e7784fe
 - 2026-10-20 — Fixed a flaky CI test: the What's new admin test didn't mock the entry refetch after publishing, so on CI's slower runner the editor showed "couldn't be loaded" → Apollon 80363e5
