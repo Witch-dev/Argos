@@ -195,6 +195,8 @@ The user has few friends who track their reading, so early-access readers will c
 - [ ] **What's new** (`specs/whats-new.md`): a public updates page with an admin editor (date, title, text, optional image, English required), a gold dot in the sidebar, started with the last month's changes. *Size M–L.* **Built 2026-10-20** (Apollon 6b7c35b). 12 past entries approved 2026-10-20 (`content/whats-new-past-entries.md`). Left: screenshots for 4 of them, then they go in on the live site.
 - [ ] **Landing page Phase 3** (`specs/landing-page.md`): a Books / Community switch under the headline, four live examples per side, a shared part (one independent developer, nothing behind a paywall, always improving, feedback shapes it, no ads, download or delete, five themes), and "early access" instead of "private beta" everywhere. Copy round and mockup round before any code. *Size M–L.* **Built 2026-10-20** (Apollon 565dda2; copy approved, mockup round skipped by the user). Left: the user's look at the page and copy changes, a new `og-image.png`.
 
+- [ ] **Security check before strangers arrive:** ZAP baseline scan and header checks on the live site (same as the Stage 10 box), and look at the Semgrep findings from 2026-10-21. Package scanning, gitleaks and Dependabot are already automatic (Apollon `Security` workflow, added 2026-10-21). *Size S.*
+
 ---
 
 ## 🚩 Closed beta
@@ -274,6 +276,7 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 - [ ] Every bug testers found is fixed or filed as P3.
 - [ ] No open P1 or P2 bugs.
 - [ ] `reviewer` + `argos-security` pass over the whole app, not just the last change.
+- [ ] **Outside-in scan of the live site:** OWASP ZAP baseline scan (Docker, passive only) against `wingedwords.app` and the API, plus securityheaders.com and Mozilla Observatory. Every finding fixed or filed as a bug. Also done once before the closed beta (Stage 4b). *Size S.*
 - [ ] **Full manual test pass.** Create `Argos/testing/README.md`: one row per area plan with its step count, the commit it was written against, the date last tested and the result. Then run `/test-plan` for every area so each plan matches the code that will launch, and fill in `_shared.md`. Run Playwright through the steps not tagged 👤, then do the 👤 steps by hand on a real phone and desktop. Every ❌ becomes a bug file. Left until now on purpose, so features that are still changing don't need testing twice. *Size M.*
 - [ ] Move the API to Render's paid plan (~$7/month) so it never sleeps (`ACCOUNTS-AND-HOSTING.md` §2.3 C).
 - [ ] **Turn the bot check on (Cloudflare Turnstile, free).** The code is built (Stage 4, `specs/bot-check.md`) and the privacy policy already names the service. Left: create the Cloudflare widget for `wingedwords.app`, set `Turnstile__SiteKey` and `Turnstile__SecretKey` on the API in Render, and do the checks in `DEPLOY.md` ("Bot check on login and sign-up").

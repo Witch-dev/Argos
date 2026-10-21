@@ -62,6 +62,15 @@ if ($backend) {
     $out = Run 'dotnet test (Release)' { dotnet test test/Argos.Tests -c Release }
     $total = ($out | Select-String -Pattern '(total|Total tests):\s*(\d+)' | Select-Object -Last 1)
     $summary += "backend ok" + $(if ($total) { " ($($total.Matches[0].Groups[2].Value) tests)" } else { '' })
+
+    # Same rule as the Security workflow: a high or critical advisory in any NuGet package blocks.
+    $json = Run 'vulnerable NuGet packages' { dotnet list Argos.slnx package --vulnerable --include-transitive --format json }
+    $bad = @(($json -join "`n" | ConvertFrom-Json).projects | ForEach-Object { $_.frameworks } |
+        ForEach-Object { @($_.topLevelPackages) + @($_.transitivePackages) } | Where-Object { $_ } |
+        ForEach-Object { $_.vulnerabilities } | Where-Object { $_.severity -in 'High', 'Critical' })
+    if ($bad.Count -gt 0) {
+        Fail 'vulnerable NuGet packages' (dotnet list Argos.slnx package --vulnerable --include-transitive 2>&1)
+    }
 }
 
 if ($web) {
@@ -71,11 +80,23 @@ if ($web) {
         Run 'lint' { npm run lint } | Out-Null
         $out = Run 'vitest' { npx vitest run }
         Run 'build' { npm run build } | Out-Null
+        Run 'npm audit (high or critical)' { npm audit --audit-level=high } | Out-Null
         $tests = ($out | Select-String -Pattern 'Tests\s+(\d+) passed' | Select-Object -Last 1)
         $summary += "web ok" + $(if ($tests) { " ($($tests.Matches[0].Groups[1].Value) tests)" } else { '' })
     }
     finally { Pop-Location }
 }
+
+# Secrets in the commits about to go out (the Security workflow scans the whole history). Needs
+# Docker; when it isn't running this step is skipped, and CI still catches it.
+docker info *> $null
+if ($LASTEXITCODE -eq 0) {
+    $range = if (git rev-parse --abbrev-ref '@{u}' 2>$null) { '@{u}..HEAD' } else { 'HEAD' }
+    Run 'gitleaks (secrets in outgoing commits)' {
+        docker run --rm -v "${repo}:/repo" zricethezav/gitleaks:v8.21.2 git /repo --no-banner --redact --log-opts="$range"
+    } | Out-Null
+    $summary += 'no secrets'
+} else { $summary += 'secrets not checked (Docker not running)' }
 
 Write-Output ('precheck passed: ' + ($summary -join ', '))
 exit 0
