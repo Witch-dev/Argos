@@ -83,7 +83,7 @@ Comments or likes on entries, email or bell notifications for new entries, a pub
 - [x] Tests: fallback note, dot clears after visiting, editor (English required, alt text required with an image, publish flow). *(Built 2026-10-20: 11 xUnit integration + 17 unit tests, 21 Vitest tests.)*
 
 ### Content
-- [ ] Claude drafts 8–12 past entries from `CHANGELOG.md` (reader-facing only, English and Spanish), the user approves them.
+- [x] Claude drafts 8–12 past entries from `CHANGELOG.md` (reader-facing only, English and Spanish), the user approves them. *(12 entries approved 2026-10-20: `content/whats-new-past-entries.md`.)*
 - [ ] Screenshots for the entries that need one (`scripts/shoot.mjs`), the user approves; entered through the admin page on the live site.
 
 ### Verification & docs
