@@ -19,3 +19,4 @@
 - [No AI art](feedback_no_ai_art.md) — no AI-generated images; public-domain/CC0 art instead (AI avatars slated for replacement)
 - [Restyle direction](project_design_restyle_direction.md) — approved mockup 2026-10-16: cream page stays, shelf effect is the signature; DESIGN.md first, then tokens and pieces
 - [Translations checked](project_translations_checked.md) — only English and Spanish reviewed by the user; don't advertise five languages yet
+- [Push as its own command](feedback_push_as_own_command.md) — git push of Apollon in a separate call; the precheck hook skipped one chained after a heredoc commit
