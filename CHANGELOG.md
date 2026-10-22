@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-22 — Fixed: Sentry no longer reports outgoing calls our code already handles (Book Riot's feed answering 500); reports come only from our own error logs → Apollon 4afba52
 - 2026-10-22 — Sign-up never says an email has an account: everyone gets "check your inbox", the emailed link makes the account (with the sign-up password in another browser), a taken address gets an "already have an account" email; change email to a taken address looks the same; unfinished sign-ups deleted after 3 days (privacy policy) → specs/signup-check-your-inbox.md, bugs/email-enumeration-signup-login.md
 - 2026-10-22 — Live-site scans: ZAP baseline 0 FAIL on site and API (warnings reviewed and accepted), Mozilla Observatory A+ for the site, securityheaders.com A+ site / A API → ROADMAP.md (Stage 4b, security check)
 - 2026-10-22 — Fixed: a daily email budget; past 50 emails a day the API alerts through Sentry, from 80 sign-up confirmations and feedback copies wait for the next day while resets and security notices still go; the hourly cap says how many minutes are left → bugs/email-sending-has-no-overall-budget.md
