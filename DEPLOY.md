@@ -40,7 +40,7 @@ The API refuses to start outside Development when either list is empty, or when 
 
 Per-address limits can't stop leaked email/password pairs being tried from thousands of addresses, one or two guesses each. With the bot check on, login and sign-up each need a solved Turnstile challenge (usually invisible to a real reader). Code and decisions: `specs/bot-check.md`.
 
-**It is off until both keys are set.** Nothing to deploy for the closed beta; turn it on before public launch (ROADMAP Stage 10). The API refuses to start if only one of the two is set.
+**It is off until both keys are set.** Turn it on before (or together with) turning off invite-only sign-up: since 2026-10-22 sign-ups are open (ROADMAP, 🚩 Early access). The API refuses to start if only one of the two is set.
 
 **Turning it on:**
 1. In the Cloudflare dashboard (free account) → Turnstile → add a widget. Hostname `wingedwords.app` (add `localhost` only on a separate dev widget). Mode: Managed.
@@ -153,12 +153,13 @@ Everything is in one Render account, region **Virginia (US East)**. The domain i
 | `Jwt__SigningKey` | long random value (Render's *Generate* button); changing it logs everyone out |
 | `Cors__AllowedOrigins__0` | `https://wingedwords.app` |
 | `App__FrontendBaseUrl` | `https://wingedwords.app` |
-| `Registration__InviteOnly` | `true` during the beta. Set to `false` only to register the very first account, then back. |
+| `Registration__InviteOnly` | `false` since 2026-10-22: anyone can sign up (ROADMAP, 🚩 Early access). Set back to `true` to close sign-ups again (spam, say); readers' invite links then work again. |
 | `Email__Host` / `Email__Username` / `Email__Password` | `smtp.resend.com` / `resend` / a Resend API key with *sending access* for `wingedwords.app` |
 | `Email__Port` | **`2587`** (see below) |
 | `Email__FromAddress` / `Email__ReplyToAddress` | `hello@wingedwords.app` |
+| `Email__DailyWarnAt` / `Email__DailyLimit` | not set: the defaults 50 / 80 fit Resend's free 100 a day. At the warn count an error reaches Sentry; from the limit, sign-up confirmations and feedback copies wait for the next day (UTC). Raise both if Resend's plan goes up (`bugs/email-sending-has-no-overall-budget.md`) |
 | `Sentry__Dsn` | the Sentry project's DSN (Sentry → Settings → Projects → Client Keys). Only here, not in a committed file, so no other copy of the API reports to Sentry. Empty = error reports off |
-| `Turnstile__SiteKey` / `Turnstile__SecretKey` | not set yet (bot check off; see its section) |
+| `Turnstile__SiteKey` / `Turnstile__SecretKey` | the Cloudflare Turnstile widget's keys (bot check on; see its section). Both or neither |
 | `Admin__UserIds__0` | your account id (see "Admin role" below). More admins: `Admin__UserIds__1`, … |
 
 On the site service: `API_BASE_URL` = `https://api.wingedwords.app/api` (a plain https URL; the container refuses anything else).
@@ -169,4 +170,4 @@ On the site service: `API_BASE_URL` = `https://api.wingedwords.app/api` (a plain
 - **Render deployed on every push to `main`**, whether or not CI passed. Since 2026-10-19 both services (site and API) are set to *After CI checks pass* (Settings → Build & Deploy → Auto-Deploy): a push goes live only once the GitHub Actions run is green, and a red run deploys nothing. To ship without waiting (an urgent fix while CI is down), use *Manual Deploy* on the service.
 - **Resend: leave click and open tracking off.** Tracking rewrites the confirmation and reset links through a third-party address, and the privacy policy doesn't mention it.
 
-**First-account recipe** (no readers exist, so nobody can create an invite): set `Registration__InviteOnly` to `false`, register, set it back to `true`, and check that the confirmation email arrives.
+**First-account recipe** (only if invite-only is on and no readers exist, so nobody can create an invite): set `Registration__InviteOnly` to `false`, register, set it back to `true`, and check that the confirmation email arrives.

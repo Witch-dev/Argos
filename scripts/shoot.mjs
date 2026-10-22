@@ -13,12 +13,11 @@
 // allows port 5174). The dev server serves hundreds of unbundled files.
 //
 // Needs the side-port servers from the browser-check skill (API on 5259, Vite on 5174) and a one-time
-// `npm install` in this folder. Without --user it registers a fresh reader (shot_<time>), confirms its
-// email in the local database and saves the login to <out>/reader.json, so the next run can reuse it
+// `npm install` in this folder. Without --user it registers a fresh reader (shot_<time>), opens its
+// sign-up link from Mailpit (localhost:8025) and saves the login to <out>/reader.json, so the next run can reuse it
 // with --user/--password. Prints one line per shot, flagging sideways scroll.
 
 import { chromium } from 'playwright'
-import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 
@@ -69,6 +68,23 @@ async function ensureServers() {
   }
 }
 
+const MAILPIT = process.env.SHOOT_MAILPIT ?? 'http://localhost:8025'
+
+/** The token in the newest sign-up email to `email`, waiting up to 15 s for it to arrive. */
+async function signupToken(email) {
+  for (let waited = 0; waited < 15000; waited += 500) {
+    const search = await fetch(`${MAILPIT}/api/v1/search?query=${encodeURIComponent(`to:${email}`)}`)
+    const [newest] = search.ok ? (await search.json()).messages ?? [] : []
+    if (newest) {
+      const message = await (await fetch(`${MAILPIT}/api/v1/message/${newest.ID}`)).json()
+      const match = /\/confirm-signup#token=(\S+)/.exec(message.Text ?? '')
+      if (match) return decodeURIComponent(match[1])
+    }
+    await new Promise((resolve) => setTimeout(resolve, 500))
+  }
+  throw new Error(`No sign-up email reached ${email} in Mailpit (${MAILPIT}). Is it running?`)
+}
+
 async function reader() {
   const user = flag('user')
   const password = flag('password')
@@ -84,10 +100,16 @@ async function reader() {
     body: JSON.stringify({ username, email: `${username}@example.com`, password: pw }),
   })
   if (!res.ok) throw new Error(`Registering a reader failed: ${res.status} ${await res.text()}`)
-  const sql = path.join(out, 'confirm.sql')
-  fs.writeFileSync(sql, `UPDATE "AspNetUsers" SET "EmailConfirmed" = true WHERE "UserName" = '${username}';`)
-  execFileSync('docker', ['cp', sql, 'apollon-postgres-1:/tmp/shoot-confirm.sql'])
-  execFileSync('docker', ['exec', 'apollon-postgres-1', 'sh', '-c', 'psql -U "$POSTGRES_USER" -d argos -q -f /tmp/shoot-confirm.sql'])
+  // Sign-up only sends a link; the account (email confirmed) is made when it's used
+  // (specs/signup-check-your-inbox.md). The link is read from Mailpit.
+  const token = await signupToken(`${username}@example.com`)
+  const confirmed = await fetch(`${API}/auth/confirm-signup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    // No browser id here, so the sign-up password proves it's the same person.
+    body: JSON.stringify({ token, password: pw }),
+  })
+  if (!confirmed.ok) throw new Error(`Using the sign-up link failed: ${confirmed.status} ${await confirmed.text()}`)
   const login = { username, password: pw }
   fs.writeFileSync(saved, JSON.stringify(login))
   return login

@@ -42,12 +42,20 @@ In the session scratchpad (never in Apollon): `npm init -y && npm i playwright@1
 
 ## 3. Seed test readers
 
-Create fresh readers through the API (register, then follows, logs, `/booklists`, `/clubs`) rather than using the hand-made dev data. Sign-up is rate limited to about 5 a minute from one address (HTTP 429): when seeding more than 5 readers, wait 65 seconds and retry. A password that appears in a data breach is refused, so use a random one. The seeded `alice_reads` and friends exist, but their passwords aren't recorded. Name them so the run is recognisable (e.g. `bc_a_<timestamp>`).
+Create fresh readers through the API (register, then follows, logs, `/booklists`, `/clubs`) rather than using the hand-made dev data. A password that appears in a data breach is refused, so use a random one. The seeded `alice_reads` and friends exist, but their passwords aren't recorded. Name them so the run is recognisable (e.g. `bc_a_<timestamp>`).
 
-**Confirm their emails.** Since Accounts Phase 2, an unconfirmed reader can't post anything others can read (reviews with text, notes, comments, writings, clubs, public lists). Either click the link in Mailpit (http://localhost:8025), or mark them confirmed directly:
+**Sign-up is two steps** since 2026-10-22 (`specs/signup-check-your-inbox.md`): `POST /api/auth/register` answers 202 and logs nobody in; the account is made by the emailed link. Read it from Mailpit and post its token:
+
+1. `GET http://localhost:8025/api/v1/search?query=to:<email>` → `messages[0].ID`
+2. `GET http://localhost:8025/api/v1/message/<ID>` → in `Text`, the token after `/confirm-signup#token=`
+3. `POST /api/auth/confirm-signup` with `{ "token": "…", "password": "<the sign-up password>" }` → `{ token, next }`, the login token (and the refresh cookie), as login gives. The password is needed whenever the request's `deviceId` isn't the one sent at register (a browser opening the link in the page sends its own; the same browser that signed up needs none).
+
+The email can take a second to reach Mailpit: poll. The account is created with its email confirmed, so it can post at once. Register and confirm-signup each count against the auth limit of about 5 requests a minute from one address (HTTP 429), so seeding more than 2 readers needs a 65-second wait in between. One address gets at most one sign-up email a minute: a second register for it within the minute answers 202 and sends nothing.
+
+To test what an **unconfirmed** reader sees (accounts from before this change can be unconfirmed), unconfirm one directly:
 
 ```
-docker exec apollon-postgres-1 sh -c 'psql -U "$POSTGRES_USER" -d argos -c "UPDATE \"AspNetUsers\" SET \"EmailConfirmed\" = true WHERE \"UserName\" LIKE '"'"'bc_%'"'"';"'
+docker exec apollon-postgres-1 sh -c 'psql -U "$POSTGRES_USER" -d argos -c "UPDATE \"AspNetUsers\" SET \"EmailConfirmed\" = false WHERE \"UserName\" = '"'"'bc_a_1'"'"';"'
 ```
 
 For longer SQL, `docker cp file.sql apollon-postgres-1:/tmp/x.sql` and run it with `psql -f`.
@@ -56,7 +64,7 @@ For longer SQL, `docker cp file.sql apollon-postgres-1:/tmp/x.sql` and run it wi
 
 ## 4. Check, then clean up
 
-**Screenshots for design work:** `node C:/Users/jramo/Argos/scripts/shoot.mjs <route…> --out <scratchpad>/shots` does the login, themes and widths for you (only Paper at 1280 by default, `--final` for Paper and Dark at 1280 and 375, `--clip <selector>` for one component; `--themes`, `--widths`, `--scroll`, `--full`). It registers and confirms its own reader the first time and reuses it from `<out>/reader.json`. Needs this section's side-port servers and a one-time `npm install` in `Argos/scripts`. Write your own Playwright script only for flows (clicking, typing, seeding data).
+**Screenshots for design work:** `node C:/Users/jramo/Argos/scripts/shoot.mjs <route…> --out <scratchpad>/shots` does the login, themes and widths for you (only Paper at 1280 by default, `--final` for Paper and Dark at 1280 and 375, `--clip <selector>` for one component; `--themes`, `--widths`, `--scroll`, `--full`). It signs up its own reader through the Mailpit link the first time and reuses it from `<out>/reader.json`. Needs this section's side-port servers and a one-time `npm install` in `Argos/scripts`. Write your own Playwright script only for flows (clicking, typing, seeding data).
 
 **Animations:** record a video (`browser.newContext({ recordVideo: { dir } })`) or take screenshots at 0 / 50 / 100% of the duration; check once more with `reducedMotion: 'reduce'` in the context options.
 

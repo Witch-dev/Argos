@@ -30,7 +30,6 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | [Blocks only apply while signed in](blocks-only-apply-signed-in.md) | P3 | L | Backend, privacy |
 | [Writings' Popular list ranks every writing on every request](writings-popular-query-cost.md) | P3 | M | Backend, performance |
 | [Removing a title can race with a new highlight-comment](remove-title-highlight-race.md) | P3 | S | Backend, writings |
-| [Account emails have no overall daily budget](email-sending-has-no-overall-budget.md) | P3 | M | Backend, email, security |
 | [A sign-up racing a rename can take the name being given up](username-hold-race.md) | P3 | S | Backend, accounts |
 | [An old username only redirects on the profile page](held-username-only-on-profile.md) | P3 | S | Backend + frontend, accounts |
 | [Book clubs show a member's progress even when that book is private](club-progress-ignores-reading-visibility.md) | P3 | M | Backend, clubs, privacy |
@@ -41,10 +40,11 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [Account emails have no overall daily budget](email-sending-has-no-overall-budget.md) | 2026-10-22 | the bug file, "Fixed" |
 | [Failed logins, lockouts and account changes leave no log line](security-events-not-logged.md) | 2026-10-22 | the bug file, "Fixed" |
 | [A new endpoint is public unless someone remembers [Authorize]](endpoints-public-unless-marked.md) | 2026-10-22 | the bug file, "Fixed" |
 | [Docker base images follow a tag, and workflows don't limit their token](supply-chain-pinning-gaps.md) | 2026-10-22 | the bug file, "Fixed" |
-| [Whether an email has an account can be found out through sign-up or login timing](email-enumeration-signup-login.md) | 2026-10-22 | the bug file, "Fixed" (login only; sign-up decided with the bot check) |
+| [Whether an email has an account can be found out through sign-up or login timing](email-enumeration-signup-login.md) | 2026-10-22 | the bug file, "Fixed" (login; sign-up and change email: specs/signup-check-your-inbox.md) |
 | [Nobody can leave a book club](club-members-cant-leave.md) | 2026-10-21 | the bug file, "Fix" |
 | [The website's container runs nginx as root](web-container-runs-as-root.md) | 2026-10-21 | the bug file, "Fixed" |
 | [Opening a public club from Discover is a dead end for non-members](public-club-dead-end-for-non-members.md) | 2026-10-20 | the bug file, "Fixed" |

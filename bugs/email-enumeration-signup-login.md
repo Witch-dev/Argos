@@ -25,4 +25,6 @@ Both doors are rate-limited per address, and the bot check (Turnstile) slows scr
 Still different, accepted:
 - An address blocked after 5 wrong passwords on one account gets "too many attempts" (needs an existing account, and only for the one guessing).
 - While an account is locked out (20 wrong passwords from several addresses), anyone typing its email gets a quick "too many attempts", since Identity checks the lockout before the hash. Needs an account already under attack.
-- A few milliseconds of database work (an unknown login with '@' looks up email then username; a wrong password saves the failed count), small and noisy next to the hash. **Sign-up** still says an email is taken, as suggested above: the decision is attached to the "Turn the bot check on" item in `ROADMAP.md`.
+- A few milliseconds of database work (an unknown login with '@' looks up email then username; a wrong password saves the failed count), small and noisy next to the hash. (Sign-up was fixed the same day, below.)
+
+2026-10-22, **sign-up and change email** (the user chose OWASP's way). Sign-up answers "check your inbox" for every address and the account is made by the emailed link; a taken address gets an "you already have an account" email instead. Change email to a taken address looks like any other change and sends that address a notice. Detail: `specs/signup-check-your-inbox.md`.
