@@ -170,7 +170,7 @@ POST   /api/imports/{id}/undo               within 7 days, not while Running
 
 ## 4. Out of scope
 
-- Importing Goodreads Listopia lists or StoryGraph challenges (not in the exports), Letterboxd-style re-import of an Argos export, or other apps (Hardcover, LibraryThing, Fable).
+- Importing Goodreads Listopia lists or StoryGraph challenges (not in the exports), Letterboxd-style re-import of an Argos export, or other apps (Hardcover, Fable). LibraryThing, a pasted list, any Excel/CSV and Bookmory are Phase 4 (added 2026-10-22).
 - Book formats (paperback / ebook / audiobook): Roadmap Stage 11.
 - Reading-journal entries (page-by-page history): Argos keeps one current page per log.
 - Matching against anything except Open Library.
@@ -221,6 +221,28 @@ reviewer + argos-security on the Phase 1 backend. All fixed, with tests:
 - [x] reviewer + argos-security (file upload, an external API, and the private note's privacy). **Done 2026-10-08.** Reviewer: no blocking bugs; fixed the stale Feed/favourites cache after an import change, stale errors in Check these, and the hard-coded "7 days" text; added tests. Security: **fixed** an unbounded `Read Count` (CPU/memory DoS from a tiny file, plus a 500 on a huge rating), unbounded shelves per row, slow tag-stripping on huge reviews, and Find it skipping the book-fetch rate limit / checking the row only after the fetch. **Not fixed, logged as bugs:** `import-no-quota-over-time`, `import-worker-sleeps-inline-on-retries`, `import-upload-shares-login-rate-limit` (also check forwarded headers before launch), `import-isbn-and-work-key-trust`. Ownership, private-note privacy, SQL injection and Open Library hygiene came back clean.
 - [x] Bruno: an Imports folder (`bruno/Imports/`, 9 requests; not run against a live API yet)
 - [x] SPEC.md (the "Shipped so far" line; §10 already marked the import question resolved); `specs/account-system.md` Status line; ROADMAP Stage 2 ticks; CHANGELOG line
+
+### Phase 4 — More sources (added 2026-10-22, Roadmap Stage 9b)
+
+Same pipeline as Goodreads and StoryGraph: a new `ImportSource` value and row mapper per source, then the shared matching, review screen and undo. Decisions still to make when the phase starts: the column-picking step's layout, and whether a pasted list may set a shelf (to read / read) for all its lines.
+
+#### Backend
+- [ ] Get a real export from LibraryThing and Bookmory (and one generic CSV, e.g. Calibre); write mapper tests from them, not from guessed column names
+- [ ] `LibraryThingRowMapper` (tab-separated or CSV; tags/collections → private lists like Goodreads shelves)
+- [ ] Pasted list: a text body instead of a file, one row per non-empty line, "Title" or "Title – Author", status from one choice for the whole list; a line limit like the file row limit
+- [ ] Generic Excel/CSV: read `.xlsx` (new package, checked first) and CSV; return the header row so the reader can map columns; a mapper driven by that column choice
+- [ ] Bookmory as a saved column choice for its Excel export
+- [ ] Error codes and upload limits for the new inputs; `argos-security` (new file type, new package)
+
+#### Frontend
+- [ ] Source cards for each new source on the import page, with how-to-export instructions
+- [ ] Paste box for the list
+- [ ] Column-picking step for Excel/CSV (preview of the first rows, required: title)
+- [ ] Translations in all five languages
+
+#### Verification
+- [ ] Real files from each app import in the browser (`browser-check`), desktop and phone width; unmatched books can be fixed; undo works
+- [ ] reviewer + argos-security; CHANGELOG line; ROADMAP Stage 9b ticks
 
 ### Local setup needed
 

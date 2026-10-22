@@ -48,6 +48,7 @@ There are two launches, not one:
 | **7** | Safety: reporting, moderation, review-bombing rules, blocks | Strangers arrive at public launch | L |
 | **8** | Privacy: private accounts and follow requests | Shelves are currently public to everyone, even logged out | L |
 | **9** | Yearly goal + stats page | Biggest reason readers pick and stay with an app | M |
+| **9b** | Import from more apps: LibraryThing, a pasted list, any Excel/CSV, Bookmory | Strangers arriving at launch come from many apps, not only Goodreads and StoryGraph | M–L |
 | **10** | Beta feedback fixes + launch checklist | Fix what testers found, then open sign-ups | M |
 | 🚀 | **Public launch** | | |
 | **11** | Right after launch | Formats & series, 2FA/passkeys/Google, Wrapped | — |
@@ -195,7 +196,7 @@ The user has few friends who track their reading, so early-access readers will c
 - [ ] **What's new** (`specs/whats-new.md`): a public updates page with an admin editor (date, title, text, optional image, English required), a gold dot in the sidebar, started with the last month's changes. *Size M–L.* **Built 2026-10-20** (Apollon 6b7c35b). 12 past entries approved 2026-10-20 (`content/whats-new-past-entries.md`). Left: screenshots for 4 of them, then they go in on the live site.
 - [ ] **Landing page Phase 3** (`specs/landing-page.md`): a Books / Community switch under the headline, four live examples per side, a shared part (one independent developer, nothing behind a paywall, always improving, feedback shapes it, no ads, download or delete, five themes), and "early access" instead of "private beta" everywhere. Copy round and mockup round before any code. *Size M–L.* **Built 2026-10-20** (Apollon 565dda2; copy approved, mockup round skipped by the user). Left: the user's look at the page and copy changes, a new `og-image.png`.
 
-- [ ] **Security check before strangers arrive:** ZAP baseline scan and header checks on the live site (same as the Stage 10 box), and look at the Semgrep findings from 2026-10-21. Package and Docker image scanning, gitleaks, Dependabot and security.txt are already in place (Apollon `Security` workflow, added 2026-10-21). *Size S.* **Partly done 2026-10-22:** the 12 Semgrep findings are all fixed in the code (Dependabot cooldown, actions pinned to hashes, both containers without root). Header check with `curl`: the site sends CSP, HSTS, nosniff, referrer and permissions policies, COOP, and `www.`/`http://` redirect to `https://wingedwords.app`; the API sent only HSTS, so it now also sends `nosniff` and `Content-Security-Policy: default-src 'none'; frame-ancestors 'none'` (Apollon 0477820, to deploy). Left: deploy, then the ZAP baseline (Docker, `zap-baseline.py`) on the site and `api.wingedwords.app`, and securityheaders.com / Mozilla Observatory.
+- [ ] **Security check before strangers arrive:** ZAP baseline scan and header checks on the live site (same as the Stage 10 box), and look at the Semgrep findings from 2026-10-21. Package and Docker image scanning, gitleaks, Dependabot and security.txt are already in place (Apollon `Security` workflow, added 2026-10-21). *Size S.* **Partly done 2026-10-22:** the 12 Semgrep findings are all fixed in the code (Dependabot cooldown, actions pinned to hashes, both containers without root). Header check with `curl`: the site sends CSP, HSTS, nosniff, referrer and permissions policies, COOP, and `www.`/`http://` redirect to `https://wingedwords.app`; the API sent only HSTS, so it now also sends `nosniff` and `Content-Security-Policy: default-src 'none'; frame-ancestors 'none'` (Apollon 0477820, to deploy). Left: deploy, then the ZAP baseline (Docker, `zap-baseline.py`) on the site and `api.wingedwords.app`, and securityheaders.com / Mozilla Observatory. **OWASP Top 10 pass on the code 2026-10-22:** no serious holes; four small findings filed (`bugs/security-events-not-logged.md` P2, `endpoints-public-unless-marked.md`, `supply-chain-pinning-gaps.md`, `email-enumeration-signup-login.md` P3).
 
 ---
 
@@ -268,6 +269,19 @@ Invite 10–30 readers. Ask them to import their Goodreads library on day one, a
 - [x] Free, and the page says so.
 
 *Size M.* It's last before launch because it's a reason to *stay*, not a safety need. Getting it in before January 2027 matters, because that's when people set reading goals.
+
+---
+
+## Stage 9b — Import from more apps (added 2026-10-22)
+
+**Spec:** `specs/book-import.md`, Phase 4. Each app gets its own row mapper; matching, the review screen and undo are shared with Goodreads and StoryGraph. Get a real export file from each app before writing its mapper.
+
+- [ ] **LibraryThing**: its tab-separated (or CSV) export. *Size S.*
+- [ ] **Paste a list**: one book per line ("Title" or "Title – Author"), no file, matched by title and author. *Size S–M.*
+- [ ] **Any Excel or CSV** (Calibre, BookBuddy, Libib…): a step where the reader picks which column is the title, author, ISBN, rating, dates and status. Needs an `.xlsx` reader package (maintained, no high/critical advisory). *Size M–L.*
+- [ ] **Bookmory**: its Excel export, as a preset of the step above. *Size S once that exists.*
+
+*Size M–L.* Placed before the launch checklist so it gets the Stage 10 test pass; it can move after launch if the beta fills the time.
 
 ---
 
