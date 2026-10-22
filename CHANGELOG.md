@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-22 — Fixed four OWASP findings: failed/blocked logins, lockouts, password resets and changes, email changes and rate-limit refusals are now logged (user id + address, never what was typed); a login for an unknown account takes as long as a wrong password; a test lists every endpoint open to logged-out visitors; Docker base images pinned by digest and the CI token limited to reading; a club invite token no longer reaches error logs or Sentry → bugs/security-events-not-logged.md, bugs/email-enumeration-signup-login.md, bugs/endpoints-public-unless-marked.md, bugs/supply-chain-pinning-gaps.md
+- 2026-10-22 — OWASP Top 10 pass over Apollon: access rules, auth, injection, uploads, headers, supply chain checked; 4 small findings filed as bugs → bugs/security-events-not-logged.md, bugs/endpoints-public-unless-marked.md, bugs/supply-chain-pinning-gaps.md, bugs/email-enumeration-signup-login.md
 - 2026-10-22 — Planned: import from LibraryThing, a pasted list, any Excel/CSV and Bookmory (Roadmap Stage 9b) → specs/book-import.md (Phase 4)
 - 2026-10-22 — Security check before beta, part 1: the 12 Semgrep findings of 2026-10-21 confirmed fixed in the code; live header check: the site sends every header, the API lacked nosniff, now sends it plus a CSP that allows nothing (not yet deployed) → Apollon 0477820, ROADMAP.md (Stage 4b)
 - 2026-10-21 — Fixed: nobody could leave a book club. "Leave club" in the club page's ⋯ menu; an admin who leaves hands the club to the longest-standing moderator (else member), as account erasure does, and the last member's leaving deletes the club → bugs/club-members-cant-leave.md

@@ -41,6 +41,10 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [Failed logins, lockouts and account changes leave no log line](security-events-not-logged.md) | 2026-10-22 | the bug file, "Fixed" |
+| [A new endpoint is public unless someone remembers [Authorize]](endpoints-public-unless-marked.md) | 2026-10-22 | the bug file, "Fixed" |
+| [Docker base images follow a tag, and workflows don't limit their token](supply-chain-pinning-gaps.md) | 2026-10-22 | the bug file, "Fixed" |
+| [Whether an email has an account can be found out through sign-up or login timing](email-enumeration-signup-login.md) | 2026-10-22 | the bug file, "Fixed" (login only; sign-up decided with the bot check) |
 | [Nobody can leave a book club](club-members-cant-leave.md) | 2026-10-21 | the bug file, "Fix" |
 | [The website's container runs nginx as root](web-container-runs-as-root.md) | 2026-10-21 | the bug file, "Fixed" |
 | [Opening a public club from Discover is a dead end for non-members](public-club-dead-end-for-non-members.md) | 2026-10-20 | the bug file, "Fixed" |
