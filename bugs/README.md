@@ -34,11 +34,14 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | [A sign-up racing a rename can take the name being given up](username-hold-race.md) | P3 | S | Backend, accounts |
 | [An old username only redirects on the profile page](held-username-only-on-profile.md) | P3 | S | Backend + frontend, accounts |
 | [Book clubs show a member's progress even when that book is private](club-progress-ignores-reading-visibility.md) | P3 | M | Backend, clubs, privacy |
+| [Backend queries that will slow down as readers grow](backend-scale-hotspots.md) | P3 | M | Backend, performance |
+| [Small backend gaps from the launch review](backend-review-minor-gaps.md) | P3 | S each | Backend |
 
 ## Fixed
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [Nobody can leave a book club](club-members-cant-leave.md) | 2026-10-21 | the bug file, "Fix" |
 | [The website's container runs nginx as root](web-container-runs-as-root.md) | 2026-10-21 | the bug file, "Fixed" |
 | [Opening a public club from Discover is a dead end for non-members](public-club-dead-end-for-non-members.md) | 2026-10-20 | the bug file, "Fixed" |
 | [A new page opens at the old page's scroll position](new-page-opens-scrolled-down.md) | 2026-10-20 | the bug file, "Fixed" |
@@ -50,11 +53,11 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | [The rail's club card shows the next checkpoint a day early west of UTC](rail-club-checkpoint-date-day-early.md) | 2026-10-18 | `CHANGELOG.md`, "Shelf refresh Phase 4: fixes" |
 | [A club says "You've finished the book" on its page and "Not started" everywhere else](club-progress-differs-between-page-and-rail.md) | 2026-10-18 | `CHANGELOG.md`, "Shelf refresh Phase 4: fixes" |
 | [Searching a common word in "My languages" finds nothing](search-common-word-in-language-finds-nothing.md) | Worked around, 2026-10-18 | `CHANGELOG.md`, "Shelf refresh Phase 4: fixes" |
-| [List collaborator invites ignore blocks](list-invites-ignore-blocks.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |
-| [Pending club invites still show a deactivated inviter's name](club-invite-shows-deactivated-inviter.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |
-| [Deleting a writing isn't one transaction](writing-delete-not-atomic.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |
-| [A time zone .NET knows but Postgres doesn't would break the Feed](time-zone-name-mismatch-500.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |
-| [The Readings strip relies only on follows being removed when someone blocks](readings-strip-no-block-safety-net.md) | 2026-10-14 | Apollon 52d5d08 (branch `bugfix-small-backend`, not yet on main) |
+| [List collaborator invites ignore blocks](list-invites-ignore-blocks.md) | 2026-10-14 | Apollon 52d5d08, re-applied to main 2026-10-21 in the access-control sweep (it had stayed on branch `bugfix-small-backend`) |
+| [Pending club invites still show a deactivated inviter's name](club-invite-shows-deactivated-inviter.md) | 2026-10-14 | Apollon 52d5d08, re-applied to main 2026-10-21 in the access-control sweep (it had stayed on branch `bugfix-small-backend`) |
+| [Deleting a writing isn't one transaction](writing-delete-not-atomic.md) | 2026-10-14 | Apollon 52d5d08, re-applied to main 2026-10-21 in the access-control sweep (it had stayed on branch `bugfix-small-backend`) |
+| [A time zone .NET knows but Postgres doesn't would break the Feed](time-zone-name-mismatch-500.md) | 2026-10-14 | Apollon 52d5d08, re-applied to main 2026-10-21 in the access-control sweep (it had stayed on branch `bugfix-small-backend`) |
+| [The Readings strip relies only on follows being removed when someone blocks](readings-strip-no-block-safety-net.md) | 2026-10-14 | Apollon 52d5d08, re-applied to main 2026-10-21 in the access-control sweep (it had stayed on branch `bugfix-small-backend`) |
 | [A book saved as Read without a finish date shows as "Finished" but isn't counted](read-without-finish-date-not-counted.md) | 2026-10-12 | Apollon f312403 |
 | [The header wraps to a third row at 320px wide](header-wraps-at-320px.md) | Won't fix, 2026-10-12 | Below the supported width; fits from 360px |
 | [The bell covers the "Community" tab on tablet-width windows](header-tabs-overlap-bell.md) | 2026-10-11 | Apollon 1e90c48 |
