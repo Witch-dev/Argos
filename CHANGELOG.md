@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-21 — Website container runs without root on nginx-unprivileged 1.30 (the old nginx:1.27 base had 59 high/critical holes); Trivy scans both Docker images in the Security workflow; Dependabot updates base images; security.txt says where to report a problem → bugs/web-container-runs-as-root.md, DEPLOY.md ("Containers run without root"), Apollon 15e4481
 - 2026-10-21 — Sentry DSN moved from `appsettings.Production.json` to Render's `Sentry__Dsn`, so only the live API reports errors (a stray Linux run with no settings had reported a startup failure) → Apollon ea47ce6, DEPLOY.md
 - 2026-10-21 — CI and Security workflows run on pushes to main only (plus pull requests), so Dependabot PRs aren't checked twice → Apollon a61e9d0
 - 2026-10-21 — Security scanning: fixed high-severity advisories in .NET crypto packages (Microsoft packages 10.0.11 → 10.0.13, MimeKit's Pkcs pinned) and Vite (8.3.5); new `Security` workflow (vulnerable NuGet/npm packages + gitleaks, every push and weekly), Dependabot, same checks in `precheck.ps1`, a Security rule in CLAUDE.md, ZAP boxes before beta and launch; from a Semgrep scan: API container runs as non-root, workflow actions pinned to commit hashes, Dependabot waits 7 days on new releases (web container still root: bugs/web-container-runs-as-root.md) → Apollon 013296f, ROADMAP.md

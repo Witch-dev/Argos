@@ -70,6 +70,20 @@ curl -sI http://wingedwords.app | head -3
 ```
 The first two each print `strict-transport-security: max-age=31536000; includeSubDomains`. The third prints a `301` or `308` redirect to `https://`.
 
+## Containers run without root, and security.txt (2026-10-21)
+
+Both containers run as a normal user, so a hole in the API or nginx doesn't hand over root inside the container: the API as the .NET image's `app` user (`USER $APP_UID` in `Dockerfile`), the site on `nginxinc/nginx-unprivileged` as user 101 (`web/Dockerfile`). The site's `entrypoint.sh` can still rewrite `config.js` and the security-headers snippet; nothing else is writable. Both images were built and checked locally; the Security workflow scans them with Trivy on every push and weekly.
+
+**Check after the first deploy with this change:** in Render, both services' logs show a normal start (the API's migrations and "Now listening", nginx with no `permission denied`). Then:
+```
+curl -s https://wingedwords.app/config.js
+curl -sI https://wingedwords.app | grep -i content-security
+curl -s https://wingedwords.app/.well-known/security.txt
+```
+The first shows `apiBaseUrl: "https://api.wingedwords.app/api"`, the second the CSP, the third the file below.
+
+**security.txt** (`web/public/.well-known/security.txt`) tells anyone who finds a security problem to write to `hello@wingedwords.app` ([RFC 9116](https://www.rfc-editor.org/rfc/rfc9116)). Its `Expires` line is **2027-10-21**: before then, move it a year forward, or tools treat the file as stale.
+
 ## Error tracking (Sentry)
 
 Crashes on the API and the site are reported to Sentry (free Developer plan, organization `winged-words`, data stored in the **US**), which emails you the first time each new kind of error appears. Two projects: `wingedwords-api` (ASP.NET Core) and `wingedwords-web` (React). Both use **error monitoring only**: no tracing, logs, metrics or session replay, and no linked GitHub repo. The org's "generative AI features" switch is off, and **Settings → Security & Privacy → "Prevent Storing of IP Addresses"** is on (a second guard: the code already sends no addresses).
