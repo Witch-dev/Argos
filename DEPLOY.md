@@ -143,6 +143,7 @@ Everything is in one Render account, region **Virginia (US East)**. The domain i
 | `Email__Host` / `Email__Username` / `Email__Password` | `smtp.resend.com` / `resend` / a Resend API key with *sending access* for `wingedwords.app` |
 | `Email__Port` | **`2587`** (see below) |
 | `Email__FromAddress` / `Email__ReplyToAddress` | `hello@wingedwords.app` |
+| `Sentry__Dsn` | the Sentry project's DSN (Sentry → Settings → Projects → Client Keys). Only here, not in a committed file, so no other copy of the API reports to Sentry. Empty = error reports off |
 | `Turnstile__SiteKey` / `Turnstile__SecretKey` | not set yet (bot check off; see its section) |
 | `Admin__UserIds__0` | your account id (see "Admin role" below). More admins: `Admin__UserIds__1`, … |
 
