@@ -316,7 +316,7 @@ In rough order. None of these block launch.
 1. ✅ **Formats and editions** (SPEC.md Next up #8, `specs/formats-editions.md`): better default cover, choosing your edition, audiobook in hours:minutes. **Done 2026-10-13.**
    - **Series** ("Book 3 of 7"), split out 2026-10-13: Open Library has no structured series data, so it needs its own spec and an answer to who corrects it.
 2. **Argos Wrapped / monthly wrap-up** as a shareable image, made from fixed rules, not AI. Aim for December 2026 if the launch lands before then; otherwise December 2027.
-3. **Account Phase 4: 2FA, passkeys and "Continue with Google"** (`specs/account-system.md`). Passkeys added 2026-10-07: the strongest protection for readers who turn it on.
+3. **Account Phase 4: 2FA, passkeys and "Continue with Google"** (`specs/account-system.md`). Passkeys added 2026-10-07: the strongest protection for readers who turn it on. **"Continue with Google" built 2026-10-22** (ahead of its place, at the user's request); it switches on once the Google client IDs are set up (`specs/account-system.md` §3.8 "Setup"). 2FA and passkeys still to do.
 4. **Buddy reads** with page-locked comments.
 5. **Mood & trope browsing**, "Popular this week", genre pages.
 6. **Author pages** (`specs/authors.md`, specced 2026-10-15): author page and linked author names, then search + "your history with this author", then follow and new-release alerts, then favourites and quotes. Four phases; Phase 1 is size L (new tables, backfill). **Phase 1 done 2026-10-15** (built ahead of its place in the order, at the user's request). **Phase 2 done 2026-10-15, Phase 3 (follow, new-release alerts) done 2026-10-16, Phase 4 (favourites, quotes) done 2026-10-16**; all four phases done.

@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-22 — "Continue with Google": sign in or sign up with Google (new accounts choose a username, no password needed), connect/disconnect in Settings → Security, Google-only accounts confirm changes with Google and can set a password; hidden until a Google client ID is configured → specs/account-system.md §3.8
 - 2026-10-22 — Fixed: Sentry no longer reports outgoing calls our code already handles (Book Riot's feed answering 500); reports come only from our own error logs → Apollon 4afba52
 - 2026-10-22 — Sign-up never says an email has an account: everyone gets "check your inbox", the emailed link makes the account (with the sign-up password in another browser), a taken address gets an "already have an account" email; change email to a taken address looks the same; unfinished sign-ups deleted after 3 days (privacy policy) → specs/signup-check-your-inbox.md, bugs/email-enumeration-signup-login.md
 - 2026-10-22 — Live-site scans: ZAP baseline 0 FAIL on site and API (warnings reviewed and accepted), Mozilla Observatory A+ for the site, securityheaders.com A+ site / A API → ROADMAP.md (Stage 4b, security check)

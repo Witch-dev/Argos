@@ -1,6 +1,6 @@
 # Feature Spec — Account System
 
-**Status:** 🚧 Phases 1–3 done (2026-10-07). The parts moved to Roadmap Stage 4 (cookie, in-memory token, 15-minute token) were built on 2026-10-11. Part of Phase 1 was already built by `specs/app-hardening.md`; see §0. Phases 4–5 not started. **Phase 6 (Goodreads import) moved to `specs/book-import.md`** (2026-10-07; built and done 2026-10-08), which adds StoryGraph and supersedes §2 "Goodreads import", §3.11 and the Phase 6 tasks here.
+**Status:** 🚧 Phases 1–3 done (2026-10-07). The parts moved to Roadmap Stage 4 (cookie, in-memory token, 15-minute token) were built on 2026-10-11. Part of Phase 1 was already built by `specs/app-hardening.md`; see §0. Phases 4–5 not started. **Phase 4's "Continue with Google" built 2026-10-22** (§3.8, ahead of its Roadmap stage at the user's request); it stays hidden until a Google client ID is set (§3.8 "Setup"). 2FA and passkeys still to do. **Phase 6 (Goodreads import) moved to `specs/book-import.md`** (2026-10-07; built and done 2026-10-08), which adds StoryGraph and supersedes §2 "Goodreads import", §3.11 and the Phase 6 tasks here.
 
 Builds on the existing auth: ASP.NET Core Identity with `ApplicationUser` (`Argos.Infrastructure/Identity/ApplicationUser.cs`), JWTs issued by `TokenService`, refresh tokens from `RefreshTokenService`, and `AuthController` (`/api/auth/register`, `/login`, `/refresh`, `/logout`, `/me`). On the frontend: `AuthContext`, `api/authToken.ts` (login token in memory; the refresh token is an `httpOnly` cookie since 2026-10-11) and `api/client.ts` (adds the `Authorization` header; on a 401 it refreshes once and retries). The research behind this spec, including the Goodreads/Letterboxd comparison, is in `ACCOUNTS-AND-HOSTING.md`. Read that first.
 
@@ -257,6 +257,23 @@ DELETE /api/users/me/logins/google      (only if hasPassword)
   - A `/welcome/username` page for new Google accounts.
   - Connect/disconnect in the Security tab, plus "Set a password" for password-less accounts.
 
+**As built (2026-10-22).** Changed from the design above while building:
+- **No `/auth/providers`:** the client ID is a `googleClientId` field on the existing `/auth/registration-status`, which the login and sign-up forms already load.
+- **No `signupToken`:** `/auth/google` answers `{ needsUsername, suggestedUsername }`, and `/auth/google/complete` takes `{ idToken, username, inviteCode? }`. It is the same Google ID token sent again (Google's lasts an hour), so there is no token of our own to forge or replay. The site carries it to `/welcome/username` in the navigation state, never in the address. While sign-up is invite-only, the username page asks for the invite code too.
+- **No `Google.Apis.Auth` package:** `IGoogleIdTokenValidator` (`Services/GoogleIdTokens.cs`) checks the signature against Google's published keys, the issuer, the audience (our client ID) and the expiry with Microsoft's token library, which the API already has for its own JWTs. That avoids adding Google's libraries and Newtonsoft.Json.
+- **Connect asks for the password** as well as the Google token, like every other change to how you log in. The account's address gets a "Google was connected" email. **Disconnect** is `POST /api/users/me/logins/google/remove` with the password, and it logs out the other sessions.
+- **Re-authentication** (`RefuseReauthenticationAsync` in `AccountSettingsController`): accounts with a password always use it. A password-less account sends `googleIdToken`, which must belong to its connected Google account and be at most 10 minutes old (so the token from an earlier login doesn't count). Username, email, password ("Set a password" is `PUT /users/me/password` without `currentPassword`) and delete all use it. Google's script answers one button per page, so the Account tab shows one "Confirm with Google" box that its three forms share.
+- **No bot check on the Google endpoints:** a Google account is already harder to mass-produce than a form submission, and Google's button can't carry the Turnstile token.
+- **The site's headers:** the CSP allows `accounts.google.com/gsi/` (script, style, frame, connect), and `Cross-Origin-Opener-Policy` became `same-origin-allow-popups` so Google's account picker can answer the page (`web/docker/entrypoint.sh`).
+- **2FA isn't built yet**, so "Google sign-in still asks for the 2FA code" waits for it (a comment in `AuthController.Google.cs` marks the place).
+- **Review pass (2026-10-22, `reviewer` + `argos-security`).** Nothing blocking. Fixed: making the account, its Google login and the invite claim now happen in one transaction (`Services/GoogleAccounts.cs`), so two sign-ups for one Google account at once (two tabs) make one account and both log in, where the loser used to get a 500 and leave an account with neither password nor Google (`SignUpsRacingForOneGoogleAccount…` test). A password login to a Google-only account now hashes like any wrong password, so its speed doesn't reveal the account. A Google confirmation that is merely too old no longer counts toward the 5-failure block. The real token check has unit tests with a locally signed key (`GoogleIdTokenValidatorTests`: wrong client ID, issuer, expiry, key, unsigned and HMAC tokens are refused), and it accepts RS256 only. The username page offers to start again once Google's token has expired. Two client IDs in the setup (step 3). Accepted: no bot check on the Google endpoints; COOP `same-origin-allow-popups`; the key-rotation retry may be answered from cache once (Google publishes keys before using them).
+
+**Setup (to do once, by the user):**
+1. At console.cloud.google.com, create a project (e.g. "Winged Words").
+2. *APIs & Services → OAuth consent screen* (now "Google Auth Platform → Branding"): app name Winged Words, support email, logo, links to `https://wingedwords.app/privacy` and `/terms`, authorised domain `wingedwords.app`. Audience **External**. Scopes: only the defaults (`openid`, `email`, `profile`), which need no Google review. While it's in *Testing*, add your own Google account as a test user; publish it before launch.
+3. *Credentials → Create credentials → OAuth client ID → Web application*, **twice** (security review 2026-10-22): a **production** client whose only authorised JavaScript origin is `https://wingedwords.app`, and a **development** client with `http://localhost:5173` and `http://localhost`. Never give the production client a localhost origin: any page running on a reader's own computer could then get a token the live site accepts. No redirect URIs and no client secret are needed.
+4. Put each client ID (it ends in `.apps.googleusercontent.com`; it isn't a secret) in `Google:ClientId`: the development one locally with `dotnet user-secrets set "Google:ClientId" "<id>" --project src/Argos.Api`, the production one on Render as the API's environment variable `Google__ClientId`. Restart the API. The button then appears on the login and sign-up pages.
+
 ### 3.9 Phase 5: export
 
 `GET /api/users/me/export` → `argos-export-{username}-{date}.zip` containing:
@@ -419,13 +436,13 @@ Items marked *(app-hardening)* were built there; items marked *(Stage 4)* wait f
 - [ ] Passkeys: register a passkey from Settings, log in with one, list and remove them (design first, see above)
 - [ ] 2FA setup / enable / disable / recovery-codes endpoints; challenge token; `/login/2fa`; lockout on bad codes
 - [ ] Check recovery-code storage (hash if plain text)
-- [ ] `Google.Apis.Auth`; `Google:ClientId` setting; `/auth/providers`, `/auth/google`, `/auth/google/complete`, connect/disconnect
-- [ ] `ReauthenticateAsync` (password or Google ID token) used by sensitive actions
-- [ ] Tests: 2FA login (code, backup code, used backup code rejected), reset doesn't disable 2FA, Google: new user → username step, existing email → 409, linked login, 2FA still asked (Google token validation behind an interface so tests can fake it)
+- [x] Google ID token check (`IGoogleIdTokenValidator`, no `Google.Apis.Auth`, see §3.8 "As built"); `Google:ClientId` setting; client ID on `/auth/registration-status`; `/auth/google`, `/auth/google/complete`, connect/disconnect *(2026-10-22)*
+- [x] Re-authentication with the password or a Google ID token (`RefuseReauthenticationAsync`) used by sensitive actions *(2026-10-22)*
+- [ ] Tests: 2FA login (code, backup code, used backup code rejected), reset doesn't disable 2FA, Google: new user → username step, existing email → 409, linked login, 2FA still asked (Google token validation behind an interface so tests can fake it). *Google part done 2026-10-22 (`GoogleSignInTests`, 10 tests, with `FakeGoogleIdTokenValidator`); the 2FA ones wait for 2FA.*
 #### Frontend
 - [ ] 2FA enable flow (QR via `qrcode`, backup codes download), disable, regenerate, low-codes warning
 - [ ] Login second step (code / backup code)
-- [ ] `GoogleButton` (loaded only if configured), `/welcome/username`, connect/disconnect, "Set a password"
+- [x] `GoogleButton` (loaded only if configured), `/welcome/username`, connect/disconnect, "Set a password" *(2026-10-22)*
 - [ ] Tests for the login steps and the 2FA enable flow
 
 ### Phase 5 — Export and delete account
