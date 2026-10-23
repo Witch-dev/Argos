@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-22 — Fixed: two Google sign-ups for one Google account at once could give the loser a 500 (Identity's email check found both accounts) instead of logging them in to the winner; showed up as a flaky CI test → Apollon 20fb11f
 - 2026-10-22 — Admin stats page built: `/admin/stats` (Site stats) with today's and 7/30-day figures and day-by-day columns for 7/30/90 days; signed-out visits counted once per tab by our own API (no cookie, no address), active readers from sign-in renewals kept 30 days then only a daily total; privacy policy "Usage counts" section, export gets `active-days.csv` → specs/admin-stats.md, Apollon 5cbb428
 - 2026-10-22 — "Continue with Google": sign in or sign up with Google (new accounts choose a username, no password needed), connect/disconnect in Settings → Security, Google-only accounts confirm changes with Google and can set a password; hidden until a Google client ID is configured → specs/account-system.md §3.8
 - 2026-10-22 — Fixed: Sentry no longer reports outgoing calls our code already handles (Book Riot's feed answering 500); reports come only from our own error logs → Apollon 4afba52
