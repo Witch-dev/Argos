@@ -81,6 +81,7 @@ Suggestions from `PRODUCT-ANALYSIS.md`, which compared Argos with what readers a
 **Discovery and reading together**
 - **Explainable recommendations**: "Readers with your taste loved…", built from taste-compare and follow data, always showing *why* a book was suggested. Readers want discovery but distrust black-box algorithms. Replaces SPEC.md Phase 2's "Basic recommendations".
 - **"Popular this week" + genre pages**: a way to find the next book without following anyone yet, which also fills the empty feed of a new user. Already listed in SPEC.md Phase 2.
+- **"What do you like to read?" after sign-up**: one skippable screen where a new reader taps 3+ genres (the existing `GenreCatalog` list, plus audience). The picks are saved and the Books tab shows a "Popular in <genre>" row for each one; Find readers shows readers of those genres first. The only rule: books in your genres, most popular first. As the reader logs books, their real top genres take over from the picks. *Parked 2026-10-24: Winged Words has too few readers and reviews to rank what's popular. While that's true, fill the rows from Open Library's subject lists (most-read books per subject, fetched and cached through `OpenLibraryClient`), then switch to our own data once there's enough. Could answer the open "first screen after sign-up" question above.*
 - **Quotes collection**: save a quote while reading (with page number), show a Quotes tab on profiles and book pages, and turn a quote into a Quote Writing in one click.
 
 **For writers**
