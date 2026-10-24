@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-23 — Security workflow green again (brotli fix in the web image; undici, zod, vitest bumped): its failure had stopped Render's auto-deploy for three pushes → Apollon e7ba3b9
 - 2026-10-23 — Spanish link preview: wingedwords.app/es shares with a Spanish image, title and description and opens the site in Spanish; the preview image redrawn with the current headline → specs/language-share-links.md, Apollon dc484e0
 
 - 2026-10-23 — /clubs polish, the nine re-review findings: the language menu is "Talks in"; on phones the language and sort fold behind "Filters" (first club 100px higher); a no-match names the search and offers "Clear filters" and "Or create one"; result counts announced; a card's phase is plain text; club topics link to the filtered directory; "Club rules" in both places; a counter on the rules field; Join carries the agreement → ux-reviews/clubs.md, Apollon 6854a25
