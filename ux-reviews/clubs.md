@@ -35,7 +35,7 @@ The new pieces work and hold up: German fits at 375 (no sideways scroll, "Meiste
 **What:** "Language" + "Any language" sits under the search. The site's own language menu is in the sidebar. A screen reader announces both as "Language".
 **Why it matters:** a reader may avoid it, worried it switches the site, or pick "Español" expecting Spanish text; two controls with one name break *recognition*.
 **Fix:** a label that says what it filters. Settings already says "Language the club talks in", so use "Talks in" with "Any language", in all five languages.
-**Status:** open
+**Status:** fixed 2026-10-23: "Talks in" with "Any language" (es "Hablan en", pt-BR "Falam em", de "Clubsprache", fr "Langue du club").
 
 #### 2. On a phone the filters push the first club to the bottom of the screen — P2 · M · Judgement
 **Where:** `/clubs` at 375×700. "Discover clubs" at y 302, the first card at y 574, below the search, the language menu, the sort and the topics row (each 44px, `--space-3` apart). At 1280 the first card is at y 408.
@@ -43,52 +43,52 @@ The new pieces work and hold up: German fits at 375 (no sideways scroll, "Meiste
 **Why it matters:** most readers browse on a phone (PRODUCT.md). Clubs are what a reader comes for; the filters are for narrowing later.
 **Fix (pick one):** (a) on phones, fold language and sort behind one "Filters" button (`btn-quiet`, `aria-expanded`), showing the count of active filters, and keep search + topics visible; or (b) put the language menu and the sort side by side at 375 (the sort's labels are short in every language but German, so measure "Meiste Mitglieder"). (a) saves ~100px, (b) ~55px.
 **Decided (2026-10-23):** (a), the "Filters" button on phones.
-**Status:** open
+**Status:** fixed 2026-10-23: on phones the language menu and the sort fold behind an outlined "Filters" button beside the search (`aria-expanded`, "Filters (1)" when one is set, sunken while open); the first club moved from y 574 to y 474 at 375×700.
 
 #### 3. A search alone that matches nothing has no way back — P2 · S · Rule
 **Where:** `ClubsDirectoryPage.tsx` the `EmptyMessage`, where "Clear filters" shows only when `topic || language`.
 **What:** "No public clubs match." with nothing after it when only the search is set; with a topic it says "Clear filters" but not what matched nothing.
 **Why it matters:** DESIGN.md's empty states: a no-results state names what happened and offers the next step.
 **Fix:** show "Clear filters" whenever `filtering`, clearing the search too. Name the search in the message ("No public clubs match "zzzxq"."), and add "or start one" linking to "Create a club" as a quiet link (the green button stays the header's).
-**Status:** open
+**Status:** fixed 2026-10-23: the message names the search ("No public clubs match “zzzxq”."), and whenever anything is filtered, "Clear filters" (clears the search too, keeps the order) and a quiet "Or create one" sit on their own row under it.
 
 #### 4. Club page topics look like the directory's filters but go nowhere — P3 · S · Judgement
 **Where:** `ClubPage.tsx` `ClubTopics` (plain `Pill`s beside the members and the language).
 **What:** the same pills that filter on `/clubs` are static here.
 **Fix:** make each a link pill to `/clubs?topic=<key>` (`Pill` already has a link style). A reader who likes one club finds others like it.
 **Decided (2026-10-23):** link them.
-**Status:** open
+**Status:** fixed 2026-10-23: each topic is a link pill to `/clubs?topic=<key>`.
 
 #### 5. The rules are "Club rules" before joining and "About this club" after — P3 · S · Rule
 **Where:** `ClubJoinCard.tsx` (`clubs.rules.title`) and the well at `ClubPage.tsx:855` (`clubs.rules.aboutTitle`), which holds only the rules (the description is in the header).
 **Why it matters:** PRODUCT.md's one word per idea. "About this club" also suggests more than the rules.
 **Fix:** "Club rules" in both places; drop `aboutTitle` from the five locale files.
-**Status:** open
+**Status:** fixed 2026-10-23: "Club rules" in both places; `aboutTitle` gone from the five locale files.
 
 #### 6. Changing a filter isn't announced — P3 · S · Rule
 **Where:** `ClubsDirectoryPage.tsx` the Discover list. No `role="status"`. `EmptyMessage` is a plain `<p>`.
 **What:** a screen-reader user presses "Fantasy" and hears only "pressed". Whether the list grew, shrank or emptied isn't said.
 **Fix:** a visually hidden `role="status"` after the filters with the count ("4 clubs", `t` with plurals) or the no-match text, updated after each response.
-**Status:** open
+**Status:** fixed 2026-10-23: the results area is one `role="status"` region with a hidden "4 clubs" count, or the no-match message itself. Also: on phones the chosen topic scrolls into view in its row.
 
 #### 7. A card's phase pill looks like the topic filters above it — P3 · S · Judgement
 **Where:** `DirectoryFacts` in `ClubsDirectoryPage.tsx`: `<Pill>` "Choosing next book" / "Reading: …", the same sunken pill as the topic `PillButton`s 100px higher.
 **Why it matters:** with clickable pills just above, a reader may tap "Choosing next book" expecting a filter. It is part of the card link.
 **Fix:** set the phase as the first plain fact in `--text` (not muted) instead of a pill, or keep the pill only for "Reading: <title>".
 **Decided (2026-10-23):** plain text for both phases, no pill.
-**Status:** open
+**Status:** fixed 2026-10-23: the phase is plain text in `--text`, the card's first fact.
 
 #### 8. The rules field doesn't show its 2,000-character limit — P3 · S · Rule
 **Where:** `ClubSettingsPage.tsx` the rules `<textarea maxLength={2000}>`.
 **What:** pasted rules longer than the limit are cut off silently.
 **Fix:** a "1,840 / 2,000" counter under the field once past ~1,500 characters with the shared `CharacterCount` component, as the other long fields do.
-**Status:** open
+**Status:** fixed 2026-10-23: the shared `CharacterCount` under the field (shows from 1,600 characters, its usual 80%).
 
 #### 9. The Join button doesn't carry "By joining you agree…" — P3 · S · Rule
 **Where:** `ClubJoinCard.tsx`. The agreement `<p>` comes after the button and isn't linked to it.
 **What:** a screen-reader user tabbing to "Join club" doesn't hear that joining accepts the rules.
 **Fix:** give the `<p>` an id and the button `aria-describedby` to it.
-**Status:** open
+**Status:** fixed 2026-10-23: the button has `aria-describedby` on the agreement.
 
 ### Looked fine
 
