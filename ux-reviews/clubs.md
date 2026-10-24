@@ -42,6 +42,7 @@ The new pieces work and hold up: German fits at 375 (no sideways scroll, "Meiste
 **What:** in a first view the reader sees controls, not clubs. Two critique rounds while building already put the language menu and the sort under the search and cut the topics to eight.
 **Why it matters:** most readers browse on a phone (PRODUCT.md). Clubs are what a reader comes for; the filters are for narrowing later.
 **Fix (pick one):** (a) on phones, fold language and sort behind one "Filters" button (`btn-quiet`, `aria-expanded`), showing the count of active filters, and keep search + topics visible; or (b) put the language menu and the sort side by side at 375 (the sort's labels are short in every language but German, so measure "Meiste Mitglieder"). (a) saves ~100px, (b) ~55px.
+**Decided (2026-10-23):** (a), the "Filters" button on phones.
 **Status:** open
 
 #### 3. A search alone that matches nothing has no way back — P2 · S · Rule
@@ -55,6 +56,7 @@ The new pieces work and hold up: German fits at 375 (no sideways scroll, "Meiste
 **Where:** `ClubPage.tsx` `ClubTopics` (plain `Pill`s beside the members and the language).
 **What:** the same pills that filter on `/clubs` are static here.
 **Fix:** make each a link pill to `/clubs?topic=<key>` (`Pill` already has a link style). A reader who likes one club finds others like it.
+**Decided (2026-10-23):** link them.
 **Status:** open
 
 #### 5. The rules are "Club rules" before joining and "About this club" after — P3 · S · Rule
@@ -73,6 +75,7 @@ The new pieces work and hold up: German fits at 375 (no sideways scroll, "Meiste
 **Where:** `DirectoryFacts` in `ClubsDirectoryPage.tsx`: `<Pill>` "Choosing next book" / "Reading: …", the same sunken pill as the topic `PillButton`s 100px higher.
 **Why it matters:** with clickable pills just above, a reader may tap "Choosing next book" expecting a filter. It is part of the card link.
 **Fix:** set the phase as the first plain fact in `--text` (not muted) instead of a pill, or keep the pill only for "Reading: <title>".
+**Decided (2026-10-23):** plain text for both phases, no pill.
 **Status:** open
 
 #### 8. The rules field doesn't show its 2,000-character limit — P3 · S · Rule
