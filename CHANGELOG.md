@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-23 — Spanish link preview: wingedwords.app/es shares with a Spanish image, title and description and opens the site in Spanish; the preview image redrawn with the current headline → specs/language-share-links.md, Apollon dc484e0
+
 - 2026-10-23 — /clubs polish, the nine re-review findings: the language menu is "Talks in"; on phones the language and sort fold behind "Filters" (first club 100px higher); a no-match names the search and offers "Clear filters" and "Or create one"; result counts announced; a card's phase is plain text; club topics link to the filtered directory; "Club rules" in both places; a counter on the rules field; Join carries the agreement → ux-reviews/clubs.md, Apollon 6854a25
 - 2026-10-23 — A better club directory: clubs get up to three topics, a language and rules (in Settings); Discover filters by topic and language and sorts by most members or recently active, and each card says what it's about and "Active 3 days ago"; rules show before joining ("By joining you agree…") and in "About this club" → specs/stronger-clubs.md Phase 6
 - 2026-10-23 — Buddy reads: 2–5 readers read one book with no voting; started from a book page or the Clubs page with people you follow or who follow you; everyone's place side by side, one thread in page order, and each post stays locked (its text never sent) until you reach the writer's point in your own edition or tap "Show anyway"; finishes when everyone has read it or the admin ends it, then "Read another book together"; "Your buddy reads" on the Clubs page and "Reading with …" on the book page → specs/stronger-clubs.md Phase 5

@@ -384,7 +384,7 @@ Then a short list: reviews with privacy per review, quotes and writing (the old 
 - [x] `npm test` (1005/1005), `npm run build`, `npm run lint`.
 - [x] Screenshot critique round (Paper and Dark, 1280 and 375, Spanish at 1280 and 375) with `design-reviewer`: two rounds, fixes below.
 - [ ] The user's look at the live page; their changes to the copy.
-- [ ] Redraw `og-image.png` with the new headline (it still shows the old pitch; the description and title in `index.html` are updated).
+- [x] Redraw `og-image.png` with the new headline (done 2026-10-23 with a Spanish version, `specs/language-share-links.md`).
 - [x] `CHANGELOG.md` entry. (§"Added later"'s import item stays open: the page names no import time, since there is no measured number.)
 
 ### As built (Phase 3, 2026-10-20)
