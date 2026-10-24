@@ -1,6 +1,6 @@
 # Book clubs show a member's progress even when that book is private
 
-**Priority:** P3 · **Size:** M · **Area:** Backend, clubs, privacy · **Found:** 2026-10-08 (review and security review of `specs/books-community-split.md` Phase 2) · **Status:** Open
+**Priority:** P3 · **Size:** M · **Area:** Backend, clubs, privacy · **Found:** 2026-10-08 (review and security review of `specs/books-community-split.md` Phase 2) · **Status:** Fixed 2026-10-23 (option 2)
 
 ## What happens
 
@@ -21,3 +21,7 @@ Which of these is right:
 3. **Hide it, with a per-club opt-in.** For example, "Share my progress on club books" when joining.
 
 Option 1 is the smallest code change (one filter plus a test). Options 2 and 3 need wording in all five languages.
+
+## Fixed
+
+2026-10-23, option 2 (decided in `specs/stronger-clubs.md` §2.1, built in its Phase 1): joining a club that reads a book is a choice to share your progress on that book, so members keep seeing it, and the app now says so in three places: under the members list on the club page ("Members see each other's progress on the club's book, even if it's private on their shelf."), in Settings → Privacy & data under "All your books at once", and in the privacy policy's "Who can see what you post". Readers who blocked the viewer stay hidden from them, as before.

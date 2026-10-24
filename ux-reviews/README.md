@@ -23,6 +23,6 @@ These are not bugs: broken behaviour goes in `bugs/`. This folder is for "it wor
 | Journal and Stats (`/journal`, `/stats`) (28/40) | 2026-10-18 | 0 | 5 | [journal-and-stats.md](journal-and-stats.md) |
 | Lists (`/lists`, browse, a list) (26/40) | 2026-10-18 | 0 | 5 | [lists.md](lists.md) |
 | Search (`/search`) (28/40) | 2026-10-18 | 0 | 2 | [search.md](search.md) |
-| Clubs (`/clubs`, a club) (25/40) | 2026-10-18 | 0 | 4 | [clubs.md](clubs.md) |
+| Clubs (`/clubs`, a club), re-reviewed after stronger clubs Phase 6 (26/40, was 25/40) | 2026-10-23 | 9 | 4 | [clubs.md](clubs.md) |
 | Settings (`/settings`, all tabs) (31/40) | 2026-10-18 | 0 | 2 | [settings.md](settings.md) |
 | Landing page (`/`, signed out) (31/36) | 2026-10-18 | 0 | 3 | [landing.md](landing.md) |

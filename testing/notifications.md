@@ -1,6 +1,6 @@
 # Test plan — Notifications (the bell)
 
-**Covers:** `specs/notifications.md` · **Written against:** Apollon commit ac4d9b1 (plus the uncommitted Stage 5 work) on 2026-10-11
+**Covers:** `specs/notifications.md`, club notifications from `specs/stronger-clubs.md` §3.2 · **Written against:** Apollon commit ac4d9b1 (plus the uncommitted Stage 5 work) on 2026-10-11; Clubs section added 2026-10-23 (uncommitted Phase 1–2 work)
 **Before you start:** the app must be running with the `AddNotifications` migration applied (`dotnet ef database update`) and the API restarted. Create four fresh readers with confirmed emails (see the `browser-check` skill for seeding through the API):
 
 - **A**: the one whose bell is checked. Has a public review of a book (rating and text), no followers, a public account.
@@ -18,7 +18,7 @@ Nobody waits for emails: nothing in this feature sends one. A single bell update
 |---|---|---|---|---|---|
 | 1 | Look at the header | A bell button with no number badge. Its accessible name is "Notifications" | | | |
 | 2 | Open the bell | A panel with the title "Notifications" and a calm line "You're all caught up." and no "Mark all as read" | | | |
-| 3 | Open Settings → Notifications | Five switches: Follows, Comments and replies, Likes (off by default), Invites, Checkpoint reminders. All on except Likes, each with one line saying what it covers | | | |
+| 3 | Open Settings → Notifications | Seven switches: Follows, Comments and replies, Likes (off by default), Invites, Checkpoint reminders, Clubs, New books. All on except Likes, each with one line saying what it covers | | | |
 
 ## Follows
 
@@ -129,10 +129,30 @@ Nobody waits for emails: nothing in this feature sends one. A single bell update
 | 52 | Delete A's account (Settings → Privacy & data, then confirm) | The rows A sent (to B and C) are gone from their bells | | | |
 | 53 | 👤 person: wait for a club checkpoint due within 48 hours (or set one) with a member who is behind | Within the hour that member gets "A checkpoint in <club> is due soon", with no × (it is only marked read) | | | |
 
+## Clubs
+
+`specs/stronger-clubs.md` §3.2. **Start:** B runs a **private** club with A as a member; C and D are not in it. Nobody has turned "Clubs" off.
+
+| # | Steps | Expected | 📱 Phone | 🖥️ Desktop | Notes |
+|---|---|---|---|---|---|
+| 54 | As C, open the club's invite link and ask to join | B's bell: "C asked to join <club>". A's bell: nothing (A doesn't help run the club) | | | |
+| 55 | B makes A a Moderator (club page → members) | A's bell: "B made you a moderator of <club>" | | | |
+| 56 | As D, ask to join too | B's and A's single row becomes "D and 1 other asked to join <club>", unread again | | | |
+| 57 | As B, approve C on the club page | The row reads "D asked to join <club>". C's bell: "B approved your request to join <club>"; clicking it opens the club | | | |
+| 58 | As A, deny D | The join-request row leaves both A's and B's bells | | | |
+| 59 | As B, suggest a book and confirm it | A's and C's bells: "B chose <book> as the next book in <club>". B gets nothing | | | |
+| 60 | As B, finish the book | A and C: "B opened a new round in <club>: suggest the next book" | | | |
+| 61 | As A, confirm a book in the new round | B and C get a second "chose" row, for the new book. The first round's row stays | | | |
+| 62 | As C, turn off Settings → Notifications → Clubs. As B, hand the club to A (club settings → Hand over admin) | A's role row becomes "B handed <club> over to you. You're its admin now", unread again. B (now a Moderator) gets nothing about stepping down | | | |
+| 63 | As B, finish the book | A gets "B opened a new round…". C gets nothing (Clubs is off). Turn it back on: the round opened while it was off doesn't appear | | | |
+| 64 | As C, block A. As A, delete the club (club settings → Delete club, type its name) | B's bell: "A deleted the club <club>". The row is not a link (hovering doesn't highlight it) but its × works. C gets nothing. The club's other rows (the books, the rounds, the role) are gone from everyone's bell | | | |
+| 65 | In another club, as a member with "chose <book>" rows, leave the club | The club's rows leave that member's bell | | | |
+
 ## Questions
 
 - **Known gap, not a failure:** liking, unliking and liking again re-rings the bell (`specs/notifications.md` §2). Likes are off by default and the owner can block.
 - **`bugs/list-invites-ignore-blocks.md`:** a list invite can still be sent across a block and shows in Lists → Pending invites. The bell hides it while the block lasts (step 37); the Lists box does not.
 - **Step 7 and step 53** depend on the 24-hour re-follow window and the hourly job. They were covered by the automated tests, not by the browser pass.
 - **Spec vs build:** the spec says the bell sits in the header "and the phone nav". It is in the header only, which holds on a phone at 360 px (steps 48–50).
+- **Clubs (steps 54–65):** a role row names the role the reader has *now*, so a Moderator demoted again sees the row disappear. A deleted club's row goes after 90 days, with the club's kept name. "You're N pages behind" on the checkpoint reminder is Phase 4, not this section.
 - **Aria label at the cap:** the bell says "100 unread" when the server's cap of 100 is reached, though there may be more.

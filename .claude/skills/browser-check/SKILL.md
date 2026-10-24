@@ -21,11 +21,11 @@ Drive the real app with Playwright against the **current** code, without touchin
 
 The user's own API on **5258** (and Vite on 5173) often runs an older build, so don't test against it and don't stop it.
 
-1. Build: `dotnet build src/Argos.Api -c Release` (Release, because the user's running API locks `bin/Debug`).
-2. Start the API from `src/Argos.Api`: `dotnet bin/Release/net10.0/Argos.Api.dll` with the environment variables `ASPNETCORE_ENVIRONMENT=Development`, `ASPNETCORE_URLS=http://localhost:5259` and `Cors__AllowedOrigins__0=http://localhost:5174`.
+1. If something already listens on 5259 (`netstat -ano | findstr :5259`), it's a side-port API from earlier in this session: stop it by that PID, so it never serves older code than what you're about to check.
+2. Build and copy it into its own folder: `dotnet publish src/Argos.Api -c Release -o $env:TEMP\argos-side-api`. Run it **from that folder**, never from `bin/Release`: a running API locks the folder it was started from, and `bin/Release` is where every build, test run and migration in the session goes. Start it with the working directory set to `$env:TEMP\argos-side-api`: `dotnet Argos.Api.dll` with the environment variables `ASPNETCORE_ENVIRONMENT=Development`, `ASPNETCORE_URLS=http://localhost:5259` and `Cors__AllowedOrigins__0=http://localhost:5174`.
 3. Start Vite from `web/`: `npx vite --port 5174 --strictPort`.
 
-Start both **detached** with PowerShell `Start-Process -WindowStyle Hidden -PassThru` (set the environment variables with `$env:` first, in the same command), not as a background job of your own shell: you are a short-lived agent, and the parent session may need the servers after you finish (for `shoot.mjs`). If they're already up (check the ports), reuse them.
+Start both **detached** with PowerShell `Start-Process -WindowStyle Hidden -PassThru` (set the environment variables with `$env:` first, in the same command), not as a background job of your own shell: you are a short-lived agent, and the parent session may need the servers after you finish (for `shoot.mjs`). Vite can be reused if it's already up on 5174 (it serves the current code as it changes); the API is restarted each time (step 1).
 4. Postgres is the Docker container `apollon-postgres-1` (host port 5433, database `argos`). If Docker isn't running, start Docker Desktop (`Start-Process 'C:\Program Files\Docker\Docker\Docker Desktop.exe'`, about 30 s) and `docker compose up -d postgres mailpit` in Apollon.
 
 A stopped Vite can survive as a process. Check who owns a port (`netstat -ano | findstr :5174`) before restarting.
@@ -70,4 +70,4 @@ For longer SQL, `docker cp file.sql apollon-postgres-1:/tmp/x.sql` and run it wi
 
 - Check at phone width (~375px) and desktop, and in the themes the change affects. Take screenshots into the scratchpad and look at them.
 - Playwright gotchas: `name:` matching is a substring ("Like this list" also matches "Unlike this list"), so use `exact: true`. `dragTo` doesn't drive the list's HTML5 drag-and-drop: dispatch `dragstart`/`dragover`/`drop` DragEvents with one shared `DataTransfer`, pausing between them.
-- Leave the side-port API and Vite running unless the task says this is the last check (then stop them by PID). Never touch the user's own servers on 5258/5173; say in the report if their API needs a restart because backend code changed.
+- Leave the side-port API and Vite running unless the task says this is the last check (then stop them by PID). Nobody needs to remember them later: hooks in `.claude/settings.local.json` run `scripts/stop-side-servers.ps1` (ports 5259 and 5174 only) when a session ends and when the next one starts. Never touch the user's own servers on 5258/5173; say in the report if their API needs a restart because backend code changed.
