@@ -5,10 +5,10 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 300d91b1-ec6d-4493-978b-63673b395aac
-  modified: 2026-10-19T21:56:23.314Z
+  modified: 2026-10-24T20:14:35.243Z
 ---
 
-Don't use or suggest AI-generated images (avatars, illustrations, art) for Winged Words. The existing preset avatars are AI-made and are slated for replacement with public-domain art (FUTURE-IDEAS.md, 2026-10-19).
+Don't use or suggest AI-generated images (avatars, illustrations, art) for Winged Words. The old AI-made preset avatars are gone (user confirmed 2026-10-24); the site has no AI art now, so don't call the avatars an AI giveaway.
 
 **Why:** readers dislike AI art and the user fears a backlash. They'd prefer a real artist but have no budget yet.
 

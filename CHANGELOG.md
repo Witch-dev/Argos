@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-24 — Stronger stats: tap any bar to see its books; how long books take, format, length, languages, plot or characters, fiction and audience, publication decades; the year before for comparison; a line for finished books with no date; club ratings saved on the reader's own date → specs/stronger-stats.md
+- 2026-10-24 — `social@wingedwords.app` forwards to Gmail (free Porkbun forward), for signing up to social media → ACCOUNTS-AND-HOSTING.md
 - 2026-10-24 — Stronger lists: a shared list passes to its first collaborator on account erasure, owners can hand a list over, invites skip suspended and deleted accounts, and changes to a list's order take its lock (no more 500s or gaps) → specs/stronger-lists.md
 - 2026-10-24 — Site stats leave the admin out: not an active reader, and no visits from a browser they signed in on (a list of named readers was built and dropped) → specs/admin-stats.md §6
 - 2026-10-23 — Security workflow green again (brotli fix in the web image; undici, zod, vitest bumped): its failure had stopped Render's auto-deploy for three pushes → Apollon e7ba3b9

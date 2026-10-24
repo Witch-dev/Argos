@@ -276,6 +276,7 @@ Ask new readers to import their Goodreads library on day one, and give them one 
 - [x] Set a yearly goal ("read 30 books in 2027") and see progress on the home page and profile.
 - [x] Stats page: books and pages per month, top authors, genres, moods, pace, average rating, DNF rate, longest and shortest book.
 - [x] Free, and the page says so.
+- [x] **Stronger stats** (`specs/stronger-stats.md`, added 2026-10-24): tap any chart to see its books; days to finish, publication decade, format, length groups, plot vs. character, fiction/non-fiction and audience, languages; the year before for comparison; a line for finished books with no date; club ratings saved on the reader's own date. Before January 2027 and before Wrapped. *Size M–L.* **Built and verified 2026-10-24.**
 
 *Size M.* It's last before launch because it's a reason to *stay*, not a safety need. Getting it in before January 2027 matters, because that's when people set reading goals.
 

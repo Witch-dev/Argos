@@ -16,7 +16,7 @@
 - [Parallel sessions and the test DB](project_parallel_sessions_test_db.md) — concurrent test runs wipe the shared argos_test; test a staged snapshot on a private DB, re-check the index before committing
 - [Books/Community split](project_books_community_split.md) — decisions so far for the two top tabs (Books default, reviews in Community, journal, private books, no off switch); spec still to write
 - [Authors feature effort reminder](project_authors_feature_effort_reminder.md) — remind: high effort for Phase 1 migration + backfill and Phase 2 privacy endpoints; rest at medium
-- [No AI art](feedback_no_ai_art.md) — no AI-generated images; public-domain/CC0 art instead (AI avatars slated for replacement)
+- [No AI art](feedback_no_ai_art.md) — no AI-generated images; public-domain/CC0 art instead (old AI avatars already removed)
 - [Restyle direction](project_design_restyle_direction.md) — approved mockup 2026-10-16: cream page stays, shelf effect is the signature; DESIGN.md first, then tokens and pieces
 - [Translations checked](project_translations_checked.md) — only English and Spanish reviewed by the user; don't advertise five languages yet
 - [Push as its own command](feedback_push_as_own_command.md) — git push of Apollon in a separate call; the precheck hook skipped one chained after a heredoc commit

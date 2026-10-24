@@ -150,6 +150,7 @@ Same as A, but the API on Render's paid Starter plan (~$7/month) so it never sle
 |---|---|---|
 | Database backups | Included in Render Postgres's paid plan | Don't lose everyone's reviews if the database breaks |
 | Receiving email (`hello@wingedwords.app`) | Porkbun's free email forwarding to Gmail (Cloudflare Email Routing needs Cloudflare DNS) | Resend only *sends* email |
+| Social media sign-up email (`social@wingedwords.app`) | A second Porkbun forward to the same Gmail, added 2026-10-24 | Keeps the address that controls the social accounts out of public view, away from `hello@` |
 | Error tracking | Sentry free plan | Tells you when something crashes for a user |
 | Uptime alerts | UptimeRobot free plan | Emails you if the site goes down |
 | Automatic deploys | GitHub Actions (free minutes per month) runs the tests; Render deploys only after they pass | A red build never reaches readers |
