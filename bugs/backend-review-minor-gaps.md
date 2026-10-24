@@ -6,7 +6,7 @@ Real but rare, or a 500 where a 400 belongs, with no data harm. Grouped so they 
 
 ## Wrong answer, no harm to data
 
-- **Reordering or removing list items at the same moment** (`BookListService.RemoveItemAsync`, `ReorderItemAsync`): owner and collaborator (or two tabs) at once trip the deferred `(BookListId, Position)` constraint, and the loser gets a 500. Only add has the reload-and-retry. Nothing is corrupted.
+- ~~**Reordering or removing list items at the same moment** (`BookListService.RemoveItemAsync`, `ReorderItemAsync`): owner and collaborator (or two tabs) at once trip the deferred `(BookListId, Position)` constraint, and the loser gets a 500. Only add has the reload-and-retry. Nothing is corrupted.~~ *Fixed 2026-10-24 → `specs/stronger-lists.md` §5 (it could also leave gaps in the positions; changes now take the list's lock).*
 - **Filtered or sorted book search past page 5** (`BookService.SearchWithOptionsAsync`): the pool is 100, pages are 20, but the controller allows 10 pages, so "Show more" ends with an empty page 6.
 - **Open Library JSON with one wrong-typed field** (`OpenLibraryWorkResponse`, `OpenLibrarySearchResponse`): a book fetch fails as "not found", and a search loses its whole page of 20. The author responses already use lenient converters.
 - **Following and favouriting authors past the cap at the same moment** (`AuthorFollowService`, `FavouriteAuthorService`): check then insert, so concurrent requests can pass 500 follows or 4 favourites.
@@ -27,7 +27,7 @@ Real but rare, or a 500 where a 400 belongs, with no data harm. Grouped so they 
 ## Moderation and admin
 
 - **Hiding content and closing its reports are two saves** (`ModerationService.HideAsync`, `HideRatingsAsync`): a failure between them leaves reports open, and the retry doesn't tell the author.
-- **A list invite can go to a suspended or deactivated reader, or to the "Deleted user" placeholder** (`ListCollaborationService.InviteAsync`), using up one of the 10 slots.
+- ~~**A list invite can go to a suspended or deactivated reader, or to the "Deleted user" placeholder** (`ListCollaborationService.InviteAsync`), using up one of the 10 slots.~~ *Fixed 2026-10-24 → `specs/stronger-lists.md`.*
 
 ## Data rules held only in code
 
