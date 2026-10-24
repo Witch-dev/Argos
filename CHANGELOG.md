@@ -9,6 +9,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 ## October 2026
 
 - 2026-10-24 — Stronger lists: a shared list passes to its first collaborator on account erasure, owners can hand a list over, invites skip suspended and deleted accounts, and changes to a list's order take its lock (no more 500s or gaps) → specs/stronger-lists.md
+- 2026-10-24 — Site stats: a "Who was active" list (last 30 days, names from today on), the admin left out of active readers and of visits from their browsers, privacy policy reworded → specs/admin-stats.md §6
 - 2026-10-23 — Security workflow green again (brotli fix in the web image; undici, zod, vitest bumped): its failure had stopped Render's auto-deploy for three pushes → Apollon e7ba3b9
 - 2026-10-23 — Spanish link preview: wingedwords.app/es shares with a Spanish image, title and description and opens the site in Spanish; the preview image redrawn with the current headline → specs/language-share-links.md, Apollon dc484e0
 
