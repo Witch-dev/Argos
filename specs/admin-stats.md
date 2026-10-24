@@ -36,7 +36,7 @@ The user can't see how the app is being used: how many people visit, sign up, co
 
 **Day by day** (one small bar chart per measure, same time range for all, a 7 / 30 / 90 days switch, default 30): new readers, active readers, visits, total traffic (visits + active readers), imports started, imports finished, imports failed. Hovering or tapping a bar shows the day and the number. Under each chart, a short table version for screen readers.
 
-Not shown at first: who the readers are. Since 2026-10-24 the page also lists who was active (§6); never emails.
+Not shown: who the readers are. The page shows only counts, never names or emails. (A list of names was built and taken out again on 2026-10-24, §6.)
 
 ### 3.2 Table `DailyCounts` (entity `DailyCount`)
 
@@ -106,7 +106,7 @@ On a free Render plan the API sleeps, so step 1 also runs at startup and catches
 - Funnels and retention ("of the readers who joined in week 1, how many came back in week 4"). Possible later from `ReaderActiveDays` if it's kept longer, which would need a new privacy decision.
 - Counts of books logged, reviews, lists, clubs. Easy to add later as more `DailyMetric` values.
 - Emailed daily or weekly summaries.
-- ~~Anything that shows individual readers.~~ Added 2026-10-24, see §6.
+- Anything that shows individual readers (tried and dropped 2026-10-24, §6).
 
 ## 5. Tasks
 
@@ -138,15 +138,12 @@ On a free Render plan the API sleeps, so step 1 also runs at startup and catches
 ### By hand (the user, on deploy)
 - [ ] Open `/admin/stats` on the live site the next day and check yesterday's active readers appeared.
 
-## 6. Who was active, and leaving the admin out (added 2026-10-24)
+## 6. Leaving the admin out (2026-10-24)
 
-Asked by the user 2026-10-24: see which readers use the site, on the stats page, and keep their own use out of the numbers.
+Asked by the user 2026-10-24: keep their own use out of the numbers.
 
-- **List "Who was active"** at the bottom of `/admin/stats`: readers active in the last 30 days, the most recent first. Columns: reader (display name and @username, linking to the profile), last active (Today / Yesterday / a UTC date), days active, joined. At most 200, the cap sent by the API (`activeReadersLimit`), with a note when it's reached. From `ReaderActiveDays`, so nothing new is stored. Suspended and deactivated accounts aren't listed.
-- **Names only from 2026-10-24** (`AdminStatsService.NamesShownFrom`), the day the privacy policy says so: days recorded under the old wording are counted, never listed. The constant can go after 2026-11-23, when older rows are gone anyway.
-- **Admins aren't active readers.** `UsageStatsRepository.ActiveRows` and the nightly roll-up leave out accounts in the Admin role, in the counts and the list. Their rows are still written (and in their export). Days rolled up before this keep their totals with the admin in them, so the active-readers chart may step down by one at 2026-10-24. Promoting or demoting someone later changes open days only.
+- **Admins aren't active readers.** `UsageStatsRepository.ActiveRows` and the nightly roll-up leave out accounts in the Admin role. Their rows are still written (and in their export). Days rolled up before this keep their totals with the admin in them, so the active-readers chart may step down by one at 2026-10-24. Promoting or demoting someone later changes open days only.
 - **The admin's signed-out visits aren't counted.** A browser an admin signs in on keeps `argos_admin_browser` in `localStorage` (set in `AuthContext`), kept after logout, and the visit ping skips it. A shared computer stops counting its visits; a new private window still counts. Rough number, as before.
-- **Privacy policy** "Usage counts", all five languages, date 24 October 2026: "We record which days you open the site while signed in. The site's admin can see this, to run the site and keep it safe. We keep the day-by-day record for 30 days, then only the total number of readers per day. …"
-- Reviewed by `reviewer` and `argos-security` 2026-10-24 (no bugs, no security issues; fixed: policy date, the names cutoff, the cap from the API). `/browser-check` 2026-10-24: list, links, admin left out (10 active today = 10 "Today" rows), 375 px no page scroll, 404 for a reader, flag kept after logout, policy text.
-- Left for the user: announce the policy change on the site (a What's new entry), since the policy promises notice of a change that matters.
+- The page's intro says "Your own use as admin isn't counted." No privacy-policy change: nothing new is stored or shown.
 
+**Dropped: a "Who was active" list of named readers** (Apollon 95121bb, removed in e30751e). Built and reviewed, then the user decided against it: readers signed up under "counts only", there'd be no opt-out, and the counts already answer "is anyone using it?". Taken out with its privacy-policy rewording. If it comes back, it needs a stated purpose, a policy change announced before it takes effect, names only from that day, and ideally a reader setting to stay off the list.
