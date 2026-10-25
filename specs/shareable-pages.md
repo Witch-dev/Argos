@@ -1,6 +1,6 @@
 # Feature Spec — Shareable pages
 
-**Status:** planned 2026-10-24, decisions asked the same day (§2.1). Three phases: Phase 1 (book, list, club for visitors, size M–L), Phase 2 (review, profile, author for visitors, size M), Phase 3 (link preview cards, English and Spanish, size M).
+**Status:** Phase 1 built 2026-10-24, Phase 2 and Phase 3 built 2026-10-25 (build notes in §5, §6 and §7); Phase 3's live checks wait for the deploy. Planned 2026-10-24, decisions asked the same day (§2.1). Three phases: Phase 1 (book, list, club for visitors, size M–L), Phase 2 (review, profile, author for visitors, size M), Phase 3 (link preview cards, English and Spanish, size M).
 
 ## 1. Problem
 
@@ -39,7 +39,7 @@ Sign-ups are open (early access) and private accounts are done (Stage 8), so a v
   - **Club:** public and private invite links both open for visitors and show the small preview (name, description, current book, member count). Public: **Join**. Private: **Ask to join**. Never the discussion, checkpoints or members' progress.
   - **Review:** Like / comment, Want to read this book, Follow the reviewer.
   - **Profile:** Follow this reader (a follow request if the account is private), Start your own shelf.
-  - **Author:** Follow this author, Want to read on each of their books.
+  - **Author:** Follow this author, Want to read on each book of the Most popular shelf (changed in Phase 2, §6).
   - **Search (asked 2026-10-24, added to Phase 1):** visitors keep searching without an account, as today. Each result gets **Want to read** through the same sign-up box, and the search page gets the quiet card. The **landing page gets a "Find a book" field** that opens `/search`, so a visitor sees at once that the site is useful without signing up.
 - **Share button** on all six pages. On a club: everyone in a **public** club, admins and moderators only in a **private** one.
 - **Preview cards (Phase 3):**
@@ -94,52 +94,109 @@ Sign-ups are open (early access) and private accounts are done (Stage 8), so a v
 ### Phase 1 — Book, list, club for visitors
 
 #### Backend
-- [ ] `next` + `do` through the confirmation email; `next` limited to our own paths.
-- [ ] `SignupSource` column + migration, set at sign-up (email and Google); count on admin stats.
-- [ ] `GET /api/lists/saved`.
-- [ ] Club invite preview has what the visitor card needs, nothing more.
-- [ ] Tests: off-site `next` ignored; unknown `do` ignored; private club preview shows no members or discussion; saved lists drop private and deleted ones.
+- [x] `next` + `do` through the confirmation email; `next` limited to our own paths.
+- [x] `SignupSource` column + migration, set at sign-up (email and Google); count on admin stats.
+- [x] `GET /api/lists/saved` (built as `GET /api/booklists/saved`, the lists controller's own prefix).
+- [x] Club invite preview has what the visitor card needs, nothing more.
+- [x] Tests: off-site `next` ignored; unknown `do` ignored; private club preview shows no members or discussion; saved lists drop private and deleted ones.
 
 #### Frontend
-- [ ] `JoinPrompt`, `SignupBox`, `ShareButton`.
-- [ ] Run `do` once after sign-in, note, clean address.
-- [ ] Book page: every reader button for visitors through `SignupBox`; visitor card; Share.
-- [ ] List page: every button for visitors through `SignupBox`; Save = like; visitor card; Share.
-- [ ] Saved tab on Lists.
-- [ ] Club invite page open to visitors with the preview; Share on the club page.
-- [ ] Search: Want to read on results for visitors through `SignupBox`; visitor card on `/search`.
-- [ ] Landing page: "Find a book" field opening `/search` (web-design plan and screenshot round).
-- [ ] Sources on admin stats (a sign-up that started on `/search` counts as `search`).
-- [ ] Translations in all five locales.
+- [x] `JoinPrompt`, `SignupBox`, `ShareButton`.
+- [x] Run `do` once after sign-in, note, clean address.
+- [x] Book page: every reader button for visitors through `SignupBox`; visitor card; Share.
+- [x] List page: every button for visitors through `SignupBox`; Save = like; visitor card; Share.
+- [x] Saved tab on Lists.
+- [x] Club invite page open to visitors with the preview; Share on the club page.
+- [x] Search: Want to read on results for visitors through `SignupBox`; visitor card on `/search`.
+- [x] Landing page: "Find a book" field opening `/search` (web-design plan and screenshot round).
+- [x] Sources on admin stats (a sign-up that started on `/search` counts as `search`).
+- [x] Translations in all five locales.
 
 #### Verification
-- [ ] `argos-security` review (sign-up flow, `next` redirect, what visitors can see, the club preview).
-- [ ] `reviewer` pass.
-- [ ] Browser check in a private window: open a book, tap Want to read, sign up, confirm by email, land back with it added. Same for Save this list, a public and a private club link, and a search result reached from the landing page's field. Admin stats shows the sign-ups.
+- [x] `argos-security` review (sign-up flow, `next` redirect, what visitors can see, the club preview).
+- [x] `reviewer` pass.
+- [x] Browser check in a private window: open a book, tap Want to read, sign up, confirm by email, land back with it added. Same for Save this list, a public and a private club link, and a search result reached from the landing page's field. Admin stats shows the sign-ups.
 
 ### Phase 2 — Review, profile, author for visitors
 
 #### Frontend
-- [ ] Review page: Like / comment, Want to read this book, Follow the reviewer; card; Share.
-- [ ] Profile page: Follow this reader (request if private), Start your own shelf; card; Share.
-- [ ] Author page: Follow this author, Want to read on each book; card; Share.
-- [ ] Translations.
+- [x] Review page: Like / comment, Want to read this book, Follow the reviewer; card; Share.
+- [x] Profile page: Follow this reader (request if private), Start your own shelf; card; Share.
+- [x] Author page: Follow this author, Want to read on each book (of the Most popular shelf, §6); card; Share.
+- [x] Translations.
 
 #### Verification
-- [ ] `reviewer` pass; `argos-security` only if a new endpoint was needed.
-- [ ] Browser check: one action per page through sign-up; a private profile shows name and avatar only.
+- [x] `reviewer` pass; `argos-security` only if a new endpoint was needed (none was).
+- [x] Browser check: one action per page through sign-up; a private profile shows name and avatar only.
 
 ### Phase 3 — Preview cards, English and Spanish
 
 #### Backend
-- [ ] Card endpoint for the six kinds, escaped, rate-limited, no Open Library calls, English and Spanish text.
-- [ ] Tests: private, hidden or unknown → generic card; spoiler review → no text; private profile → no reading count; `<`, `"`, `&` in titles escaped.
+- [x] Card endpoint for the six kinds, escaped, rate-limited, no Open Library calls, English and Spanish text.
+- [x] Tests: private, hidden or unknown → generic card; spoiler review → no text; private profile → no reading count; `<`, `"`, `&` in titles escaped.
 
 #### Frontend
-- [ ] `/es/<path>` deep links open in Spanish; Share copies the `/es` link when the app is in Spanish.
-- [ ] nginx bot `map` and `proxy_pass` for the six paths, with and without `/es`.
+- [x] `/es/<path>` deep links open in Spanish; Share copies the `/es` link when the app is in Spanish.
+- [x] nginx bot `map` and `proxy_pass` for the six paths, with and without `/es`.
 
 #### Verification
-- [ ] `argos-security` review (new anonymous endpoint, nginx proxy).
+- [x] `argos-security` review (new anonymous endpoint, nginx proxy). Also a `reviewer` pass (§7).
 - [ ] Live: `curl -A "redditbot" https://wingedwords.app/books/OL…` and `/es/books/OL…` return the book's tags; a normal browser still gets the app.
 - [ ] Paste one link of each kind into a chat with yourself (Discord or WhatsApp) and into Reddit's post preview. Use links not shared before: Reddit and chat apps keep old cards for a while.
+
+## 5. Build notes (Phase 1, 2026-10-24)
+
+What changed from §2–§3 while building, and why:
+
+- **`do` never runs from a page's own address.** §2.2 had the page read `do` from its URL. Then any link like `/u/someone?do=follow` would make a signed-in reader who opens it act. Instead the login, sign-up, email-link and Google pages read `do` from their own address and pass it on as in-app navigation state, which a link can't set (`web/src/lib/signInAction.ts`, `hooks/useSignInAction.ts`). The state is cleared before the action runs, so back or reload doesn't repeat it. `do` still travels through the email: `PendingSignups.Do`, returned by `confirm-signup`.
+- **A crafted login or sign-up link still carries an action** (security review and reviewer). So those pages say what will happen once you're in ("Once you're in, this book goes on your want-to-read"), and **Join doesn't run on its own when the club has rules**: the reader lands on the card with "Read the club's rules, then press Join club", since joining agrees to them. Without rules it joins (or asks to, for a private club).
+- **`copyList` added** to the fixed words, for "Copy to my lists" on a list.
+- **Sign-up source:** kept on the pending sign-up and the account (`SignupSource`, from `next` or `from=search`). A bare `/lists` or `/books` (a reader's own page) doesn't count; `next` must open one thing. The reader's account export has it as "Signed up from".
+- **A private club's invite token now goes only to its admins and moderators** (security review; before, every member got it in the club's details). Share on a club shows exactly when the token is there.
+- **Favourite after sign-up:** a new account hasn't read the book, so the log form opens on Read with "Mark it as read first, then it can be a favourite". **Add to a list** focuses the list menu, or says there are no lists yet.
+- **An action that fails** after sign-up says so ("That didn't go through. Try the button again.").
+- **Visitor buttons wait for the session to be known**, so a reader whose session is being restored never sees them for a moment.
+- **Where the quiet card sits (design review):** book page, under the action buttons in the book's column; list page, after the shelf (the covers come first); search, after the results (every result has its own Want to read). The club invite page has **no** separate card, since a second "Sign up" under Join competed with it; instead the card carries one muted line ("Winged Words is a free place… Joining needs a free account") and Share as a quiet button under Join.
+- **One green button for visitors:** "Save this list" is the list page's green button for a visitor (there was none).
+- **Labels:** the sign-up box and the card both say "Sign up free". On a phone, Share on the book page is icon-only (its name kept for screen readers) so it fits the row.
+- **Privacy policy:** the sign-up section now says the kind of shared page is kept (not which page or who shared it); updated 2026-10-24 in all five languages.
+- **Lists page:** "Lists" heading with a Yours / Saved switch; Saved uses the Browse cards and Load more.
+- **Admin stats:** "Sign-ups from shared pages" card under the charts, for the chosen 7/30/90 days, one bar per kind.
+
+Asked after the design review (2026-10-24), all four as recommended:
+- **Privacy policy:** keep the sentence about the kind of shared page.
+- **Landing hero tightened** (desktop only): less top padding, the in-hero dog 8.5rem, tighter switch and lead gaps, the Find a book label beside its field where there's room. At 1280×800 the green Join and the field are both on the first screen; phones unchanged.
+- **The box names the thing:** "Create a free account to add “Dune” to your want-to-read", and "…to ask to join “Club”" for a private club. Plain `t()` with the title as a value (React escapes it).
+- **The rail's "Log in" card steps aside** for visitors on book, list, club-invite and search pages, which have their own quiet card.
+
+Also fixed on the way: `GoogleSignInOffTests` failed on a machine whose user-secrets hold a real Google client ID; it now clears the ID itself.
+
+Reviews: `argos-security` found nothing at Medium or above; its two Low findings (the private invite token, crafted login links) are fixed above. `reviewer`: fixed the visitor-button flash, crafted links, Add-to-a-list focus, silent failures, the Share announcement; added tests for the hook, the login page carrying the action, saved lists with a blocking or private owner. Browser check (side ports, Mailpit): all six flows worked, including `?do=` on a page doing nothing and `next=//evil.example` staying on the site.
+
+## 6. Build notes (Phase 2, 2026-10-25)
+
+Frontend only: no new endpoint (the API already counted `review`, `profile` and `author` sign-ups from `next`).
+
+- **Review page:** for a visitor, the heart and Add a comment open the box, and a row under the likes adds **Want to read** (the book stays on the review page and is added there after sign-up), **Follow *name*** and **Share**. A signed-in reader gets only Share in that row: Want to read and Follow are the visitor's way in, as on search in Phase 1. On a phone the row takes the page's full width (in the heading's narrow column it stacked one button per line). The card sits after the review text, before the comments. After sign-in: like (your own review: "This is your own review"), want, follow (a request if the account is private), or the comment box gets focus.
+- **Share only on a Public review.** The API sends `visibility` to every reader, so a follower of a Followers-only review gets no Share (its link would show a visitor "not found"). A Public review by a private account still shows Share although a visitor can't open it; `ReviewDto` has nothing saying the author is private. Small, left as is.
+- **A visitor isn't a former reader's author.** `isAuthor` compared `user?.id` with `review.author?.id`, both undefined for a visitor on a review whose author is gone, so it uncovered spoilers (older bug, found in review). Fixed.
+- **Profile:** Follow for visitors (the box says "ask to follow" for a private account), Share beside it for everyone. The card goes after the shelves; check with a full shelf whether it falls too far down, and move it above Shelves if so (design review). **A private profile** shows its "This account is private" notice as plain text for a visitor, so the card is the page's one well; a signed-in reader still gets the notice in its well.
+- **Author:** Follow for visitors, Share for everyone, the "Follow to hear about their new books" hint for visitors too. **Want to read only on the Most popular shelf** (5 covers), icon-only on a phone with the book named for screen readers: under every cover of All books (~29) it made the page look like a shop and drowned the shelf, and each cover opens its book's page, which has the button anyway. It goes on to `/books/:id`, which adds the book, and counts as `author` (`from=author`, `SIGNUP_SOURCES` in `lib/signInAction.ts`). The card sits after the popular shelf.
+- **Shared pieces:** `onVisitor` on `FollowButton`, `AuthorFollowButton`, `LikeButton` and `ReviewSocialBar`; `SignupBox`'s `askToJoin` became `asking` (join or follow); `lib/visitorActions.ts` (`wantToReadOnce`, `followReaderOnce`, also used by the book page) and `api/followInvalidation.ts` (moved out of the two follow buttons). The rail's "Log in" card steps aside on `/reviews/:id`, `/u/:username` and `/authors/:id` too.
+- **Also fixed:** a profile without a photo showed its initial small in the corner of the 9rem ring (the CSS stretched `div`, the placeholder is a `span`). Filed `bugs/profile-reloads-when-a-row-fails.md` (found while testing).
+
+Reviews: `reviewer` found the Share and former-reader problems above (fixed) and test gaps (filled: comment focus, already liked, own review, null author, public profile). Design critique and a fresh full review: one well per page, the review row on a phone, the author buttons, the avatar ring, all fixed. Browser check (side ports, Mailpit): each page's action through sign-up, a private profile with name and avatar only, the author's Want to read landing on the book with it added, `review` and `author` sign-ups on admin stats.
+
+## 7. Build notes (Phase 3, 2026-10-25)
+
+- **Endpoint:** `GET /api/share/card?path=/books/OL1W&lang=es` (`ShareController`, `ShareCardService`, `ShareCardPage`, `ShareCardTexts`). Always 200 with `text/html`, `Cache-Control: no-cache`, `X-Robots-Tag: noindex`. The path must be one of the six pages with a valid id; anything else, and anything a visitor can't open, gets the generic card (the same words and picture as `index.html`, `og-image-es.png` in Spanish) with the site's front page as its address, never the asked-for one. Its own rate limit, `RateLimits:ShareCardsPerMinute` = 120 per address.
+- **Each card uses the page's own rule:** book and author from the database only (an id Winged Words has never loaded gets the generic card, and nothing is added); list through `BookListService.GetByIdAsync(id, null)` (an Unlisted list shows to whoever has its link, as the page does) and not hidden; review through `ReviewAccess.CanViewAsync(log, null)` and not hidden; club through the invite preview (a buddy read's token leads nowhere); profile not away, suspended or the "deleted" placeholder. A name given up in the last 30 days still finds its reader, and the card names the current address.
+- **What each card says** (English / Spanish): book "*Title*" / "By *author*. See what readers think of it on Winged Words." with the large cover; review "*Name*'s review of *Title* ★ 4.5" (the title is shortened before the stars are), the opening lines up to the first inline `||spoiler||`, or "This review has spoilers…" when marked; profile "*Name* on Winged Words", "82 books read. Follow their reading…" (books on the Read shelf a visitor can see, different books only), only "A reader on Winged Words." for a private account; list "A list by *Name* with 12 books." plus its description, first cover; club "A book club on Winged Words · 5 members. Now reading *Book*." plus its description; author "Books by *Name*…", photo. Titles up to 120 characters, lines up to 200, cut at a space with "…".
+- **Escaping:** the five HTML characters (`& < > " '`) in text and attributes; accents and "·" stay as they are (`WebUtility.HtmlEncode` turned Spanish letters into numeric entities).
+- **Avatars:** stored as preset keys, and the app's copies have hashed names, so the build also writes `/avatars/<key>.webp` (`vite.config.ts`, 612 KB). Only catalogue keys are used.
+- **nginx:** a `map` of the nine bot names; one regex location for the six pages with an optional `es/`, which serves `index.html` to people and sends bots to an internal location that `proxy_pass`es to the API (`SHARE_CARD_API_URL`, `API_BASE_URL` by default, written with a DNS resolver into a snippet by `entrypoint.sh`). Bots' cookies and `Authorization` are dropped, their address goes on in `X-Forwarded-For`, HEAD becomes GET, https is checked with SNI. Any error, 429 or a sleeping API → `index.html` (the generic card). `Vary: User-Agent` on those pages (security review). Tested in Docker against an echo server: bots proxied with the right path and language, people and Googlebot get the app, fallbacks on 500 and connection refused, a bad `SHARE_CARD_API_URL` stops the container.
+- **Rate limit through the public address** (security review, Low): to the API every bot then seems to be the site's own address, so anyone could use up the 120 a minute and every preview would fall back to the generic card (nothing leaks). Set `SHARE_CARD_API_URL` to the API's private-network address on Render to give each bot its own budget (DEPLOY.md, "Link previews").
+- **Frontend:** `splitSharePath` handles `/es/<any path>` (and `/es//other.site` stays on the site); `sharePath` puts `/es` in front of Share's link while the app is in Spanish. A saved language choice still wins over the link's, as for `/es` alone.
+- **Also:** `ErrorCodesTests` skips `ShareCardTexts.cs` (card texts, not errors); `GET api/share/card` on the anonymous endpoint list.
+
+Reviews: `reviewer` (fixed: a long title dropped the rating; renamed readers and the "deleted" placeholder; an emoji cut in half; a higher default limit; raw formatting other than `||` in a review's opening lines is left as is, since it's cosmetic). `argos-security`: nothing exploitable; added `Vary: User-Agent` and tests for a private account's Public list and review, an Unlisted list and a buddy-read token. Club invite tokens appear in the card request's query string, as they already do in the join endpoint's path: keep in mind if request logging ever records query strings.

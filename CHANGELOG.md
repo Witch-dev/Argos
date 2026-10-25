@@ -8,6 +8,9 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-25 — Shareable pages, Phase 3: link previews on Reddit, Discord and chat apps show the book, list, club, review, profile or author (cover, title, a short line) in English or Spanish, `/es/<page>` links open in Spanish and Share copies them, nginx sends known preview bots to a new card endpoint → specs/shareable-pages.md §7
+- 2026-10-25 — Shareable pages, Phase 2: review, profile and author links work for visitors (like, comment, want to read, follow the reviewer, the reader or the author through the sign-up box), Share on all three; a visitor no longer sees a former reader's spoiler review uncovered; a profile's initial fills its ring → specs/shareable-pages.md §6
+- 2026-10-24 — Shareable pages, Phase 1: book, list and club-invite links work for visitors (every button shown, a small sign-up box, the tapped action done after sign-up), Want to read on search results, a "Find a book" field on the landing page, a Saved lists tab, Share buttons, sign-ups from shared pages counted on admin stats; a private club's invite link only goes to its admins and moderators → specs/shareable-pages.md
 - 2026-10-24 — Stronger stats: tap any bar to see its books; how long books take, format, length, languages, plot or characters, fiction and audience, publication decades; the year before for comparison; a line for finished books with no date; club ratings saved on the reader's own date → specs/stronger-stats.md
 - 2026-10-24 — `social@wingedwords.app` forwards to Gmail (free Porkbun forward), for signing up to social media → ACCOUNTS-AND-HOSTING.md
 - 2026-10-24 — Stronger lists: a shared list passes to its first collaborator on account erasure, owners can hand a list over, invites skip suspended and deleted accounts, and changes to a list's order take its lock (no more 500s or gaps) → specs/stronger-lists.md

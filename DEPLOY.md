@@ -36,6 +36,20 @@ The API refuses to start outside Development when either list is empty, or when 
 
 **If Cloudflare changes its ranges** (rare), update `EdgeNetworks` in `appsettings.Production.json` from <https://www.cloudflare.com/ips/> rather than on Render. An environment variable like `Proxy__EdgeNetworks__0` replaces only the first entry of the list, not the whole list.
 
+## Link previews (shared pages, 2026-10-25)
+
+When someone pastes a Winged Words link into Reddit, Discord, WhatsApp and similar apps, the app's bot fetches the page to draw a card. Since `specs/shareable-pages.md` Phase 3, the site's nginx recognises those bots by name (`redditbot`, `Discordbot`, `facebookexternalhit`, `Twitterbot`, `Slackbot`, `WhatsApp`, `TelegramBot`, `LinkedInBot`, `Applebot`). On a book, list, club invite, review, profile or author page (with or without `/es` in front) it fetches that page's card from the API (`GET /api/share/card`) and passes it on. People, and every other bot, get the app as before. If the API doesn't answer (asleep, down, error), the bot gets the usual page with the generic card.
+
+**Which address nginx uses for the API.** The site service's `SHARE_CARD_API_URL` variable, or `API_BASE_URL` when it isn't set. Either works, with one difference:
+- **Through the public address** (`https://api.wingedwords.app/api`, the default): to the API, every bot seems to come from the site service's own address, so all bots share one budget of 120 cards a minute (`RateLimits:ShareCardsPerMinute` on the API). Plenty at the start.
+- **Through Render's private network** (better once there's traffic): set `SHARE_CARD_API_URL` on the site service to the API's internal address, `http://<api service's internal hostname>:<port>/api` (Render → the API service → *Connect* → *Internal*). The request then arrives from Render's 10.x network, so the API reads each bot's own address from `X-Forwarded-For` (see "Visitor addresses" above) and each bot has its own budget. Check in Render's docs that both services' plans can use the private network. Planned right after the API moves to the paid plan (ROADMAP, Stage before launch): a free service may not receive private-network traffic. To check it worked, set `Proxy__LogForwardedChain` = `true` on the API for a few minutes, run `curl -A "redditbot" https://wingedwords.app/books/OL45804W`, and look for "visitor is" followed by your own address (not a 10.x one or the site's); then remove the variable. If the card comes back generic, delete `SHARE_CARD_API_URL` to go back to the public address.
+
+**Check after deploying** (from any terminal; use links you haven't shared before, because chat apps keep old cards for a while):
+1. `curl -A "redditbot" https://wingedwords.app/books/OL45804W` shows `og:title` with the book's title (for a book someone has opened on the site; a book Winged Words has never loaded gets the generic card on purpose).
+2. `curl -A "redditbot" https://wingedwords.app/es/books/OL45804W` shows the same in Spanish, with `og:url` ending `/es/books/OL45804W`.
+3. `curl https://wingedwords.app/books/OL45804W` (no bot name) still returns the app (`<div id="root">`).
+4. Paste a link of each kind into a chat with yourself and into Reddit's post preview.
+
 ## Bot check on login and sign-up (Cloudflare Turnstile)
 
 Per-address limits can't stop leaked email/password pairs being tried from thousands of addresses, one or two guesses each. With the bot check on, login and sign-up each need a solved Turnstile challenge (usually invisible to a real reader). Code and decisions: `specs/bot-check.md`.
@@ -162,7 +176,7 @@ Everything is in one Render account, region **Virginia (US East)**. The domain i
 | `Turnstile__SiteKey` / `Turnstile__SecretKey` | the Cloudflare Turnstile widget's keys (bot check on; see its section). Both or neither |
 | `Admin__UserIds__0` | your account id (see "Admin role" below). More admins: `Admin__UserIds__1`, … |
 
-On the site service: `API_BASE_URL` = `https://api.wingedwords.app/api` (a plain https URL; the container refuses anything else).
+On the site service: `API_BASE_URL` = `https://api.wingedwords.app/api` (a plain https URL; the container refuses anything else). Optional: `SHARE_CARD_API_URL`, where nginx fetches link preview cards from (see "Link previews").
 
 **Things that bit us on the first deploy**
 - **Email timed out ("Sending … failed (TimeoutException); retrying").** Render's free instances block the standard outgoing SMTP ports 25, 465 and 587. Resend also listens on **2587** (STARTTLS, same as 587) and **2465** (implicit TLS, needs `Email__UseSsl=true`); `Email__Port=2587` works. Paid instances aren't blocked, but 2587 keeps working there too.
