@@ -25,7 +25,6 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | Bug | Priority | Size | Area |
 |---|---|---|---|
 | [Two account erasures at once can both create the "Deleted user" placeholder](deleted-user-placeholder-race.md) | P2 | S | Backend, account deletion (flaky test) |
-| [A book saved in the week before ratings shipped waits a week for its Open Library rating](ratings-backfill-waits-a-week.md) | P2 | S | Backend, Open Library refresh |
 | [The log form on a book's page is wider than a phone screen](log-form-overflows-on-phone.md) | P2 | S | Frontend, book page, phone |
 | [A profile keeps going back to "Loading" when one of the rows above its shelves fails](profile-reloads-when-a-row-fails.md) | P2 | S | Frontend, profile page |
 | [The "Google sign-in off" test fails on a machine with a Google client ID in its user-secrets](google-signin-off-test-reads-user-secrets.md) | P2 | S | Backend tests, local only |
@@ -44,6 +43,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [A book saved in the week before ratings shipped waits a week for its Open Library rating](ratings-backfill-waits-a-week.md) | 2026-10-25 | the bug file, "Fixed" |
 | [Book clubs show a member's progress even when that book is private](club-progress-ignores-reading-visibility.md) | 2026-10-23 | the bug file, "Fixed" (option 2: kept, and said in three places) |
 | [Account emails have no overall daily budget](email-sending-has-no-overall-budget.md) | 2026-10-22 | the bug file, "Fixed" |
 | [Failed logins, lockouts and account changes leave no log line](security-events-not-logged.md) | 2026-10-22 | the bug file, "Fixed" |

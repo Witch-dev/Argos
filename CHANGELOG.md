@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-25 — Open Library ratings: a book whose rating was never asked for gets it on the refresh job's next run, and a failed fetch is retried after a day instead of a week (new `Books.OpenLibraryRatingCheckedAt`); found on Lord of the Flies in production → bugs/ratings-backfill-waits-a-week.md
 - 2026-10-25 — Shareable pages, Phase 3: link previews on Reddit, Discord and chat apps show the book, list, club, review, profile or author (cover, title, a short line) in English or Spanish, `/es/<page>` links open in Spanish and Share copies them, nginx sends known preview bots to a new card endpoint → specs/shareable-pages.md §7
 - 2026-10-25 — Shareable pages, Phase 2: review, profile and author links work for visitors (like, comment, want to read, follow the reviewer, the reader or the author through the sign-up box), Share on all three; a visitor no longer sees a former reader's spoiler review uncovered; a profile's initial fills its ring → specs/shareable-pages.md §6
 - 2026-10-24 — Shareable pages, Phase 1: book, list and club-invite links work for visitors (every button shown, a small sign-up box, the tapped action done after sign-up), Want to read on search results, a "Find a book" field on the landing page, a Saved lists tab, Share buttons, sign-ups from shared pages counted on admin stats; a private club's invite link only goes to its admins and moderators → specs/shareable-pages.md

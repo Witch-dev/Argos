@@ -1,6 +1,6 @@
 # A book saved in the week before ratings shipped waits a week for its Open Library rating
 
-**Priority:** P2 · **Size:** S · **Area:** Backend, Open Library refresh · **Found:** 2026-10-19 (checking `specs/open-library-ratings.md` locally) · **Status:** Open
+**Priority:** P2 · **Size:** S · **Area:** Backend, Open Library refresh · **Found:** 2026-10-19 (checking `specs/open-library-ratings.md` locally) · **Status:** Fixed 2026-10-25
 
 ## What happens
 
@@ -18,3 +18,7 @@ Add `OpenLibraryRatingCheckedAt` (nullable timestamp) to `Books`, set on every r
 A second migration, the two conditions in `GetStaleBooksAsync` and `FakeBookRepository`, and tests in `OpenLibraryCacheRefreshServiceTests` and `AuthorTests` (`StaleBooks_IncludeOnesWhoseRatingWasNeverFetched`). Update `specs/open-library-ratings.md` §3.3 and SPEC.md §7.
 
 **Quick workaround for one book in dev:** set its `CachedAt` back more than a week and restart the API.
+
+## Fixed
+
+2026-10-25, as suggested: `Books.OpenLibraryRatingCheckedAt` (migration `OpenLibraryRatingCheckedAt`), stamped on every fetch attempt. Never asked → the next refresh run fetches it; asked and failed → retried after a day (was a week from `CachedAt`). Found again in production on Lord of the Flies (`OL455327W`): 1 rating here, 3.7 from 404 on Open Library, no stand-in shown, most likely because its first fetch timed out. Tests: `OpenLibraryCacheRefreshServiceTests`, `AuthorTests.StaleBooks_IncludeOnesWhoseRatingWasNeverFetched`, `OpenLibraryRatingsTests`. Detail in `specs/open-library-ratings.md` §3.3.
