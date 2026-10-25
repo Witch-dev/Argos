@@ -33,7 +33,7 @@ We want readers to be able to use Argos in **English, Spanish, Brazilian Portugu
 ## Explicitly out of scope
 
 - **Content people write**: reviews, writings, comments, list names, club names. These stay in whatever language they were written in. Machine translation of other people's posts may come later.
-- **Book data from Open Library**: titles, authors, descriptions. These come as Open Library has them.
+- **Book data from Open Library**: titles, authors, descriptions. These come as Open Library has them. *Changed 2026-10-25: titles, descriptions and covers will come in the reader's language where Open Library's editions or Wikidata / Wikipedia have them (`specs/book-data-in-reader-language.md`). Author names and subjects stay as they are.*
 - **Right-to-left languages** (Arabic, Hebrew). They need the whole layout mirrored, which is separate work.
 - **Language in the URL** (`/es/feed`). This only helps search engines index each language. It can be added for the landing page later if needed.
 - **Translating Open Library genre/subject names**, beyond the fixed genre/audience/mood lists Argos itself defines (those are translated).

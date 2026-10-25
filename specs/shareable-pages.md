@@ -141,7 +141,7 @@ Sign-ups are open (early access) and private accounts are done (Stage 8), so a v
 
 #### Verification
 - [x] `argos-security` review (new anonymous endpoint, nginx proxy). Also a `reviewer` pass (§7).
-- [ ] Live: `curl -A "redditbot" https://wingedwords.app/books/OL…` and `/es/books/OL…` return the book's tags; a normal browser still gets the app.
+- [x] Live: `curl -A "redditbot" https://wingedwords.app/books/OL…` and `/es/books/OL…` return the book's tags; a normal browser still gets the app. *Passed 2026-10-25 (OL45804W, English and Spanish, `Vary: User-Agent`; the first try gave the generic card because the book had never been loaded, as designed).*
 - [ ] Paste one link of each kind into a chat with yourself (Discord or WhatsApp) and into Reddit's post preview. Use links not shared before: Reddit and chat apps keep old cards for a while.
 
 ## 5. Build notes (Phase 1, 2026-10-24)

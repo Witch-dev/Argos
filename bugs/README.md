@@ -43,6 +43,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [A search's "exact title" rule misses a title that starts with "The"](search-exact-title-ignores-article.md) | 2026-10-25 | the bug file, "Fixed" |
 | [A book saved in the week before ratings shipped waits a week for its Open Library rating](ratings-backfill-waits-a-week.md) | 2026-10-25 | the bug file, "Fixed" |
 | [Book clubs show a member's progress even when that book is private](club-progress-ignores-reading-visibility.md) | 2026-10-23 | the bug file, "Fixed" (option 2: kept, and said in three places) |
 | [Account emails have no overall daily budget](email-sending-has-no-overall-budget.md) | 2026-10-22 | the bug file, "Fixed" |
