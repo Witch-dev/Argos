@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-26 — Likely cause of the live API's memory crashes fixed: the cover-colour job decoded covers whole (a 2 MB JPEG can be ~400 MB decoded); now at most 2048×2048 → DEPLOY.md "Incidents on the live site" (Apollon 992f445)
 - 2026-10-26 — Memory jumps are one-step bursts, not a leak (Starter plan chart); API set to the workstation garbage collector on Render; any request or background job allocating over 50 MB is now named in the log ("Heavy:") → DEPLOY.md "Incidents on the live site" (Apollon fe03913)
 - 2026-10-26 — Live API restarted by Render for passing its 512 MB memory limit (the second restart that day); no leak found in the code; the free plan has no memory chart, so the API now logs its memory every two minutes → DEPLOY.md "Incidents on the live site" (Apollon 06462a0)
 - 2026-10-26 — Live API froze for a minute (1:35 PM) and Render restarted it; cause not proven (free database or memory); health check kept as is; routine database queries no longer flood the production log → DEPLOY.md "Incidents on the live site" (Apollon 3ba87d8)
