@@ -1,6 +1,6 @@
 # Feature Spec — Log progress by chapter
 
-**Status:** 📝 Spec written 2026-10-26. Not started.
+**Status:** 🚧 Phase 1 (server) built 2026-10-26 (§6). Phase 2 (browser) next.
 
 ## 1. Problem
 
@@ -18,8 +18,7 @@ The same reader also took our own wording at its word: the buddy-read intro says
 - **The reader types the total.** Open Library has no chapter counts. 1 to 1000 chapters; `CurrentChapter` 0 to the total.
 - **Buddy-read locks:**
   - A comment (and a highlight) keeps the writer's `AtChapter` next to `AtPage`/`AtPercent`. It's shown as "ch. 7" where a page comment shows "p. 140".
-  - If the writer and reader both count in chapters with the same total, chapters are compared directly: the comment opens once the reader's chapter ≥ `AtChapter`.
-  - Otherwise it's percent, as today. A chapter position is the exact end of a chapter, not a guess in the middle of one, so a chapter writer's percent rounds **down** (a page writer's still rounds up). Otherwise two readers who both finished chapter 7 of 24 would land at 30% and 29%, and the comment would stay closed.
+  - It's percent, as today. A chapter position is the exact end of a chapter, not a guess in the middle of one, so a chapter writer's percent rounds **down** (a page writer's still rounds up). Otherwise two readers who both finished chapter 7 of 24 would land at 30% and 29%, and the comment would stay closed. With the same chapter count, that makes "finished chapter 7" open exactly the chapter-7 posts. *(Changed while building: a direct chapter comparison was planned, but rounding down does the same job for any book under 100 chapters. Over 100, two neighbouring chapters can share a percent, so a post can open up to one chapter early. That's rare, and accepted.)*
   - Mixing a page reader and a chapter reader is approximate: chapters aren't the same length. That's acceptable for spoilers; "Show anyway" is still there.
 - **"You're N pages behind"** in the checkpoint reminder stays for page readers only. Checkpoint targets are pages; a chapter reader gets the reminder without that clause.
 - **The progress history** (dots on the reading update viewer) records chapters too: "+2 chapters since" next to today's "+26 pages since".
@@ -55,12 +54,12 @@ The same reader also took our own wording at its word: the buddy-read intro says
 
 ### Phase 1 — Server *(size S–M)*
 
-- [ ] Domain fields + migration `ProgressByChapter` (§3.1).
-- [ ] Validation, error codes and translations (§3.2).
-- [ ] `ReadingProgress.Percent` and `BuddyReadRules` (chapter position, writer rounding, same-total comparison).
-- [ ] Progress history, activity "chapters since", DTOs, export.
-- [ ] Tests: validation (audio refuses chapters, page + chapter refused, ranges), percent by chapter, a comment at ch. 7 of 24 opens for another reader at ch. 7 of 24 and not at ch. 6, mixed page/chapter by percent, export columns.
-- [ ] reviewer.
+- [x] Domain fields + migration `ProgressByChapter` (§3.1).
+- [x] Validation, error codes and translations (§3.2).
+- [x] `ReadingProgress.Percent` and `BuddyReadRules` (chapter position, writer rounding). The same-total comparison was dropped (§2).
+- [x] Progress history, activity "chapters since", DTOs, export.
+- [x] Tests: validation (audio refuses chapters, page + chapter refused, ranges), percent by chapter, a comment at ch. 7 of 24 opens for another reader at ch. 7 of 24 and not at ch. 6, mixed page/chapter by percent, export columns.
+- [x] reviewer and argos-security (§6).
 
 ### Phase 2 — Browser *(size M)*
 
@@ -77,3 +76,15 @@ The same reader also took our own wording at its word: the buddy-read intro says
 - Chapter names or a table of contents per book.
 - Club checkpoints with chapter targets (today's free-text label "Chapters 5–10" already covers the talk side).
 - Filling chapter counts from anywhere: Open Library doesn't have them.
+
+## 6. Phase 1 build notes (2026-10-26)
+
+- **Data:** `Logs.TotalChapters`/`CurrentChapter`, `ReadingProgressEntries.Chapter`, `CheckpointComments.AtChapter`, migration `ProgressByChapter` (four nullable columns). `Log.CountsInChapters` (not stored) says which unit a log uses. The migration's model snapshot also picked up an older, unrelated `Book.Localizations` navigation that had never made it into the snapshot; it changes nothing in the database.
+- **Validation:** `LogService.ValidateChapters`, after `ValidateFormat`. Error codes `logs.audioNoChapters`, `pagesOrChapters`, `totalChaptersRange`, `currentChapterRange`, `currentChapterOverTotal`, in all five languages.
+- **Buddy reads:** `BuddyReadRules.PositionOf` returns `(Page, Chapter, Percent)`. A chapter position rounds down on both sides. **Security review fix:** a writer who has finished at least one chapter writes from 1% at least. In a book with over 100 chapters, "finished chapter 1" would otherwise be 0%, and a post at 0% opens for every member, even one with no position.
+- **Feed:** `ChaptersSincePrevious` next to `PagesSincePrevious`; `PreviousAt` is whichever applies. History points carry `Chapter`.
+- **Checkpoint reminder (reviewer fix):** "N pages behind" now leaves out audiobooks and chapter logs. Before this, an audiobook with no page counted from page 0, so a listener was told they were the whole checkpoint behind. That was an older bug, fixed here too. A log with no page yet still counts from the start, as before.
+- **Accepted, not changed:** the due-checkpoint reminder decides "already there" by page, so a chapter reader (like an audiobook listener today) gets the reminder for every due page checkpoint, even past it. Checkpoint targets are pages, and the reminder is a nudge, not a lock. Revisit if readers find it noisy.
+- **Accepted, not changed:** editing a post updates its `AtPage`/`AtChapter` label only when the lock point moves on, so a writer who switches units between posting and editing keeps the old label. The label still describes where the lock is.
+- **Tests:** 1718 pass. New: `ReadingProgressTests` (chapters), `FormatTests` (validation, export), `ReadingProgressHistoryTests` (chapter points and "+2 chapters"), `BuddyReadTests` (same chapter opens and the one before doesn't, page reader by percent, under-1% stays locked), `ClubVotingTests` (no "pages behind" in chapters).
+- **API restart needed:** the migration is applied on start. The dev database wasn't running while this was built.
