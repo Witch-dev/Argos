@@ -1,6 +1,6 @@
 # Feature Spec — Log progress by chapter
 
-**Status:** 🚧 Phase 1 (server) built 2026-10-26 (§6). Phase 2 (browser) next.
+**Status:** ✅ Built 2026-10-26: Phase 1 server (§6), Phase 2 browser (§7).
 
 ## 1. Problem
 
@@ -63,12 +63,12 @@ The same reader also took our own wording at its word: the buddy-read intro says
 
 ### Phase 2 — Browser *(size M)*
 
-- [ ] Types and the `progressPercent` rule.
-- [ ] Log form, progress update window, QuickLog.
-- [ ] The display places (§3.3) and the wording fix.
-- [ ] Translations in five languages; Vitest.
-- [ ] web-design critique round on the log form; browser-check: log a book in chapters, see it in the feed and a buddy read with a page reader.
-- [ ] reviewer; CHANGELOG.
+- [x] Types and the `progressPercent` rule.
+- [x] Log form, progress update window, QuickLog.
+- [x] The display places (§3.3) and the wording fix.
+- [x] Translations in five languages; Vitest.
+- [x] web-design critique round on the log form; browser-check: log a book in chapters, see it in the feed and a buddy read with a page reader.
+- [x] reviewer; CHANGELOG.
 
 ## 5. Out of scope
 
@@ -88,3 +88,22 @@ The same reader also took our own wording at its word: the buddy-read intro says
 - **Accepted, not changed:** editing a post updates its `AtPage`/`AtChapter` label only when the lock point moves on, so a writer who switches units between posting and editing keeps the old label. The label still describes where the lock is.
 - **Tests:** 1718 pass. New: `ReadingProgressTests` (chapters), `FormatTests` (validation, export), `ReadingProgressHistoryTests` (chapter points and "+2 chapters"), `BuddyReadTests` (same chapter opens and the one before doesn't, page reader by percent, under-1% stays locked), `ClubVotingTests` (no "pages behind" in chapters).
 - **API restart needed:** the migration is applied on start. The dev database wasn't running while this was built.
+
+## 7. Phase 2 build notes (2026-10-26)
+
+- **One rule:** `countsInChapters` and `progressPercent` in `web/src/lib/readingFormat.ts` match `Log.CountsInChapters` and `ReadingProgress.Percent`. `progressText` says "Chapter 7 of 24". The chapter fields sit on `FormatFields`, so `LogDto`, the requests, `ActivityItemDto` and `ClubMembershipDto` all carry them.
+- **Updates keep the unit:** the server sets the chapter fields to whatever an update sends, so `updateFromLog` (QuickLog) sends them back unchanged. "Finished!" clears them, like the page numbers.
+- **Log form** (the progress window uses the same form): "Count by" Pages | Chapters (the shared `Segmented`) above the position fields, for print and ebook only. In chapters: "Chapters in the book" and "Chapters finished", with the hint "Just started chapter 7? Enter 6." A chapter log keeps the page count as the book's length (sent but not shown). Switching clears the other unit's current place.
+  - Design critique: "Chapter you've finished" wrapped at 375px, so it became "Chapters finished" and the row is bottom-aligned. The control got more room above it, and its track a hairline edge, since the track's sunken colour matched the form's. Disposition: ship.
+- **QuickLog:** "+1 chapter" in place of "+10 pages".
+- **Shown as chapters:**
+  - The rail's "Currently reading" and the club's "next up" ("You've finished chapter 7").
+  - Buddy-read reader rows ("ch. 7 of 24"), "Posting at ch. 7 (29%)", comment bylines and locked notes ("Written at ch. 7").
+  - The reading update viewer ("has finished chapter 7 of 24", the journey's "ch." ends, chapter dots, "+2 chapters since…").
+- **Club pace:** a chapter reader is judged on track by percent, as an audiobook listener is. The checkpoint's page is set against their own page count, or the club's typical one. Before this, they counted from page 0 and always showed Behind.
+- **Wording (§1):**
+  - The buddy-read intro says comments stay hidden "until you've read as far as the person who wrote them". The empty thread says "anyone who hasn't read as far as you".
+  - "Set your page" is now "Set your progress".
+  - The landing demo says "once you've read as far as Inés".
+- **Not changed:** the landing demos' sample readers stay in pages. The rail's "Add your page" shows for a chapter log with no chapter yet.
+- **Tests:** 1189 Vitest pass. New tests cover the percent and text, "+1 chapter", the update payload, club pace, journey points, the log form's switch and payload, and the buddy-read rows and bylines. browser-check passed with a chapter reader and a page reader in one buddy read. reviewer found nothing.
