@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-26 — Live API restarted by Render for passing its 512 MB memory limit (the second restart that day); no leak found in the code; the free plan has no memory chart, so the API now logs its memory every two minutes → DEPLOY.md "Incidents on the live site" (Apollon 06462a0)
 - 2026-10-26 — Live API froze for a minute (1:35 PM) and Render restarted it; cause not proven (free database or memory); health check kept as is; routine database queries no longer flood the production log → DEPLOY.md "Incidents on the live site" (Apollon 3ba87d8)
 - 2026-10-26 — Progress by chapter, Phase 2 (browser): a Pages | Chapters choice on the log form, "+1 chapter" in QuickLog, "ch. 7 of 24" wherever a page showed (rail, club card, buddy read, bylines, reading updates); chapter readers judged on pace by percent; buddy-read and landing wording now say "read as far as", not "the page" → specs/progress-by-chapter.md §7 (Apollon 706ef9e)
 - 2026-10-26 — Progress by chapter, Phase 1 (server): a log can say "finished chapter 7 of 24" instead of a page; buddy-read locks, club progress, the feed's history and the export follow; "N pages behind" no longer counts audiobooks and chapter readers from page 0 → specs/progress-by-chapter.md §6 (Apollon 267ce62)
