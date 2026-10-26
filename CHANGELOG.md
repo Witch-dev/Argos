@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-26 — Security workflow's Trivy failed on the web image (curl/libcurl HTTP/2 use-after-free, CVE-2026-92392); the image now upgrades them to Alpine's 8.23.0 → Apollon 1c83f91
 - 2026-10-25 — Open Library reachable from production again after the batched-job deploy; backfill back on at 100 books per run → bugs/open-library-refuses-production.md
 - 2026-10-25 — Open Library outage handling: search says when Open Library isn't answering and keeps the stored books even with filters; the refresh job builds language rows in batches (one search per language per 100 books, Wikidata 50 items a request, an edition request only for a missing description), waits 10 minutes after startup and stops at the first refusal; the book page reads 100 editions → bugs/open-library-refuses-production.md, specs/book-data-in-reader-language.md §13 (Apollon e71c6de)
 - 2026-10-25 — Book data in the reader's language, Phase 4: every screen with a book on it (shelves, lists, feed, journal, clubs, stats, notifications, reader cards, review and list share cards) shows its title and cover in the reader's language through one shared rule (`ShownBook`, a query interceptor keeps it one SQL query); popular books and the landing showcase are cached per language → specs/book-data-in-reader-language.md §12
