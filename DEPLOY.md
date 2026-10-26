@@ -188,6 +188,13 @@ On the site service: `API_BASE_URL` = `https://api.wingedwords.app/api` (a plain
 
 Newest first. What happened, what we found, and what we decided, so the next one starts from here.
 
+### 2026-10-26 (later the same day): "exceeded its memory limit"
+
+- **What we saw:** an email from Render, "Web Service wingedwords-api exceeded its memory limit", and an automatic restart. The second restart that day, so the freeze below was probably the same thing: just before running out, the garbage collector (the part of .NET that frees unused memory) runs almost nonstop and the app stops answering.
+- **What the code showed:** no clear leak. Every cache entry expires, Open Library responses are capped (editions at 100), uploads have size limits, and the SkiaSharp image code disposes what it makes. The API runs .NET's **server garbage collector** (the ASP.NET default), which holds on to more memory before cleaning up. That suits big servers, not the free plan's 512 MB.
+- **Still to check:** the shape of Render → wingedwords-api → **Metrics → Memory** over the day. A slow climb to the limit means a leak. Flat, then a sudden jump, means one heavy request (look at the log just before it). Steady near the limit means the plan is too small for the app.
+- **Note on plans:** Render's $7 Starter plan also has **512 MB**, so the planned upgrade fixes sleeping, not memory. Standard (2 GB) costs about $25 a month.
+
 ### 2026-10-26: API froze for a minute, Render restarted it
 
 - **What we saw:** an email from Render, "HTTP health check failed (timed out after 5 seconds)", and the event "Instance failed: txr52 … while running your code" at 1:36 PM. The site was fine again a few minutes later, with no action from us.
