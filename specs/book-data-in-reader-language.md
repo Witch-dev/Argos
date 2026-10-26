@@ -101,6 +101,7 @@ One step, `BookLocalizer`, fills all five languages of a book at once:
 - **A cached book with `LocalizedAt` null opened on its book page:** same, inline, same limit. The book page is what gets shared, so it shouldn't wait for the backfill.
 - **Refresh** (`OpenLibraryCacheRefreshService`): when a book is refreshed, its localizations are rebuilt.
 - **Backfill:** the refresh job's run also takes a batch of books with `LocalizedAt` null, most-logged first, like the ratings backfill.
+- Since 2026-10-25 the refresh and the backfill build their books together in batches, with few Open Library requests and slightly different rules (§13).
 - Other screens (shelves, feed, lists) only read rows; they never trigger fetching.
 
 **Where the code goes:** Open Library calls stay in `OpenLibraryClient` (SPEC.md §8). Wikidata and Wikipedia get one new client, `WikimediaClient`, in `Argos.Infrastructure/ExternalApis/Wikimedia/`, with the same habits: a descriptive `User-Agent` with a contact address (Wikimedia's policy asks for one), short timeouts, null on failure, never a 500 because Wikipedia is down. `SPEC.md` §8 gets a line that Wikimedia calls go only through `WikimediaClient`, and its terms of use under Legal / Data.
@@ -402,3 +403,35 @@ Full suite: 1,693 passing.
 - In English, the same screens show "The Left Hand of Darkness" and "Norwegian Wood".
 - The long Spanish title wraps to two lines on the shelf and the club card, with no overflow. No console errors (only the 404s of a reader with no reading goal).
 - Not confirmed: the feed review card's cover looked blank in one full-page capture at 375, while the API returns the Spanish cover (probably lazy loading in the capture).
+
+## 13. Batched refresh job (2026-10-25, bugs/open-library-refuses-production.md)
+
+Open Library refused every connection from production about two hours after Phase 1 went live, and the backfill was the likeliest cause: up to 500 books a run, each with a 500-edition request, started on every API restart. The refresh job now asks for books in batches.
+
+**How it's built:** `BookLocalizationService.BuildBatchAsync` takes the books the run refreshed plus up to `CacheRefresh:MaxLocalizationsPerRun` never-built books, 100 at a time:
+- **One search per language** (`OpenLibraryClient.GetMatchedEditionsAsync`: `search.json?q=key:(/works/A OR …)&lang=xx&fields=key,language,editions,editions.key,editions.title,editions.language,editions.cover_i,editions.publish_date`). English first, for every book. Its answer also lists the languages each work has editions in, so each other language is asked only about the works that have one. For 500 books that is at most 25 requests, where it used to be 500 of up to 1 MB. A work search doesn't know (merged or deleted) is marked failed, so it comes back in a day.
+- **Wikidata:** the P648 search per book, as before (in series), then the whole batch's items in `wbgetentities` calls of 50. Open Library's own links to Wikidata are only used when the book carries them (just refreshed): asking each work for them would cost a request per book. The book page still asks.
+- **Wikipedia:** the leads, as before.
+- **Descriptions:** one small `/books/{edition}.json` request for the matched edition (`GetEditionAsync`), only for languages still without a description after Wikipedia. For English, only when the work has none.
+
+**Rule changes for books built this way** (`BookLocalizer.FromMatchedEditions`; the book page keeps §3's rules over its editions):
+- **Title:** the Wikidata label still comes first. Otherwise the one matched edition's title, which must pass `SearchEditionTitle`'s checks (it reads as the language and isn't the work's own written differently), so the page says what search results say. One edition can't outvote a mislabelled record the way many could: Open Library matches "One hundred years of solitude", tagged Spanish, for Cien años de soledad in Spanish, and the check leaves it out.
+- **Description:** Wikipedia's lead comes before an edition's here; the book page still prefers an edition's.
+- **Cover:** the matched edition's, unless it is the default cover, or the language keeps the work's title and is English or the language the title clearly reads as (Le petit prince keeps its cover for French readers). With one edition per language the old test ("the default cover is on none of the editions read") can't be made.
+
+**Pacing:** the job waits `CacheRefresh:StartDelayMinutes` (10) after the API starts. `OpenLibraryPacingHandler` counts every refused connection, 429 and 5xx on any Open Library request (`OpenLibraryPacer.Refusals`). The run stops at the first new one, in the refresh or the build. A book whose refresh failed that way isn't postponed, and a stopped build marks nothing, so the rest waits for the next run.
+
+**The book page** reads 100 editions instead of 500 (`OpenLibraryClient.MaxLocalizationEditions`): the same request as the default cover's. A first visit makes both. The log form's edition picker keeps 500.
+
+**Search when Open Library is down:** see the bug file. The API answers `{ books, openLibraryUnavailable }`, and a filtered search falls back to the stored books (years applied; languages can't be, since stored rows don't know their editions' languages).
+
+**Reviews** (`reviewer` and `argos-security`, 2026-10-25; nothing high or critical). Fixed:
+- A refused run postpones the book it met (a week) and a failed description request marks its book (a day), so a work whose own request always fails can't stop every run at itself.
+- A batch whose search answer can't be read (not a refusal) is marked failed for a day instead of blocking every run.
+- A work whose search record lists no languages is asked about every language.
+- A failed Wikidata request leaves only the books with an item in it incomplete.
+- A server error counts as a refusal only on the job's own (paced) requests: a reader's odd query that makes Open Library's search answer 500 mustn't stop the job. A refused connection or a 429 counts from any request.
+- A `null` in a search answer is skipped instead of failing every run.
+- The search page's "isn't answering" line follows the first page only.
+
+Accepted: one `/books/{id}.json` request per language still without a description can add up to hundreds per run. They are paced at one a second and stop at the first refusal. If Open Library asks for less, cap them per run.
