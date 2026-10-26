@@ -1,6 +1,6 @@
 # Open Library refuses connections from production, and search says "nothing found"
 
-**Priority:** P1 · **Size:** M–L · **Status:** code fixed 2026-10-25, block still open · **Area:** Backend, Open Library client, refresh job, search · **Found:** 2026-10-25, a Spanish search for "la mano izquierda" on the live site
+**Priority:** P1 · **Size:** M–L · **Status:** fixed 2026-10-25 (production reaches Open Library again) · **Area:** Backend, Open Library client, refresh job, search · **Found:** 2026-10-25, a Spanish search for "la mano izquierda" on the live site
 
 ## What happens
 
@@ -22,6 +22,7 @@ The same requests, with production's exact User-Agent, work from a home connecti
 ## Done so far
 
 - `CacheRefresh__MaxLocalizationsPerRun` = `0` set on `wingedwords-api` in Render (backfill off; the book page still builds a book's rows when it's opened).
+- After the fix (Apollon `e71c6de`, pushed 2026-10-25, search message checked in the browser in English and Spanish), `CacheRefresh__MaxLocalizationsPerRun` set to `100` in Render: backfill back on, at a fifth of the default. Delete it later to get 500.
 - Email sent to openlibrary@archive.org on 2026-10-25, asking whether the ranges are blocked and offering to keep to their preferred rate or use a dedicated address.
 
 ## Fixed in the code (2026-10-25)
@@ -30,7 +31,13 @@ Both parts of the fix idea's points 1 and 2 are built:
 - **Search:** the API answers `{ books, openLibraryUnavailable }`. When Open Library can't be reached, the search page says "Open Library isn't answering right now, so these are only the books saved here" (or that nothing saved matches), in five languages. A filtered or sorted search then shows the stored books that match, with the years applied. The language filter can't be applied, since stored books don't know their editions' languages. Header suggestions, pickers and import still get only the books.
 - **Refresh job:** batched as planned. Search returns the matched edition's cover (`editions.cover_i`), so covers need no extra request. There is a 10-minute start delay, and the run stops at the first refusal. The book page reads 100 editions. Detail, rule changes and review fixes: `specs/book-data-in-reader-language.md` §13.
 
-**Still open:** the block itself. Waiting on the email to Open Library; point 3 below if they won't lift it. After this deploy, set `CacheRefresh__MaxLocalizationsPerRun` back on in Render (delete it to get 500, or start lower, e.g. 100) and watch the first run's log for "Book language build".
+## Fixed (2026-10-25)
+
+After the deploy of `e71c6de`, with the backfill at 100 per run, production reaches Open Library again. The block lifted on its own; no reply to the email yet. Which cause it was (our burst or a neighbour's) is still unknown.
+
+To watch:
+- If the refusals come back, the job stops by itself and search says so. Then go to point 3 below.
+- Raise the setting to the default (delete `CacheRefresh__MaxLocalizationsPerRun`) only after a few clean runs.
 
 ## Fix idea
 

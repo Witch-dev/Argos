@@ -24,7 +24,6 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Priority | Size | Area |
 |---|---|---|---|
-| [Open Library refuses connections from production, and search says "nothing found"](open-library-refuses-production.md) (code fixed 2026-10-25; waiting on Open Library) | P1 | M–L | Backend, Open Library, search |
 | [Two account erasures at once can both create the "Deleted user" placeholder](deleted-user-placeholder-race.md) | P2 | S | Backend, account deletion (flaky test) |
 | [The log form on a book's page is wider than a phone screen](log-form-overflows-on-phone.md) | P2 | S | Frontend, book page, phone |
 | [A profile keeps going back to "Loading" when one of the rows above its shelves fails](profile-reloads-when-a-row-fails.md) | P2 | S | Frontend, profile page |
@@ -44,6 +43,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [Open Library refuses connections from production, and search says "nothing found"](open-library-refuses-production.md) | 2026-10-25 | the bug file, "Fixed" |
 | [A search's "exact title" rule misses a title that starts with "The"](search-exact-title-ignores-article.md) | 2026-10-25 | the bug file, "Fixed" |
 | [A book saved in the week before ratings shipped waits a week for its Open Library rating](ratings-backfill-waits-a-week.md) | 2026-10-25 | the bug file, "Fixed" |
 | [Book clubs show a member's progress even when that book is private](club-progress-ignores-reading-visibility.md) | 2026-10-23 | the bug file, "Fixed" (option 2: kept, and said in three places) |
