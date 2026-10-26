@@ -184,4 +184,20 @@ On the site service: `API_BASE_URL` = `https://api.wingedwords.app/api` (a plain
 - **Render deployed on every push to `main`**, whether or not CI passed. Since 2026-10-19 both services (site and API) are set to *After CI checks pass* (Settings → Build & Deploy → Auto-Deploy): a push goes live only once the GitHub Actions run is green, and a red run deploys nothing. To ship without waiting (an urgent fix while CI is down), use *Manual Deploy* on the service.
 - **Resend: leave click and open tracking off.** Tracking rewrites the confirmation and reset links through a third-party address, and the privacy policy doesn't mention it.
 
+## Incidents on the live site
+
+Newest first. What happened, what we found, and what we decided, so the next one starts from here.
+
+### 2026-10-26: API froze for a minute, Render restarted it
+
+- **What we saw:** an email from Render, "HTTP health check failed (timed out after 5 seconds)", and the event "Instance failed: txr52 … while running your code" at 1:36 PM. The site was fine again a few minutes later, with no action from us.
+- **What the logs showed:** database queries took 1–2 ms right up to **1:35:48**. Then nothing at all for a minute, not even the import worker, which checks for imports every 2 seconds. Render restarted the instance at 1:36:47, and four seconds later the database answered in 103 ms. No deploy was running: `706ef9e` started deploying at 2:21 PM. The `Cannot load library libgssapi_krb5.so.2` error at start-up is harmless noise (an optional Kerberos login component that our password logins don't use).
+- **Cause: not proven.** Either the database connection suddenly hung (likely on the free Postgres plan), or the app itself froze (for example, out of memory). The logs can't tell these apart. Render → wingedwords-api → **Metrics → Memory** can: memory near the limit before the restart means the app; flat memory means the database.
+- **Decisions:**
+  - **Keep the health check on `/health`, which includes the database.** We considered a light `/health/live` that skips the database, so a database stall wouldn't restart the API. We decided against it. The restart may be what fixed things (it replaced database connections that might have gone dead). And with a light check, readers would get errors from a frozen API that Render leaves running.
+  - **The import worker's 2-second check stays.** Idle, it costs about 1 ms of database time per check (under a minute a day), and it lets an import start almost at once.
+  - **Routine database queries no longer go to the production log** (Apollon `3ba87d8`). Failed queries still show, as errors. So the next time it happens, the lines around the freeze will be readable.
+  - **The real fix if it's the database:** move `wingedwords-db` to the paid plan (planned for the first week of November 2026; the free one is deleted around 2026-11-12).
+- **If it happens again:** check Metrics → Memory, and read the log for the minute before the freeze. If it repeats while memory stays flat, revisit the light health check, or connection settings such as `Timeout` / `Keepalive` in `Database__ConnectionString`.
+
 **First-account recipe** (only if invite-only is on and no readers exist, so nobody can create an invite): set `Registration__InviteOnly` to `false`, register, set it back to `true`, and check that the confirmation email arrives.
