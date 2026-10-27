@@ -56,7 +56,7 @@ Want to read already supports an edition, because it's a log (`LogStatus.WantToR
 
 ## 4. Out of scope
 
-- A cover chosen for the book page itself (the shared default stays automatic, `specs/formats-editions.md` §2).
+- A cover chosen for the book page itself (the shared default stays automatic, `specs/formats-editions.md` §2). (Added 2026-10-27, Apollon ef4b3be: the big cover shows *your* cover, the edition on your newest log, to you only, so a pick in See editions shows at once. Everyone else still sees the default.)
 - Search results with edition covers.
 - "Readers of this edition" or anything that needs an `Edition` table.
 
