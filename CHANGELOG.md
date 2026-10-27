@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-26 — Backend test stall fixed: test hosts' memory-reporter allocation listeners deadlocked inside .NET's EventPipe when created and disposed in parallel; test hosts no longer start the reporter (5 of 5 full runs pass) → bugs/backend-tests-stall-mid-run.md (Apollon c8dc503)
 - 2026-10-26 — Your cover on a list: the curator picks an edition per book ("Change cover" on a list, "Add to a list" in the book page's editions panel) and everyone who sees the list, its cards and its share card sees that cover → specs/book-editions-and-list-covers.md Phase 2 (Apollon 41b19d3)
 - 2026-10-26 — Backend test suite found to stall partway through some runs (also before this day's changes); not fixed yet → bugs/backend-tests-stall-mid-run.md
 - 2026-10-26 — Root cause of the live API's memory crashes fixed: the error-code lookup compiled ~200 NonBacktracking regexes on the first error after each start (534 MB, 311 MB kept); now plain text matching (0.1 MB) → DEPLOY.md "Incidents on the live site" (Apollon c676168)
