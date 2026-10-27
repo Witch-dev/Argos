@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-27 — Authors and books stored before the Latin-name fix (Homer as "Ὅμηρος") are marked stale by a data migration, so they're fetched again with the Latin name and bio (an author on its next view, a book in the next background refresh) instead of after 30 days → Apollon e768093
+- 2026-10-27 — Club suggestion options, Phase 1: the admin chooses in Settings whether members suggest or only the admin and moderators (members still vote), and each round can get a title ("Spooky stories for Halloween") shown above the suggestions, in the round-opened notification and on the club's share card → specs/club-suggestion-options.md Phase 1
 - 2026-10-27 — Book page: the big cover shows the cover you chose in See editions (to you only), so a pick shows at once; DEPLOY.md notes that the site can skip a push whose newest commit doesn't touch `web/` → Apollon ef4b3be, specs/book-editions-and-list-covers.md
 - 2026-10-27 — Authors named in another script on Open Library (Homer as "Ὅμηρος", with a Greek-then-English bio) show their Latin name and the Latin part of the bio, on author and book pages and in author search → Apollon 5111b11
 - 2026-10-26 — Backend test stall fixed: test hosts' memory-reporter allocation listeners deadlocked inside .NET's EventPipe when created and disposed in parallel; test hosts no longer start the reporter (5 of 5 full runs pass) → bugs/backend-tests-stall-mid-run.md (Apollon c8dc503)
