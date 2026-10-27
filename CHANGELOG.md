@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-27 — Readings strip: a book with no cover shows its title on cloth instead of an empty shelf with only the update count → Apollon a85ff71
 - 2026-10-27 — Google sign-in button no longer has a white box around it in dark mode → Apollon 3928cf9
 - 2026-10-27 — Club suggestions can be reported: "Report" on anyone else's suggestion (book, author or text), the admin's queue shows its title, by, link and note, and the admin deletes it with its votes instead of hiding it → bugs/club-suggestions-cannot-be-reported.md
 - 2026-10-27 — Club suggestion options, Phase 3 (browser): Suggest has Book / Author / Other tabs; author and text cards (a paper tile for a text, its by, site and note); the confirm dialog asks which of an author's books, and a text round shows each member's Not started / Reading / Finished; suggestions can't be reported yet → specs/club-suggestion-options.md Phase 3, bugs/club-suggestions-cannot-be-reported.md
