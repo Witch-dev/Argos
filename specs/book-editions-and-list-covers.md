@@ -1,6 +1,6 @@
 # Feature Spec — Editions on the book page, and your cover on lists
 
-**Status:** Planned 2026-10-26. Not started.
+**Status:** Built 2026-10-26 (Phase 1 Apollon d60aab0, Phase 2 below).
 
 ## 1. Problem
 
@@ -27,10 +27,12 @@ Want to read already supports an edition, because it's a log (`LogStatus.WantToR
 **Frontend only.**
 
 - A "See editions" button on the book page (signed in), near the cover. Tapping it opens a panel that uses `GET /api/books/{id}/editions`, so it shares the 6-hour cache the log form's picker already fills. The panel shows a grid of covers with language, publisher and year, and a language filter when there's more than one language. Reuse the list and filter parts of `EditionField`, pulled out into a shared component rather than copied.
-- **Each edition has one action, depending on your shelf:**
-  - No log of this book yet: **"Want to read with this cover"**, which creates a Want to read log with `editionOpenLibraryId`.
-  - A log already: **"Use this cover"**, which sets the edition on your most recent log of the book (update log). The currently chosen edition is marked.
+- **Each edition has one action, "Use this cover"; what it does depends on your shelf:**
+  - No log of this book yet: it creates a Want to read log with `editionOpenLibraryId`.
+  - A log already: it sets the edition on your most recent log of the book (update log). The currently chosen edition is marked ("Your cover") and listed first when the panel opens.
+  - The line under the heading says which of the two it is, once, and is each button's `aria-describedby`. (Built 2026-10-26: the planned "Want to read with this cover" label wrapped on every one of the buttons, so the design critique moved that consequence into the intro.)
   - Phase 2 adds **"Add to a list with this cover"**.
+- 8 editions at first, then 24 more per "Show more editions". An edition with no language is named by its publisher or year, never "Language not given".
 - States: loading, Open Library unreachable (`unavailable`, with the existing wording), no editions with covers.
 - Shown on a phone too: the panel stacks, with no horizontal overflow.
 
@@ -40,15 +42,16 @@ Want to read already supports an edition, because it's a log (`LogStatus.WantToR
 
 **Server.**
 - Adding a list item (`BookListService.AddItemAsync`) takes an optional `editionOpenLibraryId`.
-- A new item update (the note update grows into it, or a sibling `PATCH .../items/{itemId}/edition`) sets or clears the edition (`null` clears it). Same permission as editing the note: the owner and collaborators.
+- A new item update (the note update grows into it, or a sibling `PATCH .../items/{itemId}/edition`) sets or clears the edition (`null` clears it). Same permission as editing the note: the owner and collaborators. (Built: `PUT .../items/{itemId}/edition`, next to `/position`. The note's rule is the owner on any item and a collaborator on the books they added, so "Change cover" follows it.)
 - Both check the edition with `EditionService.FindAsync`. The errors reuse `logs.editionNotOfBook` / `logs.editionUnavailable`, or new `lists.*` codes with translations if the wording has to differ.
 - Where list covers come from: `BookListDtoMapper` item `BookCoverUrl`, the list previews (`CoverUrls` on summaries), and the list share card (`ShareCardService`) all use the edition cover when one is set. Add a small `ListItemCover.Url(item, language)` next to `LogCover`.
 - Copying a list (`CopyAsync`) keeps each item's edition.
-- Cover colours: check whatever `CoverColorService` feeds (the shelf effect) and treat a list item's edition cover the way a log's edition cover is treated.
+- Cover colours: check whatever `CoverColorService` feeds (the shelf effect) and treat a list item's edition cover the way a log's edition cover is treated. (Checked: it colours only Currently reading logs, for stories; lists don't use it, so nothing changed.)
+- Built besides: the item also sends `BookOwnCoverUrl`, so "Book's own cover" in the picker shows it; an import that moves a list item to another book clears its edition (it belonged to the old work); Undo after removing a book puts it back with its cover.
 
 **Frontend.**
-- On a list you can edit: **"Change cover"** on each item opens the shared edition list from Phase 1, plus "Book's own cover".
-- The book page editions panel gets **"Add to a list with this cover"**, which opens the existing add-to-list picker and passes the edition.
+- On a list you can edit: **"Change cover"** on each item opens the shared edition list from Phase 1, plus "Book's own cover". (Built: in the Details view beside "Add note"; an inline picker of rows, `EditionOptions`, shared with the log form's Edition picker; a tap saves; Escape or Cancel closes. The Shelf view's hint now names it.)
+- The book page editions panel gets **"Add to a list with this cover"**, which opens the existing add-to-list picker and passes the edition. (Built: a quiet "Add to a list" under each edition's "Use this cover", only for a reader with lists; it opens a row at the top of the panel with that cover and `AddToListButton`, whose select takes the focus.)
 - Five languages for every new text.
 
 ## 4. Out of scope
@@ -68,28 +71,28 @@ Want to read already supports an edition, because it's a log (`LogStatus.WantToR
 ### Phase 1 — Editions on the book page (S–M)
 
 **Frontend**
-- [ ] Shared edition list (cover grid, language filter, states) pulled out of `EditionField`, which then uses it
-- [ ] "See editions" button and panel on the book page, signed in only, fetched on tap
-- [ ] "Want to read with this cover" (new log) / "Use this cover" (latest log), chosen edition marked
-- [ ] Translations in all five locales; Vitest for the action choice and the states
+- [x] Shared edition list (`EditionList`: query, language filter, states) pulled out of `EditionField`, which then uses it
+- [x] "See editions" button and panel on the book page (`BookEditions`), signed in only, fetched on tap
+- [x] "Use this cover": a new Want to read log, or the latest log's edition; chosen edition marked
+- [x] Translations in all five locales; Vitest for the action choice and the states
 
 **Verification**
-- [ ] Browser check: One Hundred Years of Solitude, desktop and 375 px, two themes; no editions request until the tap; a Want to read with a chosen cover shows that cover on your shelf
-- [ ] `reviewer`
+- [x] Browser check: One Hundred Years of Solitude, desktop and 375 px, two themes; no editions request until the tap; a Want to read with a chosen cover shows that cover on your shelf
+- [x] `reviewer` (no bugs; left as is: an old imported log with inconsistent dates is refused by the full update, the same as the quick-log buttons, and shows the server's message)
 
 ### Phase 2 — Your cover on a list (M)
 
 **Backend**
-- [ ] Migration `ListItemEdition` (two nullable columns)
-- [ ] Add item takes `editionOpenLibraryId`; set/clear edition on an item; checked with `EditionService.FindAsync`; owner and collaborators only
-- [ ] `ListItemCover` used by the item DTO, list previews and the list share card; copy keeps the edition
-- [ ] Tests: wrong work's edition refused, Open Library down, non-editor refused, cleared with null, copy keeps it, preview and share card use the edition cover
+- [x] Migration `ListItemEdition` (two nullable columns)
+- [x] Add item takes `editionOpenLibraryId`; set/clear edition on an item; checked with `EditionService.FindAsync`; owner and collaborators only
+- [x] `ListItemCover` used by the item DTO, list previews and the list share card; copy keeps the edition
+- [x] Tests: wrong work's edition refused, Open Library down, non-editor refused, cleared with null, copy keeps it, preview and share card use the edition cover
 
 **Frontend**
-- [ ] "Change cover" on list items you can edit
-- [ ] "Add to a list with this cover" in the book page editions panel
-- [ ] Translations in all five locales; Vitest
+- [x] "Change cover" on list items you can edit
+- [x] "Add to a list with this cover" in the book page editions panel
+- [x] Translations in all five locales; Vitest
 
 **Verification**
-- [ ] Browser check: change a cover on a list, see it as another signed-in reader and as a visitor; list card preview uses it
-- [ ] `reviewer` and `argos-security` (user input reaching the server, an external call)
+- [x] Browser check: change a cover on a list, see it as another signed-in reader and as a visitor; list card preview uses it
+- [x] `reviewer` and `argos-security` (user input reaching the server, an external call). Fixed from them: Undo falls back to the book's own cover when the edition can't be checked again; the account export's `lists.csv` has the edition; "Change cover" also refreshes the Feed's list cards; the edition PUT has the search rate limit. Left as is: adding a book already on the list still checks its edition first (cached 6 h, signed in only); the panel's list picker can't change the cover of a book already on that list (that's "Change cover" on the list); no test pins the import clearing an edition; an Open Library outage isn't cached, so each check during one retries (as for logs)
