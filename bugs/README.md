@@ -43,6 +43,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [A club suggestion can't be reported](club-suggestions-cannot-be-reported.md) | 2026-10-27 | Report target, admin Delete and Report on suggestion cards (see the bug file) |
 | [The backend test suite sometimes stops partway and never finishes](backend-tests-stall-mid-run.md) | 2026-10-26 | Apollon c8dc503 (a deadlock between test hosts' allocation listeners) |
 | [Open Library refuses connections from production, and search says "nothing found"](open-library-refuses-production.md) | 2026-10-25 | the bug file, "Fixed" |
 | [A search's "exact title" rule misses a title that starts with "The"](search-exact-title-ignores-article.md) | 2026-10-25 | the bug file, "Fixed" |

@@ -13,3 +13,5 @@ The export is how readers see the data kept about them (GDPR access). Club membe
 ## Fix
 
 Add `clubs.csv`: club name, status (Member / Moderator / Admin, Invited, Asked to join, Banned) and its date, from `AccountExportRepository`. Leave out `BannedByUserId`, so the export never names the moderator who did it. Also list the buddy-read posts the reader opened with "Show anyway" (`CheckpointCommentUnlocks`, added in Phase 5: club, when; not the post's text), noted by the Phase 5 security review. Update the privacy policy's "Downloading your data" list and the export test.
+
+Also (2026-10-27, security review of `specs/club-suggestion-options.md` Phase 2): a reader's own club suggestions are missing, now that a text suggestion carries words they typed (title, by, link, note), and so is their status on text rounds (`ClubTextProgress`). Add a `club-suggestions.csv` (club, kind, book/author/text title, by, link, note, when) and the statuses to `clubs.csv` or their own file.
