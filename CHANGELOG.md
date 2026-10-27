@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-26 — Root cause of the live API's memory crashes fixed: the error-code lookup compiled ~200 NonBacktracking regexes on the first error after each start (534 MB, 311 MB kept); now plain text matching (0.1 MB) → DEPLOY.md "Incidents on the live site" (Apollon c676168)
 - 2026-10-26 — Journal entries can be edited (the log form in a dialog: rating, review, dates…) and deleted from your own Journal, in both views; before, an entry without a review couldn't be deleted at all → Apollon d2e7f97
 - 2026-10-26 — Editions on the book page: "See editions" under the cover (signed in, fetched on tap) shows every edition on the shelf; "Use this cover" puts the book on Want to read with it or changes your newest reading's cover → specs/book-editions-and-list-covers.md Phase 1
 - 2026-10-26 — Cause of the live API's memory crashes found by opening pages one by one: a profile's shelves (`GET /api/logs`) loaded every book whole and tracked; now only id, title and cover → DEPLOY.md "Incidents on the live site" (Apollon 44763d0)
