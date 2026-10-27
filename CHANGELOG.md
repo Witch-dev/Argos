@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-26 — Journal entries can be edited (the log form in a dialog: rating, review, dates…) and deleted from your own Journal, in both views; before, an entry without a review couldn't be deleted at all → Apollon d2e7f97
+- 2026-10-26 — Editions on the book page: "See editions" under the cover (signed in, fetched on tap) shows every edition on the shelf; "Use this cover" puts the book on Want to read with it or changes your newest reading's cover → specs/book-editions-and-list-covers.md Phase 1
 - 2026-10-26 — Cause of the live API's memory crashes found by opening pages one by one: a profile's shelves (`GET /api/logs`) loaded every book whole and tracked; now only id, title and cover → DEPLOY.md "Incidents on the live site" (Apollon 44763d0)
 - 2026-10-26 — Likely cause of the live API's memory crashes fixed: the cover-colour job decoded covers whole (a 2 MB JPEG can be ~400 MB decoded); now at most 2048×2048 → DEPLOY.md "Incidents on the live site" (Apollon 992f445)
 - 2026-10-26 — Memory jumps are one-step bursts, not a leak (Starter plan chart); API set to the workstation garbage collector on Render; any request or background job allocating over 50 MB is now named in the log ("Heavy:") → DEPLOY.md "Incidents on the live site" (Apollon fe03913)
