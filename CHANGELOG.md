@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-27 — Club emails: members get an email when their club starts a book (with the first part's due date) and the day before each part is due ("tomorrow is the deadline, you can start discussing"); on by default, a "Club emails" switch in Settings → Notifications and a one-click off link; their own daily share of the email budget so sign-ups always go; privacy policy updated → specs/club-emails.md
 - 2026-10-27 — Readings strip: a book with no cover shows its title on cloth instead of an empty shelf with only the update count → Apollon a85ff71
 - 2026-10-27 — Google sign-in button no longer has a white box around it in dark mode → Apollon 3928cf9
 - 2026-10-27 — Club suggestions can be reported: "Report" on anyone else's suggestion (book, author or text), the admin's queue shows its title, by, link and note, and the admin deletes it with its votes instead of hiding it → bugs/club-suggestions-cannot-be-reported.md
