@@ -12,6 +12,8 @@ The covered button is the page's one primary action. The tap still works on the 
 
 Seen again 2026-10-23 (specs/stronger-clubs.md Phase 4): on the club page at 375px in Dark, the bubble sits over the end of the voting line under "Suggestions" ("Rank the books in the order…") and clips it. Bottom padding alone won't fix that one, since it isn't at the end of the page.
 
+Seen again 2026-10-28 (`specs/open-lists.md` Phase 2): on an open list at 375px the bubble sits over the vote button at the end of a row in the middle of the page (and over an author's remove button). These are controls in the content, not only at the page's end, so this is another case that bottom padding alone won't fix.
+
 ## Fix
 
 Give the page column bottom padding at phone width equal to the floating button's height plus its offset (so nothing can end up under it at the end of a page), or make the feedback button smaller or tucked into the sidebar drawer on a phone. Check the club page, a book page and the journal at 375px.
