@@ -72,7 +72,7 @@ Buddy reads aren't touched: they have no suggestions and always read one book.
 ### 3.3 Phase 3 — Author and text suggestions (browser)
 
 - **Suggest:** the suggest box gets three tabs: Book (today's search), Author (author search), Something else (title, by, link, note). Each tab says in one line what it's for.
-- **Cards:** an author card shows the author's photo (or initials) and "Any book by …"; a text card shows the paper tile, title, "by", the link's site name and the note.
+- **Cards:** an author card shows the author's photo (or initials) and their name alone (it said "Any book by …" until 2026-10-27; a club reading short stories doesn't pick a book); a text card shows the paper tile, title, "by", the link's site name and the note.
 - **Confirm modal:** for an author, a second step lists that author's books to pick one; for a text, it says "Progress is tracked in the club, not on shelves".
 - **Text round:** the current-read card shows the title, "by" and link; each member's row has the Not started / Reading / Finished status instead of a page bar; "Your status" is three buttons for the reader. Checkpoints are set with a label and date only.
 - Translations in all five languages; tests in `ClubPage.test.tsx` and the confirm modal's tests.
