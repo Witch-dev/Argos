@@ -1,5 +1,67 @@
 # UX review — Clubs (`/clubs`, `/clubs/:id`)
 
+## Members section folded away (2026-10-28)
+
+Reviewed: 2026-10-28 · Themes: Paper, Dark · Widths: 375, 1280 (German at 375) · Reader: the club's admin, 8 members (4 without a picture) · Apollon uncommitted on top of `1b273de`
+Screenshots looked at (by a Sonnet agent and the `design-reviewer`, not in this session): folded and open, Members next to Recent activity, a Reading club (text round), German at 375, the keyboard pass (Tab to the toggle, Enter).
+Code read: `ClubPage.tsx` (the Members section), `ClubPage.module.css`, the five `clubs.json` locales, `ClubPage.test.tsx`.
+
+### Summary
+
+The reader's complaint: Members was a full card of rows (picture, name) that repeated "X joined the club" in Recent activity just below, so the page showed the same list twice. Members now folds behind "Show all N members" and, folded, says only who runs the club (picture, name and role); the full list with Promote/Remove opens on click, and starts open while the club reads, because then each row carries that member's progress. What is left is the open list's row layout, which predates this change.
+
+### Scores
+
+**Nielsen: 32/40 (good)** for the Members section (folded; 31 open). Scored below 3: none folded; open, **8 Aesthetic and minimalist: 2** (finding 2). Cognitive load: low folded; moderate open (chunking, competing pills and actions per row). Personas: a new member on a phone ("who are these two people?", answered by the role word), a moderator at 375 (Remove one line under Promote in a three-line row), a screen-reader user (`aria-expanded` changes on Enter, focus stays on the toggle, next Tab is the first member). Specificity: the folded block (people with names and roles) is the club's own; the open card still reads like a generic admin table (finding 2).
+
+### Findings
+
+#### 1. Members repeated Recent activity — P2 · M · Judgement
+**Where:** `ClubPage.tsx`, the Members section.
+**What:** every member as a row, directly above an activity list whose rows were "X joined the club" for the same people.
+**Fix:** folded by default behind a quiet "Show all N members" toggle (`aria-expanded`/`aria-controls`); folded, a "Run by" line of picture-and-name pills for the Admin and Moderators; open while the round is Reading.
+**Status:** fixed 2026-10-28
+
+#### 2. Open list: each row runs to two or three lines — P2 · M · Judgement
+**Where:** open Members rows, Reading club (1280 and 375).
+**What:** name and role pill on line 1, the progress pill ("Not started") alone on line 2 even at 1280, Promote/Remove on line 3 at 375; rows ~110px (8 members ~880px), ~160px on a phone.
+**Why it matters:** the progress pill weighs as much as the name, and a moderator on a phone has Remove close under Promote.
+**Fix:** progress on the same line as the name at 1280 (right side), in `--text-muted` `--font-size-sm` with no pill for "Not started"; actions on the same line with `--space-3` gap where there is room.
+**Status:** fixed 2026-10-28: a text's status is muted text beside the name (`.memberStatus`), only Finished keeps the green pill. A book's progress bar stays on its own line under the name, as designed (a bar needs the width).
+
+#### 3. The "Run by" pills wrapped one by one and didn't say who does what — P3 · S · Judgement
+**Where:** the folded "Run by" line at 375.
+**What:** the second pill wrapped alone under the label; two identical pills, no sign which is Admin and which Moderator.
+**Fix:** the pills sit in one wrapping group (`.runByNames`), each with its role word in `--text-muted` `--font-size-xs` (`.pillRole`).
+**Status:** fixed 2026-10-28
+
+#### 4. The toggle was grey — P3 · S · Rule
+**Where:** "Show all N members".
+**What:** muted ink, so it read as metadata; DESIGN.md's quiet button is green text.
+**Fix:** the plain `btn btn-quiet` (green `--accent`, 44px).
+**Status:** fixed 2026-10-28
+
+#### 5. The privacy note sits under the folded block — P3 · S · Judgement
+**Where:** "Members see each other's progress…", under "Run by".
+**What:** it explains the progress in the member rows, which are hidden when folded.
+**Fix (to decide):** keep it always (it is the join promise in `specs/stronger-clubs.md` §2.1), or show it only when the list is open, or move it to the progress block in the "next up" card.
+**Status:** fixed 2026-10-28: shown only while the list is open, under the rows it explains. The list is open by default while reading, which is when progress is shared.
+
+#### 6. Several "joined the club" rows in a row in Recent activity — P3 · M · Judgement
+**Where:** `ClubActivityList`, a new club where most activity is joins.
+**What:** six identical-looking "X joined the club" rows read as a roster.
+**Fix:** group consecutive joins ("6 people joined", names on Show all), as `ActivityGroupCard` does in the feed.
+**Status:** fixed 2026-10-28: joins next to each other are one row, "A, B and C joined the club" (more than four: three names and "N more"), names as links (`Intl.ListFormat` via `formatListParts`), a drawn people mark instead of one joiner's picture, the newest time under it.
+
+#### 7. The floating chat button covers the toggle at one scroll position on a phone — P3 · S · Judgement
+**Where:** 375, open list, "Hide" at the bottom edge of the viewport.
+**What:** the bubble overlaps it at that scroll; scrolling clears it. Shell-wide, not this section.
+**Status:** no change needed (2026-10-28): any floating button covers what scrolls under it mid-page; the footer sits below every page's content, so nothing is ever stuck under it at the end. Hiding the bubble while scrolling down is possible but would change it on every page.
+
+### Looked fine
+
+Named-Person pills with pictures in Paper and Dark; German "Alle 8 Mitglieder anzeigen" and "Geleitet von" wrap with no sideways scroll; the toggle's 44px height and green focus ring; `aria-expanded` changes on Enter; a half-asked removal is dropped when the list folds; no "Run by" line when a club has nobody but plain members.
+
 ## Re-review after stronger clubs Phase 6 (2026-10-23)
 
 Reviewed: 2026-10-23 · Themes: Paper, Dark · Widths: 375, 1280 (German at both, by measurement) · Readers: a non-member with no clubs (directory, preview, invite link) and the admin (club page, Settings) · Apollon with `specs/stronger-clubs.md` Phases 1–6 uncommitted on top of `2967385`

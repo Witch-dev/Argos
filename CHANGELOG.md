@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-28 — Club page UX fixes: a text's status sits beside the member's name, the progress note shows with the open list, joins in a row are one activity line ("A, B, C and 4 more joined the club"); `shoot.mjs` hides the fixed header in tall clipped shots → ux-reviews/clubs.md
+- 2026-10-28 — A club's Members list folds behind "Show all N members" (it repeated "joined the club" in Recent activity); folded, it names who runs the club, and it starts open while the club reads → ux-reviews/clubs.md
 - 2026-10-28 — A page rewritten by Chrome's translation or an extension no longer crashes React ("insertBefore" on an author page, Sentry): a guard skips or appends instead → Apollon 1b273de
 - 2026-10-28 — Adding a book to a list from its search keeps the cover you clicked (search shows a saved book's real cover, a new one's edition is kept on the list item); a work with no cover of its own and none in English (1956 Ficciones) takes any edition's instead of none → Apollon 8a2b3cd
 - 2026-10-28 — Open lists and author lists, Phase 2 (browser): "What goes on it" (books or authors) and "Who can add" when making or editing a list, which locks an open list to Public; an open list's rows show the rank, a vote button and its count, ordered by votes; anyone signed in gets "Add a book/author", and a book already there offers "Vote for it"; author entries show photo, name and years; "Open lists" and "Author lists" chips on Browse; "Lists with this author" on author pages; the bell item; visitors are asked to sign up to vote or add, and the vote they tapped is cast once they're in → specs/open-lists.md

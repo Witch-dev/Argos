@@ -221,6 +221,16 @@ try {
               console.log(`${route} ${theme} ${width}: nothing matches --clip ${clip}, skipped`)
               continue
             }
+            // A clip taller than the window is stitched from scrolls, and a sticky header would land
+            // in the middle of it; hide every fixed or sticky thing the clip isn't inside (layout
+            // unchanged, only unseen).
+            await el.evaluate((target) => {
+              for (const node of document.querySelectorAll('*')) {
+                const { position } = getComputedStyle(node)
+                if ((position === 'sticky' || position === 'fixed') && !node.contains(target))
+                  node.style.visibility = 'hidden'
+              }
+            })
             await el.screenshot({ path: file })
           } else {
             await page.screenshot({ path: file, fullPage: full })
