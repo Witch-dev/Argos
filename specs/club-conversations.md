@@ -123,6 +123,9 @@ Readers open the app when they have a reading update to log, and then leave. Not
 - **Browser:** "Club | Chat" link tabs under the club and buddy-read headers (`?tab=chat`, so the email, the bell and links open it), with "Mute chat" at the end of the row while the chat is open. A spoiler, like a deleted message, stands alone instead of joining the writer's run. Enter sends with a keyboard and mouse; on a touch screen Send sends. The floating feedback button is hidden on the chat, where it would cover Send. On a phone the field's label is visually hidden. The dot is on Clubs in the sidebar, the club in "Your clubs" (rail and Clubs page) and the Chat tab.
 - **Also:** chat messages are reportable (`ReportTargetType.ClubChatMessage`) and hideable; the author's "hidden" notice opens the chat; the data download has `club-chat.csv`; kept messages move to "Deleted user" on erasure and the rest go with the account; a club's chat goes with it. Rate limit: 10 per 30 s per reader, a sliding window (`RateLimits:ClubChatMessagesPer30Seconds`).
 
+#### Chat dock (2026-10-29, replaces the Chat tab)
+The chat is no longer a tab: it is a window docked bottom-right of the club and buddy-read pages (a pill bottom-left on a phone that opens as a full-screen sheet), with bubbles (others left, yours green on the right). Open or shut is remembered in `localStorage` (`argos_club_chat_dock`); shut, it fetches nothing and the dot comes from the 60-second unread check; open, the 5-second check runs. `?tab=chat` (emails, the bell, reports) still opens it. The messages now scroll inside the dock, not the page. Only on club pages for now; showing it on every page is a later step (one window at a time, `FUTURE-IDEAS.md` if it grows). No backend change.
+
 ### 3.3 Phase 3 — Weekly digest
 
 - `NotificationGroup.WeeklyDigest` (off by default unless the user decides otherwise, §2.2) and `UserSettings.DigestLastSentAt`.

@@ -189,6 +189,9 @@ The header in the frame tint, the sidebar on the page colour, as on the approved
 - **Phone (chosen 2026-10-16, "Books / Community on a phone" board, option A):** row 1 is menu, logo, search field and bell; row 2 is the switch, full width. The sidebar is a drawer behind the menu button.
 - **Right rail:** each block a raised card with 16px padding (narrower than the 20–24px of page cards, because the rail is 17rem wide); rows inside are plain rows with a sunken hover, never boxes of their own.
 
+### Chat dock
+A club's chat lives in a window docked bottom-right of the club's pages (a pill at the bottom left on a phone, a full-screen sheet when open). It is its own surface: raised, the elevated shadow, no border. Inside, the messages sit on the page colour as raised bubbles (14px corners, a 5px tail corner at the foot), yours in green on the right, the avatar at the end of a person's group, the day as a small pill, the time under the group. The composer is a pill field with one round send arrow; that arrow is the dock's own action and does not count against a page's One Green Button Rule.
+
 ### Icons
 One drawn line set (`components/Icon.tsx`): 24px grid, 1.8px stroke, round caps and joins, `currentColor`. **The No-Glyph Rule:** never characters or emoji as icons (✓ ♡ ✦ × + ⌂ and the like); a `designGuards` test fails on them. A star as a unit right beside a number ("4★", "★4") is typography, not an icon.
 
