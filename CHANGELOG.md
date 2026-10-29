@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-29 — Landing page no longer crashes for a browser reporting an invalid language tag ("en-US@posix", Sentry RangeError): such tags are skipped when picking the date locale → Apollon b547913
+- 2026-10-28 — Search page no longer crashes after a search in a book picker (the two shared a cache key with different page shapes; Sentry "e.books.length") → Apollon 1c7a435
 - 2026-10-28 — Club page UX fixes: a text's status sits beside the member's name, the progress note shows with the open list, joins in a row are one activity line ("A, B, C and 4 more joined the club"); `shoot.mjs` hides the fixed header in tall clipped shots → ux-reviews/clubs.md
 - 2026-10-28 — A club's Members list folds behind "Show all N members" (it repeated "joined the club" in Recent activity); folded, it names who runs the club, and it starts open while the club reads → ux-reviews/clubs.md
 - 2026-10-28 — A page rewritten by Chrome's translation or an extension no longer crashes React ("insertBefore" on an author page, Sentry): a guard skips or appends instead → Apollon 1b273de
@@ -17,6 +19,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 - 2026-10-27 — "Can't reach Open Library" messages now apologise and explain the site is free because it relies on Open Library's book data (all five languages) → Apollon 364e8f4
 - 2026-10-27 — Search: "albert camus" in Books shows his books first (an author-name match ranks like an exact title); an unfinished last word ("albert camu") is retried as a beginning when nothing is found; author search says Open Library is unreachable instead of "no authors" → Apollon b6fe8e1
 - 2026-10-27 — Club emails: members get an email when their club starts a book (with the first part's due date) and the day before each part is due ("tomorrow is the deadline, you can start discussing"); on by default, a "Club emails" switch in Settings → Notifications and a one-click off link; their own daily share of the email budget so sign-ups always go; privacy policy updated → specs/club-emails.md
+- 2026-10-27 — Club author suggestions show the author's name alone, not "Any book by …" (clubs reading short stories) → Apollon 7949650
 - 2026-10-27 — Readings strip: a book with no cover shows its title on cloth instead of an empty shelf with only the update count → Apollon a85ff71
 - 2026-10-27 — Google sign-in button no longer has a white box around it in dark mode → Apollon 3928cf9
 - 2026-10-27 — Club suggestions can be reported: "Report" on anyone else's suggestion (book, author or text), the admin's queue shows its title, by, link and note, and the admin deletes it with its votes instead of hiding it → bugs/club-suggestions-cannot-be-reported.md
