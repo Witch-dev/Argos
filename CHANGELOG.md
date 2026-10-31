@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-30 — A profile with a single favourite book no longer shows its cover column-wide: covers on a "fit" shelf stop growing at 10rem → Apollon 9eee017
 - 2026-10-29 — Club chat is now a docked window in the corner of club and buddy-read pages (bubbles: others left, yours green on the right; a pill on a phone that opens as a full-screen sheet) instead of a Chat tab; `?tab=chat` still opens it → `specs/club-conversations.md` (Chat dock), Apollon 9009fcb
 - 2026-10-29 — Club chat: a Chat tab on every club and buddy read (text, links, spoilers covered until tapped, new messages every 5 seconds while open, load older), an unread dot on Clubs, "Your clubs" and the tab, mute, delete by the writer or the club's admin and moderators, report and admin hide, blocks hide messages both ways, 10 messages per 30 s; a "you missed this" club email for unread chat or thread replies after 2 hours, at most once a day per club (ClubChat migration); privacy policy updated → specs/club-conversations.md (Phase 2)
 - 2026-10-29 — Club discussions are threads: a checkpoint lists titled threads (Active / Top / New) that open on their own page, and a reply tells the thread's author and the comment's author in the bell, one row per thread; activity, reports and hidden notices open the thread → specs/club-conversations.md (Phase 1)
