@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-10-31 — `wingedwords-api` moved to Render's paid Starter plan (no sleeping, Memory metrics); frees the site's 750 free hours after Render's usage-limit email → DEPLOY.md (Uptime alerts, How the live site is set up)
 - 2026-10-31 — Club: when confirming an author suggestion, the list of the author's books has a "Filter by title" box (loads the author's remaining pages while a title is typed) → Apollon 8be76c1
 - 2026-10-30 — A profile with a single favourite book no longer shows its cover column-wide: covers on a "fit" shelf stop growing at 10rem → Apollon 9eee017
 - 2026-10-29 — Club chat is now a docked window in the corner of club and buddy-read pages (bubbles: others left, yours green on the right; a pill on a phone that opens as a full-screen sheet) instead of a Chat tab; `?tab=chat` still opens it → `specs/club-conversations.md` (Chat dock), Apollon 9009fcb

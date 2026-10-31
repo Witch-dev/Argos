@@ -143,7 +143,7 @@ A free UptimeRobot account (signed up with your Gmail) checks two addresses ever
 - `https://wingedwords.app` (the site)
 - `https://api.wingedwords.app/health` (the API; `/health` also checks the database, so a database outage shows here too)
 
-**While the API is on Render's free plan**, which sleeps after 15 minutes without visits, the 5-minute checks keep it awake (one always-on service fits in the free 750 hours a month). If a check ever lands while it's waking (30–60 s) and reports a false "Down", raise the monitor's request timeout to 60 seconds.
+**The API is on a paid Render plan (since 2026-10-31)**, so it no longer sleeps and the checks don't need to keep it awake; they only alert you when something is down. Before that, on the free plan (sleeps after 15 minutes), the 5-minute checks kept it awake and used most of the workspace's free 750 hours a month, which led to Render's "approaching the monthly usage limit" email for `wingedwords-web`. With the API paid, the site has the 750 free hours to itself.
 
 ## How the live site is set up on Render (first deploy, 2026-10-13)
 
@@ -152,7 +152,7 @@ Everything is in one Render account, region **Virginia (US East)**. The domain i
 | Piece | Render service | Notes |
 |---|---|---|
 | Database | PostgreSQL `wingedwords-db` | **Free plan: deleted after 30 days.** Move to the paid plan (~$6–7/month) before real readers join. |
-| API | Web service `wingedwords-api`, Docker, `./Dockerfile` (repo root) | Health check path `/health`. Free plan sleeps after 15 minutes (first request ~30–60 s, background jobs pause); move to the $7 plan before launch. Runs the database migrations itself on start. |
+| API | Web service `wingedwords-api`, Docker, `./Dockerfile` (repo root) | Health check path `/health`. **Paid Starter plan ($7, since 2026-10-31):** no sleeping, and Metrics → Memory is available. Runs the database migrations itself on start. |
 | Site | Web service `wingedwords-web`, Docker, root directory `web`, `web/Dockerfile` | Docker rather than a static site on purpose: the nginx image writes `config.js` and the security headers (CSP) at startup. |
 
 **Domains** (Render → Settings → Custom Domains, DNS at Porkbun):
