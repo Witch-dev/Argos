@@ -229,20 +229,26 @@ Same pipeline as Goodreads and StoryGraph: a new `ImportSource` value and row ma
 #### Backend
 - [ ] Get a real export from LibraryThing and Bookmory (and one generic CSV, e.g. Calibre); write mapper tests from them, not from guessed column names
 - [ ] `LibraryThingRowMapper` (tab-separated or CSV; tags/collections → private lists like Goodreads shelves)
-- [ ] Pasted list: a text body instead of a file, one row per non-empty line, "Title" or "Title – Author", status from one choice for the whole list; a line limit like the file row limit
-- [ ] Generic Excel/CSV: read `.xlsx` (new package, checked first) and CSV; return the header row so the reader can map columns; a mapper driven by that column choice
+- [x] Pasted list: a text body instead of a file, one row per non-empty line, "Title" or "Title – Author", status from one choice for the whole list; a line limit like the file row limit
+- [x] Generic Excel/CSV: read `.xlsx` (new package, checked first) and CSV; return the header row so the reader can map columns; a mapper driven by that column choice
 - [ ] Bookmory as a saved column choice for its Excel export
 - [ ] Error codes and upload limits for the new inputs; `argos-security` (new file type, new package)
 
 #### Frontend
-- [ ] Source cards for each new source on the import page, with how-to-export instructions
-- [ ] Paste box for the list
-- [ ] Column-picking step for Excel/CSV (preview of the first rows, required: title)
-- [ ] Translations in all five languages
+- [x] Source cards for each new source on the import page, with how-to-export instructions
+- [x] Paste box for the list
+- [x] Column-picking step for Excel/CSV (preview of the first rows, required: title)
+- [x] Translations in all five languages
 
 #### Verification
 - [ ] Real files from each app import in the browser (`browser-check`), desktop and phone width; unmatched books can be fixed; undo works
 - [ ] reviewer + argos-security; CHANGELOG line; ROADMAP Stage 9b ticks
+
+#### Built notes (2026-11-01)
+- Pasted list: `POST /api/imports/paste` `{text, status}`; separators tab, " – ", " — ", " | ", " - ", ";" (last one wins); list markers stripped; an ISBN-only line matches by ISBN. Source `Pasted`.
+- Any CSV / TSV / `.xlsx` (ExcelDataReader 3.9.0, first sheet only): `POST /api/imports/preview` (headers, 5 rows, guessed columns, or the known source) then `POST /api/imports` with a `mapping` JSON field. Source `Spreadsheet`. Delimiter auto-detected; zip caps (500 entries, 150 MB unpacked) checked before opening. Dates: ISO, month names, or slash dates only when unambiguous. No migration (enum stored as int).
+- Export round trip (2026-11-01): `logs.csv` now writes `ISBN` and `ISBN13` as `="…"` (Excel keeps the digits), whole stars in `My Rating` plus the exact value in `Rating (half stars)` (preferred on import), `Author` / `Additional Authors`, and the reader's lists in `Bookshelves` (with `(#n)` positions on ranked lists), which come back as private lists. On import, rows for the same book (same ISBN-13, else title + first author's surname) merge into one row with one read each (`ImportRowMerger`; the latest read keeps status, rating, review), `Date Started` is read, and the single leading `'` the export adds before `= + - @` is dropped. Earlier readings' own ratings and reviews are not kept (as for StoryGraph).
+- Not done: LibraryThing / Bookmory presets (LibraryThing's TSV works through the column step), and the `argos-security` and `reviewer` passes, and the real-export check.
 
 ### Local setup needed
 

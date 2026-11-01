@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## October 2026
 
+- 2026-11-01 — Export/import round trip: ISBNs as ="…", whole + exact stars, authors split, lists in Bookshelves; import merges rereads, reads Date Started, drops the formula quote → specs/book-import.md (built notes)
+- 2026-11-01 — Import: paste a list (one book per line) and any CSV / Excel (.xlsx) file with a column-picking step; LibraryThing TSV also reads through it (built, not pushed) → specs/book-import.md Phase 4
 - 2026-10-31 — `wingedwords-api` moved to Render's paid Starter plan (no sleeping, Memory metrics); frees the site's 750 free hours after Render's usage-limit email → DEPLOY.md (Uptime alerts, How the live site is set up)
 - 2026-10-31 — Club: when confirming an author suggestion, the list of the author's books has a "Filter by title" box (loads the author's remaining pages while a title is typed) → Apollon 8be76c1
 - 2026-10-30 — A profile with a single favourite book no longer shows its cover column-wide: covers on a "fit" shelf stop growing at 10rem → Apollon 9eee017
