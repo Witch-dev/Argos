@@ -6,6 +6,11 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 **Older entries:** until 2026-10-07 entries were full paragraphs. Their full text is in `changelog/2026-09.md` and `changelog/2026-10.md`. Lines without a `→` pointer have their full text there.
 
+## November 2026
+
+- 2026-11-01 — Feedback button and admin Feedback entry use a light bulb icon instead of the message bubble, which people read as "send a message" → Apollon 78997df
+- 2026-11-01 — News section hidden: sidebar link and right-rail headlines card removed (the /news page and code stay) → Apollon 1917970
+
 ## October 2026
 
 - 2026-11-01 — Export/import round trip: ISBNs as ="…", whole + exact stars, authors split, lists in Bookshelves; import merges rereads, reads Date Started, drops the formula quote → specs/book-import.md (built notes)
