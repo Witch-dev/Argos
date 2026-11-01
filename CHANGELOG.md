@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-01 — Log form: "when did you finish it?" is now Today / A date / A year / Not sure instead of a silent today; a year-only finish counts in the year and goal but not in months or days-to-finish; new `FinishedPrecision` column (built, not pushed) → specs/read-date-precision.md
 - 2026-11-01 — Fix Lists/Community crash (Sentry "reading 'slice'" / "reading 'length'"): the popular-lists rail shared a cache key with the infinite browse page → Apollon fd215a5
 - 2026-11-01 — Feedback button and admin Feedback entry use a light bulb icon instead of the message bubble, which people read as "send a message" → Apollon 78997df
 - 2026-11-01 — News section hidden: sidebar link and right-rail headlines card removed (the /news page and code stay) → Apollon 1917970
