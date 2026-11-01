@@ -1,6 +1,6 @@
 # Feature Spec — Club and list activity in the Feed
 
-Status: approved 2026-11-01; Phase 1 (backend) built 2026-11-01. Extends `specs/feed-redesign.md` (§3.1 `ActivityEvent`, §3.2 `ActivityRecorder`, §3.3 feed query, §3.5 `ActivityGroupCard`).
+Status: approved 2026-11-01; Phase 1 (backend) and Phase 2 (frontend) built, Phase 3 verified 2026-11-01. Extends `specs/feed-redesign.md` (§3.1 `ActivityEvent`, §3.2 `ActivityRecorder`, §3.3 feed query, §3.5 `ActivityGroupCard`).
 
 ## 1. Problem
 
@@ -94,10 +94,20 @@ All text through `t('…')` in the five locale files. New strings need no backen
 - **Code review:** a list-additions event whose entries were all taken off the list no longer shows ("added 0 books"). Accepted, not changed: a progress row keeps its `CreatedAt` as it moves up (§2.4), so a 100% reached weeks later sits on the 25% day; two progress saves at the same instant can make a duplicate row (a unique index would fail the reader's log save instead).
 - Tests: `Unit/ActivityRecorderTests.cs`, `Integration/ClubAndListActivityFeedTests.cs` (also a text round, a private log, all entries removed, someone else's open list).
 
-### Phase 2 — Frontend
-- [ ] Types, `ActivityGroupCard` lines and summary, locale keys in en/es/pt-BR/de/fr.
-- [ ] Vitest for the card wording; `web-design` plan + screenshot critique (`/web-design` read `PRODUCT.md`/`DESIGN.md` first).
+### Phase 2 — Frontend ✅ (2026-11-01)
+- [x] Types, `ActivityGroupCard` lines and summary, locale keys in en/es/pt-BR/de/fr.
+- [x] Vitest for the card wording; `web-design` plan + screenshot critique (`/web-design` read `PRODUCT.md`/`DESIGN.md` first).
 
-### Phase 3 — Verification
-- [ ] `browser-check`: two readers, one follows the other; public and private club started, progress at 25/50/100, list created and 3 books added; follower sees them, a non-member does not see the private club.
-- [ ] CHANGELOG line; tick the boxes after re-reading this spec against what was built.
+**As built (Phase 2):**
+- Single events are whole sentences through `<Trans>` (`activity.line.*`), so each language places the book, club and list links itself. Percent goes through `Intl` ("50 %" in de/fr). A text round's title isn't a link.
+- One added book: named in the sentence, its cover at the line's end. Several: up to 4 on a small shelf, Show all lists every one. Author lists: names in a quiet line (3 and "N more").
+- Day summary: club and list parts name themselves ("started 1 book with a club", "added 5 books to 2 lists", "added 3 authors to a list"); more than three kinds of thing → "did N things".
+- From the critique round: a list made and filled on the same day reads once, as its additions (the `ListCreated` event is dropped from that day's card and count, so its heart doesn't show there). The same book stands once on the day's shelf, with at most two details ("50% through · started with a club"; a plain "started reading" is left out next to a club event). Hearts stay per event, so the shelf's books are liked from Show all, as before.
+- From the code review: the summary counts a book once, as the shelf does (a reader's own "started reading" next to the club event for that book, and a club 100% next to "finished", count once). Added books are named under the summary even when the day has no shelf. Accepted: a `ListCreated` dropped this way hides its likes on that card. The German shelf captions reuse `activity.verb.*` ("hat beendet:"), as before this phase.
+- Tests: `lib/activitySummary.test.ts`, `components/ActivityGroupCard.test.tsx`.
+
+### Phase 3 — Verification ✅ (2026-11-01)
+- [x] `browser-check`: two readers, one follows the other; public and private club started, progress at 25/50/100, list created and 3 books added; follower sees them, a non-member does not see the private club.
+- [x] CHANGELOG line; tick the boxes after re-reading this spec against what was built.
+
+**As verified (Phase 3):** browser-check with readers A (actor), F (follows A, member of the public club), N (follows A, in no club) and M (follows A, joined the private club by invite, approved by A). F and N saw the public club's "started" and a single progress row that ended at "finished" (25 → 30 → 50 → 100: one row, the 30% step added nothing), and "added 3 books to …" merged with the same day's `ListCreated`. N's Feed and its raw `/api/feed` JSON held neither the private club's name nor its id. M and A saw "started … with" and "50% through … in" the private club. Links to club, list, book and profile were right, no console errors, no raw keys. On a day with other activity the list addition is named under the summary (covers only when it's the day's only event), as built in Phase 2. Four "started reading" rows for one book came from the seeding (four separate logs), not from this feature.
