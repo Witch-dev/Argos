@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-01 — Club pictures: the Admin picks one of the 33 public-domain pictures for the club in Settings; it shows beside the name, on the Clubs page instead of the initial, and in the invite link's preview while the club isn't reading → specs/club-pictures.md, Apollon 8c9c991
 - 2026-11-01 — Feed shows club and list activity: "Ana started Dune with Night Owls", "is 50% through…", "added 6 books to Cozy fantasy" with their covers; private clubs only to members → specs/feed-club-and-list-activity.md, Apollon e3669ae
 - 2026-11-01 — Log form: "when did you finish it?" is now Today / A date / A year / Not sure instead of a silent today; a year-only finish counts in the year and goal but not in months or days-to-finish; new `FinishedPrecision` column (built, not pushed) → specs/read-date-precision.md
 - 2026-11-01 — Fix Lists/Community crash (Sentry "reading 'slice'" / "reading 'length'"): the popular-lists rail shared a cache key with the infinite browse page → Apollon fd215a5

@@ -25,6 +25,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | Bug | Priority | Size | Area |
 |---|---|---|---|
 | [Two account erasures at once can both create the "Deleted user" placeholder](deleted-user-placeholder-race.md) | P2 | S | Backend, account deletion (flaky test) |
+| [The "checkpoint due" notification test sometimes fails in a full run](checkpoint-due-test-flaky.md) | P2 | S | Backend tests (flaky test) |
 | [The log form on a book's page is wider than a phone screen](log-form-overflows-on-phone.md) | P2 | S | Frontend, book page, phone |
 | [A profile keeps going back to "Loading" when one of the rows above its shelves fails](profile-reloads-when-a-row-fails.md) | P2 | S | Frontend, profile page |
 | [The "Google sign-in off" test fails on a machine with a Google client ID in its user-secrets](google-signin-off-test-reads-user-secrets.md) | P2 | S | Backend tests, local only |

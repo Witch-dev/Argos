@@ -1,6 +1,6 @@
 # Feature Spec — Club pictures
 
-**Status:** planned 2026-10-27. One phase.
+**Status:** planned 2026-10-27. One phase. Built 2026-11-01 (§5 As built); the WhatsApp check waits for the deploy.
 
 ## 1. Problem
 
@@ -46,24 +46,32 @@ A club has no picture. On the Clubs page a club that isn't reading shows a cloth
 
 ### Backend
 
-- [ ] `Club.AvatarKey` and migration.
-- [ ] `PUT /api/clubs/{id}/picture`: Admin only, `AvatarCatalog.IsValid`, null clears, buddy reads refused. Error codes in `ErrorCodes.cs` with translations under `errors.codes`.
-- [ ] `AvatarKey` on the club detail, directory, `/clubs/mine` and join preview DTOs.
-- [ ] Share card: cover, then club picture, then the site card.
-- [ ] Tests: Admin sets and clears; a member or Moderator gets 403; an unknown key gets 400; a buddy read gets 400; the DTOs carry the key; the share card picks the cover while reading, the picture otherwise and the site card with neither.
+- [x] `Club.AvatarKey` and migration.
+- [x] `PUT /api/clubs/{id}/picture`: Admin only, `AvatarCatalog.IsValid`, null clears, buddy reads refused. Error codes in `ErrorCodes.cs` with translations under `errors.codes`.
+- [x] `AvatarKey` on the club detail, directory, `/clubs/mine` and join preview DTOs.
+- [x] Share card: cover, then club picture, then the site card.
+- [x] Tests: Admin sets and clears; a member or Moderator gets 403; an unknown key gets 400; a buddy read gets 400; the DTOs carry the key; the share card picks the cover while reading, the picture otherwise and the site card with neither.
 
 ### Frontend
 
-- [ ] `AvatarPicker` made reusable, with **No picture**; the profile keeps working as before.
-- [ ] Club Settings row and picker.
-- [ ] `ClubPicture` on the club page, join page and Clubs page; `ClubCover` falls back to it.
-- [ ] Translations in all five languages.
-- [ ] Tests: the picker saves through the given function and offers **No picture**; Settings shows the row to the Admin only; the Clubs page shows the picture when there's no cover and the letter with neither.
+- [x] `AvatarPicker` made reusable, with **No picture**; the profile keeps working as before.
+- [x] Club Settings row and picker.
+- [x] `ClubPicture` on the club page, join page and Clubs page; `ClubCover` falls back to it.
+- [x] Translations in all five languages.
+- [x] Tests: the picker saves through the given function and offers **No picture**; Settings shows the row to the Admin only; the Clubs page shows the picture when there's no cover and the letter with neither.
 
 ### Verification
 
-- [ ] `reviewer`; `argos-security` (a new endpoint that takes user input and a permission check).
-- [ ] `web-design` critique round on the club page, Settings and the Clubs page at 1280 and 390.
-- [ ] `browser-check`: the Admin sets a picture, a member sees it on the club page and the Clubs page, and the Admin clears it.
+- [x] `reviewer`; `argos-security` (a new endpoint that takes user input and a permission check).
+- [x] `web-design` critique round on the club page, Settings and the Clubs page at 1280 and 390.
+- [x] `browser-check`: the Admin sets a picture, a member sees it on the club page and the Clubs page, and the Admin clears it.
 - [ ] After deploy: paste a club invite link into WhatsApp for a club that's choosing and one that's reading.
-- [ ] `CHANGELOG.md`; ROADMAP box ticked.
+- [x] `CHANGELOG.md`; ROADMAP box ticked.
+
+## 5. As built (2026-11-01)
+
+- Backend: migration `ClubPicture`; `PUT /api/clubs/{id}/picture` in `ClubSettingsService.SetPictureAsync` (Admin check first, so a non-member gets 403 even for a missing club, as the other settings do); error codes `clubs.pictureUnknown`, `clubs.buddyReadNoPicture`; share card alt text `ClubPictureAlt` (English and Spanish, the two share-card languages, so not a `t()` key). Tests in `ClubSettingsTests` (Picture_*) and `ShareCardTests` (Club_ShowsItsPicture…).
+- `AvatarPicker` takes `title`, `currentKey`, `onSave` and an optional `noPictureHint` (which adds the **No picture** tile, dashed edge); `MyAvatarPicker` wraps it for the profile page and Settings, unchanged for readers. The tile's label is `profile.noPicture`.
+- Clubs page: with no book cover the cloth-bound book wears the round picture (a cameo) instead of the initial, so cards stay lined up; with a cover, a small round picture sits before the name instead. A card never shows the picture twice.
+- Settings: the row uses the readers' `Avatar` (the initial on a tinted circle when there's no picture), not the lettered book.
+- Reviews: `reviewer` (one fix: the join pages' caches are refreshed after a change), `argos-security` (nothing to fix), design critique (the No picture tile got its dashed edge).
