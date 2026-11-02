@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-01 — Clubs open to visitors: logged out, the Clubs page shows Discover and a public club's address shows its card; Join and "Create a club" open the sign-up box, and afterwards the club is joined or the Create window opens; private clubs and buddy reads answer not found; the directory is now rate-limited → specs/clubs-for-visitors.md, Apollon 50d4cc8
 - 2026-11-01 — Fixed a CI test that broke once its 2026-11-01 checkpoint due date passed: the ClubPage tests now pin today's date; six more tests that will break on 2027-01-01 filed → Apollon 387f063, bugs/frontend-tests-assume-2026.md
 - 2026-11-01 — Fixed a flaky CI test: connecting Google from Settings now waits for the queued "Google was connected" email instead of checking at once → Apollon 03941b0
 - 2026-11-01 — Unread club chat now shows in the bell: one row per club ("5 new messages in the Night Owls chat, the latest from Ana") that opens the chat and goes once it's read; muting the chat or the Clubs switch keeps it off; new migration `ClubChatBell` → specs/club-chat-bell.md, Apollon 0cc0ac2
