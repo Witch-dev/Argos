@@ -25,7 +25,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | Bug | Priority | Size | Area |
 |---|---|---|---|
 | [Admin copies of feedback and book requests share the daily optional-email budget](admin-copy-emails-share-signup-budget.md) | P2 | S | Backend, email queue |
-| [Readers with discovery off are still named on indexable book and author pages](discovery-off-readers-named-on-indexable-pages.md) | P2 | S | Backend, privacy / search |
+| [Discovery-off public readers' comments and private list collaborators are still named to visitors](discovery-off-readers-named-on-indexable-pages.md) | P3 | S | Backend, privacy / search (the book-page reviews and lists part is fixed) |
 | [Two account erasures at once can both create the "Deleted user" placeholder](deleted-user-placeholder-race.md) | P2 | S | Backend, account deletion (flaky test) |
 | [The "checkpoint due" notification test sometimes fails in a full run](checkpoint-due-test-flaky.md) | P2 | S | Backend tests (flaky test) |
 | [The chat erasure test fails when the moderation tests erase every due account at the same time](chat-erasure-test-races-moderation-erasure.md) | P2 | S | Backend tests (flaky test) |

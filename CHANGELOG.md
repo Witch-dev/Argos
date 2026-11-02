@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-02 — Book and author pages no longer name readers with discovery off to signed-out visitors, in their reviews or lists; the two smaller leftovers stay open → bugs/discovery-off-readers-named-on-indexable-pages.md, Apollon 1681b2b
 - 2026-11-02 — Search privacy: a private account's comments on public reviews and lists read "A reader" (no name, avatar or link) to signed-out visitors; reviews and lists from readers with "show me in discovery" off leave the sitemap and say noindex, their ratings still count; names on book pages left open → specs/search-engines.md §6, bugs/discovery-off-readers-named-on-indexable-pages.md, Apollon 07bd256
 - 2026-11-02 — Found on Google, Phase 1: robots.txt, a sitemap from the API (front page, What's new, legal pages, and the books, authors, public lists and reviews readers made, each with its /es twin), a title and description per page, noindex on profiles and app pages, Spanish front page paired with the English one so Spanish searches get /es; privacy policy line; live and checked in Search Console and Bing, Apollon 5c5144d → specs/search-engines.md §6, DEPLOY.md "Search engines"
 - 2026-11-02 — Like hearts no longer show a bordered box: the global button style was overriding the compact one; feed activity rows now have a bare heart column beside the cover with the count under it → Apollon edf0e73, bc09a77
