@@ -141,8 +141,8 @@ No new tables or columns. "Books readers used", "authors with such a book", the 
 - [x] `argos-security` review (new anonymous endpoint, what goes in the sitemap, `noindex` on profiles).
 - [x] `reviewer` pass.
 - [x] Browser check: the tab title changes per page; a profile, settings and a private list have `noindex` in the page; a used book has none; an unused one has `noindex, follow`.
-- [ ] Live: `https://wingedwords.app/robots.txt`, `/sitemap.xml` and `https://api.wingedwords.app/robots.txt` answer; the sitemap opens without errors in Search Console.
-- [ ] The user's Search Console and Bing steps (§3.5, 1–4).
+- [x] Live (2026-11-02): `https://wingedwords.app/robots.txt`, `/sitemap.xml` (378 pages, no `/u/`) and `https://api.wingedwords.app/robots.txt` answer. Search Console first said "No se ha podido obtener" for the sitemap right after submitting; it fetches fine with a Googlebot user agent, so recheck it the next day.
+- [x] The user's Search Console and Bing steps (§3.5, 1–4), done 2026-11-02: domain verified by TXT record, sitemap submitted, live test passed on a used book, an author, a review and a list (an unused book correctly says `noindex`), indexing requested for `/` and `/es` (`/` was already indexed, old version), Bing imported from Search Console. Left: the sitemap status the next day, and step 5 a week later (about 2026-11-09).
 
 ### Phase 2 — Plain HTML pages for search engines
 
