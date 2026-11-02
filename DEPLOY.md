@@ -50,6 +50,25 @@ When someone pastes a Winged Words link into Reddit, Discord, WhatsApp and simil
 3. `curl https://wingedwords.app/books/OL45804W` (no bot name) still returns the app (`<div id="root">`).
 4. Paste a link of each kind into a chat with yourself and into Reddit's post preview.
 
+## Search engines (Google, Bing; 2026-11-02)
+
+Since `specs/search-engines.md` Phase 1: the site has a `robots.txt` (signed-in areas and profiles closed off) and a sitemap at `wingedwords.app/sitemap.xml`, which nginx fetches from the API (`GET /api/seo/sitemap.xml`, the same route as the link preview cards, rebuilt at most once an hour). The sitemap lists the front page, What's new and the legal pages, plus the books, authors, public lists and reviews readers made, each in English and at its `/es` address. Every page says in its head whether Google may show it; profiles and app pages never. `api.wingedwords.app/robots.txt` lets Google read the API (it needs the calls to draw a page), and every API answer says `X-Robots-Tag: noindex`, so no JSON shows up in results.
+
+**Check after deploying:**
+1. `curl https://wingedwords.app/robots.txt` lists the `Disallow` lines and the `Sitemap:` line.
+2. `curl https://wingedwords.app/sitemap.xml` returns XML starting `<urlset`, with `/` and `/es`. If it's a 502 or 504, the API was asleep or slow: try again.
+3. `curl https://api.wingedwords.app/robots.txt` says `Allow: /`.
+4. `curl -s https://wingedwords.app/es | grep canonical` shows `https://wingedwords.app/es`.
+
+**Your steps, once (§3.5 of the spec):**
+1. Google Search Console → Add property → **Domain** → `wingedwords.app` → copy the TXT record → Porkbun → DNS → add it → back in Search Console, *Verify*.
+2. Search Console → *Sitemaps* → submit `https://wingedwords.app/sitemap.xml`. It should say "Success" within a day.
+3. *URL Inspection* → paste a book, an author, a list and a review address, and `https://wingedwords.app/es` → *Test live URL* → *View tested page*: the screenshot and HTML show the content, and the `/es` one is in Spanish. Then *Request indexing* for `/` and `/es`.
+4. Bing Webmaster Tools → sign in → **Import from Google Search Console**.
+5. A week later: Search Console → *Pages*: what's indexed, what's not and why. Note it in the spec's build notes.
+
+**Spanish results.** Google shows the `/es` front page to Spanish speakers once it has indexed it: `/` and `/es` name each other (hreflang) in their HTML, in the sitemap and in the page the app draws. Until then, results stay in English; step 3's *Request indexing* on `/es` speeds it up.
+
 ## Bot check on login and sign-up (Cloudflare Turnstile)
 
 Per-address limits can't stop leaked email/password pairs being tried from thousands of addresses, one or two guesses each. With the bot check on, login and sign-up each need a solved Turnstile challenge (usually invisible to a real reader). Code and decisions: `specs/bot-check.md`.

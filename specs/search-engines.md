@@ -1,6 +1,6 @@
 # Feature Spec — Found on Google (search engines)
 
-**Status:** Planned 2026-10-28, decisions asked the same day (§2.1). Two phases: Phase 1 (the basics: robots.txt, sitemap, a title per page, "don't index" where needed, Search Console; size M), Phase 2 (plain HTML pages for search engine bots on books, authors, lists and reviews; size M–L). Resolves SPEC.md §10's open SEO/SSR question: no full server rendering (§2.1).
+**Status:** Planned 2026-10-28, decisions asked the same day (§2.1); clubs added 2026-11-02 (§2.3). **Phase 1 built 2026-11-02, not pushed yet (§6).** Three phases: Phase 1 (the basics: robots.txt, sitemap, a title per page, "don't index" where needed, Search Console; size M), Phase 2 (plain HTML pages for search engine bots on books, authors, lists and reviews; size M–L), Phase 3 (public clubs and club topic pages; size S–M, after Phases 1–2 are live). Resolves SPEC.md §10's open SEO/SSR question: no full server rendering (§2.1).
 
 ## 1. Problem
 
@@ -44,6 +44,17 @@ How things are today (checked 2026-10-28):
 - **Structured data on book pages (Phase 2):** a small `Book` description in the format Google reads (JSON-LD: title, author, cover, ISBN if we have one, and our average rating with its count once a book has 3+ ratings). This is what can show stars under a result. Only our own readers' ratings, never Open Library's.
 - **Sitemap from the API.** `wingedwords.app/sitemap.xml` is passed by nginx to the API, like the card. The API builds it from the database and keeps it for an hour. One file holds up to 50,000 addresses; a sitemap index (a list of sitemap files) is added only when we get near that.
 - **Search Console and Bing Webmaster Tools are the user's steps**, written up in DEPLOY.md: verify the domain with a DNS TXT record at Porkbun, submit the sitemap, then in Bing import from Search Console.
+### 2.3 Clubs, asked 2026-11-02
+
+- **Every public club can be found, no extra switch.** Public already means anyone can find and join it in Discover; Google is one more place. An admin who doesn't want that makes the club private (members stay, `specs/stronger-clubs.md`). What's new tells admins this when Phase 3 goes live.
+- **Phase 3 of this spec**, built after Phases 1–2 are live and Search Console shows pages being indexed.
+- *Decided by me, to confirm:*
+  - **What a club shows Google** is exactly the visitor card from `specs/clubs-for-visitors.md` (`GET /api/clubs/{id}/preview`): picture, name, description, current book and cover, member count, topics, language, rules. Never discussions, members or progress.
+  - **A club counts** when it's public, not a buddy read, has a description and at least 2 active members. Others say `noindex, follow` (thin pages, as with unused books).
+  - **Private clubs, buddy reads and deleted clubs** are a 404 to bots, the same as an unknown id, so their names never show.
+  - **Invite links (`/clubs/join/<token>`) are never indexed.** The address changes when an admin resets the link, and a private club's link is a key. The club's page `/clubs/:id` is the one address Google gets.
+  - **Topic and language pages** are Discover with one filter: `/clubs?topic=fantasy` ("Fantasy book clubs") and `/clubs?lang=es` ("Book clubs in Español"). Only these single-filter forms are indexable (search text, sort and combined filters say `noindex` and point their canonical to the single-filter form). A topic or language page counts when it lists at least 2 counting clubs; plain `/clubs` always counts.
+
 - **Expectations.** Google takes weeks to read and rank a new site. Being found depends most on pages nobody else has (our readers' reviews, ratings and lists) and on other sites linking here (the Reddit answers from `specs/shareable-pages.md`). This spec makes sure nothing stands in the way; it can't make Google rank us.
 
 ## 3. Design
@@ -62,7 +73,7 @@ No new tables or columns. "Books readers used", "authors with such a book", the 
 - Check the anonymous rate limits on the endpoints these pages call (book, ratings, insights, list, review, author) leave room for Googlebot rendering pages one after another. Note what was found in the build notes.
 
 **Phase 2**
-- `GET /api/seo/page?path=…&lang=en|es`, anonymous, its own rate limit (higher than the card's: a crawl is many pages in a row), `text/html; charset=utf-8`. Pages, with everything HTML-escaped (reuse `ShareCardPage`'s `Encode`):
+- `GET /api/seo/page?path=…&lang=en|es`, anonymous, its own rate limit (higher than the card's: a crawl is many pages in a row), `text/html; charset=utf-8`. Built so a new kind is one more case (Phase 3 adds clubs). Pages, with everything HTML-escaped (reuse `ShareCardPage`'s `Encode`):
   - **Head** for every page: `<title>`, description, canonical, `hreflang` to the other language, `robots` meta (`index` or `noindex, follow` by the §2 rules), the same `og:` tags as the card.
   - **Book:** title, authors (links to their author pages), cover, description (in the page's language, `BookLocalizations`), first published, our average rating and count, the newest 10 counting reviews (reviewer's name, stars, text; links to the review), up to 10 public lists it's on (links), the JSON-LD above, a link "Open in Winged Words".
   - **Author:** name, photo, bio, years, their books we have (links), lists with this author.
@@ -74,7 +85,7 @@ No new tables or columns. "Books readers used", "authors with such a book", the 
 ### 3.3 Frontend
 
 **Phase 1**
-- `public/robots.txt` on the site: allow all; `Disallow:` the signed-in-only areas (`/settings`, `/admin`, `/notifications`, `/journal`, `/feed`, `/stats`, `/clubs/` except `/clubs/join/`, `/login`, `/register`, `/confirm-…`, `/reset-password`, `/email-off`, `/u/`); `Sitemap: https://wingedwords.app/sitemap.xml`. *Note:* `Disallow: /u/` stops Google reading profiles, but also stops it seeing their `noindex`; that's fine because a disallowed page with no links in isn't shown. Keep both.
+- `public/robots.txt` on the site: allow all; `Disallow:` the signed-in-only areas (`/settings`, `/admin`, `/notifications`, `/journal`, `/feed`, `/stats`, `/clubs/*/settings`, `/clubs/join/`, `/login`, `/register`, `/confirm-…`, `/reset-password`, `/email-off`, `/u/`); `Sitemap: https://wingedwords.app/sitemap.xml`. *Note:* `Disallow: /u/` stops Google reading profiles, but also stops it seeing their `noindex`; that's fine because a disallowed page with no links in isn't shown. Keep both.
 - nginx: `location = /sitemap.xml` passed to the API (same pattern as `/__share-card`, no cookies, short timeout).
 - `usePageMeta({ title, description, canonical, index })`: sets `document.title` ("*Title* · Winged Words"), the description meta, `<link rel="canonical">`, `hreflang` alternates and `<meta name="robots">`. `index` defaults to `false` (§2.2). Resets on leaving the page.
 - Used on: landing (index), What's new and legal pages (index), book / author / list / review (index from the API's `indexable`), every other page title-only with `noindex`. Profile: always `noindex`. A not-found or private state: `noindex`.
@@ -85,7 +96,21 @@ No new tables or columns. "Books readers used", "authors with such a book", the 
 **Phase 2**
 - nginx: a second `map`, `$search_bot`, for the bots in §2.2; `applebot` leaves `$preview_bot`. On the book, author, list and review paths (with and without `/es`), a search bot is sent to `/__seo-page`, an internal location like `/__share-card` but passing `/api/seo/page` and **keeping the API's status code** (a 404 stays a 404). If the API can't answer: a `503` so Google tries again later, never `index.html` (an empty app page would be stored as the real one). Profiles and club links stay as today for search bots (they get the app, which says `noindex`).
 
-### 3.4 The user's steps (DEPLOY.md)
+### 3.4 Phase 3 — Clubs
+
+**Backend**
+- The "counts for search" service gains clubs and club topic/language pages (§2.3), reading the same public-club rules as the directory and `/preview`.
+- Sitemap: counting clubs (`/clubs/<id>`, `lastmod` = the club's `LastActiveAt` day), `/clubs`, and the counting `/clubs?topic=…` and `/clubs?lang=…` pages, with `/es` alternates.
+- `indexable` on the `/preview` answer and on the directory answer (for the filter shown).
+- `/api/seo/page` for `clubs/<id>`: the card's fields as HTML, the current book linked to its book page, "Join on Winged Words". For `/clubs` with one topic or language: the heading, then each counting club's name (linked), description, topics, language and member count, in the "Most members" order. Topic names in the page's language (the same `GenreCatalog` names the app shows).
+- Tests: private club, buddy read, deleted and unknown answer the same 404; a club with 1 member or no description says `noindex, follow`; no member names or token in the page; a topic page with fewer than 2 counting clubs says `noindex`.
+
+**Frontend**
+- `usePageMeta` on `ClubPage` (visitor card and member view, index from `indexable`), `ClubsDirectoryPage` (index only for plain `/clubs` or one filter), `ClubJoinPage` (always `noindex`). Titles such as "Slow Sci-Fi Society · book club" and "Fantasy book clubs", through `t()` in all five locales.
+- nginx: add `clubs/<uuid>` to the search-bot paths, and `location = /clubs` sending search bots to `/__seo-page` with the query string. `clubs/join/` stays on the preview-bot route only.
+- What's new entry: public clubs can appear on search engines; make a club private if you'd rather it didn't. Privacy policy line updated to name clubs.
+
+### 3.5 The user's steps (DEPLOY.md)
 
 1. Search Console → Add property → **Domain** `wingedwords.app` → copy the TXT record → Porkbun → DNS → add it → Verify.
 2. Search Console → Sitemaps → submit `https://wingedwords.app/sitemap.xml`.
@@ -98,26 +123,26 @@ No new tables or columns. "Books readers used", "authors with such a book", the 
 ### Phase 1 — The basics
 
 #### Backend
-- [ ] Shared "counts for search" rules (books readers used, authors, lists, reviews) in one service.
-- [ ] `GET /api/seo/sitemap.xml` with `/es` alternates and `lastmod`, cached an hour, rate-limited.
-- [ ] API `robots.txt` allowing all; `X-Robots-Tag: noindex` on every API answer.
-- [ ] `indexable` on the book, author, list and review answers.
-- [ ] Check the anonymous rate limits leave room for Googlebot; note it in the build notes.
-- [ ] Tests: sitemap leaves out private, hidden, spoiler, empty and unused, and every `/u/`; `indexable` follows the same rules.
+- [x] Shared "counts for search" rules (books readers used, authors, lists, reviews) in one service.
+- [x] `GET /api/seo/sitemap.xml` with `/es` alternates and `lastmod`, cached an hour, rate-limited.
+- [x] API `robots.txt` allowing all; `X-Robots-Tag: noindex` on every API answer.
+- [x] `indexable` on the book, author, list and review answers.
+- [x] Check the anonymous rate limits leave room for Googlebot; note it in the build notes.
+- [x] Tests: sitemap leaves out private, hidden, spoiler, empty and unused, and every `/u/`; `indexable` follows the same rules.
 
 #### Frontend
-- [ ] `public/robots.txt`; nginx `/sitemap.xml` to the API.
-- [ ] `usePageMeta` hook, `noindex` by default; used on every page (§3.3).
-- [ ] Titles and descriptions in all five locales.
-- [ ] Links between book, author, list and review pages are real `<a href>`.
-- [ ] Privacy policy line: public reviews and lists may appear in search engines (all five languages); a What's new entry.
+- [x] `public/robots.txt`; nginx `/sitemap.xml` to the API.
+- [x] `usePageMeta` hook, `noindex` by default; used on every page (§3.3); club pages wait for Phase 3.
+- [x] Titles and descriptions in all five locales.
+- [x] Links between book, author, list and review pages are real `<a href>`.
+- [x] Privacy policy line: public reviews and lists may appear in search engines (all five languages); a What's new entry (drafted in §6, to post on the admin page after the deploy).
 
 #### Verification
-- [ ] `argos-security` review (new anonymous endpoint, what goes in the sitemap, `noindex` on profiles).
-- [ ] `reviewer` pass.
-- [ ] Browser check: the tab title changes per page; a profile, settings and a private list have `noindex` in the page; a used book has none; an unused one has `noindex, follow`.
+- [x] `argos-security` review (new anonymous endpoint, what goes in the sitemap, `noindex` on profiles).
+- [x] `reviewer` pass.
+- [x] Browser check: the tab title changes per page; a profile, settings and a private list have `noindex` in the page; a used book has none; an unused one has `noindex, follow`.
 - [ ] Live: `https://wingedwords.app/robots.txt`, `/sitemap.xml` and `https://api.wingedwords.app/robots.txt` answer; the sitemap opens without errors in Search Console.
-- [ ] The user's Search Console and Bing steps (§3.4, 1–4).
+- [ ] The user's Search Console and Bing steps (§3.5, 1–4).
 
 ### Phase 2 — Plain HTML pages for search engines
 
@@ -134,11 +159,52 @@ No new tables or columns. "Books readers used", "authors with such a book", the 
 - [ ] `reviewer` pass.
 - [ ] Live: `curl -A "Googlebot" https://wingedwords.app/books/OL…` returns the book's HTML; an unknown id returns 404; a normal browser still gets the app; `curl -A "redditbot"` still gets the card.
 - [ ] Search Console → URL Inspection → Test live URL on one page of each kind shows the content; Google's Rich Results Test finds the `Book` data.
-- [ ] A week after: Search Console → Pages, note what's indexed in the build notes (§3.4, 5).
+- [ ] A week after: Search Console → Pages, note what's indexed in the build notes (§3.5, 5).
+
+### Phase 3 — Clubs (after Phases 1–2 are live)
+
+#### Backend
+- [ ] Club and topic/language rules in the "counts for search" service; clubs in the sitemap; `indexable` on `/preview` and the directory.
+- [ ] `/api/seo/page` for a club and for `/clubs` with one topic or language.
+- [ ] Tests: the §3.4 list.
+
+#### Frontend
+- [ ] `usePageMeta` on the club page, Discover and the invite page; titles in all five locales.
+- [ ] nginx: club paths and `/clubs` with its query string for search bots.
+- [ ] What's new entry and the privacy policy line (§3.4).
+
+#### Verification
+- [ ] `argos-security` review (what a club page shows bots; private clubs and buddy reads stay out).
+- [ ] `reviewer` pass.
+- [ ] Live: `curl -A "Googlebot"` on a public club, a private club (404), an invite link (the app, not indexed) and `/clubs?topic=fantasy`; Search Console's live test on one club.
 
 ## 5. Not in this spec
 
 - Full server rendering (§2.1).
-- Reader profiles, clubs, writings in search.
+- Reader profiles and writings in search.
 - Languages other than English and Spanish.
 - Genre or "popular" pages made for search (they'd come with "Popular this week + genre pages" in FUTURE-IDEAS.md).
+
+## 6. Build notes (Phase 1, 2026-11-02)
+
+- **Taken over from another session.** A parallel session had started on the front page's Spanish result (the user's ask: Google showed only the English description). Its pieces were kept and folded in: the build writes `home.html` (served by nginx for exactly `/`) and `es/index.html` with a canonical and `hreflang` en/es/x-default, so `/` and `/es` name each other before the app runs. Its static `public/sitemap.xml` and allow-all `robots.txt` were replaced by the ones below.
+- **Rules in one place:** `SearchPagesRepository` (behind `SearchPagesService`). A public reader is not private, not away or suspended, and not the "deleted" placeholder. A rating or review counts when the review and the reading are both Public and it isn't hidden (checked by name, since the Hidden filter lets an owner's own through). **Reviews with an inline `||spoiler||` don't count either** (decided in review: the covered text is in the page's HTML, so Google could match or quote it), the same rule as the landing page's showcase; their book still counts. A list counts when it's Public, not hidden, from a public reader, with an entry. Authors only when Winged Words has their row.
+- **Sitemap:** `GET /api/seo/sitemap.xml` (Public rate limit, 60 a minute per address), kept in memory for an hour. The site's own pages first, then every other page newest first, cut at 25,000 pages (50,000 addresses) with a warning in the log. Each page is two `<url>`s (`/x` and `/es/x`), each naming en, es and x-default. `lastmod` is the day of the latest rating, review, edit or list addition (books, authors), list change, or review change. nginx `location = /sitemap.xml` passes it through the share-card route without cookies, credentials or the API's `X-Robots-Tag`; an error stays an error. Checked in Docker against a stand-in API.
+- **API:** `GET /robots.txt` allows everything; every other answer carries `X-Robots-Tag: noindex` (Program.cs). `indexable` is set only by the four page GETs (book, author, list, review); mutation answers say false, which only affects a signed-in tab's own head.
+- **`usePageMeta`:** one call per page, at its top level. The newest page's claim is shown; with none, the defaults are "Winged Words" and `noindex` (`startPageMeta` in `main.tsx`, before the first render; `index.html` itself has no robots tag, since it is also the front page). An indexable page gets no robots tag, a canonical, and hreflang en/es/x-default. The canonical is the `/es` one while the app is in Spanish, because `initLanguage` strips `/es` from the address. In a production build the addresses always use `https://wingedwords.app`, never the `.onrender.com` host. A page not indexed but with useful links (unused book, author, review) says `noindex, follow`. Covered inline spoilers carry `data-nosnippet`.
+- **Titles:** new `pageMeta` locale section (five languages; only en and es checked). Book "Title by Author", list "Title, a list by Name", review "Name's review of Title" (its description is the opening up to the first `||`), author and profile by name, the front page the og:title. About 30 app pages got a title from their existing heading keys and stay `noindex`. Club pages have no hook yet (Phase 3), so they get the defaults.
+- **Links:** every link between book, author, list and review pages is a router `Link` (`<a href>`); the browser check counted them on a book page.
+- **Rate limits for Googlebot (checked, no change):** a book page makes one call in the Search bucket (`GET /api/books/{id}`, 30 a minute per address); ratings, insights, lists and reviews have no per-address limit. An author page makes two (`/authors/{id}` and `/works`) plus `/stats` (Public, 60). So one Googlebot address could render 30 book or 15 author pages a minute. Google renders from many addresses and at a small site's crawl rate, so that's enough; a 429 would show it an empty page. Phase 2 removes the dependence for these four kinds.
+- **Privacy policy:** one sentence added to "Who can see what you post" in all five languages ("Public reviews and lists from public accounts can also appear in search engines such as Google, with your display name. Your profile page never does."), dated November 2, 2026.
+- **What's new entry, to post after the deploy** (admin page):
+  - *EN:* **Winged Words on Google.** Public reviews and lists can now show up in search engines like Google, so someone searching for a book can find what readers here think of it. Only what anyone can already see without signing in: reviews and lists set to Public, from public accounts. Spoilers stay out, and profiles are never shown. To keep a review or list out, set it to Followers or Private, or make your account private.
+  - *ES:* **Winged Words en Google.** Las reseñas y listas públicas ya pueden aparecer en buscadores como Google, para que quien busque un libro encuentre lo que opinan los lectores de aquí. Solo lo que cualquiera ya puede ver sin iniciar sesión: reseñas y listas públicas de cuentas públicas. Los spoilers quedan fuera, y los perfiles nunca aparecen. Para dejar fuera una reseña o lista, ponla para seguidores o privada, o haz tu cuenta privada.
+- **Tests:** `SearchPagesTests` (one seeded set checked in the sitemap and in each page's `indexable`: private account, Followers review, private reading, hidden review and list, suspended reader, spoiler and inline spoiler, empty, Private and Unlisted lists, unused book and author, no `/u/`; the sitemap first built by a signed-in owner; robots.txt and the header), `usePageMeta.test.tsx`. Full suites: 1991 backend, 1345 Vitest, lint and build pass.
+- **Browser check (side ports):** all nine checks passed: front page and `/es` (Spanish title, description and canonical), used book (no robots tag), unused book (`noindex, follow`), public list, review (description from its opening), profile, settings and a private list (`noindex`), and in-app navigation swapping title and canonical cleanly.
+
+Reviews: `reviewer` (fixed: inline spoilers out of search; `data-nosnippet` moved from the button to its span, where Google reads it; canonical on the fixed site address instead of the request's host; trailing slash dropped; nginx hides the API's `X-Robots-Tag` on the sitemap; the cap keeps the newest pages). `argos-security`: nothing a visitor couldn't already see; its test cases added (private reading, suspended reader, hidden list, sitemap built while signed in). Two points left for the user:
+
+**Decided 2026-11-02 (both lean to the reader's privacy; to build before Phase 2):**
+1. **Private accounts' comments:** a signed-out visitor (and so Google) sees a private account's comment on a public review or list as "A reader", with no name or link. Signed-in readers see it as today. A server change on the comment answers plus a test; the privacy line needs no change.
+2. **"Show me in discovery" off:** those readers' reviews and lists stay out of the sitemap and say `noindex` (`indexable` false), so their name never reaches search. Their ratings still count toward a book. A rule added to `SearchPagesRepository` plus tests.
+- [ ] Build both (backend S, then re-check the sitemap test set).

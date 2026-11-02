@@ -20,7 +20,7 @@ What already exists (checked 2026-11-01):
 - **A private club or a buddy read** at `/clubs/:id` shows the visitor the page a signed-in non-member gets: not found, with a link back to Discover. Its name is never shown.
 - **Sign-up counting:** a sign-up started on a club page or the directory counts as `club` in Admin stats ("Sign-ups from shared pages"), the same kind as invite links.
 - **The rail's "Log in" card steps aside** on `/clubs` and `/clubs/:id` for visitors, as it does on other shared pages, since those pages have their own sign-up prompts.
-- **Out of scope:** a link preview card for `/clubs/:id` (invite links already have one; add it later if club pages get shared on their own), and paging the directory (already listed in `bugs/backend-scale-hotspots.md`; more visitors make it matter sooner).
+- **Out of scope:** paging the directory (already listed in `bugs/backend-scale-hotspots.md`; more visitors make it matter sooner).
 
 ## 3. Design
 
@@ -66,3 +66,4 @@ What already exists (checked 2026-11-01):
 - **Join after logging in.** If the account a visitor logs in to is already in the club, `ClubPage` clears the `join` state without running it, so leaving the club and pressing Back can't re-join it (review).
 - **Browser.** "Start a buddy read" is hidden from visitors, since a buddy read is with readers you know. The not-found state for a private club or buddy read gained a "Discover clubs" button on its own line, and the club card a quiet "Discover clubs" link under it, for signed-in non-members too (design review).
 - **Left as they are (design review):** a club with no picture shows none on its card, as on an invite link (giving it the directory's initial cover would change the invite card too); on a phone the visitor's lone "Create a club" is full width, like the signed-in buttons. A reader who logs in to an account with an unconfirmed email gets the Create window but only learns on Create that the email needs confirming.
+- **Link previews (added 2026-11-02).** Sharing `/clubs` showed the generic English card: only the six kinds in `specs/shareable-pages.md` had cards, and the Clubs page had no Share button, so a copied address never carried `/es`. Now `/clubs` (the directory: "Book clubs on Winged Words") and `/clubs/<id>` (a public club's own card, the same as its invite link; private clubs and buddy reads get the generic card) have cards in English and Spanish, with or without `/es`, in `web/nginx.conf` and `ShareCardService`. The Clubs page has a Share button for everyone, which copies `/es/clubs` while the site is in Spanish.

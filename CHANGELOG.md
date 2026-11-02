@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-02 — Found on Google, Phase 1: robots.txt, a sitemap from the API (front page, What's new, legal pages, and the books, authors, public lists and reviews readers made, each with its /es twin), a title and description per page, noindex on profiles and app pages, Spanish front page paired with the English one so Spanish searches get /es; privacy policy line; pushed, Apollon 5c5144d → specs/search-engines.md §6, DEPLOY.md "Search engines"
 - 2026-11-02 — Like hearts no longer show a bordered box: the global button style was overriding the compact one; feed activity rows now have a bare heart column beside the cover with the count under it → Apollon edf0e73, bc09a77
 - 2026-11-02 — Fixed the club question answer form showing "Responder" twice: its label now reads "Your reply" and the placeholder is the normal reply one → Apollon 61bcf6f
 - 2026-11-02 — Missing-book requests: a "Can't find your book?" form in search and the book picker, an admin page to add or decline each one on Open Library, the reader told in the bell, 5 saved requests a day, privacy policy and DEPLOY.md updated → specs/missing-book-requests.md, bugs/admin-copy-emails-share-signup-budget.md
