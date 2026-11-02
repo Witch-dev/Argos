@@ -129,6 +129,10 @@ Removing someone: delete their entry and redeploy; it takes effect at the restar
 
 Each message sent with the feedback button (`specs/feedback-button.md`) is saved on `/admin/feedback` and emailed to `Feedback:NotifyAddress`. Production sets it to `hello@wingedwords.app` in `appsettings.Production.json` (Porkbun forwards it to your Gmail), so Render needs no variable; set `Feedback__NotifyAddress` there only to send them somewhere else. Empty means no email, only the admin page. The email's reply address is the reader's own, so **Reply** in Gmail answers them.
 
+## Book request emails
+
+Each request sent with "Can't find your book?" (`specs/missing-book-requests.md`) is saved on `/admin/book-requests` and emailed to `MissingBook:NotifyAddress`. Production sets it to `hello@wingedwords.app` in `appsettings.Production.json`, so Render needs no variable; set `MissingBook__NotifyAddress` only to send them elsewhere. Empty means no email, only the admin page. The email lists the fields to copy into Open Library's "Add a book" form. These copies share the daily optional-email budget (see `bugs/admin-copy-emails-share-signup-budget.md`).
+
 **One-time Gmail setup, so replies come from `hello@` and not your personal address:**
 1. In Resend, create an API key with *sending access* for `wingedwords.app`, named "Gmail send-as" (separate from the API's key, so either can be revoked alone).
 2. Gmail → Settings (gear) → See all settings → **Accounts and Import** → *Send mail as* → **Add another email address**. Name `Winged Words`, address `hello@wingedwords.app`, leave "Treat as an alias" ticked.

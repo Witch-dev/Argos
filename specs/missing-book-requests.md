@@ -1,6 +1,6 @@
 # Feature Spec — Missing book requests
 
-**Status:** spec written and decisions confirmed 2026-11-01; not built yet. Modelled on `specs/feedback-button.md` (a reader sends something, an admin reviews it on an admin page).
+**Status:** spec written and decisions confirmed 2026-11-01; Backend, Frontend and Verification built and checked 2026-11-02. Modelled on `specs/feedback-button.md` (a reader sends something, an admin reviews it on an admin page).
 
 ## 1. Problem
 
@@ -76,25 +76,30 @@ Adding books into Argos's own database, hosting covers, a script or API that wri
 - [x] The user confirms or changes the decisions in §2.1. **Confirmed as written, 2026-11-01.**
 
 ### Backend
-- [ ] `BookRequest` entity, configuration, migration (enum columns, `Authors` as a list).
-- [ ] ISBN validation helper (digits, length, check digit) + unit tests.
-- [ ] `BookRequestService` + repository + `BookRequestController` (`POST`), confirmed-email check, a `book-requests` rate-limit policy, the email.
-- [ ] Admin list, Added and Declined endpoints; notification types.
-- [ ] Erasure with the account; `BookRequestCleanupService` (daily, 2 years after closing).
-- [ ] Error codes for every new error, translated under `errors.codes`.
-- [ ] Tests: unit (validation, ISBN check digit, email content encoded) and integration (send, rate limit, unconfirmed email refused, admin-only list, added/declined notify, erasure).
+- [x] `BookRequest` entity, configuration, migration (enum columns, `Authors` as a list).
+- [x] ISBN validation helper (digits, length, check digit) + unit tests.
+- [x] `BookRequestService` + repository + `BookRequestController` (`POST`), confirmed-email check, a `book-requests` rate-limit policy, the email.
+- [x] Admin list, Added and Declined endpoints; notification types.
+- [x] Erasure with the account; `BookRequestCleanupService` (daily, 2 years after closing).
+- [x] Error codes for every new error, translated under `errors.codes`.
+- [x] Tests: unit (validation, ISBN check digit, email content encoded) and integration (send, rate limit, unconfirmed email refused, admin-only list, added/declined notify, erasure).
+- [x] Also built: book requests in "Download my data" (`book-requests.csv`).
+
+**Built 2026-11-02 (Apollon, not yet committed).** Notes: a bad ISBN check digit is refused by the server (`bookRequest.badIsbn`), so the form's "gentle warning" must let the reader clear the ISBN to send; the language is any two lowercase letters; the notification carries the title, Open Library id and decline reason (`subject.declineReason`), and the two new types can't be switched off. Reviews: `reviewer` found nothing to fix in the code (export gap fixed); `argos-security` had three Lows, fixed (a note could fake a "From:" line in the email, so From is first and the note last; the unconfigured-email log named the subject, now the log label; authors list capped early).
 
 ### Frontend
-- [ ] `MissingBookButton` in search results (end of list and empty state) and the book picker.
-- [ ] `MissingBookDialog` with the duplicate suggestions, ISBN check and CC0 line.
-- [ ] `/admin/book-requests` page and sidebar link.
-- [ ] All text in the five locale files.
-- [ ] Tests: dialog (required fields, ISBN type and typo warning, suggestions, thank-you), admin page (copy, Added with id, Declined).
+- [x] `MissingBookButton` in search results (end of list and empty state) and the book picker.
+- [x] `MissingBookDialog` with the duplicate suggestions, ISBN check and CC0 line.
+- [x] `/admin/book-requests` page and sidebar link.
+- [x] All text in the five locale files (new `missingBook.json`, `admin.bookRequests`, `nav.bookRequests`, bell sentences).
+- [x] Tests: dialog (required fields, ISBN type and typo warning, suggestions, thank-you), admin page (copy, Added with id, Declined).
+
+**Built 2026-11-02 (Apollon, not yet committed).** Notes: the button is for signed-in readers only (hidden for visitors, and in search's pick mode); an unconfirmed reader gets the "confirm your email" answer instead of the form, as in feedback; the ISBN is checked in `lib/isbn.ts` and a bad check digit or half-typed number blocks Send until fixed or cleared (the server refuses it too); the CC0 line sits under the note box; the sidebar link has no count badge; the bell's Declined row links nowhere, Added links to the book or a title search; the decline sentence with a reason uses `types.BookRequestDeclinedFor.<reason>`. Checks: `tsc`, lint, Vitest (1338) and build pass.
 
 ### Verification & docs
-- [ ] `browser-check`: send a request on desktop and phone, the suggestions, the email in Mailpit, Added and Declined notify the requester.
-- [ ] Screenshot critique round (Paper and Dark, 1280 and 375).
-- [ ] `reviewer` and `argos-security` (user input, email, admin endpoints), fix findings.
-- [ ] Privacy policy: a paragraph on book requests (what's stored, 2 years), all five languages.
-- [ ] `DEPLOY.md`: `MissingBook:NotifyAddress`.
-- [ ] `CHANGELOG.md`.
+- [x] `browser-check`: send a request on desktop and phone, the suggestions, the email in Mailpit, Added and Declined notify the requester. **Done 2026-11-01**: all pass; found the stale ISBN error line (fixed).
+- [x] Screenshot critique round (Paper and Dark, 1280 and 375). **Two rounds done 2026-11-02.** Fixed: one ISBN message, secondary outline search button, thank-you says "in the bell" with Close filled, check/cross bell icons, admin Copy on hover, duplicate pill, count on the open tab, Added/Declined alike, tighter phone rows. Left on purpose: the gold unread dot (DESIGN.md), the count only on the open tab (the other tab's total needs a second request).
+- [x] `reviewer` and `argos-security` (user input, email, admin endpoints), fix findings. **Done 2026-11-01**: the daily limit now counts saved requests only (`BookRequestService`, the rate-limit policy is gone); reviewer's picker dialog lost on refetch and stale error fixed; security found nothing above Low. Open Low: admin copies share the 80-a-day optional email budget with sign-up mail (`bugs/admin-copy-emails-share-signup-budget.md`). §2.1.2 now reads: a bad check digit blocks Send (deliberate).
+- [x] Privacy policy: a paragraph on book requests (what's stored, 2 years), all five languages.
+- [x] `DEPLOY.md`: `MissingBook:NotifyAddress`.
+- [x] `CHANGELOG.md`.
