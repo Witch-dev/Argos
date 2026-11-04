@@ -41,6 +41,22 @@ Applied to screenshots. Each line is a question; a "no" is a finding. Tag it Rul
 - The mobile drawer: reachable with one thumb, closes after choosing, and the current page is marked.
 - Is the depth sensible: can the reader reach the main things in one or two taps?
 
+## 4b. Finding things
+
+Whether a reader who wants something can find it without already knowing where it is. The task walk (`task-walk.md`) tests this for real; these are the questions to ask of a single screen.
+
+- **Would a newcomer find the main things this screen offers without scrolling or opening a menu?** List what a reader comes here to do; each of those needs a visible control in the first view at 375px.
+- **Nothing important lives only in a "⋯" menu.** An overflow menu is right for rare actions when space runs out; the one or two actions most readers want on this screen get a visible button. *(Judgement)*
+- **Nothing appears only on hover.** On a phone there is no hover, so a control revealed by hover doesn't exist there. *(Rule)*
+- **Icon-only controls are few and universal** (close ×, search, a bell). Everything else has a word next to it, especially in navigation. A reader shouldn't have to tap an icon to learn what it is.
+- **Same kind of action, same place, same look, on every page.** If edit is a labelled button on a review, it isn't a pencil inside "⋯" on a list. Compare with the sibling pages, not just this one.
+- **Main and secondary navigation are clearly separate:** the top tabs and sidebar are for places; settings, help and account things sit together somewhere predictable, not scattered.
+- **Dangerous actions sit apart** from normal ones (delete, leave a club, log out, block): spaced away, at the end, in `--danger`, so a slip of the thumb can't reach them.
+- **An unavailable option says why.** A disabled button with no reason, or an option that silently disappears, leaves the reader guessing whether it exists. Explain beside it ("Log the book first to favourite it") or hide it only when it can never apply. *(Judgement)*
+- **Search is always reachable** from the top bar, and an empty search or no-results screen suggests something to try.
+- **Back goes back:** returning from a page restores the scroll position, open tab and filters. Opening a modal isn't used as a way to move between pages.
+- **Advanced options come later.** A screen shows the common choices first and opens the rare ones on request ("More options"), instead of every setting at once.
+
 ## 5. Options, labels and copy
 
 - **Is the next step obvious?** Buttons say what they do ("Add to shelf", "Save review"), not "Submit", "OK" or "Click here".
@@ -49,6 +65,8 @@ Applied to screenshots. Each line is a question; a "no" is a finding. Tag it Rul
 - Are settings phrased so the on/off state is unambiguous? ("Private account: on" is clear; "Don't hide my shelves: off" is not.)
 - Does every control say what will happen *before* the reader presses it (especially anything visible to others: privacy, publish, follow)?
 - Error messages say what went wrong **and what to do next**. Empty states say what the screen is for and offer the first step.
+- **Would a newcomer understand every word?** App words a new reader hasn't learned yet ("log", "writing" as a noun, "buddy read", "DNF") need to be self-explaining in context or come with a short hint the first time they matter.
+- Fields that need explaining have **helper text under them** that stays visible while typing, not only a placeholder inside the box.
 - Tone and wording consistent with the rest of the app and the glossary used in the locale files. Same word for the same thing in all five languages.
 
 ## 6. States and feedback

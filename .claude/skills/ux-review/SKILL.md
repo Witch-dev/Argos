@@ -1,13 +1,19 @@
 ---
 name: ux-review
-description: Use to audit how an Argos screen looks and reads, without changing it — word placement, hierarchy, spacing, text sizes, menus, clarity of options and labels, accessibility, states. Triggers on "/ux-review", "review the UX of X", "is X clear / well laid out", "does X need more space", "audit the design of X", "check the menus". Produces a ranked findings file in `ux-reviews/`; the fixes are then done with the `web-design` skill. Not for building or restyling (that is `web-design`) and not for bugs in behaviour (that is `bugs/`).
+description: Use to audit how easy Argos is to use and how a screen looks and reads, without changing it — whether readers can find and do things (task walk), word placement, hierarchy, spacing, text sizes, menus, clarity of options and labels, accessibility, states. Triggers on "/ux-review", "review the UX of X", "is X clear / well laid out / intuitive", "it's hard to find X", "options are confusing", "can readers figure out X", "does X need more space", "audit the design of X", "check the menus". Produces a ranked findings file in `ux-reviews/`; the fixes are then done with the `web-design` skill. Not for building or restyling (that is `web-design`) and not for bugs in behaviour (that is `bugs/`).
 ---
 
 # Argos UX review
 
-Judges whether a screen is *good*: is it clear what to read first, is there enough room, are the sizes right, do the menus and options make sense. `web-design` builds consistently with the tokens; this skill checks the result and writes down what to fix. **It never edits the app.** Reviewing and fixing are separate jobs, and the user often wants the review alone.
+Judges whether Winged Words is *easy to use*: can a reader find what they came for and understand what each option does, without already knowing the app. Then: is it clear what to read first, is there enough room, are the sizes right. Usability comes before looks: a well-spaced screen whose main option nobody finds is a failure. `web-design` builds consistently with the tokens; this skill checks the result and writes down what to fix. **It never edits the app.** Reviewing and fixing are separate jobs, and the user often wants the review alone.
 
-Two modes: **critique** (the default: how it looks, reads and works, scored with Nielsen /40, cognitive load and personas; `references/scoring.md` has the scoring guide, persona list including Winged Words' own readers, and the named cognitive-load violations) and **audit** ("/ux-review audit <area>": technical quality scored /20 across accessibility, performance, theming, responsive and implementation integrity; `references/audit.md`). Both write to `ux-reviews/`, both never edit the app.
+Three modes, all writing to `ux-reviews/`, none editing the app:
+
+- **tasks** ("/ux-review tasks [area]", or when the complaint is "hard to find", "confusing", "not intuitive"): a fresh agent that has never seen the code tries real reader tasks from the home page in a real browser, and the lead explains each failure as wording, placement, inconsistency or feedback. Finds what page reviews can't: options nobody would look for, and actions that live in different places on different pages. Everything is in `references/task-walk.md`; follow it instead of the phases below.
+- **critique** (the default for one page or component): how it looks, reads and works, scored with Nielsen /40, cognitive load and personas; `references/scoring.md` has the scoring guide, persona list including Winged Words' own readers, and the named cognitive-load violations.
+- **audit** ("/ux-review audit <area>"): technical quality scored /20 across accessibility, performance, theming, responsive and implementation integrity; `references/audit.md`.
+
+Page critiques alone missed findability for months (the reviewer reads the code first, so it always knows where things are). For a broad "is the app easy to use?" question, walk tasks first, then critique the pages the walk showed are weak.
 
 A critique has two passes, because they find different things:
 
@@ -27,7 +33,7 @@ Pin down, asking the user only if unclear:
 
 ## Phase 2 — Capture
 
-Use the `browser-check` skill (side ports, Playwright, seeded readers). For plain page captures use `node C:/Users/jramo/Argos/scripts/shoot.mjs <route…> --out <scratchpad>/shots --final` (Paper and Dark at 1280 and 375; without `--final` only Paper at 1280, and `--clip <selector>` shoots one component); write your own Playwright script only for states that need clicks or seeded data. Take screenshots into the scratchpad and **look at each one** with Read; don't review from the CSS alone.
+Use the `browser-check` skill (side ports, Playwright, seeded readers). For plain page captures use `node C:/Users/jramo/Argos/scripts/shoot.mjs <route…> --out <scratchpad>/shots --final` (Paper and Dark at 1280 and 375; without `--final` only Paper at 1280, and `--clip <selector>` shoots one component); write your own Playwright script only for states that need clicks or seeded data. Take screenshots into the scratchpad; don't review from the CSS alone. **The visual pass runs in a Sonnet agent**, so the images stay out of the lead's context: hand a `general-purpose` agent (model `sonnet`) the screenshot paths, the scope from Phase 1, `references/visual-checklist.md` and the parts of DESIGN.md the screen depends on, and ask for candidate findings in words (where on screen, what, which checklist line, Rule or Judgement). The lead checks a doubtful one with a single `--clip` shot of its own, then does the code pass and the writing.
 
 **Motion:** for anything that animates, record a short video or take frames at 0 / 50 / 100% of the duration, and capture it again with `reducedMotion: 'reduce'`.
 
@@ -37,7 +43,7 @@ Capture, for each page: the normal state, the empty state, the loading state if 
 
 ## Phase 3 — Review
 
-1. Walk `references/visual-checklist.md` against the screenshots.
+1. Take the visual agent's findings (`references/visual-checklist.md` against the screenshots), giving "4b. Finding things" and "5. Options, labels and copy" the most weight: those are where readers get lost.
 2. Walk `references/code-checklist.md` against the page's `.tsx` and `.module.css` files (find them from the route, then follow imports one level).
 3. For anything involving colour, spacing or size, **phrase the finding against the Argos tokens** (`--space-*`, `--text-muted`, `--radius`; see `.claude/skills/web-design/references/design-tokens.md`): "the gap between the title and the byline is `--space-1`, the section gap is `--space-2`, so they read as one block; use `--space-4` between sections". Never "needs more space" alone.
 
@@ -88,12 +94,12 @@ Priorities and sizes match `bugs/`: **P1** a reader can't complete the task or c
 
 ## Phase 5 — Hand off
 
-Summarise for the user: the scores, the count by priority, the top three, and the quick wins. Recommend the passes that fit (`polish` for a list of P1/P2 findings, `bolder`/`distill` for a low "aesthetic" score, `harden`/`clarify` for low error scores; `web-design/references/passes/`), and end with 2–4 targeted questions tied to specific findings, each with 2–3 options (or say why questions were skipped, only when there are fewer than three priority findings). Then ask which findings to fix. Fixes go through `web-design` (and `new-react-feature` if behaviour changes), one finding or one coherent group at a time. After fixing, **re-capture the same screenshots** and mark the findings `fixed` in the file; add a CHANGELOG line when a batch is done: `- YYYY-MM-DD — UX fixes on <page> → ux-reviews/<file>.md`.
+Summarise for the user: the scores, the count by priority, the top three, and the quick wins. Recommend the passes that fit (`clarify` for wording causes and `layout` for placement causes from a task walk, `onboard` for a first visit that loses readers, `polish` for a list of P1/P2 findings, `bolder`/`distill` for a low "aesthetic" score, `harden`/`clarify` for low error scores; `web-design/references/passes/`), and end with 2–4 targeted questions tied to specific findings, each with 2–3 options (or say why questions were skipped, only when there are fewer than three priority findings). Then ask which findings to fix. Fixes go through `web-design` (and `new-react-feature` if behaviour changes), one finding or one coherent group at a time. After fixing, **re-capture the same screenshots** and mark the findings `fixed` in the file; add a CHANGELOG line when a batch is done: `- YYYY-MM-DD — UX fixes on <page> → ux-reviews/<file>.md`.
 
 New translatable text from a fix still goes through `t('…')` in all five locale files. When reviewing copy, review it in English first, then spot-check that the longest language (German) doesn't overflow.
 
 ## Sources
 
-Criteria condense: Impeccable's critique rubric and quality floor (`pbakaus/impeccable`, Apache 2.0, read 2026-10-16: Nielsen scoring, cognitive-load checks, personas, the specificity question, motion rules), WCAG 2.2 AA, Nielsen's 10 usability heuristics, Vercel's Web Interface Guidelines (`vercel-labs/web-interface-guidelines`, snapshot read 2026-10-11, pinned here on purpose rather than fetched at run time), the accessibility chapter of `vercel/components.build`, and a few layout, forms and feedback rules from the 119-row UX guidelines of `nextlevelbuilder/ui-ux-pro-max-skill` (MIT). Rules that assume English or server rendering were dropped or adapted (see the notes in `references/code-checklist.md`).
+Criteria condense: Impeccable's critique rubric and quality floor (`pbakaus/impeccable`, Apache 2.0, read 2026-10-16: Nielsen scoring, cognitive-load checks, personas, the specificity question, motion rules), WCAG 2.2 AA, Nielsen's 10 usability heuristics, Vercel's Web Interface Guidelines (`vercel-labs/web-interface-guidelines`, snapshot read 2026-10-11, pinned here on purpose rather than fetched at run time), the accessibility chapter of `vercel/components.build`, and a few layout, forms and feedback rules from the 119-row UX guidelines of `nextlevelbuilder/ui-ux-pro-max-skill` (MIT), plus its navigation and findability rules (`references/quick-reference.md`, read 2026-11-04: labels with icons, consistent placement, nothing hover-only, dangerous actions apart, explain what's unavailable, progressive disclosure, helper text; now "4b. Finding things" in the visual checklist). The task walk adapts two standard usability methods, the cognitive walkthrough (at each step: will the reader know what to do, and know it worked?) and first-click testing; that repo has no task-based method. Rules that assume English or server rendering were dropped or adapted (see the notes in `references/code-checklist.md`).
 
 **Deliberately not used from `ui-ux-pro-max-skill`:** its style, palette, font-pairing and "generate a design system" engine. Argos already has a fixed design system (5 themes, Literata and Public Sans, the token scale), and a generator would pull toward a different look per run. Its stack guides (Tailwind, Vue, Flutter, SwiftUI) don't apply either.
