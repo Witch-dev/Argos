@@ -225,7 +225,7 @@ The MVP was built in this order. `backend-tasks/` and `frontend-tasks/` refer to
 - **Phase 3 — Logging & ratings:** `Logs` CRUD, profile shelves, history and stats
 - **Phase 4 — Social:** follows, the query-derived feed, user search
 - **Phase 5 — Lists:** `Lists`/`ListItems`, public list pages
-- **Phase 6 — MVP polish:** responsive pass. Deploying and the closed beta moved to `ROADMAP.md` (Stage 4 onward)
+- **Phase 6 — MVP polish:** responsive pass. Deploying and early access (first planned as a closed beta) moved to `ROADMAP.md` (Stage 4 onward)
 
 ## 10. Open Decisions
 

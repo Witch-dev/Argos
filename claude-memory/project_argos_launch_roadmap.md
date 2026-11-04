@@ -1,6 +1,6 @@
 ---
 name: project-argos-launch-roadmap
-description: "Argos/ROADMAP.md is the ordered plan to closed beta then public launch; it decides build order, not SPEC.md's Next up list"
+description: "Argos/ROADMAP.md is the ordered plan to early access (open sign-ups, was closed beta) then public launch; it decides build order, not SPEC.md's Next up list"
 metadata:
   node_type: memory
   type: project
@@ -8,7 +8,7 @@ metadata:
   modified: 2026-10-22T18:40:24.758Z
 ---
 
-Argos/ROADMAP.md (written 2026-10-06) is the agreed work order to launch: Stage 0 cleanup (CI, reconcile account spec, P2 bugs) → accounts → import → phone pass → go live → 🚩 closed beta → notifications → export/delete → safety/moderation → private accounts → stats → launch checklist → 🚀 public launch. Supporting docs: PRODUCT-ANALYSIS.md (research), SPEC.md §4 "Next up" (points to the roadmap).
+Argos/ROADMAP.md (written 2026-10-06) is the agreed work order to launch: Stage 0 cleanup (CI, reconcile account spec, P2 bugs) → accounts → import → phone pass → go live → 🚩 early access (was closed beta) → notifications → export/delete → safety/moderation → private accounts → stats → launch checklist → 🚀 public launch. Supporting docs: PRODUCT-ANALYSIS.md (research), SPEC.md §4 "Next up" (points to the roadmap).
 
 **2026-10-22 change:** the closed beta became open "early access": invites put off the few interested people, so sign-ups open now (bot check first, then `Registration__InviteOnly=false`). The invite code stays as an emergency close switch. Don't plan new invite features or treat the site as invite-only.
 

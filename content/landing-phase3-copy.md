@@ -1,6 +1,6 @@
 # Landing page Phase 3: copy round
 
-Draft 1, 2026-10-20. Every line readers see on the new landing page, in English and Spanish, for review before any markup (`specs/landing-page.md`, Phase 3). The German, French and Portuguese versions are written after you approve this, from the approved English.
+Draft 1, 2026-10-20. *Since 2026-10-22 sign-ups are open: the invite buttons and the access note below only show if invite-only is switched back on.* Every line readers see on the new landing page, in English and Spanish, for review before any markup (`specs/landing-page.md`, Phase 3). The German, French and Portuguese versions are written after you approve this, from the approved English.
 
 How to review: mark lines **OK**, rewrite them, or cross them out. Lines marked **(kept)** are already live and unchanged. Demo texts are made-up sample content, like today's.
 

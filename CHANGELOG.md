@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-04 — Planning docs brought up to date with open sign-ups (no more "closed beta" / invite-only as the current state): roadmap gaps table, stage rows and boxes, marketing §3/§7/§8, status lines on the two invite specs, landing Phase 3 notes, two bug notes, social-content skill → ROADMAP.md (🚩 Early access), MARKETING.md
 - 2026-11-04 — New `social-content` skill for Instagram/TikTok posts (Spanish first, design canvas, caption + alt text + hashtags, check pass), built on Corey Haines' marketingskills `social` skill copied unchanged; hashtags capped at 5 per post → .claude/skills/social-content/SKILL.md
 - 2026-11-04 — Log form warns "This book is already in your journal" (re-read / mark finished / edit the one I have) → specs/book-actions-and-author-languages.md (Phase 2)
 - 2026-11-04 — "⋯" menu on your own books (profile shelves, favourites, Books home, list Shelf view, book page): Edit, Delete from my books, Remove from … → specs/book-actions-and-author-languages.md (Phase 1)

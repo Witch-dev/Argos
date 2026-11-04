@@ -1,6 +1,6 @@
 # Feature Spec — Invite-only sign-up
 
-**Status:** ✅ Done (2026-10-07). Roadmap Stage 1, last task.
+**Status:** ✅ Done (2026-10-07). Roadmap Stage 1, last task. **Switched off since 2026-10-22:** sign-ups are open (`ROADMAP.md`, 🚩 Early access); the code stays as an emergency close switch. Read this spec as how that switch works, not as the current state.
 
 ## 1. Problem
 

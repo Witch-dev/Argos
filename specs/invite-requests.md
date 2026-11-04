@@ -1,6 +1,6 @@
 # Feature Spec — Request an invite
 
-**Status:** ✅ Done 2026-10-19 (all three phases). Roadmap Stage 4 (before the closed beta starts). Left for deploy: set `Admin__UserIds__0` on Render (`DEPLOY.md`, "Admin role").
+**Status:** ✅ Done 2026-10-19 (all three phases). Roadmap Stage 4 (before the closed beta starts). **Dormant since 2026-10-22:** sign-ups are open, so the form and its endpoint are off (they only exist while `Registration:InviteOnly` is on). The admin role it added is in use by reports, feedback, What's new and stats. Left for deploy: set `Admin__UserIds__0` on Render (`DEPLOY.md`, "Admin role").
 
 ## 1. Problem
 

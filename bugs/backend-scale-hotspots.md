@@ -2,7 +2,7 @@
 
 **Priority:** P3 · **Size:** M (each item S–M) · **Area:** Backend, performance · **Found:** 2026-10-21 (Stage 10 whole-backend review)
 
-None of these hurts at closed-beta size. They're kept together because they're the same kind of problem and will be found together when something gets slow. Fix the one that shows up first (Render's metrics or Sentry's slow transactions), not all at once.
+None of these hurts at early-access size. They're kept together because they're the same kind of problem and will be found together when something gets slow. Fix the one that shows up first (Render's metrics or Sentry's slow transactions), not all at once.
 
 ## The list
 

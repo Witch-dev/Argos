@@ -1,6 +1,6 @@
 # Argos — Marketing plan
 
-Written 2026-10-07. Planning only; nothing here is built. It follows the two launches in `ROADMAP.md`: a closed beta (10–30 invited readers), then a public launch. Features that need building go into `ROADMAP.md` or a spec first.
+Written 2026-10-07. Planning only; nothing here is built. It follows the two launches in `ROADMAP.md`: early access (first planned as a closed beta of 10–30 invited readers; open sign-ups since 2026-10-22), then a public launch. Features that need building go into `ROADMAP.md` or a spec first.
 
 **One-line pitch (draft):** "Letterboxd for books: log, rate, review and share what you read."
 Still to decide: what makes Argos different from Goodreads and StoryGraph (candidates: a nicer social side, lists, book clubs, original-language covers and an edition picker from `FUTURE-IDEAS.md`).
@@ -124,8 +124,8 @@ Sizes to offer: 9:16 (Stories/TikTok/Shorts, 1080×1920), 4:5 (Instagram feed, 1
 
 Suggested size: **M**. Needs a spec (`specs/share-cards.md`) and an `argos-security` review because it exposes content to the public and logged-out visitors.
 
-## 3. Closed beta (Stage 4 onward)
-1. Invite readers one at a time. The invite links (5 per reader) already exist; ask each beta reader to invite one friend.
+## 3. Early access (open sign-ups since 2026-10-22)
+1. Anyone can sign up; no invite is needed. Ask each early reader to bring one friend, with a shared link (`specs/shareable-pages.md`) rather than an invite code.
 2. Start in small reading communities: a friend group, a book club, a university or workplace reading circle. Aim for 30 people who care, not 300 who don't.
 3. Collect feedback, screenshots and quotes as you go. They are reused at launch.
 4. Answer every message personally.
@@ -135,7 +135,7 @@ Suggested size: **M**. Needs a spec (`specs/share-cards.md`) and an `argos-secur
 - **BookTok, Bookstagram, BookTube**: small creators (1k–20k followers). Offer early access and ask for honest opinions, not a paid promo. Share cards are what make this easy for them.
 - **Product Hunt, Show HN, Indie Hackers**: a burst of tech-savvy users and feedback. Not the core audience.
 - **A short launch story**: "I built a Letterboxd for books."
-- Launch Reddit and Product Hunt in the same week, with the beta quotes ready.
+- Launch Reddit and Product Hunt in the same week, with the early-access quotes ready.
 
 ## 5. Ongoing
 - **Year in books** (Wrapped) in December: the most shareable thing Argos can ship.
@@ -148,9 +148,9 @@ Paid ads, press releases and a large social media presence of our own. They cost
 
 ## 7. Order
 1. Finish import, the phone experience, and spec + build share cards.
-2. Run the closed beta with 20–30 readers; collect quotes.
+2. Run early access (open sign-ups) until 20–30 readers use it; collect quotes.
 3. Public launch: Reddit + Product Hunt the same week, plus a handful of small creators.
 4. Ship "Year in books" in December and push it.
 
 ## 8. How we'll know it's working
-Keep it simple, no tracking beyond what Argos already has: sign-ups per week, share-button taps, sign-ups that came in through an invite or a shared link, and how many beta readers log a second book in their first week. Decide the real numbers when the beta starts.
+Keep it simple, no tracking beyond what Argos already has: sign-ups per week, share-button taps, sign-ups that came in through a shared link, and how many early-access readers log a second book in their first week. Decide the real numbers now that early access has started.

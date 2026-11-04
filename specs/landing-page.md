@@ -333,7 +333,7 @@ Asked on 2026-10-20 while preparing to recruit early-access readers from Reddit 
 **Opening**
 - **Headline (one for both sides):** "Track your reading for yourself. Share it when you feel like it."
 - **The lead line changes with the side** (drafts to write in the copy round).
-- Actions and the access note stay (Have an invite? Join / Request an invite / Log in).
+- Actions and the access note stay (Have an invite? Join / Request an invite / Log in). *(Only while invite-only is on. Since 2026-10-22 sign-ups are open, so the page shows a plain join button and Log in, without the access note.)*
 - **The switch sits in the opening, under the headline and buttons**, labelled **Books / Community** (the app's own names, `sections.books` / `sections.community`). **Books is open on arrival.** No link parameter to open Community directly (kept simple).
 - **Once scrolled past, the switch pins to the top bar** on every screen size, between the logo and Log in.
 - **The shelf beside the headline changes with the side.** Books: your own shelf (one book being read, two read and rated, as today). Community: friends' books, each cover with a friend's name and how far they are ("Maya, page 214"), like the Readings strip.

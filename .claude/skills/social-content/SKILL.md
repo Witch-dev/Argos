@@ -23,7 +23,7 @@ The person posting is one independent maker with a small account. Write as that 
 ## Step 1 — The brief
 
 Ask only what isn't clear from the request (one short question at most):
-- **Goal:** recruit beta readers, show one feature, a reading prompt that invites replies, a seasonal moment (year in books in Dec/Jan), or an update.
+- **Goal:** recruit early-access readers (anyone can sign up, no invite), show one feature, a reading prompt that invites replies, a seasonal moment (year in books in Dec/Jan), or an update.
 - **Format:** carousel (1080×1350, 4–8 slides), single post (1080×1350), story (1080×1920), Reel/TikTok (script + shot list, 9:16). Instagram first; TikTok reuses the same material.
 - **One idea per post.** If the request holds three features, suggest three posts.
 
