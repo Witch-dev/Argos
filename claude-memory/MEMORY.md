@@ -23,3 +23,4 @@
 - [Render DB paid plan](project_render_db_paid_plan.md) — free DB deleted ~2026-11-12; user moving to paid plan first week of Nov; remind if not done
 - [Python edits via a file](feedback_python_edits_via_file.md) — multi-line edit scripts in a scratchpad .py, not a heredoc; build text before open(p,'w')
 - [Live incidents log](project_live_incidents_log.md) — Render alerts/outages written up in DEPLOY.md "Incidents on the live site"; read it first on a new alert
+- [Spanish first](project_spanish_speaking_users.md) — 2026-11-03: promotion leads in Spanish, English second, one account; rules in MARKETING.md

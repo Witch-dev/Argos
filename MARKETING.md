@@ -47,6 +47,20 @@ Written while preparing to recruit beta readers from Reddit and book communities
 - **"Five languages"**, until Portuguese, German and French have been checked by a person.
 - Any number, quote or testimonial we don't have (`PRODUCT.md`, "Evidence on Hand").
 
+### Language focus: Spanish first (decided 2026-11-03)
+
+Most early readers come from Spanish-speaking countries, so promotion leads in Spanish and keeps English second. Reasons: grow where readers already are; Community works best when people can read each other's reviews; Spanish is one of the two checked languages, so it can be advertised.
+
+- **One account, not one per language**, so followers and comments stay together.
+- **Images:** Spanish versions first. Posts with a lot of text (carousels, stories) get an English version too, posted as extra slides after the Spanish ones or as the next story.
+- **Captions:** Spanish first, then a dividing line (———), then a short English version.
+- **Hashtags:** 3–5 per post in total (Instagram and TikTok allow at most 5), picked from both pools, usually 3 Spanish + 1–2 English. Spanish: #bookstagramespañol #booktokespañol #libros #lectura #clubdelectura #recomendacionesdelibros. English: #bookstagram #readingjournal #bookclub.
+- **Neutral Spanish** (tú, no Spain-only or country-only words), like the site, since readers come from Spain and Latin America.
+- **Bio (Instagram, under 150 characters):** "Lleva el registro de tus lecturas para ti. Compártelo cuando quieras. 📚 Gratis, sin anuncios. Acceso anticipado ↓"
+- **Expect missing books:** Open Library has more gaps for Spanish editions (see Weaknesses). Say so in a post and point to reporting a wrong book.
+
+The first round of posts, in both languages with captions, alt text and the bio, is the design canvas https://claude.ai/artifact/4LgPkkNVJfQfcDbPg3wpq6 (pages Español, English, Perfil). Covers on it are only the public-domain title pages from the landing page, never Open Library covers of modern books.
+
 ## 1. What to have before promoting anything
 
 | Item | Why | Roadmap link |

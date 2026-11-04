@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-04 — New `social-content` skill for Instagram/TikTok posts (Spanish first, design canvas, caption + alt text + hashtags, check pass), built on Corey Haines' marketingskills `social` skill copied unchanged; hashtags capped at 5 per post → .claude/skills/social-content/SKILL.md
 - 2026-11-04 — Log form warns "This book is already in your journal" (re-read / mark finished / edit the one I have) → specs/book-actions-and-author-languages.md (Phase 2)
 - 2026-11-04 — "⋯" menu on your own books (profile shelves, favourites, Books home, list Shelf view, book page): Edit, Delete from my books, Remove from … → specs/book-actions-and-author-languages.md (Phase 1)
 - 2026-11-04 — Author page: books not cached here now show their title in the site language (edition-title lookup as in search) → Apollon 8a1a0f1
