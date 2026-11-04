@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-04 — Log form warns "This book is already in your journal" (re-read / mark finished / edit the one I have) → specs/book-actions-and-author-languages.md (Phase 2)
 - 2026-11-04 — "⋯" menu on your own books (profile shelves, favourites, Books home, list Shelf view, book page): Edit, Delete from my books, Remove from … → specs/book-actions-and-author-languages.md (Phase 1)
 - 2026-11-04 — Author page: books not cached here now show their title in the site language (edition-title lookup as in search) → Apollon 8a1a0f1
 - 2026-11-04 — ux-review now leads with usability: a "tasks" mode where a fresh agent that hasn't seen the code tries reader tasks in a real browser (`scripts/walk.mjs`) and each failure is explained as wording, placement, inconsistency or feedback; "Finding things" rules in the visual checklist; the visual pass moved to a Sonnet agent → .claude/skills/ux-review/references/task-walk.md

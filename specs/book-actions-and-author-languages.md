@@ -52,7 +52,10 @@ When the reader opens `LogForm` for a book **they already have a log of** with s
 - Want to read logs don't count: moving a book from Want to read to Read is the normal path, not a duplicate.
 - The data is already on the page (`useMyLogs` on the book page; `ProfileAddBook` gets `logs`), so no new request is made.
 - Where it applies: the book page's "Log this / Log again", and `ProfileAddBook` when it creates a new log rather than moving one. The quick buttons (`BookQuickLog`'s "Finished!") already finish the current log and don't need it. Imports keep their own duplicate handling.
-- If the existing log is **Currently reading** and the reader is logging Read, the notice says so ("You're reading this one now") and the first button is **Mark it finished** (updates that log, as `BookQuickLog` does) instead of "It's a re-read". The developer should check what `LogService` does today when a Read log is created while a reading one exists, and note it here.
+- If the existing log is **Currently reading** and the reader is logging Read, the notice says so ("You're reading this one now") and the first button is **Mark it finished** (updates that log, as `BookQuickLog` does) instead of "It's a re-read". 
+  - **What `LogService` does today (checked 2026-11-04):** `CreateAsync` makes no check for an existing log of the book. A Read log created while a Currently reading one exists is saved as a second log, and the reading one stays on the Currently reading shelf until the reader finishes or deletes it. Nothing is merged or finished for them, which is why the notice offers "Mark it finished".
+  - **Built as:** the notice lives in `LogForm` (props `existingLogs`, `onEditExisting`). The Currently reading wording appears as soon as the form's status is Read, so it follows the status select. "Edit the one I have" is handed to the book page, which closes the form and opens `EditLogDialog`.
+  - **`ProfileAddBook` not covered:** it never opens `LogForm` to create; its one-tap buttons already disable the shelf the book is on. A tap of "Read" on a book being read still makes a second log. If that matters, it needs its own small confirm, not this notice.
 
 ### 2.3 An author's books in one language
 
@@ -104,14 +107,14 @@ Each phase in its own session. Opus at medium effort for all three; Phase 3 touc
 ### Phase 2 — "You already have this book" (frontend only)
 
 #### Frontend
-- [ ] Check `LogService` for a Read log created while a Currently reading one exists; write what happens in §2.2
-- [ ] The notice in `LogForm` with its three buttons, fed the reader's existing logs of the book (book page, `ProfileAddBook`)
-- [ ] The Currently reading variant (Mark it finished)
-- [ ] Keys in all five languages
-- [ ] Tests: no notice for a new book or Want to read only; the notice for Read and Stopped; each button's outcome
+- [x] Check `LogService` for a Read log created while a Currently reading one exists; write what happens in §2.2
+- [x] The notice in `LogForm` with its three buttons, fed the reader's existing logs of the book (book page done; `ProfileAddBook` left out, see §2.2)
+- [x] The Currently reading variant (Mark it finished)
+- [x] Keys in all five languages
+- [x] Tests: no notice for a new book or Want to read only; the notice for Read and Stopped; each button's outcome
 
 #### Verification
-- [ ] `npm test`, `npm run build`, `npm run lint`
+- [x] `npm test`, `npm run build`, `npm run lint`
 - [ ] `/browser-check`: "Log again" on a finished book shows the notice; "It's a re-read" saves a re-read; "Edit the one I have" opens the edit dialog
 - [ ] `reviewer`
 
