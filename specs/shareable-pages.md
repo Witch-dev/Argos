@@ -1,6 +1,6 @@
 # Feature Spec — Shareable pages
 
-**Status:** Phase 1 built 2026-10-24, Phase 2 and Phase 3 built 2026-10-25 (build notes in §5, §6 and §7); Phase 3's live checks wait for the deploy. Planned 2026-10-24, decisions asked the same day (§2.1). Three phases: Phase 1 (book, list, club for visitors, size M–L), Phase 2 (review, profile, author for visitors, size M), Phase 3 (link preview cards, English and Spanish, size M).
+**Status:** Phase 1 built 2026-10-24, Phase 2 and Phase 3 built 2026-10-25 (build notes in §5, §6 and §7); Phase 3's live checks wait for the deploy. Planned 2026-10-24, decisions asked the same day (§2.1). Phase 4 (Writings as a seventh shareable page, size S–M) added 2026-11-05. Three phases: Phase 1 (book, list, club for visitors, size M–L), Phase 2 (review, profile, author for visitors, size M), Phase 3 (link preview cards, English and Spanish, size M).
 
 ## 1. Problem
 
@@ -143,6 +143,31 @@ Sign-ups are open (early access) and private accounts are done (Stage 8), so a v
 - [x] `argos-security` review (new anonymous endpoint, nginx proxy). Also a `reviewer` pass (§7).
 - [x] Live: `curl -A "redditbot" https://wingedwords.app/books/OL…` and `/es/books/OL…` return the book's tags; a normal browser still gets the app. *Passed 2026-10-25 (OL45804W, English and Spanish, `Vary: User-Agent`; the first try gave the generic card because the book had never been loaded, as designed).*
 - [ ] Paste one link of each kind into a chat with yourself (Discord or WhatsApp) and into Reddit's post preview. Use links not shared before: Reddit and chat apps keep old cards for a while.
+
+### Phase 4 — Writings (added 2026-11-05)
+
+A Writing already opens for a visitor (`/writings/:id` is not behind a login; `GET /api/writings/{id}` is anonymous; `WritingAccess.CanViewAsync` shows it when the writer's account is public and nobody is blocked), but it is the one kind of reader-made page without a Share button, a preview card or a visitor card. Checked 2026-11-05. Same rules as the other six pages, so it becomes the seventh. *Size S–M.*
+
+Decisions I made, for the user to confirm:
+- **Share button** on the full-page Writing (`WritingDetailModal`, fullscreen) and on the Writing card's menu, as on a review. Same copy-or-share-sheet behaviour and `/es` link.
+- **Visitor card** near the top, one line tied to the page ("Read more writing like this, and write your own"), and every reader button shown: Like, Comment, Follow the writer, each asking to sign up through `SignupBox`. The `like`, `comment` and `follow` words already exist, so no new words.
+- **Preview card:** "*Name* on Winged Words" with the opening lines of the Writing (up to the first `||spoiler||`, or "This writing has spoilers…" when marked), cut the same way as reviews. The writer's avatar, or the book's cover when the Writing is about a book. A private account, a hidden Writing, a blocked or unknown id: the generic card, as for the others. English and Spanish.
+- **Not in the sitemap yet.** Whether Writings go in `specs/search-engines.md` Phase 2 is decided there, not here.
+
+#### Backend
+- [ ] Card endpoint accepts `/writings/<id>`: uses `WritingAccess.CanViewAsync(writing, null)` and not hidden; escaped, opening lines cut at the first spoiler marker; English and Spanish text in `ShareCardTexts`.
+- [ ] Tests: private account → generic card; hidden Writing → generic card; spoiler-marked → no text; unknown id → generic card; `<`, `"`, `&` escaped.
+
+#### Frontend
+- [ ] Share button on the full-page Writing and in the card menu; `splitSharePath` and `sharePath` handle `/writings/<id>`.
+- [ ] Visitor card and the buttons through `SignupBox` (Like, Comment, Follow the writer); check first what a visitor sees today.
+- [ ] nginx: add `/writings/<id>` (with and without `/es`) to the bot `map` and location.
+- [ ] Translations in all five locales.
+
+#### Verification
+- [ ] `argos-security` (the card endpoint reads a new kind) and `reviewer` pass.
+- [ ] Browser check as a visitor: open a Writing, Like and Comment each ask to sign up and are done afterwards; a private account's Writing shows nothing.
+- [ ] Live: `curl -A "redditbot" https://wingedwords.app/writings/<id>` returns the Writing's tags; paste a link into Discord, WhatsApp and Reddit's preview.
 
 ## 5. Build notes (Phase 1, 2026-10-24)
 

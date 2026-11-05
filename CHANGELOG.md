@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-05 — Spec: Writings become the seventh shareable page (Share button, preview card, visitor card); write-first-signup drops its Writings phase → specs/shareable-pages.md Phase 4
+- 2026-11-05 — Spec written: visitors write a review or comment first and are asked to sign up when they press Publish; draft kept in the browser and restored after sign-up → specs/write-first-signup.md
 - 2026-11-05 — Content language Phase 3: Reviews, Writings, a book's reviews and an author's quotes show the reader's languages first, then "In other languages (N)" with a language tag on each item; "Change" language on your own review and writing; "Languages I read" in Settings → Profile; five languages → specs/content-language.md, Apollon 3b18ea6
 - 2026-11-05 — API image takes Ubuntu's security fixes at build time (`apt-get upgrade` in the runtime stage), so Trivy stops failing each time Ubuntu publishes a fix before Dependabot bumps the pinned digest; the trigger was apt CVE-2026-109518 failing Security run #116 → Apollon 2e5e592
 - 2026-11-05 — Live database dropped out at 3:26 PM ("Postgres is not reachable"), Render restarted the API; `wingedwords-db` moved to Render's paid plan the same day (backups, no 30-day deletion); health check and retries left as they are → DEPLOY.md "Incidents on the live site"
