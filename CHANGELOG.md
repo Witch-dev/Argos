@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-05 — Live database dropped out at 3:26 PM ("Postgres is not reachable"), Render restarted the API; `wingedwords-db` moved to Render's paid plan the same day (backups, no 30-day deletion); health check and retries left as they are → DEPLOY.md "Incidents on the live site"
+
 - 2026-11-05 — Content language Phase 2: "languages I read" setting, `languages=mine|other` + `OtherLanguagesCount` on the Reviews and Writings lists, landing page in the visitor's language → specs/content-language.md, Apollon bda6c00
 - 2026-11-04 — Content language Phase 1: reviews and writings get a language label (guessed on save, writer can pick, startup backfill labels old rows) → specs/content-language.md, Apollon bda6c00
 - 2026-11-04 — Posting limits: per-reader caps on posts and comments (30 per 10 min), logs (60 per 10 min), likes and votes (60 a minute), follows and invites (50 an hour, club invites counted per reader invited) and making clubs, lists and plans (20 an hour), each with its own message in five languages → specs/posting-limits.md

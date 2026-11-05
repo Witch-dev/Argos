@@ -20,7 +20,7 @@
 - [Restyle direction](project_design_restyle_direction.md) — approved mockup 2026-10-16: cream page stays, shelf effect is the signature; DESIGN.md first, then tokens and pieces
 - [Translations checked](project_translations_checked.md) — only English and Spanish reviewed by the user; don't advertise five languages yet
 - [Push as its own command](feedback_push_as_own_command.md) — git push of Apollon in a separate call; the precheck hook skipped one chained after a heredoc commit
-- [Render DB paid plan](project_render_db_paid_plan.md) — free DB deleted ~2026-11-12; user moving to paid plan first week of Nov; remind if not done
+- [Render DB paid plan](project_render_db_paid_plan.md) — DONE 2026-11-05: live DB and API both on paid Render plans; a backup test restore is still owed
 - [Python edits via a file](feedback_python_edits_via_file.md) — multi-line edit scripts in a scratchpad .py, not a heredoc; build text before open(p,'w')
 - [Live incidents log](project_live_incidents_log.md) — Render alerts/outages written up in DEPLOY.md "Incidents on the live site"; read it first on a new alert
-- [Spanish first](project_spanish_speaking_users.md) — 2026-11-03: promotion leads in Spanish, English second, one account; rules in MARKETING.md
+- [Spanish only, Latin American](project_spanish_speaking_users.md) — 2026-11-04: posts in Spanish only for now, leaning Latin American, wingedwords.app on slides; rules in MARKETING.md

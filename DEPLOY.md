@@ -174,7 +174,7 @@ Everything is in one Render account, region **Virginia (US East)**. The domain i
 
 | Piece | Render service | Notes |
 |---|---|---|
-| Database | PostgreSQL `wingedwords-db` | **Free plan: deleted after 30 days.** Move to the paid plan (~$6–7/month) before real readers join. |
+| Database | PostgreSQL `wingedwords-db` | **Paid plan since 2026-11-05** (was the free plan, which deletes a database after 30 days and has no backups). Paid includes Render's automatic backups; one real test restore is still on the ROADMAP. |
 | API | Web service `wingedwords-api`, Docker, `./Dockerfile` (repo root) | Health check path `/health`. **Paid Starter plan ($7, since 2026-10-31):** no sleeping, and Metrics → Memory is available. Runs the database migrations itself on start. |
 | Site | Web service `wingedwords-web`, Docker, root directory `web`, `web/Dockerfile` | Docker rather than a static site on purpose: the nginx image writes `config.js` and the security headers (CSP) at startup. |
 
@@ -212,6 +212,18 @@ On the site service: `API_BASE_URL` = `https://api.wingedwords.app/api` (a plain
 
 Newest first. What happened, what we found, and what we decided, so the next one starts from here.
 
+### 2026-11-05: the database dropped out, Render restarted the API
+
+- **What we saw:** the event "Instance failed: 5jcjl. HTTP health check failed with status code 503 while running your code" at 3:27 PM.
+- **What the log showed:** at 3:26:35 the import worker's 2-second check failed inside `ImportProcessingService.NextJobIdAsync`, and in the same second `Health check postgres with status Unhealthy completed after 2.6977ms with message 'Postgres is not reachable.'` Failing in under 3 ms means the connection was refused or dropped at once, not slow. `/health` includes the database, so it answered 503, and Render restarted the instance at 3:27:10. On the new start the database answered straight away ("No migrations were applied. The database is already up to date."). The `libgssapi_krb5.so.2` error is the usual harmless start-up noise.
+- **Ruled out:** a bad deploy (the newest commit, Apollon `bda6c00`, was made at 15:57, after the failure, so the live code was older and had been running fine) and memory (a clean database error, not an out-of-memory kill).
+- **Cause:** the database itself, still on Render's **free** Postgres plan. Together with the 2026-10-26 freeze, that's two drop-outs in ten days with the API code fine both times.
+- **Decisions:**
+  - **`wingedwords-db` moved to the paid plan the same day.** This also gives automatic backups (the free plan had none) and removes the deletion due around 2026-11-12.
+  - **Health check unchanged** (still includes the database, as decided on 2026-10-26). Render waited about 35 s before restarting, so the database was likely down longer than a blip, and the restart gives fresh connections.
+  - **No automatic retries for now.** EF Core's `EnableRetryOnFailure` makes every explicit `BeginTransaction` throw unless it's wrapped in `Database.CreateExecutionStrategy()`, and there are 21 of those (clubs, blocks, follows, account erasure, Google login…). Too much change in sensitive code to work around a database that was being replaced.
+- **If it happens again on the paid plan:** check `wingedwords-db` → Events/Logs at that minute for maintenance or a restart. If drop-outs repeat, add retries (wrapping the transactions in the execution strategy) and look at `Keepalive` / `Timeout` in `Database__ConnectionString`.
+
 ### 2026-10-26 (later the same day): "exceeded its memory limit"
 
 - **What we saw:** an email from Render, "Web Service wingedwords-api exceeded its memory limit", and an automatic restart. The second restart that day, so the freeze below was probably the same thing: just before running out, the garbage collector (the part of .NET that frees unused memory) runs almost nonstop and the app stops answering.
@@ -244,7 +256,7 @@ Newest first. What happened, what we found, and what we decided, so the next one
   - **Keep the health check on `/health`, which includes the database.** We considered a light `/health/live` that skips the database, so a database stall wouldn't restart the API. We decided against it. The restart may be what fixed things (it replaced database connections that might have gone dead). And with a light check, readers would get errors from a frozen API that Render leaves running.
   - **The import worker's 2-second check stays.** Idle, it costs about 1 ms of database time per check (under a minute a day), and it lets an import start almost at once.
   - **Routine database queries no longer go to the production log** (Apollon `3ba87d8`). Failed queries still show, as errors. So the next time it happens, the lines around the freeze will be readable.
-  - **The real fix if it's the database:** move `wingedwords-db` to the paid plan (planned for the first week of November 2026; the free one is deleted around 2026-11-12).
+  - **The real fix if it's the database:** move `wingedwords-db` to the paid plan. **Done 2026-11-05**, after the next drop-out (above).
 - **If it happens again:** check Metrics → Memory, and read the log for the minute before the freeze. If it repeats while memory stays flat, revisit the light health check, or connection settings such as `Timeout` / `Keepalive` in `Database__ConnectionString`.
 
 **First-account recipe** (only if invite-only is on and no readers exist, so nobody can create an invite): set `Registration__InviteOnly` to `false`, register, set it back to `true`, and check that the confirmation email arrives.
