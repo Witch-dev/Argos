@@ -1,6 +1,6 @@
 # Feature Spec — Reviews and writings in the reader's language first
 
-**Status:** planned 2026-11-04. Three phases: Phase 1 (server: language on reviews and writings, backfill), M. Phase 2 (server: "Languages I read" and sorting), M. Phase 3 (browser), M.
+**Status:** planned 2026-11-04. Phase 1 built 2026-11-04. Phase 2 built 2026-11-05. Three phases: Phase 1 (server: language on reviews and writings, backfill), M. Phase 2 (server: "Languages I read" and sorting), M. Phase 3 (browser), M.
 
 ## 1. Problem
 
@@ -34,7 +34,7 @@ The site supports five languages (en, es, pt-BR, de, fr), and they're easy to te
 ### 3.2 Data (Phase 1)
 
 - `Log.ReviewLanguage` (string?, max 5) and `Writing.Language` (string?, max 5): one of `SupportedLanguages.Codes`, or null when there's no text (a rating-only log).
-- Set on create and on edit when the text changes, unless the request names a language. In that case, use the named one (it must be in `SupportedLanguages.Codes`, otherwise 400 with a new error code `content.badLanguage`).
+- Set on create and on edit when the text changes, unless the request names a language. An edit that leaves the text unchanged keeps the stored label (so a writer's pick survives a rating-only edit); the server can't tell a pick from a guess, so when the text changes it guesses again unless the request names a language, and the Phase 3 "Change" link must send `Language`. In that case, use the named one (it must be in `SupportedLanguages.Codes`, otherwise 400 with a new error code `content.badLanguage`).
 - `CreateWritingRequest` / `UpdateWritingRequest` and the log create/update requests get an optional `Language`. `ReviewDto` and `WritingDto` get `Language`.
 - A null language counts as matching every reader (no text, nothing to read).
 - **Backfill:** `ContentLanguageBackfill.RunAsync`, run at startup after migrations like `BookGenreBackfill`. It labels every log with review text and no `ReviewLanguage`, and every writing with no `Language`, using the writer's `PreferredLanguage` as the fallback. After the first run it finds nothing. It works in batches of ~500 so a large table doesn't load at once.
@@ -64,26 +64,35 @@ The site supports five languages (en, es, pt-BR, de, fr), and they're easy to te
 ### Phase 1 — Language on reviews and writings (server)
 
 #### Backend
-- [ ] `ContentLanguage` guess (§3.1), with unit tests: a clear sentence in each of the five languages, Spanish vs Portuguese pairs, short text ("10/10 🔥") falling back, mixed text, empty text.
-- [ ] `Log.ReviewLanguage`, `Writing.Language`, migration.
-- [ ] Set on create and edit, accept an optional `Language` from the writer, `content.badLanguage` code and translations, `Language` on `ReviewDto` and `WritingDto`.
-- [ ] `ContentLanguageBackfill` at startup (§3.2).
-- [ ] Integration tests: posting labels it; editing the text re-guesses it; a writer's choice wins and survives an edit that doesn't name a language; a bad code is refused; the backfill labels old rows and leaves rating-only logs null.
+- [x] `ContentLanguage` guess (§3.1), with unit tests: a clear sentence in each of the five languages, Spanish vs Portuguese pairs, short text ("10/10 🔥") falling back, mixed text, empty text.
+- [x] `Log.ReviewLanguage`, `Writing.Language`, migration.
+- [x] Set on create and edit, accept an optional `Language` from the writer, `content.badLanguage` code and translations, `Language` on `ReviewDto` and `WritingDto`.
+- [x] `ContentLanguageBackfill` at startup (§3.2).
+- [x] Integration tests: posting labels it; editing the text re-guesses it; a writer's choice wins and survives an edit that doesn't name a language; a bad code is refused; the backfill labels old rows and leaves rating-only logs null.
 
 #### Verification
-- [ ] `reviewer`, then `argos-security` (user input reaching the server).
-- [ ] Run the guess over the live reviews' text locally (exported, not committed) and check a sample by eye before Phase 2.
+- [x] `reviewer`, then `argos-security` (user input reaching the server).
+- [x] Run the guess over the live reviews' text locally (exported, not committed) and check a sample by eye before Phase 2. (Replaced 2026-11-05: there are under 10 live reviews, all Spanish, so instead 41 hand-written reviews in the five languages were run through `ContentLanguage`, including casual Spanish, Spanish vs Portuguese pairs, mixed text and very short text. 34 correct, 0 wrong, 7 unsure and left to the writer's site language: one-word reviews, "10/10 🔥", and three short sentences with fewer than 4 common words. Spanish writers on the English site would get those labelled `en` until they use "Change". Look at the real language tags once Phase 3 shows them.)
 
 ### Phase 2 — Reader's languages and sorting (server)
 
 #### Backend
-- [ ] `ApplicationUser.ReadingLanguages`, migration, preferences request and response, validation.
-- [ ] `languages=mine|other` and `OtherLanguagesCount` on the endpoints in §3.3; landing page `mine` with fallback.
-- [ ] Integration tests: an English reader gets English and no-text items in `mine`, Spanish in `other`; a reader with en+es gets both in `mine`; a visitor uses the request's language; Following and profile lists ignore the parameter; paging still works in both parts; blocked and hidden rules still apply in `other`.
-- [ ] Check the query plans on a copy with realistic row counts; add an index only if needed.
+- [x] `ApplicationUser.ReadingLanguages`, migration, preferences request and response, validation.
+- [x] `languages=mine|other` and `OtherLanguagesCount` on the endpoints in §3.3; landing page `mine` with fallback.
+- [x] Integration tests: an English reader gets English and no-text items in `mine`, Spanish in `other`; a reader with en+es gets both in `mine`; a visitor uses the request's language; Following and profile lists ignore the parameter; paging still works in both parts; blocked and hidden rules still apply in `other`. (`ContentLanguageListTests`. Items with no label are tested with blank-text reviews, because the startup backfill labels any unlabelled review that has text, including while another test class starts up on the shared test database.)
+- [x] Check the query plans on a copy with realistic row counts; add an index only if needed. Done 2026-11-05 on a scratch database of synthetic data (2,000 readers, 150,000 logs of which about 102,000 with review text, 60,000 writings, 52,000 review likes and 40,000 writing likes; 85% Spanish, 10% English, 3% Portuguese, the rest unlabelled), since dropped. **No index added.** Times for one page of 21, in ms:
+
+  | | Reviews Recent | Reviews Popular | Writings Recent | Writings Popular |
+  |---|---|---|---|---|
+  | Before this feature (no language filter) | 94 | 340 | 33 | 155 |
+  | `mine` (English reader) | 31 | 65 | 10 | 24 |
+  | `other` | 88 | 304 | 24 | 145 |
+
+  The count of the other languages (capped at 100) takes 0.4–0.5 ms, and 10–24 ms in the worst case, when nothing matches and it reads every row. The language filter adds nothing to the cost: `mine` is faster than before (fewer rows to sort) and `other` is about the same. A language index wouldn't help, because the filter keeps most rows.
+  **Seen on the way, not caused by this feature:** every Recent and Popular list reads and sorts all visible rows on each request (a sequential scan, then a top-N sort). That is fine at today's size and costs 0.1–0.3 s at about 100,000 reviews. Popular is the slowest, since it counts likes for every row. If the lists slow down as the site grows, the fix is an index on Recent's sort key and a stored like count for Popular. Not needed now.
 
 #### Verification
-- [ ] `reviewer`, then `argos-security` (privacy and visibility rules in lists).
+- [x] `reviewer`, then `argos-security` (privacy and visibility rules in lists). Both found nothing blocking; the reviewer's one edge case (a `before` without `beforeId` got no count) is fixed.
 
 ### Phase 3 — Browser
 

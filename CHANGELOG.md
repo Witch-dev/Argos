@@ -8,7 +8,12 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-05 — Content language Phase 2: "languages I read" setting, `languages=mine|other` + `OtherLanguagesCount` on the Reviews and Writings lists, landing page in the visitor's language → specs/content-language.md, Apollon (uncommitted)
+- 2026-11-04 — Content language Phase 1: reviews and writings get a language label (guessed on save, writer can pick, startup backfill labels old rows) → specs/content-language.md, Apollon (uncommitted)
+- 2026-11-04 — Posting limits: per-reader caps on posts and comments (30 per 10 min), logs (60 per 10 min), likes and votes (60 a minute), follows and invites (50 an hour, club invites counted per reader invited) and making clubs, lists and plans (20 an hour), each with its own message in five languages → specs/posting-limits.md
 - 2026-11-04 — Instagram link (@wingedwords.app) on the site: drawn icon + "Instagram" in the footer, "Follow us on Instagram" under the landing page's closing Join button, all five languages → MARKETING.md (Account), Apollon c20ac64
+- 2026-11-04 — Social posts: 1–2 search phrases worked into each caption ("diario de lectura", "club de lectura"…), Instagram Name field with keywords → MARKETING.md (Language focus, "Search words in captions"), .claude/skills/social-content/SKILL.md
+- 2026-11-04 — Social posts: Spanish only for now, Spanish leaning Latin American, `wingedwords.app` shown on first/last slide and caption, pre-1931 first-edition covers allowed, bio "Únete en wingedwords.app"; first Spanish-only carousel "Esto o aquello" on the canvas → MARKETING.md (Language focus), .claude/skills/social-content/SKILL.md
 - 2026-11-04 — Planning docs brought up to date with open sign-ups (no more "closed beta" / invite-only as the current state): roadmap gaps table, stage rows and boxes, marketing §3/§7/§8, status lines on the two invite specs, landing Phase 3 notes, two bug notes, social-content skill → ROADMAP.md (🚩 Early access), MARKETING.md
 - 2026-11-04 — New `social-content` skill for Instagram/TikTok posts (Spanish first, design canvas, caption + alt text + hashtags, check pass), built on Corey Haines' marketingskills `social` skill copied unchanged; hashtags capped at 5 per post → .claude/skills/social-content/SKILL.md
 - 2026-11-04 — Log form warns "This book is already in your journal" (re-read / mark finished / edit the one I have) → specs/book-actions-and-author-languages.md (Phase 2)
