@@ -56,6 +56,7 @@ Most early readers come from Spanish-speaking countries, so promotion leads in S
 - **Captions:** Spanish first, then a dividing line (———), then a short English version.
 - **Hashtags:** 3–5 per post in total (Instagram and TikTok allow at most 5), picked from both pools, usually 3 Spanish + 1–2 English. Spanish: #bookstagramespañol #booktokespañol #libros #lectura #clubdelectura #recomendacionesdelibros. English: #bookstagram #readingjournal #bookclub.
 - **Neutral Spanish** (tú, no Spain-only or country-only words), like the site, since readers come from Spain and Latin America.
+- **Account (2026-11-04):** Instagram `@wingedwords.app` (instagram.com/wingedwords.app). The site links to it from the footer on every page and under the closing "Join free" on the landing page (`INSTAGRAM_URL` in Apollon `web/src/components/SiteFooter.tsx`).
 - **Bio (Instagram, under 150 characters):** "Lleva el registro de tus lecturas para ti. Compártelo cuando quieras. 📚 Gratis, sin anuncios. Acceso anticipado ↓"
 - **Expect missing books:** Open Library has more gaps for Spanish editions (see Weaknesses). Say so in a post and point to reporting a wrong book.
 
