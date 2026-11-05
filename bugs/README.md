@@ -35,6 +35,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | [The "Google sign-in off" test fails on a machine with a Google client ID in its user-secrets](google-signin-off-test-reads-user-secrets.md) | P2 | S | Backend tests, local only |
 | [Blocks only apply while signed in](blocks-only-apply-signed-in.md) | P3 | L | Backend, privacy |
 | [Writings' Popular list ranks every writing on every request](writings-popular-query-cost.md) | P3 | M | Backend, performance |
+| [Changing a writing's language marks it "edited"](writing-language-change-marks-edited.md) | P3 | S | Backend |
 | [Removing a title can race with a new highlight-comment](remove-title-highlight-race.md) | P3 | S | Backend, writings |
 | [A sign-up racing a rename can take the name being given up](username-hold-race.md) | P3 | S | Backend, accounts |
 | [An old username only redirects on the profile page](held-username-only-on-profile.md) | P3 | S | Backend + frontend, accounts |

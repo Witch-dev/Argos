@@ -1,6 +1,6 @@
 # Feature Spec — Reviews and writings in the reader's language first
 
-**Status:** planned 2026-11-04. Phase 1 built 2026-11-04. Phase 2 built 2026-11-05. Three phases: Phase 1 (server: language on reviews and writings, backfill), M. Phase 2 (server: "Languages I read" and sorting), M. Phase 3 (browser), M.
+**Status:** planned 2026-11-04. Phase 1 built 2026-11-04. Phase 2 built 2026-11-05. Three phases: Phase 1 (server: language on reviews and writings, backfill), M. Phase 2 (server: "Languages I read" and sorting), M. Phase 3 built 2026-11-05 (browser), M.
 
 ## 1. Problem
 
@@ -97,13 +97,25 @@ The site supports five languages (en, es, pt-BR, de, fr), and they're easy to te
 ### Phase 3 — Browser
 
 #### Frontend
-- [ ] Types and API calls for `language`, `languages`, `otherLanguagesCount`, `readingLanguages`.
-- [ ] Two-part loading with the "In other languages" divider and language tags: Reviews section, Writings section, book page reviews, author quotes, landing page.
-- [ ] "Change" language on your own posted review and writing.
-- [ ] Settings: "Languages I read".
-- [ ] Translations in all five locale files. Vitest for the two-part loading and the settings form.
+- [x] Types and API calls for `language`, `languages`, `otherLanguagesCount`, `readingLanguages`.
+- [x] Two-part loading with the "In other languages" divider and language tags: Reviews section, Writings section, book page reviews, author quotes. (The landing page needed nothing in the browser: the server already returns its reviews in the visitor's language with the fallback, and the landing cards show no tag. The Feed's starter falls back to the other languages when the reader's own are empty.)
+- [x] "Change" language on your own posted review and writing.
+- [x] Settings: (Profile tab, saves on each tick; ticking only the site language saves nothing, so it keeps following the site language) "Languages I read".
+- [x] Translations in all five locale files. Vitest for the two-part loading and the settings form.
 
 #### Verification
-- [ ] Screenshot critique round (`web-design`), then `browser-check`: an English reader and a Spanish reader on the same book page, a bilingual reader, a visitor in English.
-- [ ] `reviewer`.
-- [ ] CHANGELOG line, What's new entry (English and Spanish).
+- [x] Screenshot critique round (`web-design`), then `browser-check`: an English reader and a Spanish reader on the same book page, a bilingual reader, a visitor in English. (The guess tagged all 8 seeded texts correctly. Critique: divider heading 14px and always ruled, language menu auto-width, settings hint says it saves on tick. Not yet looked at again after those fixes; the real language tags on the live site are still to check once deployed.)
+- [x] `reviewer`. Fixed: the auto-start of the other languages retried forever after a failure; the Feed starter key lacked the languages; author quotes loaded the other languages without being asked; the settings check used the raw site language. Left: a writing's "Change" marks it edited (`bugs/writing-language-change-marks-edited.md`); on a book page the "(N)" can exceed what is listed when reviews are already shown under "From people you follow".
+- [x] CHANGELOG line. What's new entry drafted in §5 (English and Spanish), to post on the admin page after the deploy.
+
+## 5. What's new draft (to post on the admin page after the deploy)
+
+Try path: `/reviews`.
+
+**English**
+- Title: Reviews now come in your language first
+- Body: Reviews and writings are now sorted by language. The ones in the languages you read come first, and everything else is still there under "In other languages", each marked with its language. You can choose which languages you read in Settings, under "Languages I read". If we guessed the language of your own review or writing wrong, open it and press "Change".
+
+**Español**
+- Título: Las reseñas ahora llegan primero en tu idioma
+- Cuerpo: Las reseñas y los escritos ahora se ordenan por idioma. Los que están en los idiomas que lees van primero, y todo lo demás sigue ahí, en «En otros idiomas», cada uno con su idioma indicado. Puedes elegir los idiomas que lees en Ajustes, en «Idiomas que leo». Si nos equivocamos con el idioma de tu reseña o tu escrito, ábrelo y pulsa «Cambiar».
