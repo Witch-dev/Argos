@@ -8,8 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
-- 2026-11-05 — Content language Phase 2: "languages I read" setting, `languages=mine|other` + `OtherLanguagesCount` on the Reviews and Writings lists, landing page in the visitor's language → specs/content-language.md, Apollon (uncommitted)
-- 2026-11-04 — Content language Phase 1: reviews and writings get a language label (guessed on save, writer can pick, startup backfill labels old rows) → specs/content-language.md, Apollon (uncommitted)
+- 2026-11-05 — Content language Phase 2: "languages I read" setting, `languages=mine|other` + `OtherLanguagesCount` on the Reviews and Writings lists, landing page in the visitor's language → specs/content-language.md, Apollon bda6c00
+- 2026-11-04 — Content language Phase 1: reviews and writings get a language label (guessed on save, writer can pick, startup backfill labels old rows) → specs/content-language.md, Apollon bda6c00
 - 2026-11-04 — Posting limits: per-reader caps on posts and comments (30 per 10 min), logs (60 per 10 min), likes and votes (60 a minute), follows and invites (50 an hour, club invites counted per reader invited) and making clubs, lists and plans (20 an hour), each with its own message in five languages → specs/posting-limits.md
 - 2026-11-04 — Instagram link (@wingedwords.app) on the site: drawn icon + "Instagram" in the footer, "Follow us on Instagram" under the landing page's closing Join button, all five languages → MARKETING.md (Account), Apollon c20ac64
 - 2026-11-04 — Social posts: 1–2 search phrases worked into each caption ("diario de lectura", "club de lectura"…), Instagram Name field with keywords → MARKETING.md (Language focus, "Search words in captions"), .claude/skills/social-content/SKILL.md
