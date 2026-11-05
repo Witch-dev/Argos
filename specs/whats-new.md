@@ -59,9 +59,22 @@ Publishing keeps the first publish time, so editing a published entry doesn't li
 - **Sidebar link** "What's new" near Settings, with the gold dot (`aria-label` includes "new updates" while it shows). **Footer link** beside Privacy, Terms and Guidelines.
 - **`/admin/whats-new`**: a list (drafts first, then published, each with date and status) and an editor: date, language tabs (English marked required, a filled-dot on languages with text), title, body, alt text, image upload with preview and Remove, "Try it" path, Save draft / Publish / Unpublish / Delete (with confirmation). A preview of the entry as readers will see it.
 
+### 3.5 The bell notice (added 2026-11-05)
+
+Publishing an entry rings the bell of every reader, so they find out without opening the page.
+
+- **A new notification type `WhatsNew`** (subject `WhatsNewEntry`, no actor), one row per reader and entry, written when the entry is published. The text is the same short line in all five languages ("There's something new on Winged Words") and opens `/whats-new`; the row never copies the entry, so it can't be out of date or in the wrong language.
+- **A "What's new" switch** in Settings → Notifications (group `WhatsNew`), on by default. Turning it off writes no rows; turning it on later doesn't backfill.
+- **Who:** every account that isn't deactivated or suspended and hasn't turned the switch off, existing at the moment of publishing.
+- **Once per entry:** unpublishing hides the row and publishing again shows it, without ringing a second time. The row also vanishes if the entry is deleted.
+- **Past-dated entries tell nobody.** The notice is written only when the date shown is today or up to two days back, so entering the 12 past entries (§5, Content) doesn't ring twelve bells.
+- Best effort: a failure to write the notices is logged and never undoes the publish.
+- The gold dot on the sidebar link stays; the bell is the louder second signal.
+- Migration `WhatsNewBell` (the unique index on notifications gains the new type).
+
 ## 4. Out of scope
 
-Comments or likes on entries, email or bell notifications for new entries, a public roadmap or voting, links or formatting inside the text, more than one image per entry, automatic entries from commits.
+Comments or likes on entries, email for new entries (see `FUTURE-IDEAS.md`), a public roadmap or voting, links or formatting inside the text, more than one image per entry, automatic entries from commits.
 
 ## 5. Tasks
 
@@ -85,6 +98,12 @@ Comments or likes on entries, email or bell notifications for new entries, a pub
 ### Content
 - [x] Claude drafts 8–12 past entries from `CHANGELOG.md` (reader-facing only, English and Spanish), the user approves them. *(12 entries approved 2026-10-20: `content/whats-new-past-entries.md`.)*
 - [ ] Screenshots for the entries that need one (`scripts/shoot.mjs`), the user approves; entered through the admin page on the live site.
+
+### Bell notice (§3.5)
+- [x] Type, group, subject, fan-out query, hook in publish, migration `WhatsNewBell`. *(Apollon, 2026-11-05. The dev DB is updated; the API needs a restart.)*
+- [x] Settings switch, bell sentence and link, five languages.
+- [x] Tests: publish tells once, a draft or past-dated entry tells nobody, the fan-out skips a muted or deactivated reader (in a rolled-back transaction, since all test hosts share one database), sentence and link.
+- [ ] Look at it in the browser: publish an entry dated today, see the bell on a second account, click it.
 
 ### Verification & docs
 - [x] `browser-check`: visitor and reader views, dot on and off, admin create → draft → publish → edit → unpublish → delete, image upload at both widths. *(2026-10-20, all steps passed; a Spanish visitor sees the Spanish text.)*
