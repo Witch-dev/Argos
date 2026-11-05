@@ -286,7 +286,7 @@ Move the inline script from `index.html` to `public/theme-init.js`, loaded with 
 - **The other open bugs in `bugs/`:** blocks between commenters, feed query cost, the flaky tests and the rest. Each keeps its own file and priority. Only the logout bug (P1) is folded in here, because Phase 2 rewrites that code.
 - **httpOnly-cookie sessions, HTTPS/HSTS, and reading the real client IP behind a proxy (`ForwardedHeaders`).** These go with the hosting decision. Add a line for each to `ACCOUNTS-AND-HOSTING.md` so they aren't lost.
 - **Email confirmation, password reset, two-factor login** (SPEC.md Phase 2).
-- **Rate limits on writes** (posting comments, likes). Nothing suggests abuse yet, and per-user limits need their own thought.
+- **Rate limits on writes** (posting comments, likes). Nothing suggests abuse yet, and per-user limits need their own thought. *Done 2026-11-04 in `specs/posting-limits.md`, once sign-ups opened.*
 - **Autosaving Writing drafts.** Refresh tokens remove the main way to lose a draft (the 60-minute logout). Draft saving is a nice-to-have for `FUTURE-IDEAS.md`.
 - **A CSP reporting endpoint.**
 
