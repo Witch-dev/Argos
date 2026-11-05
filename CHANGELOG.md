@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-05 — API memory: glibc gives freed native memory back (Dockerfile), workstation GC set in the csproj, the `Memory:` line splits "own" from "files"; open until a week's chart stays flat → bugs/api-memory-climbs-between-deploys.md (Apollon 7567b43)
+- 2026-11-05 — What's new publishes now ring the bell for every reader (a "What's new" switch in Settings, on by default; past-dated entries tell nobody); emailing readers goes to the future ideas → specs/whats-new.md §3.5
 - 2026-11-05 — Spec: Writings become the seventh shareable page (Share button, preview card, visitor card); write-first-signup drops its Writings phase → specs/shareable-pages.md Phase 4
 - 2026-11-05 — Spec written: visitors write a review or comment first and are asked to sign up when they press Publish; draft kept in the browser and restored after sign-up → specs/write-first-signup.md
 - 2026-11-05 — Content language Phase 3: Reviews, Writings, a book's reviews and an author's quotes show the reader's languages first, then "In other languages (N)" with a language tag on each item; "Change" language on your own review and writing; "Languages I read" in Settings → Profile; five languages → specs/content-language.md, Apollon 3b18ea6

@@ -212,6 +212,12 @@ On the site service: `API_BASE_URL` = `https://api.wingedwords.app/api` (a plain
 
 Newest first. What happened, what we found, and what we decided, so the next one starts from here.
 
+### 2026-11-05: memory climbs for days between deploys (no restart)
+
+- **What we saw:** the 7-day chart going from ~35% to 60–75% in steps, reset only by deploys. The `Memory:` lines showed the .NET heap at ~30 MB while the process was ~250 MB above it, so the growth is native, not .NET objects.
+- **Decision (Apollon `7567b43`):** glibc settings in the Dockerfile (`MALLOC_ARENA_MAX=2`, mmap and trim thresholds at 128 KB) so freed native memory goes back to Linux; `ServerGarbageCollection=false` in the csproj, so the Render setting `DOTNET_gcServer` is no longer needed (harmless to leave). The `Memory:` line now reads `process N MB (A MB own, F MB files)`.
+- **If it still climbs:** if "own" keeps rising, call glibc's `malloc_trim(0)` after each cover-colour run. Detail and the remaining steps: `bugs/api-memory-climbs-between-deploys.md`.
+
 ### 2026-11-05: the database dropped out, Render restarted the API
 
 - **What we saw:** the event "Instance failed: 5jcjl. HTTP health check failed with status code 503 while running your code" at 3:27 PM.
