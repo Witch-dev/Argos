@@ -69,3 +69,4 @@ Built as §3, in Apollon `PostingLimitsTests` (7 tests). Full backend suite on a
   - The profile's name and bio went into Posts.
   - Not done: the 429 log line has the address but not the account; finding the account behind a flood means matching addresses. Fine at today's size.
 - **No `Retry-After`:** ASP.NET's sliding window doesn't give one (club chat never had one either).
+- **Checked live 2026-11-05:** saving the profile 31 times on wingedwords.app, the 31st was refused with the posting message.
