@@ -1,7 +1,7 @@
 # The live API's memory climbs between deploys and only a deploy brings it down
 
 **Priority:** P2 (no restart yet, but a week without a deploy could reach the 512 MB limit) · **Size:** M · **Area:** Backend, memory
-**Found:** 2026-11-05 · **Status:** Step 1, Step 1b and the csproj line of Step 2 done (Apollon `7567b43`, 2026-11-05). Open until a week's chart stays flat. Steps 2 (rest) and 3 deferred.
+**Found:** 2026-11-05 · **Status:** Step 1, Step 1b and the csproj line of Step 2 done (Apollon `7567b43`, 2026-11-05). Still climbing a day later, now in the .NET heap and an unlabelled part (see "A day after the fix"); more logging in Apollon `6a2aacb`. Open until a week's chart stays flat. Steps 2 (rest) and 3 deferred.
 
 ## What we see
 
@@ -68,6 +68,25 @@ The first half hour after a deploy, from the `Memory:` lines and Render's chart:
 ### Step 1b: say where the native memory is (MemoryReporter, a few lines)
 
 Read `/proc/self/status` on Linux and add `RssAnon` (memory the process asked for: glibc pools, SkiaSharp, compiled code) and `RssFile` (loaded files, can be dropped) to the `Memory:` line. If `RssAnon` still climbs after Step 1, the next tool is calling glibc's `malloc_trim(0)` after each cover-colour run, which hands free pool memory back to the system on the spot. It's a single native call, used in other .NET-on-Linux apps for this exact problem.
+
+## A day after the fix (2026-11-06, instance `v59vv`)
+
+Render's chart still went from ~36% to ~60% in 24 hours. The `Memory:` lines split it:
+
+| Part | Nov 5, 7:00 PM | Nov 6, 6:24–7:22 PM | Change |
+|---|---|---|---|
+| .NET heap, committed by the GC | 42 MB | 88–97 MB | **+46–55** |
+| Native (`own` minus committed) | 26 MB | 49–58 MB | +23–32 |
+| `files` | 93 MB | 102 MB | +9 (loaded code, harmless) |
+| `process` minus (`own` + `files`) | 59 MB | 130 MB | **+70, unlabelled** |
+
+- **Native memory is mostly under control now**: the glibc settings worked, so `malloc_trim` isn't the next step.
+- **The .NET heap tripled** (20 → 70–75 MB, steps such as 22 → 32 MB at 7:50 PM). Something alive in .NET is kept: most likely the in-memory caches filling (cause 3), possibly with no end.
+- **The unlabelled part** is most likely `RssShmem`: .NET maps the code it compiles through shared memory (write-xor-execute), so first-time compiles land there rather than in `own`.
+- It was flat for the last hour seen, and fell a little at 7:14 PM (heap 75 → 70), so it may level off rather than grow forever.
+- One `Heavy: GET (no route) allocated 60 MB` at 6:26 PM, mostly reflection (`RuntimeMethodInfoStub`, `CustomAttributeType`). Swagger is off outside Development, so not that. The count is the whole process's while the request was open, so it may be a background job. Once only; doesn't explain the climb.
+
+**Apollon `6a2aacb`** adds `shared` (RssShmem) and `cache N entries` to the `Memory:` line, and the path to a `Heavy:` line with no route. Next: read the lines a day after that deploy. A climbing `shared` = compiled code (should level off; `TieredCompilation` settings if not). A climbing cache count = Step 3. A climbing heap with a flat cache count = something else in .NET, needs a heap dump (`dotnet-gcdump`).
 
 ## Fix plan
 
