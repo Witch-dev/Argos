@@ -52,15 +52,19 @@ Written while preparing to recruit beta readers from Reddit and book communities
 Most early readers come from Spanish-speaking countries, so promotion leads in Spanish and keeps English second. Reasons: grow where readers already are; Community works best when people can read each other's reviews; Spanish is one of the two checked languages, so it can be advertised.
 
 - **One account, not one per language**, so followers and comments stay together.
+- **Spanish only for now (2026-11-04).** Posts are made in Spanish alone: no English slides, no English story, no English part in the caption. The account then reads as a Spanish-language book account, which helps it grow there. Add a short English line again if English-speaking followers start to come. (Until then, ignore the English parts of the next three points.)
 - **Images:** Spanish versions first. Posts with a lot of text (carousels, stories) get an English version too, posted as extra slides after the Spanish ones or as the next story.
 - **Captions:** Spanish first, then a dividing line (———), then a short English version.
 - **Hashtags:** 3–5 per post in total (Instagram and TikTok allow at most 5), picked from both pools, usually 3 Spanish + 1–2 English. Spanish: #bookstagramespañol #booktokespañol #libros #lectura #clubdelectura #recomendacionesdelibros. English: #bookstagram #readingjournal #bookclub.
-- **Neutral Spanish** (tú, no Spain-only or country-only words), like the site, since readers come from Spain and Latin America.
+- **Spanish that leans Latin American (2026-11-04).** *Tú* and *ustedes*, never *vosotros*. Where Spain and Latin America use different words, take the Latin American one ("link en la bio", "celular"). No slang from a single country (*chido*, *bacán*, *che*): it sounds warm to one country and odd to the rest. Readers in Spain still understand all of it.
+- **Show the address (2026-11-04):** write `wingedwords.app` in full on the first and last slide of a carousel and in the caption ("Es gratis: wingedwords.app (link en la bio)"). Instagram captions aren't clickable and the site doesn't come up on Google yet, so people need to be able to type it.
+- **Search words in captions (2026-11-04):** Instagram searches caption text, not only hashtags. Work 1–2 phrases that readers search for into each caption, inside a normal sentence and early if it fits: "diario de lectura", "club(es) de lectura", "registrar tus lecturas", "app para registrar libros leídos", "lista de libros por leer". Rotate them between posts; never a list of keywords. The Instagram **Name** field is searched too: "Winged Words · Diario de lectura y clubes".
+- **Comment prompts with one easy answer:** ask for one word or letter ("¿Más A o más B?"), never a list of answers to type out.
 - **Account (2026-11-04):** Instagram `@wingedwords.app` (instagram.com/wingedwords.app). The site links to it from the footer on every page and under the closing "Join free" on the landing page (`INSTAGRAM_URL` in Apollon `web/src/components/SiteFooter.tsx`).
-- **Bio (Instagram, under 150 characters):** "Lleva el registro de tus lecturas para ti. Compártelo cuando quieras. 📚 Gratis, sin anuncios. Acceso anticipado ↓"
+- **Bio (Instagram, under 150 characters):** "Lleva el registro de tus lecturas para ti. Compártelo cuando quieras. 📚 Gratis, sin anuncios. Únete en wingedwords.app ↓" (sign-ups are open, so no more "Acceso anticipado").
 - **Expect missing books:** Open Library has more gaps for Spanish editions (see Weaknesses). Say so in a post and point to reporting a wrong book.
 
-The first round of posts, in both languages with captions, alt text and the bio, is the design canvas https://claude.ai/artifact/4LgPkkNVJfQfcDbPg3wpq6 (pages Español, English, Perfil). Covers on it are only the public-domain title pages from the landing page, never Open Library covers of modern books.
+The posts, with captions, alt text and the bio, are on the design canvas https://claude.ai/artifact/4LgPkkNVJfQfcDbPg3wpq6 (pages Español, English, Perfil). The first round was made in both languages; the "Esto o aquello" carousel (2026-11-04) is Spanish only. **Images on it:** public-domain title pages from the landing page and simple book drawings made in code (the user prefers a quiet drawing to old covers that pull the eye; only Dracula 1897 was liked among the old covers). Public-domain first-edition covers from Wikimedia Commons are also allowed: a cover can be used only if the book was published before 1931 and the image is a flat scan or photo of the cover. A photo of a book as an object belongs to its photographer unless it is CC0. Never Open Library covers of modern books.
 
 ## 1. What to have before promoting anything
 
@@ -101,6 +105,16 @@ So there are **two things to build**, and they do different jobs:
 
 Sizes to offer: 9:16 (Stories/TikTok/Shorts, 1080×1920), 4:5 (Instagram feed, 1080×1350), 1:1 (everywhere, 1080×1080), and 1.91:1 (link preview, 1200×630). Fit with the 5 themes: let the reader choose light, dark or a theme colour for the card.
 
+### Styles chosen (2026-11-05)
+From the design canvas "Share card styles" (https://claude.ai/artifact/X4Hstduggwvuz113aKEWEG), four styles. All four show the cover as a book on a shelf, with the review below on paper:
+- **Cover colours** (V2a/V2b): the background is tinted with the cover's own colour, which the server already works out and saves (`CoverColorPicker`, `CoverColors` table; lightness from `web/src/lib/bookTint.ts`). Picked over the blurred cover because it costs almost nothing to draw, keeps text contrast predictable, makes small image files and already has a fallback for covers with no colour. It is the default style.
+- **Three photos behind the book, fading into paper** (W1, W4, W5; built like V3, whose wall-of-pages photo wasn't free to use). All three are CC0, so no credit is required, but list them in `THIRD-PARTY-NOTICES.md` when they ship:
+  - W1, old botany book: Ricky Kharawala, https://commons.wikimedia.org/wiki/File:Old_botany_book_(Unsplash).jpg
+  - W4, leather-bound stack: Chris Lawton, https://commons.wikimedia.org/wiki/File:Leather_bound_books_(Unsplash).jpg
+  - W5, Gladstone's Library: Michael D Beckwith, https://commons.wikimedia.org/wiki/File:Gladstone_S_Library_(187351035).jpeg
+
+**Lists and 5 books (to design).** The four backgrounds work for every card type; only the middle changes. With cover colours, use the first book's colour (the #1 of a ranked 5 books), not a mix of all the covers. A **5 books** card ("5 libros", renamed from "Top 5" 2026-11-06) shows five covers standing on one shelf, numbered 1–5 only when the reader made it ranked, with the theme as the title ("My 5 science fiction favourites") and no review text (the feature is `specs/five-books.md`). A **list** card shows up to six covers on one or two shelves, then "+N more", the list title, its maker and the book count. One card draws up to six covers, so take them from the cover cache at the medium size.
+
 ### How it could be built (to confirm in a spec)
 - **Link previews need a server.** The React site is drawn in the browser, but the apps that fetch a link preview don't run JavaScript, so they would see an empty page. A small backend endpoint like `/r/{id}` returns a plain page with the preview tags (title, description, image) and sends real visitors on to the normal review page. This is one controller, no new service.
 - **Card images are made on the server** by one endpoint (e.g. `/r/{id}/card.png?size=story`), using an image library in .NET (SkiaSharp or ImageSharp). The same endpoint feeds both the preview and the "Save/Share image" button, so there is one design to maintain. Draw them from the data already stored, and cache the results.
@@ -119,7 +133,7 @@ Sizes to offer: 9:16 (Stories/TikTok/Shorts, 1080×1920), 4:5 (Instagram feed, 1
 ### Questions to settle in the spec
 1. Does a logged-out visitor see the whole review when they tap the link, or a short version with "Sign up to read more"? (The second helps growth; the first is friendlier.)
 2. Which items can be shared first? Suggested start: finished book + review, then progress, then lists.
-3. One fixed design, or a few styles to choose from?
+3. ~~One fixed design, or a few styles to choose from?~~ Settled 2026-11-05: four styles, see "Styles chosen" above.
 4. Do we want a "Made with Argos" mark on every card? (Suggested: yes, small.)
 5. Final domain and short-link format, which depends on Stage 4.
 

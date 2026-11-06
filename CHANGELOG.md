@@ -8,6 +8,9 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-06 — Comment votes: your own vote now shows as a tinted chip and heavier arrow (it was only a near-identical colour change), and an upvoted comment (review, writing, list, reading or club) is told to its author as a grouped like under the Likes switch → Apollon (this commit)
+- 2026-11-06 — Spec written: "5 books" ("5 libros", renamed from Top 5s, ranking optional) as a kind of list, Favourite books as a built-in 5 books (4 → 5), favourite authors unlimited with 5 on the profile; on the roadmap in Stage 4b → specs/five-books.md
+- 2026-11-05 — Roadmap: copyright safe harbor before public launch (DMCA agent, copyright page, terms lines, "Copyright" report reason), so pirated books shared by readers don't make us liable → ROADMAP.md Stage 10
 - 2026-11-05 — API memory: glibc gives freed native memory back (Dockerfile), workstation GC set in the csproj, the `Memory:` line splits "own" from "files"; open until a week's chart stays flat → bugs/api-memory-climbs-between-deploys.md (Apollon 7567b43)
 - 2026-11-05 — What's new publishes now ring the bell for every reader (a "What's new" switch in Settings, on by default; past-dated entries tell nobody); emailing readers goes to the future ideas → specs/whats-new.md §3.5
 - 2026-11-05 — Spec: Writings become the seventh shareable page (Share button, preview card, visitor card); write-first-signup drops its Writings phase → specs/shareable-pages.md Phase 4
