@@ -74,7 +74,7 @@ Publishing an entry rings the bell of every reader, so they find out without ope
 
 ## 4. Out of scope
 
-Likes on entries (comments: see `specs/whats-new-comments.md`), email for new entries (see `FUTURE-IDEAS.md`), a public roadmap or voting, links or formatting inside the text, more than one image per entry, automatic entries from commits.
+Likes on entries (comments are built: `specs/whats-new-comments.md`), email for new entries (see `FUTURE-IDEAS.md`), a public roadmap or voting, links or formatting inside the text, more than one image per entry, automatic entries from commits.
 
 ## 5. Tasks
 

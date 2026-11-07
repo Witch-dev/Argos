@@ -1,6 +1,6 @@
 # Feature Spec — Comments on What's new
 
-**Status:** written 2026-11-06, decisions confirmed by the user the same day; not built. Extends `specs/whats-new.md` (which listed comments as out of scope).
+**Status:** written 2026-11-06, decisions confirmed by the user the same day; built 2026-11-06 (Apollon, migration `WhatsNewComments`). Extends `specs/whats-new.md` (which listed comments as out of scope).
 
 ## 1. Problem
 
@@ -23,9 +23,10 @@ What's new is one-way: the owner writes an update and readers can only read it (
   - The entry must exist and be published (a draft has no comments), else not found.
   - Writing a new comment or reply needs `CommentsEnabled`; turning it off keeps the existing comments visible and read-only ("Comments are closed"). Edit and delete of one's own comment still work.
   - Blocks, rate limits, the content length and the hiding of reported comments behave as for the other targets. A blocked reader can't reply to a block-er, but the admin is never blocked from replying.
+  - *As built:* an entry has no owner (`OwnerId` is empty), so blocking an admin's account never shuts a reader out of What's new. On this target an admin sees past blocks: the whole thread, the bell row, and a reply to anyone. Otherwise a reader could block the admins and then post there unseen by them (security review, 2026-11-06). A reader's own block still hides the admin's comments from that reader.
 - **Reading:** the comment tree endpoint is open to visitors for this target only (`AllowAnonymous`, the `public` rate-limit policy), with the same hidden/blocked filtering for signed-in viewers. `GET /api/whats-new` entries gain `commentCount` and `commentsEnabled`, so the list shows the count without loading every thread (`CountWholePostCommentsAsync`, as lists do).
 - **Notifications** (`NotificationRecorder`): `WhatsNew` maps to subject `WhatsNewEntry` (already exists).
-  - New top-level comment: one `Comment` row for each admin (except the author), grouped like other comment notices so a busy entry doesn't ring fifty times.
+  - New top-level comment: one `Comment` row for each admin (except the author), grouped so a busy entry doesn't ring fifty times. *As built:* comment notices elsewhere are one row per comment, so this is a row per admin and entry (no comment id) that each new comment makes unread again and names its writer on (`repeatAlways`). It is told through a block, and its readers are the admins with a confirmed email who aren't away.
   - Reply: one `Reply` row to the parent comment's author, as now. If an admin is the replier, the parent author gets it; nobody is told twice.
   - Text names the entry's title in the reader's language (fallback English) and opens `/whats-new#entry-<id>`, which scrolls to and opens that entry's comments.
 - **Cleanup:** deleting an entry deletes its comment thread (`DeleteByTargetAsync`); account erasure already handles comments by target type, add `WhatsNew` to its list for the author's comments only. Unpublishing hides the comments with the entry.
@@ -35,9 +36,9 @@ What's new is one-way: the owner writes an update and readers can only read it (
 ### 3.2 Frontend
 
 - Each entry card on `/whats-new` gets a footer line "N comments" / "Comment" that opens the thread under the card (collapsed by default so the page stays a readable list; opens by itself when the URL hash points at the entry). Uses `CommentTree` and `CommentForm` as lists do.
-- Visitors see the thread and, where the form would be, a "Sign in to join the conversation" link. A closed entry shows "Comments are closed" instead of the form.
-- The owner's replies get a small "Winged Words team" label next to the name so readers can tell they are talking with the site. *(Needs checking against how admin accounts already show; if there is no such label, this is the one new UI piece.)*
-- Admin editor: a "Allow comments" checkbox beside Save draft / Publish, and the comment count in the entry list.
+- Visitors see the thread and, where the form would be, a "Log in to join the conversation" link (the site says "Log in"), back to `/whats-new#entry-<id>` afterwards. A closed entry shows "Comments are closed." instead of the form, and no Reply buttons. An entry closed before anyone commented shows no comments line at all.
+- The owner's replies get a small "Winged Words team" label next to the name so readers can tell they are talking with the site. *Checked 2026-11-06:* an admin's comment showed like anyone's (avatar, display name or username, a link to the profile), with no mark, so the label is new: a neutral pill, set by the server from the admin role (`CommentDto.AuthorIsTeam`) on What's new only. It stays on a private admin's comment that a visitor sees as "A reader".
+- Admin editor: an "Allow comments" checkbox with a one-line hint, just above Save draft / Publish (which save it), and the comment count and "Comments closed" among each list row's facts.
 - Bell sentences ("{name} commented on “{title}”", "{name} replied to you on “{title}”") in all five locale files, and the Settings copy for "Comments and replies" mentions What's new.
 - Design: no new tokens; follows `DESIGN.md`. Mobile: thread indented at most two levels, as elsewhere.
 
@@ -49,23 +50,23 @@ Likes on entries, email for new comments (add later if the bell isn't enough; se
 
 ### Before building
 - [x] Visibility, threading, notifications and per-entry switch confirmed by the user (2026-11-06).
-- [ ] Check how the admin's name shows in replies (the team label in §3.2).
+- [x] Check how the admin's name shows in replies (the team label in §3.2): no mark existed, so the label was built.
 
 ### Backend (medium effort)
-- [ ] `CommentTargetType.WhatsNew`; `CommentService` rules (published only, anchors rejected, closed entries); anonymous read of the tree.
-- [ ] `CommentsEnabled` on the entry, migration `WhatsNewComments`, admin update, `commentCount` and `commentsEnabled` in the list.
-- [ ] Notifications: admin notice for a top-level comment, reply notice, subject and link, grouping.
-- [ ] Cleanup on entry delete and account erasure; error code and translations.
-- [ ] Tests: visitor can read but not write; draft entry refuses; closed entry refuses new comments but shows old ones; admin gets the bell, the commenter gets the reply bell, nobody twice; blocked reader; delete entry removes the thread; hidden comment disappears.
+- [x] `CommentTargetType.WhatsNew`; `CommentService` rules (published only, anchors rejected, closed entries); anonymous read of the tree.
+- [x] `CommentsEnabled` on the entry, migration `WhatsNewComments`, admin update, `commentCount` and `commentsEnabled` in the list.
+- [x] Notifications: admin notice for a top-level comment, reply notice, subject and link, grouping.
+- [x] Cleanup on entry delete and account erasure; error code and translations.
+- [x] Tests: visitor can read but not write; draft entry refuses; closed entry refuses new comments but shows old ones; admin gets the bell, the commenter gets the reply bell, nobody twice; blocked reader; delete entry removes the thread; hidden comment disappears.
 
 ### Frontend
-- [ ] Comments footer and thread on each entry card; deep link by hash.
-- [ ] Visitor "sign in" prompt and the closed state.
-- [ ] Admin: "Allow comments" checkbox and count.
-- [ ] All text in the five locale files; bell rows (`NotificationRow`).
-- [ ] Tests: thread opens, visitor sees sign-in, closed hides the form, hash opens the entry.
+- [x] Comments footer and thread on each entry card; deep link by hash.
+- [x] Visitor "sign in" prompt and the closed state.
+- [x] Admin: "Allow comments" checkbox and count.
+- [x] All text in the five locale files; bell rows (`NotificationRow`).
+- [x] Tests: thread opens, visitor sees sign-in, closed hides the form, hash opens the entry.
 
 ### Verification & docs
-- [ ] `browser-check`: visitor read, reader comment, admin reply, bell on both accounts, close comments, phone width.
-- [ ] `reviewer` and `argos-security` (new public read of user content, new notification fan-out, anonymous endpoint), fix findings.
-- [ ] Update `specs/whats-new.md` §4 (remove "comments") and `CHANGELOG.md`.
+- [x] `browser-check`: visitor read, reader comment, admin reply, bell on both accounts, close comments, phone width.
+- [x] `reviewer` and `argos-security` (new public read of user content, new notification fan-out, anonymous endpoint), fix findings.
+- [x] Update `specs/whats-new.md` §4 (remove "comments") and `CHANGELOG.md`.

@@ -16,5 +16,5 @@ For signed-out callers only, leave out authors with `IsDiscoverable == false` in
 
 ## Related, smaller
 
-- A public account with discovery off that comments on a public review or list is still named: decision 1 only masks private accounts. Add `|| !IsDiscoverable` to the signed-out condition in `AnnotationCommentsController.EnrichAuthors` if that should change.
+- A public account with discovery off that comments on a public review or list is still named: decision 1 only masks private accounts. Add `|| !IsDiscoverable` to the signed-out condition in `AnnotationCommentsController.EnrichAuthors` if that should change. Since 2026-11-06 the same applies to comments on What's new, which is indexable (`specs/whats-new-comments.md`).
 - A private account that accepted a collaborator invite on a public list is named, with avatar, in `GET /api/booklists/{id}` to signed-out visitors (`ListCollaborationService.cs`, `BookListDtoMapper.cs`).
