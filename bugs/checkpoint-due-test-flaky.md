@@ -20,3 +20,18 @@ A notification with no actor is a reminder that a job sends. Something other tha
 ## Fix
 
 Find which notification it was (log `reminder.Type` in the failing check), then either stop the hosted jobs in `ApiFactory`, or have the test check that the Admin got no notification *of this kind for this club*, if the Admin is meant to be skipped.
+
+## More occurrences, 2026-11-07 (it is a family, not one test)
+
+Pushing Apollon a1a6ec1 (a search-ranking change nothing here touches), the precheck's full `dotnet test` run failed. A different test failed in each full run, none on a private database:
+
+| Run | Failed | Failure |
+|---|---|---|
+| 1 and 2 | `ContentLanguageTests.TheBackfill_LabelsOldRows_UsesTheSiteLanguageForShortOnes_AndLeavesRatingOnlyLogsNull` and `NotificationTests.CheckpointDue_IsSentOnce_ToMembersWhoHaveNotReachedIt` | `Assert.Equal()` differs; `Assert.Empty()` not empty (a no-actor notification, as above) |
+| 3 (parent commit, separate worktree) | `ContentLanguageTests.TheBackfill_…` only | same |
+| 4 | `ClubSuggestionKindsTests.ACheckpointOnATextRound_RemindsThoseNotFinished_WithoutPages` | `Assert.DoesNotContain()`: a no-actor notification (already read) was in the list |
+| 5 | none; the push went through | |
+
+Each passes when run alone (`ContentLanguageTests` plus `NotificationTests.CheckpointDue` together: 23 of 23), and no other dotnet or test process was running. Likely the same cause for all three: tests share one database and either run a background job (a reminder job, or `ContentLanguageBackfill.RunAsync`, which labels *every* unlabelled row, not just the test's) or assert on notifications another class's job also creates. `TheBackfill_…` ends with `Assert.Equal(0, RunAsync(...))`, which fails whenever another test has left an unlabelled row at that moment.
+
+Fix for the whole family: stop the hosted jobs in `ApiFactory`, and make each test check only its own rows (this club, these users) instead of the whole table or "nothing else was sent". Related: [chat-erasure-test-races-moderation-erasure.md](chat-erasure-test-races-moderation-erasure.md).
