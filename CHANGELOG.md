@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-06 — Comment votes: your own vote now shows as a tinted chip and heavier arrow (it was only a near-identical colour change), and an upvoted comment (review, writing, list, reading or club) is told to its author as a grouped like under the Likes switch → Apollon 8d4e0b2
 - 2026-11-06 — Club chat and club comments get an emoji picker and light formatting (`**bold**`, `*italic*`, `> quote`) with a toolbar, links in club comments become clickable; the chat no longer breaks family and flag emoji; GIFs wait on Klipy's answers → specs/rich-club-text.md (Apollon 997b88a)
 - 2026-11-06 — API memory still climbs a day after the glibc fix, now in the .NET heap and an unlabelled part; the `Memory:` line adds shared memory and cache entries, `Heavy:` names unrouted paths → bugs/api-memory-climbs-between-deploys.md (Apollon 6a2aacb)
 - 2026-11-06 — Security workflow fixed: Trivy flagged 3 HIGH Alpine packages in the web image (musl, musl-utils, zlib); added to the `apk upgrade` line in `web/Dockerfile` → Apollon a0435c5
