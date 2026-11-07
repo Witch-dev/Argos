@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-07 — API memory: today's logs show the caches are cheap (600 entries ≈ 3 MB); the API now forces a full collection once an hour and logs what's really alive in the heap, to tell a real leak from garbage waiting to be freed → bugs/api-memory-climbs-between-deploys.md (Apollon 8cfba6a)
 - 2026-11-06 — Comments on What's new: readers comment and reply under each update (visitors read, closed entries keep theirs), admins' replies carry a "Winged Words team" label, the admins get one bell row per update and the replied-to reader a reply notice, a bell row opens `/whats-new#entry-<id>` with the thread open; per-entry "Allow comments" switch; an admin sees past blocks there → specs/whats-new-comments.md (Apollon 3ecbc01)
 - 2026-11-06 — Coverless books in the Readings strip are cloth-bound like the shelves; long titles in the no-cover placeholder wrap with a hyphen instead of being cut at both edges; book page heading hyphenates on phones → Apollon 46e85aa
 - 2026-11-06 — Comment votes: your own vote now shows as a tinted chip and heavier arrow (it was only a near-identical colour change), and an upvoted comment (review, writing, list, reading or club) is told to its author as a grouped like under the Likes switch → Apollon 8d4e0b2

@@ -1,7 +1,7 @@
 # The live API's memory climbs between deploys and only a deploy brings it down
 
 **Priority:** P2 (no restart yet, but a week without a deploy could reach the 512 MB limit) · **Size:** M · **Area:** Backend, memory
-**Found:** 2026-11-05 · **Status:** Step 1, Step 1b and the csproj line of Step 2 done (Apollon `7567b43`, 2026-11-05). Still climbing a day later, now in the .NET heap and an unlabelled part (see "A day after the fix"); more logging in Apollon `6a2aacb`. Open until a week's chart stays flat. Steps 2 (rest) and 3 deferred.
+**Found:** 2026-11-05 · **Status:** Step 1, Step 1b and the csproj line of Step 2 done (Apollon `7567b43`, 2026-11-05). Still climbing a day later, now in the .NET heap and an unlabelled part (see "A day after the fix"); more logging in Apollon `6a2aacb`. 2026-11-07: the cache is cheap, so the question is the heap; an hourly full collection in the log tells live data from garbage (see "Two days after"). Open until a week's chart stays flat. Steps 2 (rest) and 3 deferred.
 
 ## What we see
 
@@ -87,6 +87,24 @@ Render's chart still went from ~36% to ~60% in 24 hours. The `Memory:` lines spl
 - One `Heavy: GET (no route) allocated 60 MB` at 6:26 PM, mostly reflection (`RuntimeMethodInfoStub`, `CustomAttributeType`). Swagger is off outside Development, so not that. The count is the whole process's while the request was open, so it may be a background job. Once only; doesn't explain the climb.
 
 **Apollon `6a2aacb`** adds `shared` (RssShmem) and `cache N entries` to the `Memory:` line, and the path to a `Heavy:` line with no route. Next: read the lines a day after that deploy. A climbing `shared` = compiled code (should level off; `TieredCompilation` settings if not). A climbing cache count = Step 3. A climbing heap with a flat cache count = something else in .NET, needs a heap dump (`dotnet-gcdump`).
+
+## Two days after (2026-11-07, instance `fqdnm`, ~04:47 AM to 12:27 PM)
+
+| Part | 04:47 AM | 12:27 PM | Change |
+|---|---|---|---|
+| process | 329 MB | 367 MB | +38 |
+| own | 118 MB | 141 MB | +23 |
+| shared | 107 MB | 116 MB | +9 |
+| .NET heap (committed) | 52 (76) MB | 69 (91) MB | +17 |
+| cache | 23 entries | 602 entries | +579 |
+
+- **Cache:** it went 23 → 601 entries between 11:31 and 11:41 (a crawler or a visitor on author pages or search) but the heap only rose 61 → 64 MB. So the caches are cheap, and Step 3 stays deferred.
+- **The 11:30 step on the chart** is mostly `shared` (108 → 114 MB): code compiled the first time pages are used.
+- **Steps at 12:03 and 12:25** (+8 and +5 MB in `own`, cache and heap flat): native memory again (cover-colour job, images or driver buffers). Small, but if it keeps going, `malloc_trim(0)` after the cover-colour run is still the tool.
+- **The heap climbs about 2–3 MB an hour.** `HeapSizeBytes` is read after the last GC, which with this little traffic is rarely a full one, so this may be garbage waiting to be freed rather than live data.
+- Rate overall: ~5 MB an hour, so days from the limit. Daily-ish deploys reset it (`wcmfb` started at 187 MB).
+
+**Apollon (next commit):** once an hour `MemoryReporter` forces a full compacting collection and logs `Memory after full collection: .NET heap B MB -> A MB alive`. Next: read the `-> A MB alive` numbers across a day. Flat = the heap is fine and the climb is compiled code + native steps. Climbing = something in .NET is really kept → `dotnet-gcdump`.
 
 ## Fix plan
 
