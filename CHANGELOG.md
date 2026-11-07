@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-07 — Flaky backend tests fixed (tests only, API needs no restart): the hosted reminder job no longer runs in test hosts, and the reminder, ContentLanguage backfill and erasure tests check only their own rows or run alone → bugs/checkpoint-due-test-flaky.md (Apollon ed8d341)
 - 2026-11-07 — Search: a work with a Cyrillic author beside a Latin translator (the covered 2012 "Crimen y castigo") kept the Cyrillic name, ranked as non-Latin and sank below coverless one-author editions; its original-script author now gets the Latin spelling too → Apollon a1a6ec1
 - 2026-11-07 — API memory: today's logs show the caches are cheap (600 entries ≈ 3 MB); the API now forces a full collection once an hour and logs what's really alive in the heap, to tell a real leak from garbage waiting to be freed → bugs/api-memory-climbs-between-deploys.md (Apollon 8cfba6a)
 - 2026-11-06 — Comments on What's new: readers comment and reply under each update (visitors read, closed entries keep theirs), admins' replies carry a "Winged Words team" label, the admins get one bell row per update and the replied-to reader a reply notice, a bell row opens `/whats-new#entry-<id>` with the thread open; per-entry "Allow comments" switch; an admin sees past blocks there → specs/whats-new-comments.md (Apollon 3ecbc01)

@@ -28,8 +28,6 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | [Admin copies of feedback and book requests share the daily optional-email budget](admin-copy-emails-share-signup-budget.md) | P2 | S | Backend, email queue |
 | [Discovery-off public readers' comments and private list collaborators are still named to visitors](discovery-off-readers-named-on-indexable-pages.md) | P3 | S | Backend, privacy / search (the book-page reviews and lists part is fixed) |
 | [Two account erasures at once can both create the "Deleted user" placeholder](deleted-user-placeholder-race.md) | P2 | S | Backend, account deletion (flaky test) |
-| [The "checkpoint due" notification test sometimes fails in a full run (so do the ContentLanguage backfill and a club-suggestion reminder test; blocked a push on 2026-11-07)](checkpoint-due-test-flaky.md) | P2 | S | Backend tests (flaky test) |
-| [The chat erasure test fails when the moderation tests erase every due account at the same time](chat-erasure-test-races-moderation-erasure.md) | P2 | S | Backend tests (flaky test) |
 | [Some frontend tests assume the year is 2026 and will fail from 1 January 2027](frontend-tests-assume-2026.md) | P2 | S | Frontend tests (date-dependent) |
 | [The log form on a book's page is wider than a phone screen](log-form-overflows-on-phone.md) | P2 | S | Frontend, book page, phone |
 | [A profile keeps going back to "Loading" when one of the rows above its shelves fails](profile-reloads-when-a-row-fails.md) | P2 | S | Frontend, profile page |
@@ -50,6 +48,8 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [The "checkpoint due" notification test and its family (ContentLanguage backfill, club-suggestion reminder) fail sometimes in a full run](checkpoint-due-test-flaky.md) | 2026-11-07 | Apollon ed8d341 (hosted reminder job off in ApiFactory, tests check only their own rows) |
+| [The chat erasure test fails when other tests erase every due account](chat-erasure-test-races-moderation-erasure.md) | 2026-11-07 | Apollon ed8d341 (sweeping tests run alone in a non-parallel collection) |
 | [A club suggestion can't be reported](club-suggestions-cannot-be-reported.md) | 2026-10-27 | Report target, admin Delete and Report on suggestion cards (see the bug file) |
 | [The backend test suite sometimes stops partway and never finishes](backend-tests-stall-mid-run.md) | 2026-10-26 | Apollon c8dc503 (a deadlock between test hosts' allocation listeners) |
 | [Open Library refuses connections from production, and search says "nothing found"](open-library-refuses-production.md) | 2026-10-25 | the bug file, "Fixed" |

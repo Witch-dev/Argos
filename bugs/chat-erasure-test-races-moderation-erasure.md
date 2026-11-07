@@ -17,3 +17,7 @@ The test marks two readers as deactivated 40 days ago and erases them one by one
 ## Fix
 
 Have the test that sweeps every due account run in a collection that doesn't run in parallel with tests that make due accounts (`[Collection]` with `DisableParallelization`), or let `EraseDueAsync` take the ids it may touch in tests.
+
+## Fixed 2026-11-07 (Apollon ed8d341)
+
+`AccountErasureTests` and `StrongerListsTests` (both sweep with `EraseDueAsync`) now share a `DisableParallelization` collection (`ErasureCollection`), so they run alone, after the parallel classes. The moderation test asks `GetDueAsync` instead of sweeping. Three full runs on a private database: all 2051 passed.
