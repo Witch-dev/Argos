@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-08 — Clubs: when a club is choosing its next book, an admin or moderator gets a "What's next?" card (choose the book yourself, no vote, or let the club vote), and `confirm-book` takes a `pick` that suggests and confirms in one call; checkpoint rows end with a "Discuss →" cue so it's clear they open the discussion → Apollon 6bcdb76, be781b6
 - 2026-11-08 — Database OOM again on 11-07 (Render restarted the API on the 503): no heavy query in `pg_stat_statements`, the 256 MB box is crowded by ~17 processes; API pool cut to 5 with a 10-minute connection lifetime, watching until ~11-12 before any plan upgrade → DEPLOY.md "Incidents on the live site"
 - 2026-11-07 — Flaky backend tests fixed (tests only, API needs no restart): the hosted reminder job no longer runs in test hosts, and the reminder, ContentLanguage backfill and erasure tests check only their own rows or run alone → bugs/checkpoint-due-test-flaky.md (Apollon ed8d341)
 - 2026-11-07 — Search: a work with a Cyrillic author beside a Latin translator (the covered 2012 "Crimen y castigo") kept the Cyrillic name, ranked as non-Latin and sank below coverless one-author editions; its original-script author now gets the Latin spelling too → Apollon a1a6ec1
