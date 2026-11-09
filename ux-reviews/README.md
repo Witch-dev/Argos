@@ -6,6 +6,7 @@ These are not bugs: broken behaviour goes in `bugs/`. This folder is for "it wor
 
 | Page / flow | Reviewed | Open | Fixed | File |
 |---|---|---|---|---|
+| Task walk, whole app (first walk: logging, lists, clubs; phone, EN + ES) | 2026-11-08 | 0 | 9 | [task-walk.md](task-walk.md) |
 | Books home (`/books`), re-reviewed after the shelf refresh (27/40) | 2026-10-18 | 0 | 14 | [books-home.md](books-home.md) |
 | Community feed (`/feed`), re-reviewed after the shelf refresh (29/40) | 2026-10-18 | 0 | 14 (+1 specced) | [community-feed.md](community-feed.md) |
 | Font-size scale: Journal and landing page | 2026-10-12 | 0 | 5 | [font-size-scale.md](font-size-scale.md) |
