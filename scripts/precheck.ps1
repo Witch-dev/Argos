@@ -78,7 +78,8 @@ if ($web) {
     try {
         Run 'typecheck (tsc)' { npx tsc --noEmit -p tsconfig.app.json } | Out-Null
         Run 'lint' { npm run lint } | Out-Null
-        $out = Run 'vitest' { npx vitest run }
+        # Half the cores: one test runner per core starved the machine and timed tests out (2026-11-09).
+        $out = Run 'vitest' { npx vitest run --maxWorkers=50% }
         Run 'build' { npm run build } | Out-Null
         Run 'npm audit (high or critical)' { npm audit --audit-level=high } | Out-Null
         $tests = ($out | Select-String -Pattern 'Tests\s+(\d+) passed' | Select-Object -Last 1)
