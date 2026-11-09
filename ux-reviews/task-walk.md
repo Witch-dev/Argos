@@ -97,3 +97,8 @@ Pattern: Edit is a visible button on lists and clubs but an icon-only ⋯ on boo
 
 ## Looked fine
 Task 3 (save for later: "Want to read", clear green confirmation, both languages). Task 9 (Club settings found at once, "Saved."). Task 12 (yearly goal: far down Home but easy). Task 14 (language, 3 actions). Search as the first click: 12 of 13 first clicks were right.
+
+## Re-walk, 2026-11-08 (after the fixes above; tasks 1, 8, 10; one fresh walker, phone, English)
+Task 1: direct in about 8 actions (was about 14). Task 8: direct in about 9 (topic picked in the create form). Task 10: book chosen after detours; the invite-by-link line was read, but the walker's browser has no share sheet, so Share is unconfirmed.
+New findings, fixed the same day (Apollon, not yet pushed): (a) "Confirm next read" did nothing visible twice, its error sat at the top of the dialog out of sight on a phone, now shown beside the button; (b) Clubs not findable from the Community tab, now a Clubs and a People link on the Feed page; (c) no sign a log saved once the form closed, now a "Saved to your books" line.
+Still open: letting a club skip checkpoints (needs the backend to allow zero checkpoints); a Hobbit search result labelled "Graphic novel" (data); the date field's dd-mm-yyyy is the browser's own.
