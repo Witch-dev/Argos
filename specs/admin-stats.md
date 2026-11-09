@@ -15,7 +15,7 @@ The user can't see how the app is being used: how many people visit, sign up, co
 ### 2.1 Decisions I made, for the user to confirm
 
 - **"Active" means opened the app that day while signed in**, not "typed a password". `LastLoginAt` only changes on a real login, and a reader stays signed in for 30 days, so it would miss almost all daily use. The quiet sign-in renewal (`/api/auth/refresh`) runs on every page load and every 15 minutes while the app is open, so that's where a day is recorded.
-- **Days are UTC days**, the same for everyone. Labelled "days are in UTC" on the page.
+- **Days are Chile days** (America/Santiago, with its summer time), where the admin lives; UTC until 2026-11-09, so earlier days keep UTC edges. Labelled on the page.
 - **Which reader was active on which day is kept 30 days, then only the count is kept.** Thirty days is the least that still allows "active in the last 30 days" (monthly actives). It's deleted with the account and listed in the export and the privacy policy.
 - **The history is kept as daily counts**, so deleting an account or an old import job (deleted 30 days after it finishes) doesn't shrink past days.
 - **Signed-in readers aren't counted as visits**; they're counted as active readers. A visit counts once per browser tab session, so reloading doesn't add more.
@@ -40,11 +40,11 @@ Not shown: who the readers are. The page shows only counts, never names or email
 
 ### 3.2 Table `DailyCounts` (entity `DailyCount`)
 
-The day-by-day history. One row per UTC day per measure.
+The day-by-day history. One row per Chile day per measure.
 
 | Column | Type | Notes |
 |---|---|---|
-| `Day` | `date` | UTC day. Part of the key. |
+| `Day` | `date` | Chile day. Part of the key. |
 | `Metric` | `DailyMetric` enum, stored as text | `NewReaders`, `ActiveReaders`, `Visits`, `ImportsStarted`, `ImportsFinished`, `ImportsFailed`. Part of the key. |
 | `Count` | `int` | |
 
@@ -60,7 +60,7 @@ Where each is counted:
 
 | Column | Type | Notes |
 |---|---|---|
-| `Day` | `date` | UTC day. Key with `UserId`. |
+| `Day` | `date` | Chile day. Key with `UserId`. |
 | `UserId` | `Guid` | FK to the user, cascade delete. |
 
 Written with `INSERT … ON CONFLICT DO NOTHING` on a successful `/login`, Google login and `/refresh`. To avoid a database write every 15 minutes per open tab, the service keeps a small in-memory set of "(reader, day) already written" that clears at the day change. Not written for a suspended or deactivated account (those can't refresh anyway).
@@ -72,7 +72,7 @@ Written with `INSERT … ON CONFLICT DO NOTHING` on a successful `/login`, Googl
 
 ### 3.5 Nightly job `UsageStatsWorker`
 
-A `BackgroundService` like `FeedbackCleanupService`. Once a day, shortly after midnight UTC:
+A `BackgroundService` like `FeedbackCleanupService`. Once a day, shortly after midnight Chile time:
 1. For each closed day not yet in `DailyCounts` as `ActiveReaders` (normally just yesterday; more if the API was asleep), count that day's `ReaderActiveDays` rows and write the total, 0 when every reader of that day is now deactivated or suspended (so the day's rows are still deleted after 30 days; argos-security, 2026-10-22).
 2. Delete `ReaderActiveDays` rows older than 30 days (today and the 29 days before it stay).
 
