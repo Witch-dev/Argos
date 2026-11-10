@@ -136,7 +136,7 @@ The chat is no longer a tab: it is a window docked bottom-right of the club and 
 
 - Direct messages between readers, live delivery (SignalR, "typing…"), browser and phone push notifications: `FUTURE-IDEAS.md`.
 - Threads in buddy reads; threads for highlights; @mentions (still in `FUTURE-IDEAS.md`).
-- Pictures, files, reactions, replies-to-a-message and editing in chat.
+- Pictures, files, replies-to-a-message and editing in chat. (Reactions were added later: `specs/chat-reactions.md`.)
 - Chat search, and chat outside clubs.
 
 ## 5. Tasks

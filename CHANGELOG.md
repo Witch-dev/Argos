@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-09 — Tests asked for today's UTC date while usage counts and active days now use Chile days, so three tests failed between 00:00 and 03:00 UTC; they ask UsageCounter.Today, and the export's active-days column says "Day (Chile time)" → Apollon 60b9248
+- 2026-11-09 — Club chat: react to a message with one of six emoji, as in WhatsApp (one per reader, tap again to take it back, who reacted shown by name); reaches open chats with the 5-second check → specs/chat-reactions.md (Apollon fd34f6e)
 - 2026-11-09 — Admin stats count days in Chile time (America/Santiago, with summer time) instead of UTC; days before this keep their UTC edges → specs/admin-stats.md (Apollon c6ff764)
 - 2026-11-08 — First task walk (phone, English and Spanish) and its fixes: log form with status buttons and Yesterday, Clubs in the Books menu, club topics at creation, share link in Invite readers, checkpoints explained, privacy and list wording, site language in Settings → ux-reviews/task-walk.md (Apollon 1c89252, 72234cc, 76ee353)
 - 2026-11-08 — Web addresses (http/https only) in a bio, a club description and a list description are now clickable links (new tab, `nofollow ugc`); reviews, comments and journal text stay plain → Apollon d551199, 76ee353
