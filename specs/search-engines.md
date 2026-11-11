@@ -165,18 +165,18 @@ No new tables or columns. "Books readers used", "authors with such a book", the 
 ### Phase 3 — Clubs (after Phases 1–2 are live)
 
 #### Backend
-- [ ] Club and topic/language rules in the "counts for search" service; clubs in the sitemap; `indexable` on `/preview` and the directory.
-- [ ] `/api/seo/page` for a club and for `/clubs` with one topic or language.
-- [ ] Tests: the §3.4 list.
+- [x] Club and topic/language rules in the "counts for search" service; clubs in the sitemap; `indexable` on `/preview` and the directory (a small `GET /api/clubs/indexable?topic=&language=`, since the directory answer is a plain list).
+- [x] `/api/seo/page` for a club and for `/clubs` with one topic or language.
+- [x] Tests: the §3.4 list (`ClubSearchPagesTests`).
 
 #### Frontend
-- [ ] `usePageMeta` on the club page, Discover and the invite page; titles in all five locales.
-- [ ] nginx: club paths and `/clubs` with its query string for search bots.
-- [ ] What's new entry and the privacy policy line (§3.4).
+- [x] `usePageMeta` on the club page, Discover and the invite page; titles in all five locales.
+- [x] nginx: club paths and `/clubs` with its query string for search bots.
+- [x] Privacy policy line (all five languages, dated 2026-11-11). What's new entry drafted in §8, to post on the admin page after the deploy.
 
 #### Verification
-- [ ] `argos-security` review (what a club page shows bots; private clubs and buddy reads stay out).
-- [ ] `reviewer` pass.
+- [x] `argos-security` review, 2026-11-11: nothing to fix.
+- [x] `reviewer` pass, 2026-11-11: nothing blocking.
 - [ ] Live: `curl -A "Googlebot"` on a public club, a private club (404), an invite link (the app, not indexed) and `/clubs?topic=fantasy`; Search Console's live test on one club.
 
 ## 5. Not in this spec
@@ -221,3 +221,16 @@ Reviews: `reviewer` (fixed: inline spoilers out of search; `data-nosnippet` move
 - **Rate limit:** `SeoPagesPerMinute` = 300 per address. **Open point (security review, Low–Medium):** while nginx reaches the API through its public address, every bot shares that one budget, so someone sending "Googlebot" in a loop could make real search bots get 503s for as long as it runs. Fix: the user's step above (Render's private network, as planned for the cards). A book page costs roughly 15–20 queries, about half of them repeated for the `og:` tags; fine at today's size, the first thing to trim if it shows in the API's memory or the database.
 - **Tests:** `SeoPageTests` (19): used book (content, escaping, links, a private account's review left out, no average under 3 ratings), average and JSON-LD at 3 ratings, unused book `noindex, follow`, unknown book and author 404 with zero calls to Open Library (counted at the HTTP level; checked that the counter catches a real call), other paths 404, Followers/private-account/hidden/unknown reviews the same 404 even asked by their author, spoiler and inline-spoiler reviews, lists (public, empty, private, hidden), authors (used and unused), Spanish book and review, many authors, discovery-off reader and the caller's own hidden review. `AnonymousEndpointsTests` lists the endpoint. Full backend suite 2081/2081.
 - **Left:** the user's Render step, deploy, then the live checks above.
+
+## 8. Build notes (Phase 3, 2026-11-11)
+
+- **Rules:** `SearchPagesRepository.CountingClubRows` (public, `Kind == Club`, non-blank description, 2+ active members); `SearchPagesService` adds `IsClubIndexableAsync`, `IsClubFilterIndexableAsync` (plain `/clubs` always; one topic or language with 2+ counting clubs; both filters or an unknown value never) and `GetFilterClubsAsync`. Sitemap: `/clubs` as a site page, each counting club (`lastmod` = day of its newest activity), each counting `/clubs?topic=` and `/clubs?lang=` page, all with `/es` alternates.
+- **Pages:** `SeoPageService.Clubs.cs`. A club page is the `/preview` card as HTML (picture, members count, topics, language, description, current book linked, rules, "Join on Winged Words"); no member, token or discussion is read. The directory page lists counting clubs most members first (50 max). nginx passes `topic=$arg_topic&clubLang=$arg_lang`; the API checks them against `GenreCatalog` and the supported languages (unknown = 404; both filters = shown, `noindex, follow`, canonical the topic's). Topic names in English and Spanish live in `SeoPageTexts`.
+- **App:** `ClubJoinPreviewDto` gained `topics`, `language`, `indexable`. `usePageMeta` got a `query` option for the canonical. `PublicClubPreview` and the directory set meta; the member view only titles itself (small `ClubTitle` component, since the page returns early); the invite page is always `noindex`.
+- **nginx:** `clubs/<id>` and `/clubs` moved into the book/author/list/review location; the profile and invite location keeps only `u/` and `clubs/join/`. Checked in Docker against a stand-in API: bots, `/es`, filters, an invite link, preview bots and browsers.
+- **Deviations:** a noindex directory page gets no canonical; nginx doesn't pass `?q=` or `?sort=`, so a bot on `/clubs?q=x` gets the plain page; the member view never says `index` (bots never reach it).
+- **Reviews (both clean). Minor, left:** `GetCountingClubsAsync` is uncached and runs on each `/clubs/indexable` call and twice per bot render of a directory page (cache a few minutes if clubs grow); the app trims a club's meta description with `truncate`, the server with `Cut` (differ only on multi-line text); `SeoPageTexts` hard-codes Spanish genre names (could drift from `catalog.json`); the directory canonical doesn't `encodeURIComponent` the topic; the sitemap cache can keep a just-privated club's id for up to an hour (its page is already 404).
+- **Tests:** `ClubSearchPagesTests` (5), `ClubsControllerTests` field sets, `SeoPageTests` 404 list, `usePageMeta`, directory, join and club page Vitest cases. Full Vitest 1455 pass; backend run is the precheck's.
+- **What's new entry, to post after the deploy:**
+  - *EN:* **Public clubs on Google.** Public book clubs can now show up in search engines, with their name, description, current book and member count, never who the members are. To keep a club out, make it private.
+  - *ES:* **Clubes públicos en Google.** Los clubes de lectura públicos ya pueden aparecer en buscadores, con su nombre, descripción, libro actual y número de miembros, nunca quiénes son los miembros. Para dejar un club fuera, hazlo privado.
