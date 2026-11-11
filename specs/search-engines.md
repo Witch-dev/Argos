@@ -177,7 +177,7 @@ No new tables or columns. "Books readers used", "authors with such a book", the 
 #### Verification
 - [x] `argos-security` review, 2026-11-11: nothing to fix.
 - [x] `reviewer` pass, 2026-11-11: nothing blocking.
-- [ ] Live: `curl -A "Googlebot"` on a public club, a private club (404), an invite link (the app, not indexed) and `/clubs?topic=fantasy`; Search Console's live test on one club.
+- [x] Live: `curl -A "Googlebot"` on a public club, a private club (404), an invite link (the app, not indexed) and `/clubs?topic=fantasy`; Search Console's live test on one club. *Checked 2026-11-11 (Apollon e239d65, c602a22; the site needed a Manual Deploy, see DEPLOY.md): a public club gives its page with canonical and no `noindex` (`/es` the Spanish title), an unknown id 404 `noindex`, an invite link and a browser the app, `/clubs` indexable, `?topic=fantasy` `noindex, follow` (fewer than 2 fantasy clubs), redditbot the card, only the member count shown. A real private club wasn't tried (same answer as an unknown id by design). Search Console's live test on a club: "La URL está disponible para Google", the page can be indexed.*
 
 ## 5. Not in this spec
 
