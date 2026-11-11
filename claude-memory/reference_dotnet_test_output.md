@@ -13,6 +13,6 @@ Apollon's `dotnet test` prints in Spanish and logs every EF query, so a full run
 - summary: `total:`, `error:`, `correcto:`, `omitido:`
 - `--logger trx` is rejected (exit 5, Microsoft Testing Platform); don't use it.
 - Use `ARGOS_TEST_DATABASE=<name>` to test on a private DB ([[parallel-sessions-test-db]]).
-- `UsageStatsTests.AdminStats_...ActiveReadersLive` can fail once in a full run near midnight UTC and pass alone (seen 2026-11-06).
+- Usage counts and active days are Chile days (`UsageCounter.Today`, since Apollon c6ff764). A test that takes "today" from `DateTime.UtcNow` for them fails between 00:00 and 03:00 UTC; three did until Apollon 60b9248 (2026-11-09). A failure in the precheck that passes on a private DB is usually another session sharing `argos_test`.
 
 Also for screenshot critiques: `shoot.mjs --widths 375` is a desktop browser (fine pointer), so `.btn-small` shows at 36px; real phones get the 44px coarse-pointer rule in `index.css`.

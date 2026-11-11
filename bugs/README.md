@@ -41,6 +41,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | [The data export says nothing about a reader's clubs](club-memberships-missing-from-export.md) | P3 | S | Backend, export, privacy |
 | [A composer's disabled Post button almost disappears in Paper](disabled-post-button-faint-in-paper.md) | P3 | S | Frontend, design, composers |
 | [On a phone, the floating feedback button covers the end of a page's main button](feedback-bubble-covers-primary-action.md) | P3 | S | Frontend, phone, feedback button |
+| [A renewal whose answer is lost signs the reader out](refresh-answer-lost-logs-out.md) | P3 | M | Backend + frontend, sessions |
 | [Backend queries that will slow down as readers grow](backend-scale-hotspots.md) | P3 | M | Backend, performance |
 | [Small backend gaps from the launch review](backend-review-minor-gaps.md) | P3 | S each | Backend |
 

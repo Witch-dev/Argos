@@ -24,4 +24,6 @@
 - [Python edits via a file](feedback_python_edits_via_file.md) — multi-line edit scripts in a scratchpad .py, not a heredoc; build text before open(p,'w')
 - [Live incidents log](project_live_incidents_log.md) — Render alerts/outages written up in DEPLOY.md "Incidents on the live site"; read it first on a new alert
 - [Spanish only, Latin American](project_spanish_speaking_users.md) — 2026-11-04: posts in Spanish only for now, leaning Latin American, wingedwords.app on slides; rules in MARKETING.md
+- [Social voice: "yo", underdog](feedback_social_voice_i_underdog.md) — 2026-11-07: posts in first person singular, passionate, solo underdog; no company "we"; rules in MARKETING.md
 - [dotnet test output](reference_dotnet_test_output.md) — Spanish output: grep 'con errores' for failures; no trx logger; shoot.mjs 375 is fine-pointer
+- [Social: attract new people, promote reading](project_social_acquisition_reading_tool.md) — 2026-11-07: tiny account, posts must reach new people (save/send/tag); message = tool that promotes reading
