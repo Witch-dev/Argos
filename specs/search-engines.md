@@ -158,7 +158,7 @@ No new tables or columns. "Books readers used", "authors with such a book", the 
 - [x] `argos-security` review (new anonymous endpoint, nginx routing, same-content rule), 2026-11-11.
 - [x] `reviewer` pass, 2026-11-11.
 - [ ] The user's step before the live checks: set `SHARE_CARD_API_URL` on the site service to the API's internal address (DEPLOY.md, "Link previews"), so each bot has its own budget (§7).
-- [ ] Live: `curl -A "Googlebot" https://wingedwords.app/books/OL…` returns the book's HTML; an unknown id returns 404; a normal browser still gets the app; `curl -A "redditbot"` still gets the card.
+- [x] Live: `curl -A "Googlebot" https://wingedwords.app/books/OL…` returns the book's HTML; an unknown id returns 404; a normal browser still gets the app; `curl -A "redditbot"` still gets the card. *Checked 2026-11-11 (Apollon 4399a1e): a sitemap book, author, list and review give their page with no `noindex`, an unused book `noindex, follow`, an unknown one 404 `noindex`, `/es` the Spanish title, a browser the app, redditbot the card, `/sitemap.xml` 200.*
 - [ ] Search Console → URL Inspection → Test live URL on one page of each kind shows the content; Google's Rich Results Test finds the `Book` data.
 - [ ] A week after: Search Console → Pages, note what's indexed in the build notes (§3.5, 5).
 
