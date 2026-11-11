@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-11 — Security check failed on the API image (ASP.NET Core 10.0.14, CVE-2026-114146, -114147, -114149, HIGH); both .NET base images now 10.0.15 → Apollon 4399a1e
 - 2026-11-11 — Search engines get plain HTML pages: Googlebot, Bingbot, DuckDuckBot and Applebot asking for a book, author, list or review page get its content from the API (only what a visitor sees, same title as the app, `Book` data with our average at 3+ ratings), a real 404 for private or unknown pages, and a 503 when the API can't answer → specs/search-engines.md §7 (Apollon 176f02a)
 - 2026-11-10 — Drafts: a review, note, comment, reply, writing, highlight or chat message being typed survives a reload or an unloaded tab and comes back with "Draft restored" and Discard; per reader, removed at logout or when another reader signs in, gone after 7 days → specs/stale-tab-recovery.md (Apollon 8d6a3a8)
 - 2026-11-10 — Coming back to an open tab: every page's code is fetched in the background (a deploy no longer gives "new version, reload"), an expired login token is renewed before use (admin pages said "Page not found" after 15 minutes away), and a failed renewal retries when the network is back → specs/stale-tab-recovery.md (Apollon 8d6a3a8)
