@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-10 — Security check failed on the web image (libxslt CVE-2026-87636, CVE-2026-9947, HIGH); the image now takes Alpine's fixed libxslt 1.1.43-r4 → Apollon 9a02612
 - 2026-11-10 — UX fixes on a profile's followers/following lists: they open in a sheet (title, count, Close, search past 20 people, Follow on each row, follow back and a quiet Remove on your own followers) instead of an endless inline list → ux-reviews/profile-follow-lists.md (Apollon c4da748)
 - 2026-11-09 — Tests asked for today's UTC date while usage counts and active days now use Chile days, so three tests failed between 00:00 and 03:00 UTC; they ask UsageCounter.Today, and the export's active-days column says "Day (Chile time)" → Apollon 60b9248
 - 2026-11-09 — Club chat: react to a message with one of six emoji, as in WhatsApp (one per reader, tap again to take it back, who reacted shown by name); reaches open chats with the 5-second check → specs/chat-reactions.md (Apollon fd34f6e)
