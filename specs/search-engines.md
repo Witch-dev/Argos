@@ -1,6 +1,6 @@
 # Feature Spec — Found on Google (search engines)
 
-**Status:** Planned 2026-10-28, decisions asked the same day (§2.1); clubs added 2026-11-02 (§2.3). **Phase 1 built 2026-11-02, not pushed yet (§6).** Three phases: Phase 1 (the basics: robots.txt, sitemap, a title per page, "don't index" where needed, Search Console; size M), Phase 2 (plain HTML pages for search engine bots on books, authors, lists and reviews; size M–L), Phase 3 (public clubs and club topic pages; size S–M, after Phases 1–2 are live). Resolves SPEC.md §10's open SEO/SSR question: no full server rendering (§2.1).
+**Status:** Planned 2026-10-28, decisions asked the same day (§2.1); clubs added 2026-11-02 (§2.3). **Phase 1 built 2026-11-02 and live (§6). Phase 2 built 2026-11-11, not deployed yet (§7).** Three phases: Phase 1 (the basics: robots.txt, sitemap, a title per page, "don't index" where needed, Search Console; size M), Phase 2 (plain HTML pages for search engine bots on books, authors, lists and reviews; size M–L), Phase 3 (public clubs and club topic pages; size S–M, after Phases 1–2 are live). Resolves SPEC.md §10's open SEO/SSR question: no full server rendering (§2.1).
 
 ## 1. Problem
 
@@ -147,16 +147,17 @@ No new tables or columns. "Books readers used", "authors with such a book", the 
 ### Phase 2 — Plain HTML pages for search engines
 
 #### Backend
-- [ ] `GET /api/seo/page` for book, author, list and review, English and Spanish, escaped, its own rate limit, no Open Library calls, 404 for unknown/private/hidden.
-- [ ] Book JSON-LD (rating only with 3+ ratings, our readers' only).
-- [ ] Tests: the §3.2 Phase 2 list.
+- [x] `GET /api/seo/page` for book, author, list and review, English and Spanish, escaped, its own rate limit, no Open Library calls, 404 for unknown/private/hidden.
+- [x] Book JSON-LD (rating only with 3+ ratings, our readers' only).
+- [x] Tests: the §3.2 Phase 2 list.
 
 #### Frontend
-- [ ] nginx `$search_bot` map; `applebot` moved from `$preview_bot`; `/__seo-page` keeping the status code, `503` when the API can't answer.
+- [x] nginx `$search_bot` map; `applebot` moved from `$preview_bot`; `/__seo-page` keeping the status code, `503` when the API can't answer.
 
 #### Verification
-- [ ] `argos-security` review (new anonymous endpoint, nginx routing, same-content rule).
-- [ ] `reviewer` pass.
+- [x] `argos-security` review (new anonymous endpoint, nginx routing, same-content rule), 2026-11-11.
+- [x] `reviewer` pass, 2026-11-11.
+- [ ] The user's step before the live checks: set `SHARE_CARD_API_URL` on the site service to the API's internal address (DEPLOY.md, "Link previews"), so each bot has its own budget (§7).
 - [ ] Live: `curl -A "Googlebot" https://wingedwords.app/books/OL…` returns the book's HTML; an unknown id returns 404; a normal browser still gets the app; `curl -A "redditbot"` still gets the card.
 - [ ] Search Console → URL Inspection → Test live URL on one page of each kind shows the content; Google's Rich Results Test finds the `Book` data.
 - [ ] A week after: Search Console → Pages, note what's indexed in the build notes (§3.5, 5).
@@ -208,3 +209,15 @@ Reviews: `reviewer` (fixed: inline spoilers out of search; `data-nosnippet` move
 1. **Private accounts' comments:** a signed-out visitor (and so Google) sees a private account's comment on a public review or list as "A reader", with no name or link. Signed-in readers see it as today. A server change on the comment answers plus a test; the privacy line needs no change.
 2. **"Show me in discovery" off:** those readers' reviews and lists stay out of the sitemap and say `noindex` (`indexable` false), so their name never reaches search. Their ratings still count toward a book. A rule added to `SearchPagesRepository` plus tests.
 - [x] Build both (backend S, then re-check the sitemap test set). **Built 2026-11-02.** (1) `CommentDto.AuthorAnonymous`: for a signed-out viewer, `AnnotationCommentsController.EnrichAuthors` blanks user id, username, display name and avatar of a private account's comment (whole-post and highlight answers); the comment components show "A reader" (`comments.aReader`, five languages) with no link. (2) `SearchPagesRepository`: `CountingReviews` and `CountingLists` also need `IsDiscoverable`; ratings and text reviews still make a book count, but a book only reachable through a discovery-off reader's list does not. Tests: `SearchPagesTests` (a fourth reader with discovery off in the sitemap set; `PrivateAccountsComments_AreAnonymousToVisitorsOnly`), one Vitest case.
+
+## 7. Build notes (Phase 2, 2026-11-11)
+
+- **One service, the app's own rules.** `SeoPageService` builds each page from the services the app's pages call, as a signed-out visitor: `BookListService.GetByIdAsync` + `BookListDtoMapper` (list), `LogService.GetReviewAsync` + `ReviewAccess` + `ReviewDtoMapper` (review), `ReviewSocialService.GetPageAsync` / `GetRatingSummaryAsync` and `ListDiscoveryService` (book and author). `CurrentViewer.AsVisitor()` makes the database's "hidden by the admin" filter treat the caller as nobody too, so a reader calling the API with their own token doesn't see their own hidden review or list on the page (found in the security review). `indexable` is `SearchPagesService`'s, the same answer the app's pages get.
+- **What each page shows.** Book: title, authors (links), cover, first published, our average once there are 3+ ratings, description, the newest 10 reviews that count (text, no whole-review or inline spoiler, from readers a visitor sees), up to 10 lists, JSON-LD `Book` (`aggregateRating` only with the average). Author: name, photo, years, bio, up to 50 of their books we have (`IBookRepository.GetByAuthorKeyAsync`, oldest first), up to 10 lists. List: title, owner, size, description, entries (books or authors, numbered when ranked), likes; item notes left out. Review: book (link), cover, reader and date, stars, text with each inline `||spoiler||` replaced by "[spoiler]" (an unclosed one covers the rest), likes; a whole-review spoiler shows no text. Every page links "Open in Winged Words" and carries the card's `og:` tags (`ShareCardService.FindAsync`, `ShareCardPage.AppendPreviewTags`).
+- **Titles match the app's** `pageMeta` texts in English and Spanish (`SeoPageTexts`), including "A, B and others" past three authors and a former reader's review titled by its book alone (found in review).
+- **Not found:** unknown, private and hidden give the same 404 page (it depends only on the language), `noindex`.
+- **Robots:** the API's own address always answers `X-Robots-Tag: noindex` (so `api.wingedwords.app/api/seo/page` is never indexed, found in the security review); the page's rule comes in `X-Page-Robots` (`noindex, follow` for a page that doesn't count, `noindex` for a 404, none for one that counts) and nginx turns it into the site's `X-Robots-Tag`. The HTML has the same rule as a `robots` meta.
+- **nginx:** `$search_bot` = googlebot, google-inspectiontool, bingbot, duckduckbot, applebot (moved from `$preview_bot`). A new location for `books|authors|lists|reviews` (with or without `/es`) comes before the other shareable pages: search bot → `/__seo-page`, preview bot → the card, people → the app. `/__seo-page` strips cookies and credentials, keeps the API's status (a 404 stays a 404), and turns 400, 429, 5xx or an unreachable API into `503` with `Retry-After: 120`. Profiles, clubs and invites stay the app for search bots. Checked in Docker against a stand-in API: every bot, both languages, a person, a preview bot, 404, 429, 500, API down, and the robots header mapping.
+- **Rate limit:** `SeoPagesPerMinute` = 300 per address. **Open point (security review, Low–Medium):** while nginx reaches the API through its public address, every bot shares that one budget, so someone sending "Googlebot" in a loop could make real search bots get 503s for as long as it runs. Fix: the user's step above (Render's private network, as planned for the cards). A book page costs roughly 15–20 queries, about half of them repeated for the `og:` tags; fine at today's size, the first thing to trim if it shows in the API's memory or the database.
+- **Tests:** `SeoPageTests` (19): used book (content, escaping, links, a private account's review left out, no average under 3 ratings), average and JSON-LD at 3 ratings, unused book `noindex, follow`, unknown book and author 404 with zero calls to Open Library (counted at the HTTP level; checked that the counter catches a real call), other paths 404, Followers/private-account/hidden/unknown reviews the same 404 even asked by their author, spoiler and inline-spoiler reviews, lists (public, empty, private, hidden), authors (used and unused), Spanish book and review, many authors, discovery-off reader and the caller's own hidden review. `AnonymousEndpointsTests` lists the endpoint. Full backend suite 2081/2081.
+- **Left:** the user's Render step, deploy, then the live checks above.

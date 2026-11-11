@@ -31,7 +31,10 @@ For a weekly plan: 2–3 posts a week is enough for one person. Use the pillars 
 
 ## Step 2 — Write
 
-- **Spanish first, then English.** Neutral Spanish with *tú*, no words used only in Spain or in one country. Write the English as its own text, not a word-for-word translation; same facts, same order.
+- **Spanish only for now** (MARKETING.md, "Language focus", 2026-11-04): skip the English slides, story and caption part below unless the user asks for them. Spanish leaning Latin American: *tú*/*ustedes*, never *vosotros*; the Latin American word where the two differ ("link en la bio", "celular"); no slang from a single country. If English is asked for, write it as its own text, not a word-for-word translation; same facts, same order.
+- **Voice: "yo", passionate, the underdog** (MARKETING.md, "Voice on social media", 2026-11-07). Write as one independent maker, first person singular; "nosotros" only for the readers together. Lead with the passion, mention being small in one honest line, no hardship story, no apologising.
+- **Show `wingedwords.app` in full** on the first and last slide and in the caption; captions aren't clickable and the site isn't on Google yet.
+- **1–2 search phrases per caption** (MARKETING.md, "Search words in captions"): woven into a sentence, early if it fits, rotated between posts. No keyword lists.
 - **Only true claims.** Every feature named must exist today; check the code in `C:/Users/jramo/Apollon` or the spec if unsure. No numbers, quotes, testimonials or reader counts we don't have; mark a gap as `[NEED: …]` instead of inventing it.
 - **Never:** "No AI", "five languages" (at most "also in Spanish" in English posts), "app" for the site (say "add it to your home screen"), competitor names except as import sources (Goodreads, StoryGraph).
 - **Hook on slide 1 / the first line.** Specific to books and readers, not a generic formula filled in.
@@ -46,7 +49,7 @@ Posts live on the design canvas https://claude.ai/artifact/4LgPkkNVJfQfcDbPg3wpq
 - **Text size:** headings 72–100px, body at least 28px; it's read on a phone.
 - **Images, only these:**
   - Screenshots of the real site, made with `node C:/Users/jramo/Argos/scripts/shoot.mjs` (or the `browser-check` skill for states that need data), **with seeded test readers only**: never a real reader's name, avatar or review without their written OK.
-  - The public-domain title pages and art already on the canvas, or other public-domain/CC0 art with its source noted.
+  - The public-domain title pages, first-edition covers and art already on the canvas, or other public-domain/CC0 art with its source noted. A real book cover is fine when the book was published before 1931 and the image is a flat scan or photo of the cover (Wikimedia Commons marks these "Public domain"); readers prefer covers that look like a book (cloth, colour) to plain title pages.
   - **Never** AI-generated images, and never Open Library covers of modern books.
 - English slides go after the Spanish ones in the same carousel when there's a lot of text; a story's English version is the next story.
 

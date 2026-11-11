@@ -66,6 +66,17 @@ Most early readers come from Spanish-speaking countries, so promotion leads in S
 
 The posts, with captions, alt text and the bio, are on the design canvas https://claude.ai/artifact/4LgPkkNVJfQfcDbPg3wpq6 (pages Español, English, Perfil). The first round was made in both languages; the "Esto o aquello" carousel (2026-11-04) is Spanish only. **Images on it:** public-domain title pages from the landing page and simple book drawings made in code (the user prefers a quiet drawing to old covers that pull the eye; only Dracula 1897 was liked among the old covers). Public-domain first-edition covers from Wikimedia Commons are also allowed: a cover can be used only if the book was published before 1931 and the image is a flat scan or photo of the cover. A photo of a book as an object belongs to its photographer unless it is CC0. Never Open Library covers of modern books.
 
+### Voice on social media: "I", passionate, the underdog (decided 2026-11-07)
+
+Posts speak as one person who loves books and builds this alone, not as a company. Chosen after checking the research (first-person "I" beats "we" in customer–firm messages, Packard et al. 2018; underdog brand stories work through identification and work best with *passion and determination*, Paharia et al. 2011). None of it tests a solo app maker directly, so treat it as a sound default, not proof.
+
+- **"Yo", not "nosotros".** "Lo hice yo solo", "leo cada mensaje", "lo estoy construyendo". Use "nosotros" only for the readers together ("lo que estamos leyendo"), where it is true. Never a company "we" that hides that it is one person.
+- **Lead with why, not with the struggle.** The passion for reading and for building this is the hook; being small is the context. One honest line ("soy una sola persona, así que tarda un poco más") is enough. No long hardship story, no apologising, no begging for follows.
+- **Confident about the product, honest about the size.** Small flaws can be named (a missing book, a feature not built yet). Never a serious one in a post (data, privacy, reliability), and never to excuse a bug.
+- **Warm and specific, a bit bookish.** Say what was built and why, with a real detail. No hype words, no "revolucionario".
+- **Only true.** "Underdog" never justifies a made-up number, quote or story. `[NEED: …]` still applies.
+- **Where it applies:** social posts, captions, stories, replies and the bio. The app's buttons, errors and legal pages stay neutral and clear.
+
 ## 1. What to have before promoting anything
 
 | Item | Why | Roadmap link |
@@ -105,15 +116,22 @@ So there are **two things to build**, and they do different jobs:
 
 Sizes to offer: 9:16 (Stories/TikTok/Shorts, 1080×1920), 4:5 (Instagram feed, 1080×1350), 1:1 (everywhere, 1080×1080), and 1.91:1 (link preview, 1200×630). Fit with the 5 themes: let the reader choose light, dark or a theme colour for the card.
 
-### Styles chosen (2026-11-05)
-From the design canvas "Share card styles" (https://claude.ai/artifact/X4Hstduggwvuz113aKEWEG), four styles. All four show the cover as a book on a shelf, with the review below on paper:
-- **Cover colours** (V2a/V2b): the background is tinted with the cover's own colour, which the server already works out and saves (`CoverColorPicker`, `CoverColors` table; lightness from `web/src/lib/bookTint.ts`). Picked over the blurred cover because it costs almost nothing to draw, keeps text contrast predictable, makes small image files and already has a fallback for covers with no colour. It is the default style.
-- **Three photos behind the book, fading into paper** (W1, W4, W5; built like V3, whose wall-of-pages photo wasn't free to use). All three are CC0, so no credit is required, but list them in `THIRD-PARTY-NOTICES.md` when they ship:
+### Styles chosen (2026-11-05, narrowed 2026-11-06)
+The final designs are on the canvas "Share cards, final" (https://claude.ai/artifact/BSoEPAMckFsyKNSfVnFj9G): every card type on each of the three backgrounds. Explorations: "Share card styles" (https://claude.ai/artifact/X4Hstduggwvuz113aKEWEG).
+
+Three backgrounds only, all photos; the reader picks one. Cover colours (V2a/V2b, the background tinted from `CoverColorPicker`) were chosen on 2026-11-05 and dropped on 2026-11-06.
+- **Review card:** the cover as a book on a shelf, the photo behind it fading into paper behind the review (built like V3, whose wall-of-pages photo wasn't free to use).
+- **Progress card:** the same layout as the review card, with "Currently reading", a progress bar ("Page 212 of 384", 55%), an optional one-line note, and `wingedwords.app/u/<name>` in the footer so people can follow along. Reader profile and Year in books cards are for later (FUTURE-IDEAS.md).
+- **The three photos** (W1 botany, W4 leather, W5 library). All three are CC0, so no credit is required, but list them in `THIRD-PARTY-NOTICES.md` when they ship:
   - W1, old botany book: Ricky Kharawala, https://commons.wikimedia.org/wiki/File:Old_botany_book_(Unsplash).jpg
   - W4, leather-bound stack: Chris Lawton, https://commons.wikimedia.org/wiki/File:Leather_bound_books_(Unsplash).jpg
   - W5, Gladstone's Library: Michael D Beckwith, https://commons.wikimedia.org/wiki/File:Gladstone_S_Library_(187351035).jpeg
 
-**Lists and 5 books (to design).** The four backgrounds work for every card type; only the middle changes. With cover colours, use the first book's colour (the #1 of a ranked 5 books), not a mix of all the covers. A **5 books** card ("5 libros", renamed from "Top 5" 2026-11-06) shows five covers standing on one shelf, numbered 1–5 only when the reader made it ranked, with the theme as the title ("My 5 science fiction favourites") and no review text (the feature is `specs/five-books.md`). A **list** card shows up to six covers on one or two shelves, then "+N more", the list title, its maker and the book count. One card draws up to six covers, so take them from the cover cache at the medium size.
+**Lists and 5 books.** The three backgrounds work for every card type; only the middle changes. A **5 books** card ("5 libros", renamed from "Top 5" 2026-11-06) shows five covers standing on one shelf, numbered 1–5 only when the reader made it ranked, with the theme as the title ("My 5 science fiction favourites") and no review text (the feature is `specs/five-books.md`). A **list** card shows up to six covers on one or two shelves, then "+N more", the list title, its maker and the book count. One card draws up to six covers, so take them from the cover cache at the medium size.
+
+**5 books layouts chosen (2026-11-06).** Three arrangements, all with five same-size covers and no numbers, so they read as a set: **A shelf** (five covers between two bookends, slightly overlapping and tilted), **B flat lay** (covers dropped on a table at loose angles) and **C ring** (covers in a circle around the theme). The tied bundle (D) was dropped. On these cards the photo fills the whole card with no fade, the books sit centred above the text, and the text sits on a paper panel at the bottom. The ring puts a paper circle behind its title. Mockups: "Share cards, final".
+
+**List layouts chosen (2026-11-06).** Three arrangements, each ending in a "+N more" tag: **A real shelf** (one cover face out, spines, a leaning book and a small pile), **D reading pile** (eight books lying flat, titles readable on the spines) and **E bookshop display** (two ledges, three covers face out on each). Fanned cards and dominoes were dropped. Like 5 books: full photo, books centred, text on a paper panel. Mockups: "Share cards, final".
 
 ### How it could be built (to confirm in a spec)
 - **Link previews need a server.** The React site is drawn in the browser, but the apps that fetch a link preview don't run JavaScript, so they would see an empty page. A small backend endpoint like `/r/{id}` returns a plain page with the preview tags (title, description, image) and sends real visitors on to the normal review page. This is one controller, no new service.
@@ -133,7 +151,7 @@ From the design canvas "Share card styles" (https://claude.ai/artifact/X4Hstdugg
 ### Questions to settle in the spec
 1. Does a logged-out visitor see the whole review when they tap the link, or a short version with "Sign up to read more"? (The second helps growth; the first is friendlier.)
 2. Which items can be shared first? Suggested start: finished book + review, then progress, then lists.
-3. ~~One fixed design, or a few styles to choose from?~~ Settled 2026-11-05: four styles, see "Styles chosen" above.
+3. ~~One fixed design, or a few styles to choose from?~~ Settled 2026-11-05, narrowed 2026-11-06: three photo backgrounds, see "Styles chosen" above.
 4. Do we want a "Made with Argos" mark on every card? (Suggested: yes, small.)
 5. Final domain and short-link format, which depends on Stage 4.
 
