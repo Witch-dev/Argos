@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-11 — Marking a book Read from a club page (or any progress dialog) now shows the stars and review, and a finished member's club card has a "Rate and review" button → Apollon 4062a44
 - 2026-11-11 — Author pages keep a person's own books apart from the ones Open Library lists them on as a second name (translators like Megan McDowell): "Also credited on" section with each book's real author, header line for people mostly credited on others' books → specs/author-credited-books.md (Apollon 3019f4d)
 - 2026-11-11 — Club page: "Let the club vote" opens the suggest form (book, author or other) instead of only scrolling, which on a short page looked like a jump to the invite panel → Apollon 9f34000
 - 2026-11-11 — Public clubs and the club directory's one-topic and one-language pages reach search engines: sitemap entries, plain HTML pages for bots, `indexable`, page meta in the app, privacy line → specs/search-engines.md §8 (Apollon e239d65)
