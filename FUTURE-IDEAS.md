@@ -121,11 +121,13 @@ Suggestions from `PRODUCT-ANALYSIS.md`, which compared Argos with what readers a
 
 ## Making money (2026-10-06)
 
-The chosen approach: **Argos stays free and has no ads.** Money comes from readers who choose to support it, never from locking features or selling data. Hosting costs about $7/month (`ACCOUNTS-AND-HOSTING.md` §2.3), so the bar is low. Add these **after public launch**, once people use Argos daily. Asking for money during the beta gets less honest feedback.
+The chosen approach: **Argos stays free.** Money comes from readers who choose to support it, never from locking features or selling data. Hosting costs about $7/month (`ACCOUNTS-AND-HOSTING.md` §2.3), so the bar is low. Add these **after public launch**, once people use Argos daily. Asking for money during the beta gets less honest feedback.
 
 **Never charge for these:** logging, reviews, stats and the yearly goal, Wrapped, clubs, buddy reads, lists, import and export. Say so on a public pricing page. Paywalled stats and buddy reads are what readers dislike about other apps (`PRODUCT-ANALYSIS.md`).
 
-**Avoid:** ads (they pay little at small scale and need tracking and GDPR cookie banners), selling or sharing reading data, and limits on free accounts ("only 3 lists").
+**Ads are a maybe (2026-11-13):** not ruled out for the future, so the site and posts no longer promise "no ads"; just don't mention ads either way. If they come, they pay little at small scale and tracking ads need a GDPR cookie banner and a privacy policy change, so prefer plain, non-tracking ones.
+
+**Avoid:** selling or sharing reading data, and limits on free accounts ("only 3 lists").
 
 - **Supporter membership ("Argos Plus" or similar)**: the main income. About $3–4/month or $30/year, with the yearly plan clearly cheaper. It gives extras and convenience, never core features:
   - a supporter badge on the profile
