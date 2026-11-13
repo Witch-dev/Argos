@@ -161,27 +161,71 @@ Follows `DESIGN.md` (the shelf is the signature) with the `web-design` skill's s
 ### Phase 3 — 5 books and the new profile (browser) · *size M–L*
 
 #### Frontend
-- [ ] `FiveBooksShelf` with empty slots and numbers only when ranked, on the profile, list cards and the list page.
-- [ ] Create form *List / 5 books* with *Ranked* and genre; "New 5 books" on the profile; add-to-list counts and Full; pin/unpin.
-- [ ] Profile: Favourite books and Favourite authors side by side, pinned 5 books, both pickers capped at 5, `/u/:username/favourite-authors`.
-- [ ] Favourite books' locked controls hidden; the "will also leave your favourite books" line on log delete and edit.
-- [ ] Browse *5 books* chip and genre select.
-- [ ] Translations in all five locales. Vitest for the shelf (1–5 books, ranked and not, owner vs visitor), the create form, the pickers at 5, and the log-delete warning.
-- [ ] `web-design` screenshot round (the empty fifth slot, and an unranked shelf that doesn't look like a ranking), then `reviewer`.
+- [x] `FiveBooksShelf` with empty slots and numbers only when ranked, on the profile, list cards and the list page.
+- [x] Create form *List / 5 books* with *Ranked* and genre; "New 5 books" on the profile; add-to-list counts and Full; pin/unpin.
+- [x] Profile: Favourite books and Favourite authors side by side, pinned 5 books, both pickers capped at 5, `/u/:username/favourite-authors`.
+- [x] Favourite books' locked controls hidden; the "will also leave your favourite books" line on log delete and edit.
+- [x] Browse *5 books* chip and genre select.
+- [x] Translations in all five locales. Vitest for the shelf (1–5 books, ranked and not, owner vs visitor), the create form, the pickers at 5, and the log-delete warning.
+- [x] `web-design` screenshot round (the empty fifth slot, and an unranked shelf that doesn't look like a ranking), then `reviewer`.
+
+#### Built (2026-11-13)
+
+- **Decided with the user:** Favourite books keeps the Public-only rule from Phase 2 (no per-viewer filter). The add search on its page, "Add to list" and the profile picker each say the rule before adding.
+- `FiveBooksShelf` (five equal places on one board, an `ol` with big display numbers when ranked, a `ul` without numbers when not). The owner's first empty place is the one button ("Add a book", "Pick your fifth" when four are in), with a green dashed outline; the other empty places and a visitor's are faint dashed outlines. When the shelf is narrower than 22rem (a phone), titles leave the screen (kept for screen readers) and the add place shows only its plus. On a card, covers only, with the number row kept so cards line up.
+- Profile: Favourite books (heading links to its list; "See all (N)" opens the Favourites tab) and Favourite authors (heading "Favourite authors" for everyone; five as a photo grid, 3+2 beside the books, "See all (N)" past five) in a `favourites` container, side by side from 40rem. Then "5 books": the pinned ones (each loads its list for book links; the owner's empty place opens the list) and the owner's "New 5 books" (`/lists?new=fiveBooks`). Both pickers are one shared `ShowcasePicker` (5 at most, ↑/↓ at 44px).
+- List page of a 5 books: "5 books" pill and the genre as a pill link to browse (`/lists/browse?fiveBooks=1&genre=`), the shelf above the rows (the shelf/rows switch and sort are hidden), reorder arrows at 44px, Pin/Unpin, collaborators hidden, the image share offered only when complete, add hidden when full. Favourite books also hides Delete and Copy, and its edit form shows only description, tags and *Ranked* (the stored title and Public are sent back).
+- "Add to list": Favourite books first, offered before the list exists (made with `POST /api/users/me/favourite-books` on the first add), "Title (3 of 5)", "Title: full", "Title: mark it as read first" (the book page passes whether you read it).
+- Log forms: delete (the "⋯" menu, the journal, and your review card on the book page, which now asks before deleting) and edit warn "It will also leave your favourite books." when the log is the last Read log of a hearted book, or the last public one of a book in Favourite books. Making the reading Private or Followers says the book leaves Favourite books and stays hearted. `lib/favouriteLeaving.ts`.
+- Caches: a log change and an un-heart also refresh `['bookLists']` (the server takes the book off the list); a change on the Favourite books page refreshes `['favourites']`.
+- Texts that said "four" now say five. Tests: `FiveBooks.test.tsx` (17) plus updated favourites tests.
+- Screenshot round: two `design-reviewer` critique rounds (fixes: browse's genre select on its own line, which made 375 scroll sideways; the add place in green; the authors grid beside the books; one heading; card number rows; genre as a pill), then a fresh full review (disposition **ship**, after the add place got its words under the shelf when the place is too narrow for them). Left for later: the floating feedback button covering a heading link on a phone (`bugs/feedback-button-covers-row-links.md`), and the shared list page's header Add button and row controls. `reviewer` findings fixed (list caches after a log change, the last-public-read warning, Ranked hidden after an open list switched to 5 books, the rule in Add to list).
+- Apollon 92536be (with Phase 4), pushed 2026-11-13.
 
 ### Phase 4 — "In N readers' 5 books" · *size S–M*
 
-- [ ] Backend: `GET /api/books/{id}/five-books`, counted as a visitor; tests for private accounts, private and unlisted lists, suspended and deactivated readers, blocks not changing the count.
-- [ ] Frontend: the line and cards on the book page, five locales.
-- [ ] `reviewer`, then `argos-security`.
+- [x] Backend: `GET /api/books/{id}/five-books`, counted as a visitor; tests for private accounts, private and unlisted lists, suspended and deactivated readers, blocks not changing the count.
+- [x] Frontend: the line and cards on the book page, five locales.
+- [x] `reviewer`, then `argos-security`.
+
+#### Built (2026-11-13)
+
+- `GET /api/books/{openLibraryId}/five-books` → `{ count, lists }` (`BookFiveBooksDto`), anonymous, rate limit `public`. The count is the same for everyone: distinct readers with the book in a Public 5 books or Favourite books, on a public, active account (not away, suspended or the deleted placeholder), in a list the admins haven't hidden (`HiddenAt` checked by name, since the Hidden filter would let the asker's own through). `ListSocialRepository.CountFiveBooksReadersWithBookAsync`.
+- The up to 3 cards reuse "Lists with this book" (`fiveBooksOnly`), most-liked first, with its viewer filter: blocks both ways when signed in, readers who turned discovery off for a visitor. So the count can be above the cards shown, and the line stays when no card is left. A hidden list isn't a card even for its owner. One reader can fill two cards (a 5 books and Favourite books), left as is.
+- A book nobody cached answers `{0, []}`, never calling Open Library.
+- Book page: `FiveBooksWithBookSection` (in `ListsWithBookSection.tsx`) right under "What readers think", heading "In 12 readers' 5 books" / "En los 5 libros de 12 lectores" (plural forms in all five locales), cards with the 5 books shelf; nothing at 0. Under the `bookLists` query key, so a list change refreshes it.
+- Tests: `FiveBooksTests` `InFiveBooks_*` (3), `FiveBooksWithBookSection.test.tsx` (4).
+- Reviews: `reviewer` (fixed: hidden list as an owner's own card), `argos-security` clean. It noted that "count above cards" can hint that someone in a block has the book, which signing out already shows (`bugs/blocks-only-apply-signed-in.md`).
+- Screenshot round for the section: done in Verification below.
+- Apollon 92536be (Phases 3 and 4 together), pushed 2026-11-13.
 
 ### Verification
-- [ ] `browser-check` with two seeded readers: A had 4 showcased favourites before the migration → sees them in the same order, without numbers, with an inviting fifth slot, picks a fifth; B sees all five and likes and comments on A's Favourite books. A turns *Ranked* on → numbers show for both.
-- [ ] A makes a "Science fiction" 5 books with the genre, ranked, adds 3 books, reorders with ↑/↓ at 375 px, pins it; A makes an unranked "To read in winter" too; B sees both on A's profile; A makes one Private; B no longer sees it.
-- [ ] A deletes the journal entry of a book in Favourite books → the warning shows, and the book leaves both the heart shelf and the list.
-- [ ] A favourites a 6th author → it's under "See all"; A swaps it into the showcase.
-- [ ] Phone width, all five themes. What's new entry once Phase 3 is live (the switch from 4 to 5 is visible to everyone).
-- [ ] Re-read this spec against what was built; `CHANGELOG.md`; SPEC.md.
+- [x] `browser-check` with two seeded readers: A had 4 showcased favourites before the migration → sees them in the same order, without numbers, with an inviting fifth slot, picks a fifth; B sees all five and likes and comments on A's Favourite books. A turns *Ranked* on → numbers show for both.
+- [x] A makes a "Science fiction" 5 books with the genre, ranked, adds 3 books, reorders with ↑/↓ at 375 px, pins it; A makes an unranked "To read in winter" too; B sees both on A's profile; A makes one Private; B no longer sees it.
+- [x] A deletes the journal entry of a book in Favourite books → the warning shows, and the book leaves both the heart shelf and the list.
+- [x] A favourites a 6th author → it's under "See all"; A swaps it into the showcase.
+- [x] Phone width, all five themes. What's new entry once Phase 3 is live (the switch from 4 to 5 is visible to everyone). *(Drafted below; post it after the deploy.)*
+- [x] Re-read this spec against what was built; `CHANGELOG.md`; SPEC.md.
+
+#### Verified (2026-11-13)
+
+- **`browser-check`** (readers A, B, C on the side ports), every step passed:
+  - A's 4 favourites were seeded through the showcase endpoint. The migration itself was checked on the live copy (Phase 2).
+  - Order kept, no numbers, "Pick your fifth"; picking a fifth inline worked. B liked and commented. *Ranked* on → 1–5 for A and B.
+  - Reorder buttons 44×44, and the order survives a reload. Both pins show to B. The Private one leaves B's view of the profile, and its URL says "List not found."
+  - The delete confirm ends "It will also leave your favourite books."; the hearted count and the list both went 5 → 4.
+  - 6 authors → 5 shown plus "See all (6)"; the picker swap shows on the profile.
+  - Book page: "In 4 readers' 5 books" (a fourth reader was seeded by another session) with 3 shelf cards, signed in and signed out. A book in nobody's 5 books shows no section.
+  - No sideways scroll at 375 on the profile, the list pages, browse with the 5 books chip and genre, favourite authors, or the book page.
+- **Five themes at 375** (the section, signed in and out; A's profile): `design-reviewer`.
+  - Fixed: the quiet dashed empty places used `--border` (about 1.3:1 on the shelf) and nearly vanished in Dark. They now mix `--text-muted` into it (`FiveBooksShelf.module.css`).
+  - Checked and kept: the muted "4 of 5" text measures 4.66–7.27:1 in every theme, and the blank number row on unranked cards keeps cards level (Phase 3).
+  - Seen, not from this spec: the list card's owner pill, and the profile's shelf tabs clipping at the edge (they scroll).
+- **Re-read against the build:** matches §2–3 with the changes the Built notes give: Public-only Favourite books, the extra `POST /api/users/me/favourite-books`, `favourite-authors` paging shape, `lists.favouritesPublicRead` / `lists.pinFiveBooksOnly` / `lists.badType` / `authors.showcaseDuplicate`. SPEC.md §7 already has the columns (Lists, FavouriteAuthors, FavouriteBooks).
+- **Still open for the user** (Phase 1): a pinned *Unlisted* 5 books shows on the profile to everyone. Keep, or show pins only when Public?
+- **What's new entry, to post after the deploy** (Try it: `/lists?new=fiveBooks`):
+  - *EN:* **5 books.** Make a set of five books on any theme: your five science fiction, five to read in winter. Turn on Ranked if it's a top five, or leave it as a set. Pin up to three to your profile, where others can like and comment on them. Your favourite books are now a 5 books too, with room for a fifth. Favourite as many authors as you like and choose five for your profile. And a book's page shows how many readers have it in their 5 books.
+  - *ES:* **5 libros.** Crea un grupo de cinco libros sobre lo que quieras: tus cinco de ciencia ficción, cinco para leer en invierno. Activa Ranking si es un top cinco, o déjalo como grupo. Fija hasta tres en tu perfil, donde otros pueden darles «me gusta» y comentarlos. Tus libros favoritos ahora también son un 5 libros, con sitio para un quinto. Marca como favoritos a todos los autores que quieras y elige cinco para tu perfil. Y la página de un libro muestra cuántos lectores lo tienen en sus 5 libros.
 
 ## 5. Checked against the other list and author specs (2026-11-06)
 

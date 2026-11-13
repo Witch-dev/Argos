@@ -32,6 +32,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | [The log form on a book's page is wider than a phone screen](log-form-overflows-on-phone.md) | P2 | S | Frontend, book page, phone |
 | [A profile keeps going back to "Loading" when one of the rows above its shelves fails](profile-reloads-when-a-row-fails.md) | P2 | S | Frontend, profile page |
 | [The "Google sign-in off" test fails on a machine with a Google client ID in its user-secrets](google-signin-off-test-reads-user-secrets.md) | P2 | S | Backend tests, local only |
+| [The floating feedback button covers links at the right edge on a phone](feedback-button-covers-row-links.md) | P3 | S | Frontend, shell, phone |
 | [Blocks only apply while signed in](blocks-only-apply-signed-in.md) | P3 | L | Backend, privacy |
 | [Writings' Popular list ranks every writing on every request](writings-popular-query-cost.md) | P3 | M | Backend, performance |
 | [Changing a writing's language marks it "edited"](writing-language-change-marks-edited.md) | P3 | S | Backend |
