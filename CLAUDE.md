@@ -6,7 +6,7 @@ Argos is a Letterboxd-like app for books. Its public name is **Winged Words** (r
 
 - **Code:** `C:/Users/jramo/Apollon` (git, GitHub `Witch-dev/Apollon`, private). Backend in `src/` (`Argos.Api`, `Argos.Domain`, `Argos.Infrastructure`), tests in `test/Argos.Tests` (`Unit/`, `Integration/`), frontend in `web/`. Run `git diff` / `git status` there for code changes.
 - **Planning:** this folder (git, GitHub `Witch-dev/Argos`, private). `SPEC.md` (architecture §5, versions §6, data model §7, constraints §8), `ROADMAP.md` (decides build order: the next task is the first unticked box), `specs/*.md` (one per feature), `bugs/*.md`, `ux-reviews/*.md` (findings from the `ux-review` skill: "works, but could look and read better"), `FUTURE-IDEAS.md`, `CHANGELOG.md`. `backend-tasks/` and `frontend-tasks/` are the finished original build, history only.
-- Commit each repo separately, staging files by name. Another Claude session may be working at the same time. `gh` is not installed, so the user checks CI on GitHub's Actions tab.
+- Commit each repo separately, staging files by name. Another Claude session may be working at the same time. `gh` is installed and logged in as Witch-dev (2026-11-13): `gh run list` / `gh run view <id> --log-failed` (run from the Apollon folder) read CI results and failures. It may not be on the PATH in older shells: `C:\Program Files\GitHub CLI\gh.exe`.
 
 ## Building and checking
 
