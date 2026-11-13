@@ -8,6 +8,9 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-12 — Share cards Phase 3: anyone who can see a book list can share it as a 1080×1920 picture in three arrangements (shelf, reading pile, bookshop display) with "+N more", the maker's name and profile address; the share sheet gained an arrangement picker → specs/share-cards.md (Apollon 23fac38, not pushed until the phone check)
+- 2026-11-12 — Share cards Phase 2: a reader can share where they are in a book as a 1080×1920 picture (bar, page or chapter, note, profile address), from the quick update, the book's page while reading, and a new "Progress saved" step in the progress dialog → specs/share-cards.md
+- 2026-11-12 — Share cards Phase 0 and 1: Open Library covers work on a canvas directly (no proxy needed), and a review's author can share it as a 1080×1920 picture on three photo backgrounds, drawn in the browser → specs/share-cards.md
 - 2026-11-11 — Marking a book Read from a club page (or any progress dialog) now shows the stars and review, and a finished member's club card has a "Rate and review" button → Apollon 4062a44
 - 2026-11-11 — Author pages keep a person's own books apart from the ones Open Library lists them on as a second name (translators like Megan McDowell): "Also credited on" section with each book's real author, header line for people mostly credited on others' books → specs/author-credited-books.md (Apollon 3019f4d)
 - 2026-11-11 — Club page: "Let the club vote" opens the suggest form (book, author or other) instead of only scrolling, which on a short page looked like a jump to the invite panel → Apollon 9f34000

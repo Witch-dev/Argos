@@ -23,7 +23,7 @@ A share card is a picture made for posting: the book or books, the reader's word
 5. **The progress card shows the Winged Words address** so people can follow along.
 6. **Cheap to run:** the reader's own phone or computer draws the card. The API and the database do nothing new (§2.2.1).
 
-### 2.2 Decided while writing the spec (not asked; change any before building)
+### 2.2 Decided while writing the spec (checked with the user 2026-11-12; kept as written, with the additions in §2.3)
 
 1. **Drawn in the browser, never on the server.** Drawing a 1080×1920 picture on the server would use about 30–60 MB of memory per card with SkiaSharp, against an API limit of 512 MB that has already been hit (DEPLOY.md, "Incidents on the live site"). It would also need file storage, which the app doesn't have. In the browser it costs the server nothing: the data is already on the page, and the photos are static files from the web host.
 2. **Drawn with the browser's own canvas (Canvas 2D), no new package.** Libraries that photograph HTML (`html-to-image` and similar) rely on an SVG trick that iPhone Safari handles badly: missing images on the first try, fonts not ready. Drawing with Canvas 2D is more code (text wrapping, rotated covers, shadows), but it behaves the same on every phone and adds no dependency to check. The canvas mockups give the exact positions to copy.
@@ -47,6 +47,13 @@ A share card is a picture made for posting: the book or books, the reader's word
     - The PNG is named `winged-words-<type>.png`.
 11. **Text on the card follows the site's language** (all five locales), but the book titles stay as the reader sees them on the site.
 12. **No tracking:** nothing is sent to the server when a card is made or shared. A count can come later if it's worth it.
+
+### 2.3 Added when checking §2.2 (2026-11-12)
+
+1. **Profile address, not the mockup's short link.** The mockups show `wingedwords.app/r/8f3k2`; the cards print `wingedwords.app/u/<username>` (§2.2.5).
+2. **Inline spoilers (`||…||` inside the review text):** the excerpt is cut before the first one, then "…". If too little text comes before it (under about 40 characters), the card shows "Contains spoilers" as for the whole-review flag.
+3. **The detail line under the author** ("412 pages · read in 9 days" in the mockup): only the parts the data has, no genre. Days read only when the log has a start date. No line when there's nothing to show.
+4. **iPhone Safari:** Phase 0 used WebKit through Playwright as a stand-in. A real iPhone is checked in Verification; if covers fail there, the pass-through endpoint (§3.3 step 3) is added then.
 
 ## 3. Design
 
@@ -73,6 +80,8 @@ If a page doesn't have enough books loaded, the card asks the existing list endp
 2. If it works, use the covers directly.
 3. If it doesn't, add one small endpoint that passes a cover file through: `GET /api/covers/{coverId}-L.jpg`, only for Open Library cover ids and only from `covers.openlibrary.org`, with a short cache header. It doesn't decode the image or keep it in memory, so it costs a little bandwidth only. It needs `argos-security` (outside call).
 4. Write the result in this section.
+
+**Result (2026-11-12): covers work directly, no endpoint needed.** Every response in the chain sends `Access-Control-Allow-Origin` (`covers.openlibrary.org` → `archive.org/download` → `iaNNN.us.archive.org`). Tested with Playwright from a local page: three covers (two by id, which redirect twice through archive.org, one by ISBN, which doesn't), `crossOrigin = 'anonymous'`, `drawImage`, `getImageData` and `toBlob('image/png')`. All three passed on Chromium 153, Firefox 155 and WebKit 26.6. A control image loaded without `crossOrigin` failed with `SecurityError` on all three, so the test can detect a failure. Covers come in uneven shapes (350×500, 465×475, 265×475), so `drawCover` crops to fill its frame. A real iPhone is still checked in Verification (§2.3.4).
 
 **The pieces:**
 - **`web/src/shareCards/draw.ts`** holds the drawing helpers:
@@ -101,35 +110,56 @@ If a page doesn't have enough books loaded, the card asks the existing list endp
 ## 4. Tasks
 
 ### Phase 0 — Cover check · *size S*
-- [ ] The CORS test in §3.3 on Chrome, Firefox and iPhone Safari; write the result here.
-- [ ] Only if it fails: the cover pass-through endpoint, tests (other hosts refused, bad ids refused), `argos-security`.
+- [x] The CORS test in §3.3 on Chrome, Firefox and iPhone Safari; write the result here. (Passed on Chromium, Firefox and WebKit; real iPhone in Verification.)
+- [x] ~~Only if it fails: the cover pass-through endpoint, tests (other hosts refused, bad ids refused), `argos-security`.~~ Not needed.
 
 ### Phase 1 — Review card and the shared pieces (browser) · *size M*
 
 #### Frontend
-- [ ] The three background photos in `web/public/share-cards/`, sized and compressed; credits in `THIRD-PARTY-NOTICES.md`.
-- [ ] `draw.ts` helpers, font and image loading, the drawn-cover fallback.
-- [ ] `reviewCard.ts` (spoilers, long text, no rating, no cover).
-- [ ] `ShareCardSheet`: preview, background picker, share file / save image, the privacy line, remembered choice.
-- [ ] Button on `ReviewDetailPage` for the owner.
-- [ ] Translations in all five locales.
-- [ ] Vitest: text cut at a word, spoilers hide the text, the button only for the owner, share-sheet vs download choice. Canvas drawing itself isn't unit-tested (jsdom has no canvas); a pure layout function (positions from data) is.
-- [ ] `web-design` screenshot round of the three backgrounds against the canvas mockups, then `reviewer`.
+- [x] The three background photos in `web/public/share-cards/`, sized and compressed; credits in `THIRD-PARTY-NOTICES.md`. (Kept at 1600×1068 with the mockups' sepia(.25) saturate(.9) baked in, not pre-cropped to 1080×1920: the review card and the list cards crop the photo differently, so the canvas crops it. 194/200/278 KB, plus ~5 KB `-thumb.jpg` files for the picker.)
+- [x] `draw.ts` helpers, font and image loading, the drawn-cover fallback. (Only the helpers the review card uses; `drawSpine`, `drawLying`, `drawBookend`, `drawPaperPanel` and `drawProgressBar` come with Phases 2–4.)
+- [x] `reviewCard.ts` (spoilers, long text, no rating, no cover). Card data from the review, the owner's log (pages, start date) and the book (authors) in `reviewCardData.ts`.
+- [x] `ShareCardSheet`: preview, background picker, share file / save image, the privacy line, remembered choice. The PNG is made as soon as the card is drawn, so "Share image" calls `navigator.share` straight from the tap (Safari refuses it after a wait).
+- [x] Button on `ReviewDetailPage` for the owner (`ShareReviewImageButton`).
+- [x] Translations in all five locales (`shareCards.json`).
+- [x] Vitest: text cut at a word, spoilers hide the text, the button only for the owner, share-sheet vs download choice. Canvas drawing itself isn't unit-tested (jsdom has no canvas); a pure layout function (positions from data) is.
+- [x] `web-design` screenshot round of the three backgrounds against the canvas mockups, then `reviewer`. (Two critique rounds, then a fresh full review: ship. `reviewer`: three low findings, fixed.)
+
+**Built notes (2026-11-12):**
+- **Titles and the wordmark are Literata 700, not 600.** A canvas can't set Literata's optical-size axis, so at card size the browser picks the thin display cut, which looks a weight lighter than the mockup's 600. 700 matches it by eye. The later cards should do the same.
+- **Instagram Stories zones (from the design review, not changed):** the footer address (y≈1730–1800) and the top of the cover (y=144) sit where Stories draws its own top and bottom bars. The mockups have the same layout. If posted cards show the address covered, raise the footer to about y 1650.
 
 ### Phase 2 — Progress card · *size S*
-- [ ] `progressCard.ts`: bar, page X of Y, percentage, optional note, profile address.
-- [ ] "Share your progress" after saving in `ProgressUpdateModal`, and on the reader's own currently-reading book; five locales; Vitest for the percentage (no total pages → page number only, no bar).
+- [x] `progressCard.ts`: bar, page X of Y, percentage, optional note, profile address. (The place comes from `progressText`, so a reading counted in chapters or an audiobook shows "Chapter 6 of 24" or "4 h 10 m of 12 h". Card words in `progressCardData.ts`; the note is cut like the review excerpt.)
+- [x] "Share your progress" after saving in `ProgressUpdateModal`, and on the reader's own currently-reading book; five locales; Vitest for the percentage (no total pages → page number only, no bar). (`ShareProgressImageButton`; `web-design` critique round, then `reviewer`: no bugs, four minor findings fixed.)
+
+**Built notes (2026-11-12):**
+- **Where the button is:** a link next to "Edit details" in `QuickLog`, which covers both the progress dialog's quick update ("+10 pages" then share) and the book's own page while reading it. After a full-form save of a book still being read, the dialog stays open on a "Progress saved" step with the book, its place, "Share your progress" and "Done". Every way out of that step (Done, Close, Escape, outside click) counts as saved, so club and buddy-read pages still refresh. A save that finishes the book closes as before. `LogForm`'s `onSaved` now passes the saved log.
+- **Shared pieces moved into `draw.ts`:** `drawPerson`, `drawProgressBar`, `newCardCanvas`, `TITLE_FONT` and `QUOTE_FONT`. The review card draws exactly as before.
+- **Privacy line:** three cases. The reading is "only me": visitors won't see the book. It's followers-only: only followers will. The account is private: only followers will see the progress.
+- **"CURRENTLY READING" is a small-caps kicker,** which DESIGN.md otherwise refuses. Kept because it's in the approved mockup and works as a status label, not decoration.
+- **Typed apostrophes inside a word curl** (can't → can’t) in review excerpts and progress notes, to match the card's curly quote marks.
+- **The Library photo behind the label and title** is busier than Botany or Leather. The fade matches the mockup, so it was left alone; look at it again if posted cards read poorly.
 
 ### Phase 3 — List card · *size S–M*
-- [ ] `listCard.ts` with shelf, pile and display; "+N more"; short lists (fewer books than the arrangement holds) still look full.
-- [ ] Arrangement picker; button on `ListDetailPage`; five locales; Vitest for the book counts per arrangement and "+N more".
+- [x] `listCard.ts` with shelf, pile and display; "+N more"; short lists (fewer books than the arrangement holds) still look full. (Card words in `listCardData.ts`; new `draw.ts` pieces: `drawSpine`, `drawLying`, `drawPaperPanel`, `drawTag`, `bookColours`.)
+- [x] Arrangement picker; button on `ListDetailPage`; five locales; Vitest for the book counts per arrangement and "+N more". (`ShareListImageButton`; `web-design` critique round twice, then ship; `reviewer`: no bugs, two minor findings fixed.)
+
+**Built notes (2026-11-12):**
+- **Who and which lists:** the button shows for anyone who can see a book list, visitors too, next to Share. Author lists get none (no covers), nor an empty list. The privacy line has three cases: a private list (visitors won't see it), an unlisted one (it won't show on the maker's profile, which is the card's address), and the maker's own private account.
+- **Books and order:** the list's own order, vote order on an open list. The address is the maker's profile whoever shares it; "A list by Ana" names them. Counts are "23 books · 41 likes", likes left out at 0.
+- **Shelf (A):** the first book face out, then spines, the last upright one leaning, and from the eighth book a small lying stack with the "+N more" slip on it, as in the mockup. Three or fewer books all stand face out. Spines and lying books take their cover's average colour (read from the smaller cover), cloth colour without one, and ink or cream text by contrast ratio. The surname is dropped from a spine rather than cutting the title.
+- **Bigger than the mockup:** after the first critique the shelf was scaled up (cover 240×360, spines 400–480 tall, titles 28–30px) because the mockup's spine text was about 8px on a phone. Short piles lie thicker and scale up; a one-row display is 1.25× (1.5× for one book).
+- **List-card shelves are "edged"** (lit top edge, front lip, closer contact shadow) so they sit in the full-card photo; the review and progress shelves are unchanged. `drawCover`'s page block is now proportional (still 12px on the review card's cover, ~8px on list covers).
+- **The arrangement is remembered** per card type (`argos_shareCardListArrangement`); the picker's names come from `shareCards.arrangements`, which Phase 4 extends with flat lay and ring.
+- **The footer sits inside the paper panel** (its foot at y 1800), via `drawFooter`'s new `top`.
 
 ### Phase 4 — 5 books card · *size S* (after `specs/five-books.md` Phase 3)
 - [ ] `fiveBooksCard.ts` with shelf, flat lay and ring; numbers only when ranked; offered only when complete.
 - [ ] Five locales; Vitest for ranked vs not and the incomplete case.
 
 ### Verification
-- [ ] `browser-check`: make each card type on each background and download it. Check that the PNG is 1080×1920, the covers appear, and the fonts are Literata and Public Sans, not the fallbacks.
-- [ ] On a real iPhone and a real Android phone: "Share image" opens the share sheet with the picture, and Instagram Stories accepts it.
-- [ ] A private review: the privacy line shows, and sharing still works.
+- [x] `browser-check`: make each card type on each background and download it. Check that the PNG is 1080×1920, the covers appear, and the fonts are Literata and Public Sans, not the fallbacks. (2026-11-12, Chromium at 1280 wide: 69 PNGs (review, progress from the book page and from the "Progress saved" step, lists as maker and visitor in all three arrangements), all 1080×1920, real covers through the archive.org redirects, Literata 700/italic and Public Sans loaded, no console errors. One fix: a cloth cover broke a long word mid-word ("cancion/ero"); `drawClothCover` now shrinks the title until its longest word fits. The 5 books card is checked when Phase 4 is built.)
+- [ ] On a real iPhone and a real Android phone: the covers appear on the card (Phase 0 only tested WebKit), "Share image" opens the share sheet with the picture, and Instagram Stories accepts it.
+- [x] A private review: the privacy line shows, and sharing still works. (2026-11-12, in the same `browser-check`.)
 - [ ] The API's memory on Render doesn't change while cards are made (it shouldn't: nothing reaches it, unless Phase 0 needed the cover pass-through).
