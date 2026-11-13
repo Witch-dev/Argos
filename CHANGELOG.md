@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-12 — 5 books Phase 2 (server): Favourite books becomes a list every reader can have (made on first use, 5 books, only books read publicly, kept in step with the hearts: a reading made private or deleted takes the book off), the profile showcase moves into it; favourite authors go from 4 to up to 500 with 5 shown and a picker → specs/five-books.md
+- 2026-11-12 — 5 books Phase 1 (server): lists get a type (list, 5 books, Favourite books), a 5 books holds at most five books, is never open or shared, can have a genre, can be pinned (up to 3) to the profile; browse filters by 5 books and genre and never shows Favourite books → specs/five-books.md
 - 2026-11-12 — Share cards Phase 3: anyone who can see a book list can share it as a 1080×1920 picture in three arrangements (shelf, reading pile, bookshop display) with "+N more", the maker's name and profile address; the share sheet gained an arrangement picker → specs/share-cards.md (Apollon 23fac38, not pushed until the phone check)
 - 2026-11-12 — Share cards Phase 2: a reader can share where they are in a book as a 1080×1920 picture (bar, page or chapter, note, profile address), from the quick update, the book's page while reading, and a new "Progress saved" step in the progress dialog → specs/share-cards.md
 - 2026-11-12 — Share cards Phase 0 and 1: Open Library covers work on a canvas directly (no proxy needed), and a review's author can share it as a 1080×1920 picture on three photo backgrounds, drawn in the browser → specs/share-cards.md

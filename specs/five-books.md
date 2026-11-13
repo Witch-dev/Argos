@@ -115,21 +115,48 @@ Follows `DESIGN.md` (the shelf is the signature) with the `web-design` skill's s
 ### Phase 1 — 5 books lists (server) · *size M*
 
 #### Backend
-- [ ] Migration `FiveBooks` part 1: `type`, `genre_key`, `profile_pin`, the pin and one-favourites-list indexes.
-- [ ] 5 books rules on create, add, collaborators, open, kind, type lock, genre; *Ranked* left free; new error codes and translations.
-- [ ] Pins: pin/unpin endpoints, `pinned-lists` endpoint behind the profile gate.
-- [ ] DTO fields (`type`, `genreKey`, `profilePin`, `isComplete`), browse filters, "Lists with this book", copy keeps the type and *Ranked*, `lists.csv` type column. SPEC.md §7.
-- [ ] Tests: the 6th book, each refused setting, ranked on and off, type lock, unknown genre, copy, pins (4th refused, private pin hidden from others, blocked and private-account viewers), browse filters.
+- [x] Migration `FiveBooks` part 1: `type`, `genre_key`, `profile_pin`, the pin and one-favourites-list indexes.
+- [x] 5 books rules on create, add, collaborators, open, kind, type lock, genre; *Ranked* left free; new error codes and translations.
+- [x] Pins: pin/unpin endpoints, `pinned-lists` endpoint behind the profile gate.
+- [x] DTO fields (`type`, `genreKey`, `profilePin`, `isComplete`), browse filters, "Lists with this book", copy keeps the type and *Ranked*, `lists.csv` type column. SPEC.md §7.
+- [x] Tests: the 6th book, each refused setting, ranked on and off, type lock, unknown genre, copy, pins (4th refused, private pin hidden from others, blocked and private-account viewers), browse filters.
+
+#### Built (2026-11-12)
+
+- Columns are `Type`, `GenreKey`, `ProfilePin` on `BookLists` (PascalCase like the rest of the table). Checks `CK_BookLists_FiveBooksClosed`, `CK_BookLists_FiveBooksOnlyFields`, `CK_BookLists_ProfilePinRange`; one Favourite books per reader is the partial unique `IX_BookLists_UserId_FavouriteBooks`.
+- The pin slots are a **deferrable** unique constraint (`UQ_BookLists_UserId_ProfilePin`, raw SQL in the migration, like list positions), so unpinning or deleting a pinned list moves the later pins up in one save. Pin changes count slots past the query filters, so a list the admins hid keeps its slot. Two pins at once → 409 `lists.changedConcurrently`.
+- Update: `type` sent and different → `lists.typeLocked`; `genreKey` null leaves it, `""` clears it. Favourite books compares the title **as stored**, so Phase 3's edit form must send the stored title back, not the translated one.
+- `pinned-lists` numbers the pins 0..n-1 as the viewer sees them (a gap would show a hidden private pin, `argos-security`), and leaves out an empty 5 books for everyone but its owner (§3.3).
+- An extra code `lists.pinFiveBooksOnly` (pinning a Standard list) and `lists.badType` (asking for Favourite books, or browsing it).
+- Reviews: `reviewer` and `argos-security` done, findings fixed. **Open question for the user:** a pinned *Unlisted* 5 books shows on the profile to everyone, which is what §2.2.18 says ("people who could open it") but makes it findable. Keep, or show pins only when Public?
+- 15 tests in `FiveBooksTests.cs`. Apollon: uncommitted at the time of writing.
 
 ### Phase 2 — Favourite books as a 5 books, favourite authors unlimited (server) · *size M–L*
 
 #### Backend
-- [ ] Migration part 2 **(high effort)**: copy each reader's showcase into a Favourite books list (not ranked), then drop `ShowcasePosition`; `FavouriteAuthors.showcase_position` with the backfill. Check on a copy of the live data that every showcased book ends at the same position and no reader without a showcase gets a row.
-- [ ] `FavouriteBooksList` helper: get-or-create (race), add needs Read and hearts, unheart removes, the locked actions.
-- [ ] `LogService` delete/update sync **(high effort)**: no Read log left → heart and item go in the same save; `isFavourite` on the log DTO.
-- [ ] Showcase endpoint and `GET …/favourites` over the list; `favourites.csv` from the list.
-- [ ] Favourite authors: cap 500, first free slot, author-showcase endpoint, paged `favourite-authors`, merge keeps the lower position, export column, new codes.
-- [ ] Tests: migration result (dev database and a test that runs the copy step), the four sync rules (including a reread where one Read log remains), locked actions, showcase replace with 5, favourite authors past 4, showcase order, merge.
+- [x] Migration part 2 **(high effort)**: copy each reader's showcase into a Favourite books list (not ranked), then drop `ShowcasePosition`; `FavouriteAuthors.showcase_position` with the backfill. Check on a copy of the live data that every showcased book ends at the same position and no reader without a showcase gets a row. *Built and checked on copies of the dev data (with edge cases added) and on a copy of the live data (2026-11-13, see Built below).*
+- [x] `FavouriteBooksList` helper: get-or-create (race), add needs Read and hearts, unheart removes, the locked actions.
+- [x] `LogService` delete/update sync **(high effort)**: no Read log left → heart and item go in the same save; `isFavourite` on the log DTO.
+- [x] Showcase endpoint and `GET …/favourites` over the list; `favourites.csv` from the list.
+- [x] Favourite authors: cap 500, first free slot, author-showcase endpoint, paged `favourite-authors`, merge keeps the lower position, export column, new codes.
+- [x] Tests: migration result (dev database and a test that runs the copy step), the four sync rules (including a reread where one Read log remains), locked actions, showcase replace with 5, favourite authors past 4, showcase order, merge.
+
+#### Built (2026-11-12)
+
+- **A rule added for privacy (reviewer and `argos-security` both raised it):** Favourite books holds only books with a Read log **everyone may see** (reading privacy Public). The old showcase hid a hearted book from viewers who couldn't see that reading (`books-community-split.md` §2); a list has no per-viewer filter. So:
+  - the migration copies only showcased books with a Public Read log, positions closed up (0..n-1); the others stay hearted, for the reader to make public and add again;
+  - adding (list page or picker) needs one: no Read log → `reviews.markReadFirst`, only a private or followers reading → new `lists.favouritesPublicRead`;
+  - a reading made Private or Followers (per entry, in the edit form, or "make everything private") takes the book off the list in the same save; **the heart stays** (hearts are filtered per viewer). The last Read log going takes heart and place (§2.2.12).
+  - **For the user to confirm:** a reader whose readings default to Followers can't fill Favourite books without making those readings Public. The alternative is a per-viewer filter on Favourite books everywhere a list's items show (list page, cards, "Lists with this book", share card, search pages), which is much more code. Phase 3's add button and picker should explain the rule.
+- Code: `FavouriteBooksListRepository` (raw SQL, locks the list row like any list change, joins the caller's transaction) and the `FavouriteBooksList` helper (used by `BookListService`, `ReviewSocialService`, `LogService`, `ImportService`). Hearting still doesn't add to the list (§2.2.17). `LogRepository.DeleteAsync` joins an open transaction.
+- **Extra endpoint not in §3.2:** `POST /api/users/me/favourite-books` → `{ listId }`, making the list if needed, so Phase 3's "Add to list" has an id before the first add. `GET …/favourites` adds `listId` (null until the list exists) and `isRanked`; `showcasePosition` is the list position.
+- `PUT /api/users/me/showcase` re-checks under the list lock (hearted and publicly read); a change that lands meanwhile gives `lists.changedConcurrently`.
+- Import: "Remove" and "Undo" sync in the same transaction as the log delete; a title-match fix that moves logs to another book syncs the old book after the save.
+- Favourite authors: slots kept by a per-reader advisory lock; deferred unique `UQ_FavouriteAuthors_UserId_ShowcasePosition` and check `CK_FavouriteAuthors_ShowcasePositionRange`. `GET …/favourite-authors` returns `{ showcase, total, hasMore, authors }`: without `?page` `authors` is the showcase (what today's frontend reads), with `?page=` (48 a page, newest first) one page. New codes `authors.showcaseMax`, `authors.showcaseFavouritesOnly`, `authors.showcaseDuplicate`. `favourite-authors.csv` gains "Profile position".
+- `LogDto.isFavourite` = the owner hearted the book (false for anyone else); Phase 3's warning shows it when no other Read log of the book is left.
+- Migration `FavouriteBooksList` (Apollon `src/Argos.Infrastructure/Migrations/20261113023004_FavouriteBooksList.cs`), reversible (Down puts the list back in the old column, tested). Tests: `FavouriteBooksListTests` (8), `FavouriteBooksMigrationTests` (the copy step on a throwaway database), new `FavouriteAuthorTests` (past four, picker, cap 500, merge).
+- **Live-copy check, done 2026-11-13:** the Render backup of 2026-11-13 14:20 UTC (68 readers, at `ChatReactionsChangedBy`) restored into `argos_livecopy`, then `powershell -File scripts/five-books-migration-check/run.ps1 -Database argos_livecopy`: every "problems" row 0. 26 hearts, 12 showcased books from 6 readers, all with a Public Read log, so 6 Favourite books lists with 12 books and none left out; 14 favourite authors (7 readers) all in their slots; no list, item or heart lost. The script now first brings an older copy up to `FiveBooks` (it only adds columns to `BookLists`), since `before.sql` reads `BookLists."Type"`. Also run earlier on two dev copies (one with private, followers-only, gap and 6-author cases added): all 0.
+- Reviews: `reviewer` and `argos-security` done, findings fixed (the privacy rule above, picker re-check under the lock, atomic import undo, import re-match, a JSON null body → 400).
 
 ### Phase 3 — 5 books and the new profile (browser) · *size M–L*
 
