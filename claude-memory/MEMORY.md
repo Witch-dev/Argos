@@ -9,7 +9,7 @@
 - [Review after each phase](feedback_review_after_each_phase.md) — run reviewer at the end of every spec phase (argos-security only if auth/input/privacy/external API), then fix findings
 - [Launch roadmap](project_argos_launch_roadmap.md) — Argos/ROADMAP.md decides build order to beta + public launch; next task = first unticked box
 - [Bug files](feedback_bug_files.md) — every unfixed bug gets its own md in Argos/bugs/, indexed by priority P1-P3 and size S/M/L
-- [CI and pushing](project_apollon_ci_and_pushing.md) — Apollon CI is green; offer commit+push after each finished piece, user checks Actions tab
+- [CI and pushing](project_apollon_ci_and_pushing.md) — Apollon CI is green; offer commit+push after each finished piece, then check CI with gh (installed 2026-11-13)
 - [Token efficiency](feedback_token_efficiency.md) — one session per phase (status line shows context), screenshots go to a Sonnet agent, small work direct; Sonnet agents except argos-security
 - [Suggest model/effort](feedback_suggest_model_effort.md) — first line of every task AND a line in every handoff prompt: keep Opus medium, or switch to high/Sonnet
 - [Handoff prompt for new session](feedback_handoff_prompt_new_session.md) — at the end of a finished task/phase/stage, give a 2–4 line prompt to continue in a fresh session
