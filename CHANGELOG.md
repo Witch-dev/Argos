@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-13 — Share cards Phase 4: a 5 books shared as an image gets its own card (five covers on a shelf between bookends, dropped on a table, or in a ring around the title; numbered only when ranked; offered once all five are in) → specs/share-cards.md (Phase 4), Apollon 4fe35b3
 - 2026-11-13 — Fixed: two Google sign-ups for one account at the same moment (a double tap) could show "An account already uses this email…" to the second; it now logs in to the account just made. Found as a CI failure; `gh` installed so Claude can read CI → Apollon 11239ad
 - 2026-11-13 — 5 books verified in the browser (all checklist steps, the book page section at 375 px in five themes); the quiet empty places on the shelf made visible in Dark; a pinned Unlisted 5 books stays visible to everyone, and its page now says so and points to Private; What's new entry drafted for after the deploy → specs/five-books.md (Verification)
 - 2026-11-13 — 5 books Phase 4: "In N readers' 5 books" on the book page, counted as a signed-out visitor would, with the three most-liked of those lists as cards → specs/five-books.md (Apollon 92536be)
