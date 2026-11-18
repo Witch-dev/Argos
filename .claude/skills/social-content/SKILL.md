@@ -11,6 +11,7 @@ The person posting is one independent maker with a small account. Write as that 
 
 ## Step 0 — Read first
 
+0. `C:/Users/jramo/Argos/content/social-log.md`: what's been made and posted, the current way of working, the next free row on the canvas and the ideas waiting. Update it after every post (Step 5).
 1. `C:/Users/jramo/Argos/MARKETING.md`, **§0 Positioning** (the lead idea, strengths and how to say them, weaknesses, **Claims to avoid**) and **Language focus: Spanish first**. These are decisions the user made; don't argue with them in a post.
 2. `C:/Users/jramo/Argos/PRODUCT.md` (who the readers are) and the colour and type sections of `DESIGN.md`.
 3. From `upstream/social.md`: **Hook Formulas** and **No AI Tells**. Then, by format:
@@ -38,7 +39,7 @@ For a weekly plan: 2–3 posts a week is enough for one person. Use the pillars 
 - **Only true claims.** Every feature named must exist today; check the code in `C:/Users/jramo/Apollon` or the spec if unsure. No numbers, quotes, testimonials or reader counts we don't have; mark a gap as `[NEED: …]` instead of inventing it.
 - **Never:** "No AI", "five languages" (at most "also in Spanish" in English posts), "app" for the site (say "add it to your home screen"), competitor names except as import sources (Goodreads, StoryGraph).
 - **Hook on slide 1 / the first line.** Specific to books and readers, not a generic formula filled in.
-- **Ending:** one clear action: "link in bio", a real question for the comments, or "save this for later". Not "Thoughts?".
+- **Ending:** one clear action: "link in bio", a real question for the comments, or "save this for later". Not "Thoughts?", and no "comenta A o B" / one-letter answers (user decision 2026-11-18, MARKETING.md): a real question the reader can answer in a sentence, plus a reason to save or send the post.
 
 ## Step 3 — Design
 
@@ -50,7 +51,8 @@ Posts live on the design canvas https://claude.ai/artifact/4LgPkkNVJfQfcDbPg3wpq
 - **Images, only these:**
   - Screenshots of the real site, made with `node C:/Users/jramo/Argos/scripts/shoot.mjs` (or the `browser-check` skill for states that need data), **with seeded test readers only**: never a real reader's name, avatar or review without their written OK.
   - The public-domain title pages, first-edition covers and art already on the canvas, or other public-domain/CC0 art with its source noted. A real book cover is fine when the book was published before 1931 and the image is a flat scan or photo of the cover (Wikimedia Commons marks these "Public domain"); readers prefer covers that look like a book (cloth, colour) to plain title pages.
-  - **Never** AI-generated images, and never Open Library covers of modern books.
+  - **Posts about writers and books** (anniversaries, prize news, reading guides): use the books' real covers from Open Library (`https://covers.openlibrary.org/b/id/<cover_i>-L.jpg`), a Spanish edition when one has a cover, uploaded to the canvas as assets, alt text naming the edition (user decision 2026-11-16). Posts about Winged Words itself keep screenshots, drawings and public-domain art.
+  - **Never** AI-generated images.
 - English slides go after the Spanish ones in the same carousel when there's a lot of text; a story's English version is the next story.
 
 ## Step 4 — Caption, alt text, hashtags
@@ -78,4 +80,4 @@ Go through this list and fix what fails:
 - [ ] Images follow Step 3 (no AI art, no modern covers, no real readers).
 - [ ] Hashtags 3–5; alt text in both languages; the action at the end is clear.
 
-Then give the user the canvas link and the caption block. **Nothing is posted or scheduled from here**: the user reads it, especially the Spanish, and posts it themselves.
+Then add the post to `content/social-log.md` (row in "Posts made", next free row, ideas list) and give the user the canvas link and the caption block. **Nothing is posted or scheduled from here**: the user reads it, especially the Spanish, and posts it themselves.

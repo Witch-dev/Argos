@@ -27,3 +27,7 @@
 - [Social voice: "yo", underdog](feedback_social_voice_i_underdog.md) — 2026-11-07: posts in first person singular, passionate, solo underdog; no company "we"; rules in MARKETING.md
 - [dotnet test output](reference_dotnet_test_output.md) — Spanish output: grep 'con errores' for failures; no trx logger; shoot.mjs 375 is fine-pointer
 - [Social: attract new people, promote reading](project_social_acquisition_reading_tool.md) — 2026-11-07: tiny account, posts must reach new people (save/send/tag); message = tool that promotes reading
+- [Ads are a maybe](project_ads_maybe.md) — 2026-11-13: never write "no ads"/"sin anuncios" anywhere; just don't mention ads
+- [Book covers in posts](feedback_book_covers_in_posts.md) — 2026-11-16: posts about writers/books use real Open Library covers (Spanish edition first); app posts keep drawings
+- [Real questions, not A/B](feedback_real_questions_not_ab.md) — 2026-11-18: posts end with a real question + save/send reason, never "comenta A o B"
+- [Social media log](project_social_log.md) — Argos/content/social-log.md: posts made, how to make the next one, next canvas row; read first, update after each post
