@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-18 — Modern web platform, Phase 2: every modal is a native `<dialog>` (browser keeps Tab inside, makes the page inert, Esc closes only the top one); the hand-built dialogs (stories, composer, writing overlay, progress, create club…) now share `Modal`; short fade-and-rise entrance → specs/modern-web-platform.md
+- 2026-11-18 — Modern web platform, Phase 1: book covers load lazily (the book page's main cover loads first, high priority); meeting link check uses `new URL()`; spec written with the full scan and phases 2–6 → specs/modern-web-platform.md
 - 2026-11-13 — "No ads" no longer promised anywhere (landing page, privacy policy, Instagram bio text in MARKETING.md): ads may come one day, so we just don't mention them; FUTURE-IDEAS.md "Making money" now says ads are a maybe → Apollon e4544b7
 - 2026-11-13 — Share cards Phase 4: a 5 books shared as an image gets its own card (five covers on a shelf between bookends, dropped on a table, or in a ring around the title; numbered only when ranked; offered once all five are in) → specs/share-cards.md (Phase 4), Apollon 4fe35b3
 - 2026-11-13 — Fixed: two Google sign-ups for one account at the same moment (a double tap) could show "An account already uses this email…" to the second; it now logs in to the account just made. Found as a CI failure; `gh` installed so Claude can read CI → Apollon 11239ad
