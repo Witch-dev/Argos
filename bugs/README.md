@@ -29,6 +29,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 | [Discovery-off public readers' comments and private list collaborators are still named to visitors](discovery-off-readers-named-on-indexable-pages.md) | P3 | S | Backend, privacy / search (the book-page reviews and lists part is fixed) |
 | [Two account erasures at once can both create the "Deleted user" placeholder](deleted-user-placeholder-race.md) | P2 | S | Backend, account deletion (flaky test) |
 | [Some frontend tests assume the year is 2026 and will fail from 1 January 2027](frontend-tests-assume-2026.md) | P2 | S | Frontend tests (date-dependent) |
+| [Logging in with empty fields shows the server's raw English validation text](login-empty-submit-raw-server-text.md) | P2 | S | Frontend + backend, login |
 | [The log form on a book's page is wider than a phone screen](log-form-overflows-on-phone.md) | P2 | S | Frontend, book page, phone |
 | [A profile keeps going back to "Loading" when one of the rows above its shelves fails](profile-reloads-when-a-row-fails.md) | P2 | S | Frontend, profile page |
 | [The "Google sign-in off" test fails on a machine with a Google client ID in its user-secrets](google-signin-off-test-reads-user-secrets.md) | P2 | S | Backend tests, local only |

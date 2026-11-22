@@ -240,7 +240,7 @@ Adapted from Impeccable's `animate` and `delight`. Motion is planned before it i
 - New items after "Show more" may stagger, capped ~300ms in total. No scroll reveals, section fade-ins, parallax or hover lifts. On Operate screens no page-load choreography.
 - Content visible by default; a second click mid-animation lands in the right end state; `will-change` only during a known animation.
 - **Reduced motion:** remove the movement, keep the meaning (the cover appears with a short fade, the heart and Follow still change at once). Fewer and gentler, not nothing.
-- Tokens: `--duration-feedback` 120ms, `--duration-state` 200ms, `--duration-panel` 320ms, `--duration-focal` 560ms, `--ease-out` (arrivals), `--ease-in` (exits); under reduced motion they shorten to fades (feedback 0ms, the rest 120–150ms).
+- Tokens: `--duration-feedback` 120ms, `--duration-state` 200ms, `--duration-panel` 320ms, `--duration-focal` 560ms, `--ease-out` (arrivals), `--ease-in` (exits); under reduced motion feedback, state and panel are instant (0ms) and focal is a 150ms fade. They are the one switch: every transition and animation takes its length from them (`index.css`, no blanket `!important` rule), so a new one must too, or carry its own reduced-motion rule.
 - **Plan first:** one line before code: what moves, which job, how long, what reduced motion shows.
 
 ## Do's and Don'ts

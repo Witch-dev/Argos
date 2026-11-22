@@ -58,7 +58,7 @@ Gaps in the sequence (5, 7) are intentional — round up or down to the nearest 
 
 ## Motion
 
-`--duration-feedback` 120ms (a press), `--duration-state` 200ms (a change of state), `--duration-panel` 320ms (menus, panels), `--duration-focal` 560ms (only the book settling onto the shelf); `--ease-out` for arrivals, `--ease-in` for exits. Reduced motion shortens them to fades. No `transition: all`, no bounce (`designGuards`).
+`--duration-feedback` 120ms (a press), `--duration-state` 200ms (a change of state), `--duration-panel` 320ms (menus, panels), `--duration-focal` 560ms (only the book settling onto the shelf); `--ease-out` for arrivals, `--ease-in` for exits. Reduced motion sets them to 0ms (focal: a 150ms fade), with no blanket `!important` rule behind them, so every new transition or animation uses a token or carries its own reduced-motion rule. `index.css` is in `@layer reset, tokens, base` plus unlayered shared pieces: read its top note before adding a global rule. No `transition: all`, no bounce (`designGuards`).
 
 ## Shared pieces (Phase 1)
 
