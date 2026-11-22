@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-22 — Web image: nginx 1.30.7 (from nginx.org, all five pinned packages) and libxml2 2.13.9-r3, for new Trivy CRITICAL/HIGH advisories → Apollon ff434e3
 - 2026-11-22 — Modern web platform, Phase 5: `index.css` in cascade layers (floor only; 0 computed-style differences on 8 routes), the 6 reduced-motion `!important`s replaced by the duration tokens, menus fade in, StatTiles reflow by their own box, reduced motion respected by every smooth scroll → specs/modern-web-platform.md
 - 2026-11-22 — Modern web platform, Phase 4: one danger edge for fields in error everywhere (`:user-invalid` after the reader leaves a field breaking its own rule, or the page's `aria-invalid`), mirrored to screen readers; Pages/Chapters toggle is native radios (arrow keys) → specs/modern-web-platform.md
 - 2026-11-22 — Bug filed: logging in with empty fields shows the server's raw English validation text → bugs/login-empty-submit-raw-server-text.md
