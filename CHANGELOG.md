@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-22 — First security watch: .NET packages 10.0.15, fresh aspnet/sdk/node base images, React Router 7.18.6, eslint/typescript-eslint past the minimatch advisory → Apollon 7296ee5, security-watch/log.md
 - 2026-11-22 — `/security-watch` skill: a daily check (run by hand) of advisory feeds, stale base images and the news for everything we use, logged in `security-watch/log.md` → .claude/skills/security-watch/SKILL.md
 - 2026-11-22 — Web image: nginx 1.30.7 (from nginx.org, all five pinned packages) and libxml2 2.13.9-r3, for new Trivy CRITICAL/HIGH advisories → Apollon ff434e3
 - 2026-11-22 — Modern web platform, Phase 5: `index.css` in cascade layers (floor only; 0 computed-style differences on 8 routes), the 6 reduced-motion `!important`s replaced by the duration tokens, menus fade in, StatTiles reflow by their own box, reduced motion respected by every smooth scroll → specs/modern-web-platform.md

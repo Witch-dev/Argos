@@ -43,7 +43,7 @@ Run these before any web search. Each one answers "are we affected" precisely.
    ```
    CI fails only on high/critical. Here report moderates too, as "plan".
 
-2. **.NET security releases.** Fetch `https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/10.0/releases.json` (with `curl -s`, then read `releases[0]`): `release-version`, `release-date`, `security` and the `cve-list`. If the newest 10.0.x with `security: true` is newer than our `Microsoft.*` package versions (all 10.0.N), we are behind. The runtime itself comes from the Docker image, so that needs a new digest too (step 4).
+2. **.NET security releases.** Fetch `https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/10.0/releases.json` (with `curl -s`, then read `releases[0]`): `release-version`, `release-date`, `security` and the `cve-list`. If the newest 10.0.x with `security: true` is newer than our `Microsoft.*` package versions (all 10.0.N), we are behind. Most of the fixes are in the runtime, which comes from the Docker image (step 4 shows its version), and `dotnet list package --vulnerable` can't see those, so check both.
 
 3. **Node.js security releases.** `curl -s https://nodejs.org/dist/index.json`, the newest `v22.*` entry with `"security": true`. Only matters for the build stage of `web/Dockerfile` and local dev (Node isn't running on the live site; nginx serves the built files), so it's usually "plan".
 
@@ -52,10 +52,14 @@ Run these before any web search. Each one answers "are we affected" precisely.
    # Docker Hub (nginxinc/nginx-unprivileged, node): the tag's top-level digest, not a per-architecture one
    for t in nginxinc/nginx-unprivileged/tags/1.30-alpine library/node/tags/22-alpine; do
      curl -s https://hub.docker.com/v2/repositories/$t | python -c "import json,sys;print(json.load(sys.stdin)['digest'])"; done
-   # Microsoft (dotnet/aspnet, dotnet/sdk): the digest is in the response header
-   curl -sI -H "Accept: application/vnd.oci.image.index.v1+json" https://mcr.microsoft.com/v2/dotnet/aspnet/manifests/10.0 | grep -i docker-content-digest
-   curl -sI -H "Accept: application/vnd.oci.image.index.v1+json" https://mcr.microsoft.com/v2/dotnet/sdk/manifests/10.0 | grep -i docker-content-digest
+   # Microsoft (dotnet/aspnet, dotnet/sdk): compare the .NET version and build date inside
+   # our pinned digest with the tag's current image. Don't compare digests here: MCR answers
+   # with a different digest depending on the request's Accept header (a false alarm on 2026-11-22).
+   S=/c/Users/jramo/Argos/.claude/skills/security-watch/scripts/mcr-image-version.py
+   python -I $S dotnet/aspnet sha256:<our digest from Dockerfile>;  python -I $S dotnet/aspnet 10.0
+   python -I $S dotnet/sdk sha256:<our digest from Dockerfile>;     python -I $S dotnet/sdk 10.0
    ```
+   A lower `DOTNET_VERSION` in ours = we're missing a .NET security release (act). Same version, newer date = an operating-system rebuild (plan; take it with the next bump). To update, get the tag's digest with `curl -sI -H "Accept: application/vnd.docker.distribution.manifest.list.v2+json" https://mcr.microsoft.com/v2/dotnet/aspnet/manifests/10.0 | grep -i docker-content-digest`.
    Use the tag on our `FROM` line (it changes when we move to a new nginx/node line). **nginx itself** is installed in `web/Dockerfile` from nginx.org's own package repository at an exact version (read the version from the Dockerfile's comments and `RUN` line), so also compare that with the newest 1.30.x on <https://nginx.org/en/security_advisories.html>: a newer fixed version there means bumping the pinned version, not only the digest. A different digest means a newer image exists. That alone isn't urgent (images are rebuilt often for small reasons), but combined with a security release from step 2, step 5 or the news, it's the fix: update the digest. Also note if the tag's line itself is near end of life (for example nginx 1.30 when 1.32 is stable, Node 22 near its end date).
 
 5. **GitHub advisories published in the window** for the packages exposed to the internet:
