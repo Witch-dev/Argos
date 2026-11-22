@@ -8,6 +8,9 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-22 — Visitors enter the app, Phase 3: a visitor's Books tab shows the real page's sections filled with faded public-domain sample books, each marked Example with one line on what it's for, and one "Add your first book" button → specs/visitors-enter-the-app.md
+- 2026-11-22 — Visitors enter the app, Phase 2: `/` opens the app for visitors (the Everyone feed with a Join line, likes open the sign-up box), the landing page moves to `/about` and `/es/about`, a Following / Everyone switch for readers (Everyone under 3 follows until they pick), the Books / Community switch for visitors, a "What is Winged Words?" link → specs/visitors-enter-the-app.md
+- 2026-11-22 — Visitors enter the app, Phase 1 (server): `GET /api/feed?scope=everyone`, open to visitors. It shows reviews, writings and reading updates from public, discoverable accounts, judged as a visitor whoever asks, minus blocks both ways. Also: the language split, the `home` sign-up source, `/about` in the sitemap and a rate limit for readers on Everyone → specs/visitors-enter-the-app.md
 - 2026-11-22 — First security watch: .NET packages 10.0.15, fresh aspnet/sdk/node base images, React Router 7.18.6, eslint/typescript-eslint past the minimatch advisory → Apollon 7296ee5, security-watch/log.md
 - 2026-11-22 — `/security-watch` skill: a daily check (run by hand) of advisory feeds, stale base images and the news for everything we use, logged in `security-watch/log.md` → .claude/skills/security-watch/SKILL.md
 - 2026-11-22 — Web image: nginx 1.30.7 (from nginx.org, all five pinned packages) and libxml2 2.13.9-r3, for new Trivy CRITICAL/HIGH advisories → Apollon ff434e3
