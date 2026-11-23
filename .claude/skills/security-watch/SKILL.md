@@ -9,7 +9,7 @@ A daily look at the outside world: has something we use become unsafe since the 
 
 **Model and effort:** Sonnet or Opus medium is plenty. Keep it cheap: exact feeds first, a handful of grouped web searches, no subagents.
 
-**It reports, it doesn't fix.** For anything to act on, propose the fix (bump, new image digest, config change) and wait for the user. The fix itself then follows the normal rules in `CLAUDE.md` (pin the version, precheck, changelog line).
+**It reports, it doesn't fix.** For anything to act on, propose the fix (bump, new image digest, config change) and wait for the user. The fix itself then follows the normal rules in `CLAUDE.md` (pin the version, precheck, changelog line). **A fix to either Dockerfile isn't done until the image has been built and served pages.** For `web/Dockerfile`: `docker build -t argos-web web && sh web/docker/smoke-test.sh argos-web` (in Apollon) must pass before pushing; CI runs the same check and Render won't deploy until it's green. A security reinstall of nginx once overwrote the app's `index.html` with nginx's welcome page and took every page but `/` down (DEPLOY.md, incident 2026-11-22).
 
 ## 1. Where the last run left off
 
