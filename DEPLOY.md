@@ -212,6 +212,13 @@ On the site service: `API_BASE_URL` = `https://api.wingedwords.app/api` (a plain
 
 Newest first. What happened, what we found, and what we decided, so the next one starts from here.
 
+### 2026-11-22: "Welcome to nginx!" on every page but / and /about
+
+- **What we saw:** `wingedwords.app/feed` showed nginx's default welcome page. `/` and `/about` still showed the app, so it looked fine from the bare address.
+- **Cause (Apollon `ff434e3`, deployed that afternoon):** the web Dockerfile reinstalls nginx 1.30.7 from nginx.org for a security fix, and that step ran *after* the app's files were copied in. The nginx package writes its welcome page to `/usr/share/nginx/html/index.html`, replacing the app's. Every route served by the `index.html` fallback (`/feed`, `/books`, `/login`, share links, any refresh) got the welcome page; `/` (`home.html`) and `/about` (`about.html`) have their own copies, so they kept working.
+- **Fix (Apollon `ff4d57e`):** the app's files, nginx.conf and the entrypoint are copied in after the apk step. Checked by building the image and requesting `/`, `/feed`, `/books`, `/login` before pushing.
+- **Lesson:** after any change to `web/Dockerfile`, build it and request a deep link (`/feed`), not only `/`. CI's Trivy scan builds the image but never serves a page from it.
+
 ### 2026-11-07: the database refused connections again, Render restarted the API
 
 - **What we saw:** the API event "Instance failed: h7lgj" at 6:21 PM (UTC-3, so 9:21 PM UTC). The API memory chart was healthy: 40-45%, a blip to about 47% at the failure, then a drop to 25% after the restart. Not an API memory problem.

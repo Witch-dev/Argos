@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-22 — Live site fixed: every page but / and /about showed "Welcome to nginx!" because the nginx security reinstall overwrote the app's index.html; the app is now copied in after it → DEPLOY.md "Incidents on the live site", Apollon ff4d57e
 - 2026-11-22 — App.test no longer fails the precheck now and then: it waits for the Books and Feed pages the header's section switch preloads → bugs/app-test-late-page-import.md
 - 2026-11-22 — Feed: several readers doing the same thing on one day (a club's members starting its book, club progress, starting the same book) show as one row, "Ana, Luis and 18 more started …", with Show all for each reader's heart → specs/feed-club-and-list-activity.md §3.4
 - 2026-11-22 — Visitors enter the app, Phase 3: a visitor's Books tab shows the real page's sections filled with faded public-domain sample books, each marked Example with one line on what it's for, and one "Add your first book" button → specs/visitors-enter-the-app.md
