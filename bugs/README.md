@@ -24,7 +24,6 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Priority | Size | Area |
 |---|---|---|---|
-| [App.test: a late page import fails the precheck now and then](app-test-late-page-import.md) | P2 | S–M | Frontend tests |
 | [The live API's memory climbs between deploys and only a deploy brings it down](api-memory-climbs-between-deploys.md) | P2 | M | Backend, memory (native, not .NET; fix deployed in Apollon 7567b43, watching the chart) |
 | [Admin copies of feedback and book requests share the daily optional-email budget](admin-copy-emails-share-signup-budget.md) | P2 | S | Backend, email queue |
 | [Discovery-off public readers' comments and private list collaborators are still named to visitors](discovery-off-readers-named-on-indexable-pages.md) | P3 | S | Backend, privacy / search (the book-page reviews and lists part is fixed) |
@@ -52,6 +51,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Fixed | Where |
 |---|---|---|
+| [App.test: a late page import fails the precheck now and then](app-test-late-page-import.md) | 2026-11-22 | Apollon 6b08f69 (the test waits for the pages the header's section switch preloads) |
 | [The "checkpoint due" notification test and its family (ContentLanguage backfill, club-suggestion reminder) fail sometimes in a full run](checkpoint-due-test-flaky.md) | 2026-11-07 | Apollon ed8d341 (hosted reminder job off in ApiFactory, tests check only their own rows) |
 | [The chat erasure test fails when other tests erase every due account](chat-erasure-test-races-moderation-erasure.md) | 2026-11-07 | Apollon ed8d341 (sweeping tests run alone in a non-parallel collection) |
 | [A club suggestion can't be reported](club-suggestions-cannot-be-reported.md) | 2026-10-27 | Report target, admin Delete and Report on suggestion cards (see the bug file) |

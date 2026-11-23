@@ -18,3 +18,9 @@ with a jsdom "Not implemented: navigation to another Document" just before it. S
 
 - What makes a signed-out `/news` render or load `/books`: the visitor routing added in specs/visitors-enter-the-app.md Phase 2 (`HomeGate`, `useSection`'s `argos.visitorSection`, `SectionsLayout`), or the auth refresh navigating away (the jsdom navigation warning).
 - Fix in the test, not by hiding the error: wait for the app to settle (or mock the auth refresh) so no page loads after the test ends.
+
+## Fixed (2026-11-22, Apollon 6b08f69)
+
+**Cause:** not the visitor routing or the auth refresh. The header's Books/Community switch (`layout/SectionSwitch.tsx`) preloads `BooksHomePage` and `FeedPage` with a fire-and-forget `import()` when it mounts, so the switch is ready instantly. `App.test` finished as soon as the news story showed, and under a busy full run the Books import could still be loading when the file's environment closed. Signed out, nothing on `/news` sets `window.location`, so the jsdom navigation warning was most likely another file's output printed next to it.
+
+**Fix:** after its assertion the test awaits `import('./pages/BooksHomePage')` and `import('./pages/FeedPage')`; importing a module again joins the load already under way. The app code is unchanged. Checked: App.test passed 3 times on its own, and the full Vitest run passed (195 files, 1585 tests, no unhandled errors).
