@@ -24,6 +24,7 @@ One file per bug, so each can be picked up, fixed and closed on its own. Fixed b
 
 | Bug | Priority | Size | Area |
 |---|---|---|---|
+| [App.test: a late page import fails the precheck now and then](app-test-late-page-import.md) | P2 | S–M | Frontend tests |
 | [The live API's memory climbs between deploys and only a deploy brings it down](api-memory-climbs-between-deploys.md) | P2 | M | Backend, memory (native, not .NET; fix deployed in Apollon 7567b43, watching the chart) |
 | [Admin copies of feedback and book requests share the daily optional-email budget](admin-copy-emails-share-signup-budget.md) | P2 | S | Backend, email queue |
 | [Discovery-off public readers' comments and private list collaborators are still named to visitors](discovery-off-readers-named-on-indexable-pages.md) | P3 | S | Backend, privacy / search (the book-page reviews and lists part is fixed) |

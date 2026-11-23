@@ -69,6 +69,8 @@ Migration `AddClubAndListActivity`. High effort (touches the recorder constraint
 
 All text through `t('…')` in the five locale files. New strings need no backend error codes (no new error paths).
 
+**Several readers, one row (added 2026-11-22, from the user's screenshot of a club start filling the Everyone feed).** When different readers' rows each hold one event that says the same thing on the same day, the Feed shows them as one row: "**Ana**, **Luis** and 18 more started *Dune* with *Night Owls*" (all names when there are three). What merges: a club's book started, club progress at the same percent, and plain "started reading" of the same book (`lib/mergeActivity.ts`). Finished and stopped books never merge, since each carries the reader's own rating. A reader whose day holds more than one thing keeps their own row. The merged row stands where the newest of them stood and is built in the browser over all loaded pages, so the server, paging and database are unchanged. It has up to three stacked faces (one on a phone), the time and the cover, and no heart: likes stay on each reader's event, so "Show all N" lists every reader with their own heart (`MergedActivityCard` in `ActivityGroupCard.tsx`, sentences under `activity.merged.*`).
+
 ## 4. Out of scope
 
 - Notifications for these events.
