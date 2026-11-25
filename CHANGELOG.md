@@ -8,6 +8,7 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-25 — Likes and comments on each progress step: tap a dot on the reading update's journey line to like or comment on that moment; "All steps" list; bell rows name the place and open the viewer on that step; likes on Feed activity rows notify → specs/progress-step-likes-comments.md
 - 2026-11-22 — Feed: when merged rows fold a page into a few cards, it fetches more pages by itself until it shows about 15 more cards per load (at most 4 pages a load) → specs/feed-club-and-list-activity.md §3.4
 - 2026-11-22 — CI builds the web image and checks it serves the app on /, deep links, /about and /es (Render deploys only after it passes); security-watch says to run it before pushing a Dockerfile fix → DEPLOY.md "Incidents on the live site" 2026-11-22
 - 2026-11-22 — Live site fixed: every page but / and /about showed "Welcome to nginx!" because the nginx security reinstall overwrote the app's index.html; the app is now copied in after it → DEPLOY.md "Incidents on the live site", Apollon ff4d57e
