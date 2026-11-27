@@ -8,6 +8,8 @@ One line per real change or fix across both repos (Apollon code and Argos planni
 
 ## November 2026
 
+- 2026-11-27 — "2026 in books" Phase 0: opening date setting (December 9), heads-up card on Books home and a coming-soon page, "News emails" switch with a one-click off link, admin box that sends the heads-up and "ready" notices and emails once per reader (own share of the daily email budget), privacy policy line → specs/year-in-books.md §6
+- 2026-11-25 — "2026 in books" (the Wrapped idea) specced: tap-through year recap with a share image per slide, private books counted but never named, reader type by fixed rules, its own plain colour backgrounds; hidden until the second week of December, with a heads-up notification and email to every reader a week before → specs/year-in-books.md
 - 2026-11-25 — Likes and comments on each progress step: tap a dot on the reading update's journey line to like or comment on that moment; "All steps" list; bell rows name the place and open the viewer on that step; likes on Feed activity rows notify → specs/progress-step-likes-comments.md
 - 2026-11-22 — Feed: when merged rows fold a page into a few cards, it fetches more pages by itself until it shows about 15 more cards per load (at most 4 pages a load) → specs/feed-club-and-list-activity.md §3.4
 - 2026-11-22 — CI builds the web image and checks it serves the app on /, deep links, /about and /es (Render deploys only after it passes); security-watch says to run it before pushing a Dockerfile fix → DEPLOY.md "Incidents on the live site" 2026-11-22
